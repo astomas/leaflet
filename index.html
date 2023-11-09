@@ -781,7 +781,7 @@ if (presenceLegende) {
 }
 
 function main() {
-   	if (!L.Browser.mobile){
+   	if (L.Browser.mobile){
 		carteLeaflet = new CarteLeaflet("carteId", [43.96, 4.1], 8)
 	}
 	else {
