@@ -3,39 +3,39 @@
 <html>    
   <head>
   
-	<link rel="stylesheet" href="leaflet/Ressources/API_JS/leaflet.css" />
-	<script src="leaflet/Ressources/API_JS/leaflet.js"></script>
+	<link rel="stylesheet" href="/leaflet/Ressources/API_JS/leaflet.css" />
+	<script src="/leaflet/Ressources/API_JS/leaflet.js"></script>
 	
 	<title id="ti">Carte Leaflet</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	
-	<script type="text/javascript" src="leaflet/Ressources/API_JS/easy-button.js"></script>
-	<link rel="stylesheet" href = "leaflet/Ressources/API_JS/easy-button.css" />	 
-	<link rel="stylesheet" href="leaflet/Ressources/API_JS/images/easyButton/font-awesome-4.7.0/css/font-awesome.min.css" />
+	<script type="text/javascript" src="/leaflet/Ressources/API_JS/easy-button.js"></script>
+	<link rel="stylesheet" href = "/leaflet/Ressources/API_JS/easy-button.css" />	 
+	<link rel="stylesheet" href="/leaflet/Ressources/API_JS/images/easyButton/font-awesome-4.7.0/css/font-awesome.min.css" />
 
 	<script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbn4agQo3A4Hp3Yyyros9hD7vFw0WSNOM&callback=Function.prototype"> </script>
-	<script src="leaflet/Ressources/API_JS/Leaflet.GoogleMutant.js"></script>
+	<script src="/leaflet/Ressources/API_JS/Leaflet.GoogleMutant.js"></script>
 	
-	<script src="leaflet/Ressources/API_JS/leaflet-gplaces-autocomplete.js"></script>
-  	<link rel="stylesheet" href="leaflet/Ressources/API_JS/leaflet-gplaces-autocomplete.css" />
+	<script src="/leaflet/Ressources/API_JS/leaflet-gplaces-autocomplete.js"></script>
+  	<link rel="stylesheet" href="/leaflet/Ressources/API_JS/leaflet-gplaces-autocomplete.css" />
     
-	<script src="leaflet/Ressources/API_JS/leaflet.browser.print.js"></script>
+	<script src="/leaflet/Ressources/API_JS/leaflet.browser.print.js"></script>
 		
-	<script src="leaflet/Ressources/API_JS/Leaflet.Dialog.js"></script>
-  	<link rel="stylesheet" href="leaflet/Ressources/API_JS/Leaflet.Dialog.css" /> 
+	<script src="/leaflet/Ressources/API_JS/Leaflet.Dialog.js"></script>
+  	<link rel="stylesheet" href="/leaflet/Ressources/API_JS/Leaflet.Dialog.css" /> 
 	
-	<script src="leaflet/Ressources/API_JS/leaflet.permalink.js"></script>
+	<script src="/leaflet/Ressources/API_JS/leaflet.permalink.js"></script>
 	
-	<link rel="stylesheet" type="text/css" href="leaflet/Ressources/API_JS/leaflet-ruler.css">
-	<script src="leaflet/Ressources/API_JS/leaflet-ruler.js"></script>
+	<link rel="stylesheet" type="text/css" href="/leaflet/Ressources/API_JS/leaflet-ruler.css">
+	<script src="/leaflet/Ressources/API_JS/leaflet-ruler.js"></script>
 
-	<script src="leaflet/Ressources/API_JS/streetview.js"></script>
+	<script src="/leaflet/Ressources/API_JS/streetview.js"></script>
 	
-	<script type="text/javascript" src="leaflet/Ressources/API_JS/leaflet.legend.js"></script>	
-	<link rel="stylesheet" href="leaflet/Ressources/API_JS/leaflet.legend.css" />
-	<script src="leaflet/Ressources/API_JS/lodash.js"></script>	
-	<script src="leaflet/Ressources/API_JS/turf_6_5.js"></script>
+	<script type="text/javascript" src="/leaflet/Ressources/API_JS/leaflet.legend.js"></script>	
+	<link rel="stylesheet" href="/leaflet/Ressources/API_JS/leaflet.legend.css" />
+	<script src="/leaflet/Ressources/API_JS/lodash.js"></script>	
+	<script src="/leaflet/Ressources/API_JS/turf_6_5.js"></script>
 	
 	<style>
 	
@@ -359,7 +359,7 @@ function CarteLeaflet(conteneurId, coordCentreCarte, zoomInitial) {
 		}
 		else {
 			presenceIcone = false;
-			var customIcone = new L.Icon({iconUrl: "leaflet/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
+			var customIcone = new L.Icon({iconUrl: "/leaflet/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
 			return L.marker(latlng, {icon: customIcone});
 		}
 	}
@@ -546,7 +546,7 @@ if (presenceLegende) {
 	}; 	
 
 	this.serviceVisu = function () {		
-			pegmanIcon = new L.Icon({iconUrl: "leaflet/Ressources/API_JS/images/streetview.png", iconSize: [16,32], iconAnchor: [8,33]});
+			pegmanIcon = new L.Icon({iconUrl: "/leaflet/Ressources/API_JS/images/streetview.png", iconSize: [16,32], iconAnchor: [8,33]});
 			pegman = L.marker(maCarte.getCenter(),{icon:pegmanIcon});
 			maCarte.on("move", function() {
 				pegman.setLatLng(maCarte.getCenter()); 
@@ -714,8 +714,8 @@ if (presenceLegende) {
   	  	var contenuAide = [ 
 		"<p><center><h3 style='margin-bottom:20px'>Afficher la carte depuis le Système d'Information du CD 30.</p> Une connexion internet est nécessaire.</h3></center></p>",	
 		"<p><b>Légende dynamique en bas à droite:</b> masquer ou afficher chaque élément de la légende en cliquant dessus.</p>",
-		"<p><b>Visualisation Street View, Mapillary, IGN, Google Maps:</b> double-cliquer n'importe où sur la carte pour faire apparaitre 'Pegman' (personnage jaune) et le bloc de service de visualisation en bas à droite. Déplacer le fond de carte pour positionner Pegman puis cliquer sur l'icone de l'un des services pour ouvrir, dans un nouvel onglet, la page correspondante à la position. Désactiver le service en pressant une touche du clavier ou en cliquant sur Pegman.</p><a href='leaflet/ressources/api_js/images/visu-leaflet.png' target='_blank'><img src='leaflet/ressources/api_js/images/visu-leaflet.png' title='Service visualisation' style='width:50%;  display: block; margin-left: auto;  margin-right: auto;'></img></a>",	
-		"<p><b>Mesure de distance:</b> cliquer sur le bouton 'Règle', qui se colore, pour mesurer une distance sur la carte en km (3 décimales). Tracer une ligne avec la souris, cliquer pour créer des mesures intermédiaires et des changements d'angle. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment), appuyer sur la touche 'Echap'. Il est ainsi possible de mesurer plusieurs tronçons. Recliquer sur le bouton 'Régle' pour effacer les mesures effectuées.</p><a href='leaflet/ressources/api_js/images/regle-leaflet.png' target='_blank'><img src='leaflet/ressources/api_js/images/regle-leaflet.png' title='Mesure distance' style='width:60%;  display: block; margin-left: auto;  margin-right: auto;'></img></a>",
+		"<p><b>Visualisation Street View, Mapillary, IGN, Google Maps:</b> double-cliquer n'importe où sur la carte pour faire apparaitre 'Pegman' (personnage jaune) et le bloc de service de visualisation en bas à droite. Déplacer le fond de carte pour positionner Pegman puis cliquer sur l'icone de l'un des services pour ouvrir, dans un nouvel onglet, la page correspondante à la position. Désactiver le service en pressant une touche du clavier ou en cliquant sur Pegman.</p><a href='/leaflet/Ressources/api_js/images/visu-leaflet.png' target='_blank'><img src='/leaflet/Ressources/api_js/images/visu-leaflet.png' title='Service visualisation' style='width:50%;  display: block; margin-left: auto;  margin-right: auto;'></img></a>",	
+		"<p><b>Mesure de distance:</b> cliquer sur le bouton 'Règle', qui se colore, pour mesurer une distance sur la carte en km (3 décimales). Tracer une ligne avec la souris, cliquer pour créer des mesures intermédiaires et des changements d'angle. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment), appuyer sur la touche 'Echap'. Il est ainsi possible de mesurer plusieurs tronçons. Recliquer sur le bouton 'Régle' pour effacer les mesures effectuées.</p><a href='/leaflet/Ressources/api_js/images/regle-leaflet.png' target='_blank'><img src='/leaflet/Ressources/api_js/images/regle-leaflet.png' title='Mesure distance' style='width:60%;  display: block; margin-left: auto;  margin-right: auto;'></img></a>",
 		"<p><br></p>"
 		].join("");
     	var fenêtreAide = new L.control.dialog({size: [710,620], anchor: [0, 100], position:"topleft", initOpen: true, minSize:[350,250], maxSize:[900,700]});
@@ -794,8 +794,8 @@ function main() {
 		carteLeaflet.information();	
 		carteLeaflet.aide();		
 		carteLeaflet.titre();		
-		carteLeaflet.logo("leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr");
-		carteLeaflet.logo("leaflet/Ressources/c3po_gr.png", "70px", "Accueil si3p0", "/", "_self");
+		carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr");
+		carteLeaflet.logo("/leaflet/Ressources/c3po_gr.png", "70px", "Accueil si3p0", "/", "_self");
 	}
 }
 		
