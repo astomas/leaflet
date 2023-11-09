@@ -786,10 +786,10 @@ function main() {
 	carteLeaflet.dessinerCarte();
     carteLeaflet.limiteAdmin(Gard);
 	carteLeaflet.serviceVisu();
-	if (clicZoomActif){carteLeaflet.zoomObjet()};
-	carteLeaflet.recentrer();
+	if (clicZoomActif){carteLeaflet.zoomObjet()};	
 	carteLeaflet.rechercherLieu(maCarte);	
 	if (!L.Browser.mobile){
+		carteLeaflet.recentrer();
 		carteLeaflet.mesurer();
 		carteLeaflet.imprimer();
 		carteLeaflet.information();	
