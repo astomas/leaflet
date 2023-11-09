@@ -787,9 +787,9 @@ function main() {
     carteLeaflet.limiteAdmin(Gard);
 	carteLeaflet.serviceVisu();
 	if (clicZoomActif){carteLeaflet.zoomObjet()};	
+	carteLeaflet.recentrer();
 	carteLeaflet.rechercherLieu(maCarte);	
-	if (!L.Browser.mobile){
-		carteLeaflet.recentrer();
+	if (!L.Browser.mobile){		
 		carteLeaflet.mesurer();
 		carteLeaflet.imprimer();
 		carteLeaflet.information();	
