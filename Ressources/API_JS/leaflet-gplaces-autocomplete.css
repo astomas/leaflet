@@ -1,0 +1,51 @@
+.leaflet-gac-wrapper {
+    height: 26px;
+}
+
+.leaflet-control-container .leaflet-gac-control {
+    width: 300px;
+    height: 26px;
+    padding: 0 7px;
+    border-radius: 5px;
+    border: 1px #d0d0d0 solid;
+}
+
+.leaflet-control-container .leaflet-right .leaflet-gac-control {
+    position: absolute;
+    right: 0;
+    transition: width .3s ease .15s;
+}
+
+.leaflet-control-container .leaflet-gac-control:focus {
+    outline: none;
+}
+
+/* modif CD 30  */
+.leaflet-control-container .leaflet-gac-search-btn .leaflet-gac-search-icon:hover {
+  background-color: #f5f5f5;
+}
+
+
+.leaflet-control-container .leaflet-gac-search-btn {
+    background: #fff;
+    width: 26px; 
+    height: 26px;
+    border-radius: 4px;
+}
+
+.leaflet-control-container .leaflet-gac-search-btn .leaflet-gac-search-icon {
+    cursor: pointer;
+    width: 96%;
+    height: 100%;
+	/* modif CD30: chemin local icone loupe */
+	background: url("/Ressources/API_JS/images/loupe.svg") no-repeat center center; 
+	background-size: 80%;
+}
+
+.leaflet-control-container .leaflet-gac-hidden {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    transition: width .3s ease .15s;
+}
