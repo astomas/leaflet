@@ -781,7 +781,12 @@ if (presenceLegende) {
 }
 
 function main() {
-    carteLeaflet = new CarteLeaflet("carteId", [43.96, 4.1], 10);	
+   	if (!L.Browser.mobile){
+		carteLeaflet = new CarteLeaflet("carteId", [43.96, 4.1], 8)
+	}
+	else {
+		carteLeaflet = new CarteLeaflet("carteId", [43.96, 4.1], 10)
+	}	
 	carteLeaflet.ajoutCoucheGeojson();	
 	carteLeaflet.dessinerCarte();
     carteLeaflet.limiteAdmin(Gard);
