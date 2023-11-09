@@ -779,11 +779,11 @@ if (presenceLegende) {
 }
 
 function main() {
-    	objCarteLeaflet = new CarteLeaflet("carteId", [43.96, 4.1], 10);	
-	// if (L.Browser.mobile){objCarteLeaflet.setView([43.96, 4.1], 8)};
+    	carteLeaflet = new CarteLeaflet("carteId", [43.96, 4.1], 10);	
+	if (L.Browser.mobile){carteLeaflet.setView([43.96, 4.1], 8)};
 	carteLeaflet.ajoutCoucheGeojson();	
 	carteLeaflet.dessinerCarte();
-    carteLeaflet.limiteAdmin(Gard);
+    	carteLeaflet.limiteAdmin(Gard);
 	carteLeaflet.serviceVisu();
 	if (clicZoomActif){carteLeaflet.zoomObjet()};
 	carteLeaflet.recentrer();
