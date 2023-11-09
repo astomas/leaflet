@@ -253,7 +253,7 @@ function CarteLeaflet(conteneurId, coordCentreCarte, zoomInitial) {
 					tableauContenuTooltip.push("<b>"+ nomPpté + ":</b> " + élément.properties[nomPpté]);
 					}
 				} 
-				if (toolTip) {			
+				if (toolTip && !L.Browser.mobile) {			
 					couche.bindPopup(tableauContenuPopup.join("<br />"), {maxWidth: 400, closeOnClick:true});
 					couche.bindTooltip(tableauContenuTooltip.join("<br />"));
 				}
