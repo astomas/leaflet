@@ -38,7 +38,7 @@
     width: 96%;
     height: 100%;
 	/* modif CD30: chemin local icone loupe */
-	background: url("/Ressources/API_JS/images/loupe.svg") no-repeat center center; 
+	background: url("/leaflet/Ressources/API_JS/images/loupe.svg") no-repeat center center; 
 	background-size: 80%;
 }
 
