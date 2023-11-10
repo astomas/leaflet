@@ -784,19 +784,19 @@ function main() {
     	carteLeaflet = new CarteLeaflet("carteId", [43.96, 4.1], 10);	
 	carteLeaflet.ajoutCoucheGeojson();	
 	carteLeaflet.dessinerCarte();
-    carteLeaflet.limiteAdmin(Gard);
+    	carteLeaflet.limiteAdmin(Gard);
 	carteLeaflet.serviceVisu();
 	if (clicZoomActif){carteLeaflet.zoomObjet()};	
 	carteLeaflet.recentrer();
-	carteLeaflet.rechercherLieu(maCarte);
-	carteLeaflet.information();	
-	carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr");
+	carteLeaflet.rechercherLieu(maCarte);	
+	carteLeaflet.titre();	
 	if (!L.Browser.mobile){		
 		carteLeaflet.mesurer();
-		carteLeaflet.imprimer();	
-		carteLeaflet.aide();		
-		carteLeaflet.titre();			
+		carteLeaflet.imprimer();
+		carteLeaflet.information();	
+		carteLeaflet.aide();				
 		carteLeaflet.logo("/leaflet/Ressources/c3po_gr.png", "70px", "Accueil si3p0", "/", "_self");
+		carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr");
 	}
 }
 		
