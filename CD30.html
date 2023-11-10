@@ -790,12 +790,12 @@ function main() {
 	carteLeaflet.recentrer();
 	carteLeaflet.rechercherLieu(maCarte);
 	carteLeaflet.information();	
+	carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr");
 	if (!L.Browser.mobile){		
 		carteLeaflet.mesurer();
 		carteLeaflet.imprimer();	
 		carteLeaflet.aide();		
-		carteLeaflet.titre();		
-		carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr");
+		carteLeaflet.titre();			
 		carteLeaflet.logo("/leaflet/Ressources/c3po_gr.png", "70px", "Accueil si3p0", "/", "_self");
 	}
 }
