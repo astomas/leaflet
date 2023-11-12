@@ -122,16 +122,16 @@ function CarteLeaflet(conteneurId, coordCentreCarte, zoomInitial) {
  	var googleSat = L.gridLayer.googleMutant({
 		maxZoom: 22	, type:"hybrid"			
 	});		
-	var cléIGN = "essentiels";  
+ 
 	var coucheWMTSIGN = "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2";
-	var fdcIGN = L.tileLayer("http://wxs.ign.fr/" + cléIGN + "/geoportail/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGN + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fpng",{ 
-		maxZoom: 18
-    });	
-	var cléIGN = "ortho"; 
-	var coucheWMTSIGNORTHO = "ORTHOIMAGERY.ORTHOPHOTOS";	
-	var orthoIGN = L.tileLayer("http://wxs.ign.fr/" + cléIGN + "/geoportail/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGNORTHO + "&TILEMATRIXSET=PM&TILEMATRIX={z}&TILECOL={x}&TILEROW={y}&STYLE=normal&FORMAT=image/jpeg",{ 
+	var fdcIGN = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGN + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png", {
 		maxZoom: 19
-    });		
+    	});	
+
+	var coucheWMTSIGNORTHO = "ORTHOIMAGERY.ORTHOPHOTOS";	
+	var orthoIGN = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGNORTHO + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg", {
+		maxZoom: 19
+    	});		
 	var StadiaMap = L.tileLayer("https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png?api_key=ee6964e8-3d98-4060-b991-2e3c21732548", {
 		maxZoom: 20
 	});	
