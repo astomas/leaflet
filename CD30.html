@@ -508,7 +508,7 @@ if (presenceLegende) {
 	var ctrlBoxRepliée = false;		
 	if (presenceLegende){	
 		var nbrEltsLegende = tabCtrlLegend.length;
-		if (ctrlBoxRepliée || nbrEltsLegende > 17 || L.Browser.mobile){
+		if (ctrlBoxRepliée || nbrEltsLegende > 17){
 			ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche,  {collapsed:true});
 			ctrlBoxCouches.addTo(maCarte);
 			}
