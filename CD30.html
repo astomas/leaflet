@@ -743,9 +743,15 @@ if (presenceLegende) {
 				);	
 				return img;
             }
-        });		
-		var ctrlLogo = new L.Control.Logo({position: "bottomleft"});						
+        });	
+		if (!L.Browser.mobile){ 
+			var ctrlLogo = new L.Control.Logo({position: "bottomleft"});	
+		}
+		else {
+			var ctrlLogo = new L.Control.Logo({position: "bottomright"});	
+		}	
 		ctrlLogo.addTo(maCarte);
+			
 	};
 	
 	this.titre = function(){
@@ -770,7 +776,7 @@ if (presenceLegende) {
 			L.ctrlTitre = function(options) {			  	
 				return new L.CtrlTitre(options);
 			};
-
+			
 			L.ctrlTitre({position: "bottomleft"}).addTo(maCarte);
 			 
 			(maCarte).on("browser-print-start", function(e){
