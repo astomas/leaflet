@@ -383,7 +383,7 @@ function CarteLeaflet(conteneurId, coordCentreCarte, zoomInitial) {
 			attributionControl: false,
 			closePopupOnClick: false
 		});	
-		if (L.Browser.mobile){maCarte.setView([43.96, 4.1], 8.5)};
+		if (L.Browser.mobile){maCarte.setView([44, 4.1], 8.5)};
 		
 		var copyright = L.control.attribution({position:"bottomleft"});
 		copyright.setPrefix('').addAttribution("<a href='https://intranet.intra.cg30.fr/fr/organigramme/organigramme-presidente-fr/organigramme-direction-generale-des-services-fr/organigramme-dgs-direction-fr/organigramme-dga-mobilites-et-logistique-fr/organigramme-dgaml-direction-d-appui-fr/organigramme-dgaml-dapp-pole-systemes-d-information-fr.html' target='_blank'>Pôle des Systèmes d'Information (DGaML - DAppui)</a>");
