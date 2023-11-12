@@ -516,7 +516,7 @@ if (presenceLegende) {
 			ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche,  {collapsed:false});				
 			ctrlBoxCouches.addTo(maCarte);
 			}
-		if (nbrEltsLegende > 24 || L.Browser.mobile) {	
+		if (nbrEltsLegende > 24) {	
 			blocLegende.remove();
 			blocLegende = L.control.Legend({title:null, collapsed:true, position: "bottomright", opacity:0.8, legends:tabCtrlLegendeObj});
 			blocLegende.addTo(maCarte);
