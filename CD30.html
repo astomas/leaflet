@@ -713,7 +713,7 @@ if (presenceLegende) {
 		if (!L.Browser.mobile){
     			var fenêtreAide = new L.control.dialog({size: [710,620], anchor: [0, 100], position:"topleft", initOpen: true, minSize:[350,250], maxSize:[900,700]});
 		} else {
-			var fenêtreAide = new L.control.dialog({size: [300,310], anchor: [0, 50], position:"topleft", initOpen: true, minSize:[300,250], maxSize:[600,400]});
+			var fenêtreAide = new L.control.dialog({size: [290,310], anchor: [0, 50], position:"topleft", initOpen: true, minSize:[300,250], maxSize:[600,400]});
 		}
 		ctrlAide = L.easyButton("fa-question fa-2x", function (btnA, carteA) {				
 			fenêtreAide.setContent(contenuAide).addTo(carteA);   
