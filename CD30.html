@@ -710,7 +710,11 @@ if (presenceLegende) {
 		"<p><b>Mesure de distance:</b> cliquer sur le bouton 'Règle', qui se colore, pour mesurer une distance sur la carte en km (3 décimales). Tracer une ligne avec la souris, cliquer pour créer des mesures intermédiaires et des changements d'angle. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment), appuyer sur la touche 'Echap'. Il est ainsi possible de mesurer plusieurs tronçons. Recliquer sur le bouton 'Régle' pour effacer les mesures effectuées.</p><a href='/leaflet/Ressources/API_JS/images/regle-leaflet.png' target='_blank'><img src='/leaflet/Ressources/API_JS/images/regle-leaflet.png' title='Mesure distance' style='width:60%;  display: block; margin-left: auto;  margin-right: auto;'></img></a>",
 		"<p><br></p>"
 		].join("");
-    	var fenêtreAide = new L.control.dialog({size: [710,620], anchor: [0, 100], position:"topleft", initOpen: true, minSize:[350,250], maxSize:[900,700]});
+		if (!L.Browser.mobile){
+    			var fenêtreAide = new L.control.dialog({size: [710,620], anchor: [0, 100], position:"topleft", initOpen: true, minSize:[350,250], maxSize:[900,700]});
+		} else {
+			var fenêtreAide = new L.control.dialog({size: [310,320], anchor: [0, 50], position:"topleft", initOpen: true, minSize:[350,250], maxSize:[600,400]});
+		}
 		ctrlAide = L.easyButton("fa-question fa-2x", function (btnA, carteA) {				
 			fenêtreAide.setContent(contenuAide).addTo(carteA);   
 			<!-- fenêtreAide.hideResize(); -->
