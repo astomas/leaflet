@@ -785,13 +785,13 @@ function main() {
 	carteLeaflet.serviceVisu();
 	if (clicZoomActif){carteLeaflet.zoomObjet()};	
 	carteLeaflet.recentrer();
-	carteLeaflet.rechercherLieu(maCarte);	
+	carteLeaflet.rechercherLieu(maCarte);
+	carteLeaflet.aide();
 	carteLeaflet.titre();	
 	if (!L.Browser.mobile){		
 		{carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr")};		
 		carteLeaflet.mesurer();
-		carteLeaflet.imprimer();
-		carteLeaflet.aide();
+		carteLeaflet.imprimer();		
 		carteLeaflet.information();		
 	}	
 }
