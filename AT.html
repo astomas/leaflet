@@ -57,7 +57,7 @@
 	.titre { text-align: left; line-height: 30px; color: #555; } 
 	.infotitre { padding: 6px 8px; font: 10px/12px Arial, Helvetica, sans-serif; font-size: 15px; background: white; background: rgba(255,255,255,1); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; line-height: 20px; cursor:grab;} 
     
-	a[href^="http://maps.google.com/maps"]{display:none !important}
+	a[href^="https://maps.google.com/maps"]{display:none !important}
 	a[href^="https://maps.google.com/maps"]{display:none !important}
 	.gmnoprint a, .gmnoprint span, .gm-style-cc {display:none; }
 	.gmnoprint div {background:none !important; }
@@ -787,7 +787,7 @@ function main() {
 	carteLeaflet.rechercherLieu(maCarte);
 	carteLeaflet.titre();	
 	if (!L.Browser.mobile){		
-		{carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "http://www.gard.fr")};		
+		{carteLeaflet.logo("/leaflet/Ressources/legard.jpg", "70px", "Le Gard", "https://www.gard.fr")};		
 		carteLeaflet.mesurer();
 		carteLeaflet.imprimer();		
 		carteLeaflet.information();		
