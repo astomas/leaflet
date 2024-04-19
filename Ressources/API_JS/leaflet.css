@@ -320,7 +320,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 .leaflet-touch .leaflet-bar a {
-	width: 30px;
+	width: 27px;
 	height: 30px;
 	/* modif CD30 resize print icon */
 	/*height: 30px;*/
@@ -572,6 +572,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	background: #fff;
 	border: 1px solid #666;
 	}
+
+/* Modif CD30 - icone folder plugin filelayer import gpx */	
+.icon {
+	max-width: 70%;
+	max-height: 90%;
+	margin: 3px;
+	}	
 
 
 /* Tooltip */

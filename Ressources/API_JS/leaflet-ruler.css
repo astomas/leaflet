@@ -17,6 +17,7 @@
   background-position: center;
   background-image: url("./images/ruler_orange.svg"); 
   border-color: chartreuse !important;
+  background-color: #FBFF77 !important;
 }
 .leaflet-bar{
   background-color: #ffffff;
