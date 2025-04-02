@@ -29,6 +29,10 @@
 	margin:4px 0 4px 4px;
 	font-weight:bolder;
 	color:blue;
+    max-width: 400px !important;
+	overflow-x: auto;
+    white-space: nowrap;
+}
 }
 .leaflet-control-search.search-load .search-input {
 	background: url('../API_JS/images/loader.gif') no-repeat center right #fff;
@@ -117,4 +121,6 @@
 	font-weight:bold;
 	border-radius:.25em;
 }
+
+
 

@@ -1,5 +1,7 @@
 ﻿(function () {
     L.GPlaceAutocomplete = {};
+	// modif CD30 - var globale servira qd rech google en cours à désactiver le 'keydown' du service visu
+	window.rechGoogleEnCours = false;
 
     L.Control.GPlaceAutocomplete = L.Control.extend({
         options: {
@@ -86,6 +88,10 @@
                 L.DomUtil.removeClass(this.icon, "leaflet-gac-hidden");
             }
             this.collapsedModeIsExpanded = shouldDisplaySearch;
+			
+			 // Mise à jour de la variable globale
+			window.rechGoogleEnCours = shouldDisplaySearch;
+			
         },
 
         //***

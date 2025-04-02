@@ -18,6 +18,7 @@ L.Map.ContextMenu = L.Handler.extend({
         var container = this._container = L.DomUtil.create('div', L.Map.ContextMenu.BASE_CLS, map._container);
         container.style.zIndex = 10000;
         container.style.position = 'absolute';
+		container.style.background = 'white !important';
 
         if (map.options.contextmenuWidth) {
             container.style.width = map.options.contextmenuWidth + 'px';
