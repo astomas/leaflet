@@ -132,11 +132,18 @@
 	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
 	pointer-events: auto;
 	}
-.leaflet-top,
-.leaflet-bottom {
+.leaflet-top, .leaflet-bottom {
 	position: absolute;
 	z-index: 1000;
 	pointer-events: none;
+	}
+	/* modif cd 30 - box layers par dessus visu, info et legende */
+	.leaflet-bottom.leaflet-right {
+    z-index: 500 !important;
+	}
+	/* modif cd 30 - logos et titre sous le reste */
+	.leaflet-bottom.leaflet-left {
+    z-index: 500 !important;
 	}
 .leaflet-top {
 	top: 0;
@@ -370,7 +377,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 .leaflet-control-layers .leaflet-control-layers-list,
 .leaflet-control-layers-expanded .leaflet-control-layers-toggle {
-	display: none;
+	display: none;	
 	}
 .leaflet-control-layers-expanded .leaflet-control-layers-list {
 	display: block;
@@ -412,7 +419,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 .leaflet-container .leaflet-control-attribution {
 	background: #fff;
-	background: rgba(255, 255, 255, 0.8);
+	background: rgba(255, 255, 255, 0.9);
 	margin: 0;
 	}
 .leaflet-control-attribution,
