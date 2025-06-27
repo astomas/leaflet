@@ -15,6 +15,7 @@
 	cursor: grab;
 }	
 
+/* titre carte */
 .titre { 
 	text-align: left;
 	line-height: 30px;
@@ -53,14 +54,109 @@ a[href^="https://maps.google.com/maps"]{
 	height: 0px; padding: 0; margin: 0;
 }	
 
-.encadré-aide {
-	text-align: center; font-weight: bold;
-	border: 2px solid orange; padding: 2px;
-	background-color: #CEE6F3; color: #007079;	display: block;
-	font-size: 1.4em; margin-block-start: 0em; margin-block-end: 1em;
-	margin-inline-start: 30px; margin-inline-end: 30px;
+/* aide */
+.bouton-aide {
+    width: 42px !important;
+    height: 31px !important;
+    font-size: 7px !important;
+    margin-top: 2px !important;
+    border-width: 2px !important;
+    font-weight: bolder !important;
+    color: white !important;
+    background-color: #f9b062 !important;
 }
 
+.bouton-aide:hover {
+    background-color: #f79731 !important;
+}
+
+.encadré-aide {
+	text-align: center; 
+	font-weight: bold;
+	border: 2px solid orange; 
+	padding: 2px;
+	background-color: #CEE6F3; 
+	color: #007079;	
+	display: block;
+	font-size: 1.4em; 
+	margin-block-start: 0em; 
+	margin-block-end: 1em;
+	margin-inline-start: 30px; 
+	margin-inline-end: 30px;
+}
+
+p {
+	margin: 10px 0;
+	line-height: 1.5;
+	text-align: left;
+}
+
+p img {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+p b {
+	font-weight: bold;
+}
+
+.text-highlighted {
+	color: #0078A8;
+	font-weight: bold;
+}
+
+.text-warning {
+	color: #3d546a;
+	font-weight: bold;
+	text-align: center;
+	display: block;
+	background-color: #dcd9db;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+#lienExtensible {
+	color: #0078A8;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#lienExtensible:hover {
+	color: #005a8a;
+}
+
+#contenuExtensible {
+	display: none;
+	padding: 10px;
+	background-color: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	margin-top: 10px;
+}
+
+/* info */
+.bouton-info {
+    width: 66px !important;
+    height: 46px !important;
+    color: #4f5697 !important;
+    background-color: white !important;
+    border-width: 1px !important;
+}
+
+.bouton-info:hover {
+    background-color: #e7e7e7;
+}
+
+.bouton-info-actif {
+    background-color: #e7e7e7;
+}
+
+/* cle */
+.bouton-cle:hover {
+	background-color: #ffe062 !important;
+}
+
+/* Service Visualisation */
 .popupgps .leaflet-popup-content-wrapper, .popupgps .leaflet-popup-tip{
 	background: white;
  }	
@@ -73,7 +169,107 @@ a[href^="https://maps.google.com/maps"]{
 	background-color: #f4f4f4 !important;
 }
 
-.bouton-cle:hover {
-	background-color: #ffe062 !important;
+.bouton-visu {
+	width : "66px";
+	height : "46px";
+	borderRadius : "5px";
+	backgroundColor : "#ffffce";
+	borderWidth : "1px";
+	marginRight : "8px";
 }
+
+.bouton-service-visu {
+    width: 66px;
+    height: 46px;
+    border-radius: 5px;
+    background-color: #ffffce;
+    border-width: 1px;
+    margin-right: 8px;
+}
+
+.bouton-service-visu-actif {
+    background-color: #ffff5b;
+}
+
+.bouton-service-visu img {
+    width: 34px;
+    height: 42px;
+}
+
+.boutons-conteneur {
+    display: flex;
+    margin-bottom: -6px;
+}
+
+.button-container, .boutons-conteneur {
+    margin-bottom: -5px !important;
+}
+
+/* logos */
+.leaflet-control-logos {
+    display: flex;
+    flex-direction: row;
+    background: none;
+    border: none;
+}
+
+.leaflet-control-logos-icon {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.leaflet-control-logos-icon:last-child {
+    margin-right: 0;
+}
+
+/* Forcer la transparence  */
+.leaflet-control-logos-container {
+    display: flex;
+    flex-direction: row;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important; 
+}
+
+.leaflet-control-logos-container.leaflet-bar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+	margin-bottom: 0px;
+}
+
+.leaflet-control-logos-img {
+    cursor: pointer;
+    margin-right: 5px;
+}	
+
+.leaflet-control-logos-img:last-child {
+    margin-right: 0;
+}
+
+/* legende 3D */
+.legende3D {
+  background: rgba(241, 241, 241);
+  padding:8px 12px; 
+  font:12px Arial;
+  border-radius:5px; 
+  box-shadow:0 0 15px rgba(0,0,0,0.2);
+  position:absolute; 
+  right:210px; 
+  bottom:37px; 
+  z-index:999;
+}
+.legende3D .item {
+	margin-bottom:4px;
+	display:flex;
+	align-items:center;
+}
+.legende3D .color {
+	width:18px;
+	height:18px;
+	margin-right:8px;
+	border:1px solid #999;
+}
+
+
 
