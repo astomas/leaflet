@@ -387,7 +387,7 @@ function CarteLeaflet(conteneurId) {
 		}
 		else {
 			presenceIcone = false;
-			var customIcone = new L.Icon({iconUrl: "/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
+			var customIcone = new L.Icon({iconUrl: "/leaflet/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
 			return L.marker(latlng, {icon: customIcone});
 		}
 	}
@@ -1020,31 +1020,31 @@ if (presenceLegende) {
 	this.aide = function () {
 		var contenuAideInitial =
 		`<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
-		<p><img src='/ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer: </b> recentrer automatiquement la carte sur le Département du Gard (ou sur l'UT selon carte).</p>
-		<p><img src='/ressources/API_JS/images/Aide/rechGoogle.gif' width='27' height='27'><b> Rechercher commune, adresse, route, lieu:</b> saisir les 1ères lettres du lieu recherché. Géocodage Google Maps, Gard priorisé.</p>
-		<p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b> Autres fonctions:</b> déploiement de 4 autres fonctions: imprimer, mesurer distance(s), calcul d'isochrones et import de fichiers shape, gpx (GPS), geojson, kml, csv. Détails d'utilisation
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer: </b> recentrer automatiquement la carte sur le Département du Gard (ou sur l'UT selon carte).</p>
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/rechGoogle.gif' width='27' height='27'><b> Rechercher commune, adresse, route, lieu:</b> saisir les 1ères lettres du lieu recherché. Géocodage Google Maps, Gard priorisé.</p>
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b> Autres fonctions:</b> déploiement de 4 autres fonctions: imprimer, mesurer distance(s), calcul d'isochrones et import de fichiers shape, gpx (GPS), geojson, kml, csv. Détails d'utilisation
 		en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
-		<p><img src='/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher entité métier:</b> disponible selon les cartes, saisir les 1ères lettres pour afficher les correspondances et zoomer dessus. La nature de l'entité à rechercher est indiquée dans l'invite de saisie.
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher entité métier:</b> disponible selon les cartes, saisir les 1ères lettres pour afficher les correspondances et zoomer dessus. La nature de l'entité à rechercher est indiquée dans l'invite de saisie.
 		Appuyer sur la touche clavier 'Espace' pour afficher la liste entière.</p>
-		<p><img src='/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en b. à dr. en cliquant dessus. Le bloc des cases à cocher en h. à dr. affiche/masque une couche entière tandis que le bloc légende 
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en b. à dr. en cliquant dessus. Le bloc des cases à cocher en h. à dr. affiche/masque une couche entière tandis que le bloc légende 
 		permet en + d'afficher/masquer les éléments d'une même couche.</p>
-		<p><img src='/ressources/API_JS/images/Aide/streetview.gif' height='30'> <b>Accès à Street View, Panoramax, Géoportail IGN 2D/3D, Google Maps, Waze: </b>afficher le bloc service de visualisation et 'Pegman' (personnage orange). 
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/streetview.gif' height='30'> <b>Accès à Street View, Panoramax, Géoportail IGN 2D/3D, Google Maps, Waze: </b>afficher le bloc service de visualisation et 'Pegman' (personnage orange). 
 		Positionner Pegman sur la carte et cliquer sur l'icone de l'un des services	pour ouvrir, dans un nouvel onglet, la page correspondante à sa position. Recliquer sur le bouton ou appuyer sur une touche clavier pour le désactiver.</p>
-		<p><img src='/ressources/API_JS/images/Aide/info.png' height='30'> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l'icone 'i' (ou via croix).</p>
-		<p><img src='/ressources/API_JS/images/Aide/coordGPS.gif' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'. 
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/info.png' height='30'> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l'icone 'i' (ou via croix).</p>
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/coordGPS.gif' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'. 
 		Le menu d'origine est toujours accessible par clic droit sur les blocs fonds de carte ou légende.</p>
 		<p><a href='#' id='lienExtensible'><b>(*) Voir plus de détails sur les autres fonctions</b></a></p>
 		<div id='contenuExtensible' style='display:none;'</div>`;
 		
 		var contenuAideExtensible = 
-		`<p><img src='/ressources/API_JS/images/Aide/imprimer.gif' width='27' height='27'> <b> Imprimer carte:</b> 'Vue courante': imprimer au format paysage la portion de carte représentée à l'écran. 'Auto Gard': imprimer l'ensemble du département (mise à l'échelle auto). 'Sélec. zone' : 
+		`<p><img src='/leaflet/ressources/API_JS/images/Aide/imprimer.gif' width='27' height='27'> <b> Imprimer carte:</b> 'Vue courante': imprimer au format paysage la portion de carte représentée à l'écran. 'Auto Gard': imprimer l'ensemble du département (mise à l'échelle auto). 'Sélec. zone' : 
 		imprimer une portion de la carte selon un rectangle tracé à la souris.</p>
-		<p><img src='/ressources/API_JS/images/Aide/distance.gif' width='27'><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment)
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/distance.gif' width='27'><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment)
 		, appuyer sur la touche 'Echap' ou double-cliquer. Il est ainsi possible de mesurer plusieurs tronçons. ré-appuyer sur le bouton 'Régle' ou la touche 'Echap' pour tout effacer.</p>
-		<p><img src='/ressources/API_JS/images/Aide/isochrone.gif' width='27' height='27'> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton) 
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/isochrone.gif' width='27' height='27'> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton) 
 		affichant l'isochrone ou l'isodistance autour ou depuis le point (valeurs Départ/Arrivée). 
 		Les calculs prennent en compte le réseau routier.</p>
-		<p><img src='/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b> Import fichier .shp, .gpx, .geojson, .kml, .csv:</b> choisir un ou plusieurs fichiers correspondant à 
+		<p><img src='/leaflet/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b> Import fichier .shp, .gpx, .geojson, .kml, .csv:</b> choisir un ou plusieurs fichiers correspondant à 
 		l'un de ces formats ou leur version zippée (.zip), pour afficher leur contenu sur la carte au cours de la session. 
 		<ul>		
 		<li>Fichiers WGS84 nécessaires. Si projection Lambert 93, reprojeter en WGS84 via outil type QGis ou site 'mapshaper.org'.</li>		
@@ -1161,13 +1161,13 @@ if (presenceLegende) {
             stateName: 'click',
             onClick: afficherPluginStreetview,
             title: 'Service Visualisation',
-            icon:'<img src="/Ressources/API_JS/images/icones visu/pegman.png">'
+            icon:'<img src="/leaflet/Ressources/API_JS/images/icones visu/pegman.png">'
         }]	
     });
     
     boutonServiceVisu.button.classList.add('bouton-service-visu');
             
-    pegmanIcon = new L.Icon({iconUrl: "/Ressources/API_JS/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
+    pegmanIcon = new L.Icon({iconUrl: "/leaflet/Ressources/API_JS/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
     pegman = L.marker(maCarte.getCenter(),{icon:pegmanIcon});
     maCarte.on("move", function() {
         pegman.setLatLng(maCarte.getCenter()); 
