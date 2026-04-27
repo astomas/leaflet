@@ -1,0 +1,133 @@
+.leaflet-legend {
+  background-color: #bbff00; 
+}
+.leaflet-legend-title {
+  margin: 0px;
+  padding-bottom: 0px;
+}
+
+.leaflet-legend-column {
+  float: left;
+  margin-right: 5px;
+  width: min-content;  
+  min-width: 160px;
+}
+
+.leaflet-legend-item {
+  display: table;
+  margin: 0px 0px 1px -1px;
+}
+
+.leaflet-legend-item span {
+  /* vertical-align: middle; */
+  display: table-cell;
+  word-break: keep-all;
+  white-space: nowrap;
+  background-color: transparent;
+  text-align: left;
+  /* padding-top: 2px; */
+}
+
+.leaflet-legend-item-clickable {
+  cursor: pointer;
+}
+.leaflet-legend-item-inactive span {
+  /*color: #cccccc;*/
+  color: #909497;
+  }
+.leaflet-legend-item-inactive i img, .leaflet-legend-item-inactive i canvas {
+   opacity: 0.3; 
+}
+
+.leaflet-legend-item i {
+  display: inline-block;
+  padding: 0px 2px 0px 0px;
+  position: relative;
+  vertical-align: middle;
+}
+
+.leaflet-legend-toggle {
+/* modif CD30: chgt icone et taille défaut quand legende repliée */
+  background-image: url("./images/legend.png");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  box-shadow: none;
+  border-radius: 0px;
+  padding: 8px;
+}
+
+.leaflet-legend-contents {
+  display: none;
+}
+
+.leaflet-legend-expanded .leaflet-legend-contents {
+  display: block;
+  padding: 4px 4px 0px 7px;
+}
+
+/* modif CD30 colonne + large quand 2 col. legende */
+.leaflet-legend-contents.deux-colonnes .leaflet-legend-column {
+  min-width: 80px !important;
+  margin-right: 0px;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+
+.leaflet-legend-contents img {
+/* modif cd30: reposition icones lors de l'impression */
+  /* position: absolute; */
+    position: relative;
+	top: -2px !important;
+	left:-2px !important;
+}
+
+/* --- Thématiques repliables (regroupement par nomCouche) --- */
+.leaflet-legend-group-header {
+    cursor: pointer;
+    padding: 3px 5px;
+    margin-top: 4px;
+    background-color: #d0d4e8;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 12px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.leaflet-legend-group-header:first-child {
+    margin-top: 0;
+}
+.leaflet-legend-group-header:hover {
+    background-color: #bcc1d9;
+}
+.leaflet-legend-group-arrow {
+    font-size: 10px;
+    width: 12px;
+    flex-shrink: 0;
+}
+.leaflet-legend-group-title {
+    /* max-width: 300px; */
+	overflow-wrap: break-word; 
+    hyphens: auto;  
+    white-space: normal;
+}
+.leaflet-legend-group-content {
+    padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 4px;
+}
+/* largeur et hauteur fixe */
+.leaflet-legend-group-collapsed {
+    height: 0;
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+}
+
+.leaflet-legend-contents:after {
+  content: "";
+  display: block;
+  clear: both;
+  }

@@ -1,0 +1,73 @@
+﻿/* Container principal - z-index élevé pour passer au-dessus des autres contrôles */
+.leaflet-gac-container {
+    z-index: 1000 !important;
+}
+
+.leaflet-gac-wrapper {
+    height: 26px;
+}
+
+/* Style pour le nouveau PlaceAutocompleteElement */
+.leaflet-gac-wrapper gmp-place-autocomplete {
+    display: block;
+    width: 360px;
+    height: 26px;
+    z-index: 1001 !important;
+    --gmp-autocomplete-input-border-radius: 5px;
+    --gmp-autocomplete-input-border: 1px solid #d0d0d0;
+    --gmp-autocomplete-input-padding: 0 3px;
+	
+}
+
+.leaflet-gac-wrapper gmp-place-autocomplete {
+    font-size: 13px !important;
+}
+
+.leaflet-control-container .leaflet-right gmp-place-autocomplete {
+    position: absolute;
+    right: 0;
+    transition: width .3s ease .15s, opacity .3s ease;
+}
+
+/* Masquer le composant en mode collapsed */
+.leaflet-gac-wrapper gmp-place-autocomplete.leaflet-gac-hidden {
+    opacity: 0;
+    width: 0 !important;
+    overflow: hidden;
+    pointer-events: none;
+    transition: width .3s ease .15s, opacity .2s ease;
+}
+
+/* Bouton loupe */
+.leaflet-control-container .leaflet-gac-search-btn {
+    background: #fff;
+    width: 26px; 
+    height: 26px;
+    border-radius: 4px;
+}
+
+.leaflet-control-container .leaflet-gac-search-btn .leaflet-gac-search-icon {
+    cursor: pointer;
+    width: 96%;
+    height: 103%;
+    /* modif CD30: chemin local icone loupe */
+    background: url("/Ressources/API_JS/images/loupe.svg") no-repeat center center; 
+    background-size: 71%;
+}
+
+.leaflet-control-container .leaflet-gac-search-btn .leaflet-gac-search-icon:hover {
+    background-color: #f5f5f5;
+}
+
+/* Classe hidden générique */
+.leaflet-control-container .leaflet-gac-hidden {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.leaflet-gac-wrapper gmp-place-autocomplete::part(clear-button) {
+    display: none !important;
+}
