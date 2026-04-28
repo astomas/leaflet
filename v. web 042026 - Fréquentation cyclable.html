@@ -1709,13 +1709,13 @@ this.importFichier = function () {
             stateName: 'click',
             onClick: afficherPluginStreetview,
             title: 'Service Visualisation',
-            icon:'<img src="/leaflet/Ressources 26/images/icones visu/pegman.png">'
+            icon:'<img src="/leaflet/Ressources/API_JS/images/icones visu/pegman.png">'
         }]	
     });
     
     boutonServiceVisu.button.classList.add('bouton-service-visu');
             
-    pegmanIcon = new L.Icon({iconUrl: "/leaflet/Ressources 26/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
+    pegmanIcon = new L.Icon({iconUrl: "/leaflet/Ressources/API_JS/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
     pegman = L.marker(maCarte.getCenter(),{icon:pegmanIcon});
     maCarte.on("move", function() {
         pegman.setLatLng(maCarte.getCenter()); 
@@ -1872,7 +1872,7 @@ this.ajouterLogo = function() {
         
         if (valeurTitre1.endsWith("Waze")){
             icones.push({
-                imgSource: "/leaflet/Ressources 26/waze.png", 
+                imgSource: "/leaflet/Ressources/waze.png", 
                 largeur: "68px", 
                 marginLeft: "10px", 
                 imgTooltip: "Waze", 
