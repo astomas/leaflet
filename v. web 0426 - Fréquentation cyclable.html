@@ -211,23 +211,36 @@ function CarteLeaflet(conteneurId) {
 	 
 	var coucheWMTSIGN = "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2";
 	var fdcIGN = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGN + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png"
-	,{
-		maxZoom: 19
-    });	
+		,{
+			maxZoom: 21,
+			maxNativeZoom: 19
+	    });	
  
 	var coucheWMTSIGNORTHO = "ORTHOIMAGERY.ORTHOPHOTOS";	
 	var orthoIGN = 	L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGNORTHO + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg"
-	,{
-		maxZoom: 19
-	});	
+		,{
+			maxZoom: 21,
+			maxNativeZoom: 19
+		});	
 	
-	var StadiaMap = L.tileLayer("https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png?api_key=ee6964e8-3d98-4060-b991-2e3c21732548", {
-		maxZoom: 20
-	});	
-	
-	var cartoDB = L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",{
-		maxZoom: 20
-	});
+	var StadiaMap = L.tileLayer(
+		"https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png?api_key=ee6964e8-3d98-4060-b991-2e3c21732548"
+		,{
+			maxZoom: 22,
+			maxNativeZoom: 20,			
+			attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a>'
+		}
+	);
+
+	var cartoDB = L.tileLayer(
+		"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+		,{
+			subdomains: 'abcd',
+			maxZoom: 22,
+			maxNativeZoom: 20,			
+			attribution: '&copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+		}
+	);
 	
 
 	var tabGeomCouche = [];	
