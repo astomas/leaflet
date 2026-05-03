@@ -201,6 +201,7 @@ function ajouterHoverEtClic(bouton, params) {
     }
 }
 
+// [modif Claude Code] extraction au niveau module (était redéfinie pour chaque feature dans creerPopupEtLegende)
 // Export CSV multi-entités (utilisé par popups multi-lignes et import fichiers)
 window.exportTronconCSV = function(dataGroupEncoded, nomFichier) {
     var dataArray = JSON.parse(decodeURIComponent(dataGroupEncoded));
@@ -596,6 +597,7 @@ function CarteLeaflet(conteneurId) {
 	creerPopupEtLegende();
 	}
 	
+	// [modif Claude Code] suppression code mort : var marker + push/return jamais exécutés (situés après les return)
 	function creerIconeCusto (élément, latlng) {
 		if (élément.properties.icone) {
 			presenceIcone = true;
@@ -819,6 +821,7 @@ function CarteLeaflet(conteneurId) {
 	ordreMLSLeg = groupBy(tabEltsMLSLeg, "options.nomCoucheMLSEtCouleur");	
 	ordreMPLeg = groupBy(tabEltsMPLeg, "options.nomCoucheMPEtCouleur");
 	
+	// [modif Claude Code] Object.assign({}, ...) au lieu de muter ordreMarkerLeg
 	var listeCouchesLeg = Object.assign({}, ordreMarkerLeg, ordreMLSLeg, ordreMPLeg);
 	var tabCouchesLGLeg = Object.values(listeCouchesLeg).map(listOfCouches => L.layerGroup(listOfCouches));
 
@@ -2284,6 +2287,7 @@ this.rechercherJson = function(){
 
 		syncOmsAvecEtatCouche();
 
+		// [modif Claude Code] handler unique partagé au lieu de N handlers (1 par couche point) sur overlayadd/overlayremove
 		const couchesPointAvecLayer = indicesCouchesPoint.map(idx => tabCoucheMG[idx]);
 		const onToggleCouchePoint = (e) => {
 			if (couchesPointAvecLayer.includes(e.layer)) {
