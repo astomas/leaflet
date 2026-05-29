@@ -21,7 +21,7 @@ _nbre_vues integer := array_length(_nom_vue, 1);
 dateCouranteTitre character varying := ' " - ' || to_char(current_timestamp, 'DD/MM/YYYY') || ' " ';
 dateCouranteMinute character varying := ' " - ' || to_char(current_timestamp, 'DD/MM/YYYY HH24:MI') || ' " ';
 
-partieDébut character varying :=  
+partieDÃ©but character varying :=  
 '
 <!DOCTYPE html>
 <html>    
@@ -39,12 +39,12 @@ partieDébut character varying :=
 	<!-- limite geojson du Gard -->
 	<script src="/Ressources/API_JS/librairies_cd30/gard.js"></script>
 
-	<!-- création boutons - lib. fontawesome d''icones pr boutons -->
+	<!-- crÃ©ation boutons - lib. fontawesome d''icones pr boutons -->
 	<script type="text/javascript" src="/Ressources/API_JS/easy-button.js"></script>
 	<link rel="stylesheet" href = "/Ressources/API_JS/easy-button.css" />	 
 	<link rel="stylesheet" href="/Ressources/API_JS/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
 
-	<!-- clé API google - limite appels/mois -->
+	<!-- clÃ© API google - limite appels/mois -->
 	<script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbn4agQo3A4Hp3Yyyros9hD7vFw0WSNOM&callback=Function.prototype&loading=async&v=beta"></script>
 	<!-- Fonds carte Google -->
 	<script src="/Ressources/API_JS/Leaflet.GoogleMutant.js"></script>
@@ -95,7 +95,7 @@ partieDébut character varying :=
 	<!-- Effet 3D sur batis -->
 	<script type="text/javascript" src="/Ressources/API_JS/OSMBuildings-leaflet.js"></script>	
 	
-	<!-- spiderfy points superposés -->
+	<!-- spiderfy points superposÃ©s -->
 	<script src="/Ressources/API_JS/overlap-marker.js"></script>
 	
 	</head>	
@@ -114,7 +114,7 @@ partieDébut character varying :=
 	
 	L.Icon.Default.imagePath = ''/Ressources/API_JS/images/'';
 
-	var tabNettoyé = [];
+	var tabNettoyÃ© = [];
 
 	if (valeurTitre1.endsWith("3D")) {
 			nbreDeVues = nbreDeVues - 1;
@@ -131,17 +131,17 @@ tabCoucheMetier = [];
 partieCodeJS character varying :=    
 '  
 
-// Vérifier si la couche a au moins une feature avec coordonnées
+// VÃ©rifier si la couche a au moins une feature avec coordonnÃ©es
 tabCoucheMetier = tabCoucheMetier.map(function(couche, index) {
     var donnees = Array.isArray(couche) ? couche[0] : couche;
     
-    // Fonction locale : vérifie qu''une feature a une géométrie réellement exploitable
+    // Fonction locale : vÃ©rifie qu''une feature a une gÃ©omÃ©trie rÃ©ellement exploitable
     function geometrieUtile(feature) {
         if (!feature.geometry) return false;
         var coords = feature.geometry.coordinates;
         if (!Array.isArray(coords) || coords.length === 0) return false;
         
-        // Extraction récursive de tous les points [lng, lat]
+        // Extraction rÃ©cursive de tous les points [lng, lat]
         function extrairePoints(arr) {
             if (!Array.isArray(arr) || arr.length === 0) return [];
             if (typeof arr[0] === ''number'') return [arr];
@@ -155,7 +155,7 @@ tabCoucheMetier = tabCoucheMetier.map(function(couche, index) {
         if (feature.geometry.type === ''Point'') return points.length === 1;
         if (points.length < 2) return false;
         
-        // Au moins un point doit différer du premier
+        // Au moins un point doit diffÃ©rer du premier
         var premier = points[0];
         return points.some(function(p) {
             return p[0] !== premier[0] || p[1] !== premier[1];
@@ -189,20 +189,20 @@ tabCoucheMetier = tabCoucheMetier.map(function(couche, index) {
 });
 nbreDeVues = tabCoucheMetier.length;
 
-//Regrouper les éléments d''un tableau dans un objet en fonction de la valeur d''un de leurs attributs
+//Regrouper les Ã©lÃ©ments d''un tableau dans un objet en fonction de la valeur d''un de leurs attributs
 function groupBy(tableauDonnees, cheminPropriete) {
-    // reduce() parcourt le tableau et construit l''objet final regroupé
+    // reduce() parcourt le tableau et construit l''objet final regroupÃ©
     return tableauDonnees.reduce((groupesCrees, elementCourant) => {        
-        // 1. On navigue dans l''élément (ex: "properties.nature") pour trouver le nom du groupe
+        // 1. On navigue dans l''Ã©lÃ©ment (ex: "properties.nature") pour trouver le nom du groupe
         const valeurDuGroupe = cheminPropriete.split(''.'').reduce((objetCourant, sousPropriete) => objetCourant?.[sousPropriete], elementCourant);        
-        // 2. Si le groupe n''existe pas encore, on l''initialise avec un tableau vide [], puis on y ajoute l''élément
+        // 2. Si le groupe n''existe pas encore, on l''initialise avec un tableau vide [], puis on y ajoute l''Ã©lÃ©ment
         (groupesCrees[valeurDuGroupe] = groupesCrees[valeurDuGroupe] || []).push(elementCourant);        
-        // 3. On retourne l''objet enrichi pour le passage au prochain élément
+        // 3. On retourne l''objet enrichi pour le passage au prochain Ã©lÃ©ment
         return groupesCrees;        
-    }, {}); // {} = objet vide de départ
+    }, {}); // {} = objet vide de dÃ©part
 }
 
-// Inverser les coordonnées des géométries. GeoJSON impose [Longitude, Latitude] mais Leaflet lit les coordonnées au format [Latitude, Longitude] (api turf)
+// Inverser les coordonnÃ©es des gÃ©omÃ©tries. GeoJSON impose [Longitude, Latitude] mais Leaflet lit les coordonnÃ©es au format [Latitude, Longitude] (api turf)
 function flipGeoJSON(coords) {
     if (typeof coords[0] === ''number'') {
         return [coords[1], coords[0]];
@@ -210,7 +210,7 @@ function flipGeoJSON(coords) {
     return coords.map(elementTableau => flipGeoJSON(elementTableau));
 }
 
-// gestion interactions icone clé 
+// gestion interactions icone clÃ© 
 function ajouterHoverEtClic(bouton, params) {
     let isLocked = false;
     const {
@@ -317,14 +317,14 @@ function CarteLeaflet(conteneurId) {
 				}
 			});
 	
-	function styleCoucheMétier(élément) {	 
-		if (élément.properties.couleur){		
-			var couleurEltCouche = élément.properties.couleur;  
+	function styleCoucheMÃ©tier(Ã©lÃ©ment) {	 
+		if (Ã©lÃ©ment.properties.couleur){		
+			var couleurEltCouche = Ã©lÃ©ment.properties.couleur;  
 			}
 		else {
 			var couleurEltCouche = "red";	
 			}
-		if (élément.geometry.type == "MultiPolygon") {
+		if (Ã©lÃ©ment.geometry.type == "MultiPolygon") {
 			var styleCouchePolygon = {	
 				color: couleurEltCouche
 				//fillOpacity: 0.1
@@ -332,11 +332,11 @@ function CarteLeaflet(conteneurId) {
 			return styleCouchePolygon;
 		}
 		
-		if (élément.geometry.type == "MultiLineString") {
+		if (Ã©lÃ©ment.geometry.type == "MultiLineString") {
 			var styleCoucheMLS = {	
 				color: couleurEltCouche
 			}
-			if (valeurTitre1.includes("fauchage") && élément.properties["Traitement       "] == ''Ponctuel'') {
+			if (valeurTitre1.includes("fauchage") && Ã©lÃ©ment.properties["Traitement       "] == ''Ponctuel'') {
 				styleCoucheMLS.dashArray = ''5,10'';
 			}	
 			return styleCoucheMLS;
@@ -344,22 +344,22 @@ function CarteLeaflet(conteneurId) {
 		
 	}
 
-	function traiterEltsCouche (élément, couche) {
+	function traiterEltsCouche (Ã©lÃ©ment, couche) {
 		
 		function nettoyerValNulles() {
-			for (var nomPpté in élément.properties) {	
-				if (élément.properties[nomPpté] == null) {
-					élément.properties[nomPpté] = "Non défini";}	
+			for (var nomPptÃ© in Ã©lÃ©ment.properties) {	
+				if (Ã©lÃ©ment.properties[nomPptÃ©] == null) {
+					Ã©lÃ©ment.properties[nomPptÃ©] = "Non dÃ©fini";}	
 			}
 		}
 
 		function formaterLienHttp(){
-			for (var nomPpté in élément.properties) {
-				if (nomPpté.match(/[Ll]ien/) && élément.properties[nomPpté] !== "Non défini") {
-					élément.properties[nomPpté] = "<a href=" + élément.properties[nomPpté].replace(/ /g,"%20") + " title="+ élément.properties[nomPpté].replace(/ /g,"%20") + " target=_blank> " + "Accéder au lien</a>";	
+			for (var nomPptÃ© in Ã©lÃ©ment.properties) {
+				if (nomPptÃ©.match(/[Ll]ien/) && Ã©lÃ©ment.properties[nomPptÃ©] !== "Non dÃ©fini") {
+					Ã©lÃ©ment.properties[nomPptÃ©] = "<a href=" + Ã©lÃ©ment.properties[nomPptÃ©].replace(/ /g,"%20") + " title="+ Ã©lÃ©ment.properties[nomPptÃ©].replace(/ /g,"%20") + " target=_blank> " + "AccÃ©der au lien</a>";	
 				}
-				else if (nomPpté.match(/[Ee]mail|[Mm]ail/) && élément.properties[nomPpté] !== "Non défini") {
-					élément.properties[nomPpté] = "<a href=mailto:" + élément.properties[nomPpté] + " target=_blank> " + élément.properties[nomPpté] + " </a>";
+				else if (nomPptÃ©.match(/[Ee]mail|[Mm]ail/) && Ã©lÃ©ment.properties[nomPptÃ©] !== "Non dÃ©fini") {
+					Ã©lÃ©ment.properties[nomPptÃ©] = "<a href=mailto:" + Ã©lÃ©ment.properties[nomPptÃ©] + " target=_blank> " + Ã©lÃ©ment.properties[nomPptÃ©] + " </a>";
 				}
 			}	
 		}
@@ -368,16 +368,16 @@ function CarteLeaflet(conteneurId) {
 	function surlignerElt() { 
 		flagHoverSurlignage = false; 
 		
-	    var couleurEltCouche = élément.properties.couleur || "red";
-	    var typeGeometryG = élément.geometry.type;
+	    var couleurEltCouche = Ã©lÃ©ment.properties.couleur || "red";
+	    var typeGeometryG = Ã©lÃ©ment.geometry.type;
 	
 	    if (typeGeometryG.includes("LineString")) {
-	        couche._estSélectionné = false;
+	        couche._estSÃ©lectionnÃ© = false;
 	
-	        // On attache les événements à la couche
+	        // On attache les Ã©vÃ©nements Ã  la couche
 	        couche.on({
 	            click: function(e) {
-	                e.target._estSélectionné = true;
+	                e.target._estSÃ©lectionnÃ© = true;
 	                e.target.setStyle({
 	                    color: "#ff6600",
 	                    weight: 10,
@@ -385,7 +385,7 @@ function CarteLeaflet(conteneurId) {
 	                });
 	            },
 	            popupclose: function(e) {
-	                e.target._estSélectionné = false;
+	                e.target._estSÃ©lectionnÃ© = false;
 	                e.target.setStyle({							
 	                    color: couleurEltCouche,
 	                    weight: 3,
@@ -393,7 +393,7 @@ function CarteLeaflet(conteneurId) {
 	                });
 	            },
 	            mouseover: function(e) {
-	                if (flagHoverSurlignage && !e.target._estSélectionné) {
+	                if (flagHoverSurlignage && !e.target._estSÃ©lectionnÃ©) {
 	                    e.target.setStyle({
 	                        weight: 6,
 	                        color: ''red'',
@@ -402,7 +402,7 @@ function CarteLeaflet(conteneurId) {
 	                }
 	            },
 	            mouseout: function(e) {
-	                if (flagHoverSurlignage && !e.target._estSélectionné) {
+	                if (flagHoverSurlignage && !e.target._estSÃ©lectionnÃ©) {
 	                    e.target.setStyle({							
 	                        color: couleurEltCouche,
 	                        weight: 3,
@@ -413,7 +413,7 @@ function CarteLeaflet(conteneurId) {
 	        });
 	    }
 			// surlignage polygones
-			function créerSurlignage () {
+			function crÃ©erSurlignage () {
 				couche.setStyle({
 					color: "#ff6600",
 					weight: 10,
@@ -421,8 +421,8 @@ function CarteLeaflet(conteneurId) {
 				});
 			}
 			function resetSurlignage () {
-				if (élément.properties.couleur){		
-					var couleurEltCouche = élément.properties.couleur;  
+				if (Ã©lÃ©ment.properties.couleur){		
+					var couleurEltCouche = Ã©lÃ©ment.properties.couleur;  
 				}
 				else {
 					var couleurEltCouche = "red";	
@@ -433,25 +433,25 @@ function CarteLeaflet(conteneurId) {
 					opacity: 1
 				});
 			}						
-			typeGeometryG = élément.geometry.type;	
+			typeGeometryG = Ã©lÃ©ment.geometry.type;	
 			if (typeGeometryG.includes("Polygon")) {
 				couche.on({
-					click: créerSurlignage,	
+					click: crÃ©erSurlignage,	
 					popupclose: resetSurlignage
 				});	
 			}
 	}
 			
 		function creerTabLegende() {
-			if ((élément.properties.couleur == "Non défini" || typeof élément.properties.couleur === "undefined") && (élément.geometry.type !== "Point" && élément.geometry.type !== "MultiPoint")){
-				élément.properties.couleur = "red";
+			if ((Ã©lÃ©ment.properties.couleur == "Non dÃ©fini" || typeof Ã©lÃ©ment.properties.couleur === "undefined") && (Ã©lÃ©ment.geometry.type !== "Point" && Ã©lÃ©ment.geometry.type !== "MultiPoint")){
+				Ã©lÃ©ment.properties.couleur = "red";
 			}	
-			if (élément.properties.legende){					
+			if (Ã©lÃ©ment.properties.legende){					
 				presenceLegende = true;
-				tabComposantLeg.push([élément.geometry.type, élément.properties.legende, élément.properties.couleur, élément.properties.icone, 
-				élément.properties.afficherlegouverture, élément.properties.nomcouche]);
+				tabComposantLeg.push([Ã©lÃ©ment.geometry.type, Ã©lÃ©ment.properties.legende, Ã©lÃ©ment.properties.couleur, Ã©lÃ©ment.properties.icone, 
+				Ã©lÃ©ment.properties.afficherlegouverture, Ã©lÃ©ment.properties.nomcouche]);
 			}
-			tabGeomCouche.push([élément.geometry.type, élément.properties.nomcouche]);	
+			tabGeomCouche.push([Ã©lÃ©ment.geometry.type, Ã©lÃ©ment.properties.nomcouche]);	
 		}
 		
 	function creerPopupEtLegende() {
@@ -459,7 +459,7 @@ function CarteLeaflet(conteneurId) {
     window.exportTronconCSV = function(dataGroupEncoded, nomFichier) {
         var dataArray = JSON.parse(decodeURIComponent(dataGroupEncoded));        
 
-		// Récupérer TOUTES les colonnes uniques de toutes les entités, nomcouche en col 1
+		// RÃ©cupÃ©rer TOUTES les colonnes uniques de toutes les entitÃ©s, nomcouche en col 1
 		var toutesColonnes = [''nomcouche'']; 
 		dataArray.forEach(function(item) {
 			Object.keys(item).forEach(function(k) {
@@ -475,7 +475,7 @@ function CarteLeaflet(conteneurId) {
         dataArray.forEach(function(item) {
             var ligne = toutesColonnes.map(function(col) {
                 var val = item[col] === null || item[col] === undefined ? "" : String(item[col]);
-                // Nettoyage HTML et échappement guillemets
+                // Nettoyage HTML et Ã©chappement guillemets
                 return ''"'' + val.replace(/<[^>]*>/g, "").replace(/"/g, ''""'') + ''"'';
             });
             csv += ligne.join(";") + "\r\n";
@@ -495,9 +495,9 @@ function CarteLeaflet(conteneurId) {
 		
     };
 
-    // AGRÉGATION POPUP DOUBLONS
-    var geoRef = JSON.stringify(élément.geometry.coordinates);
-    var propsGroupes = indexSpatial[geoRef] || [élément.properties];
+    // AGRÃ‰GATION POPUP DOUBLONS
+    var geoRef = JSON.stringify(Ã©lÃ©ment.geometry.coordinates);
+    var propsGroupes = indexSpatial[geoRef] || [Ã©lÃ©ment.properties];
 
     var estMulti = propsGroupes.length > 1;
     var contenuFinalPopup, texteTooltip;
@@ -505,15 +505,15 @@ function CarteLeaflet(conteneurId) {
         var htmlParts = [];
         propsGroupes.forEach(function(pps, idx) {
             var p = [];
-            var nom = pps.nomcouche || pps.legende || ("Entité " + (idx + 1));
+            var nom = pps.nomcouche || pps.legende || ("EntitÃ© " + (idx + 1));
             
             p.push("<div style=''border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px; font-weight:bold; font-size:12px; color:#333;''>" + nom + "</div>");
             p.push("<div style=''padding:5px;''>");
             var details = [];
-            for (var nomPpté in pps) {
-                if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
-                    var ligne = "<b>"+ nomPpté + ":</b> " + pps[nomPpté];
-                    nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? details.unshift(ligne) : details.push(ligne);
+            for (var nomPptÃ© in pps) {
+                if (!nomPptÃ©.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
+                    var ligne = "<b>"+ nomPptÃ© + ":</b> " + pps[nomPptÃ©];
+                    nomPptÃ©.match(/^([Nn]umÃ©ro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? details.unshift(ligne) : details.push(ligne);
                 }
             }
             p.push(details.join("<br />"));
@@ -525,25 +525,25 @@ function CarteLeaflet(conteneurId) {
         var dataGroupJSON = encodeURIComponent(JSON.stringify(propsGroupes));
         var boutonExport = "<div style=''text-align:center; padding:10px; border-top:1px solid #ddd;''>" +
                            "<button onclick=''window.exportTronconCSV(\"" + dataGroupJSON + "\", \"Export\")'' class=''btn-export-csv''>" +
-                           "<i class=''fa fa-file-excel-o''></i> Exporter les " + propsGroupes.length + " entités (CSV)</button>" +
+                           "<i class=''fa fa-file-excel-o''></i> Exporter les " + propsGroupes.length + " entitÃ©s (CSV)</button>" +
                            "</div>";
 
         contenuFinalPopup = "<div class=''popup-scroll grille-active''>" + htmlParts.join("<hr class=''sep-grille'' />") + "</div>" + boutonExport;
-        texteTooltip = "<b>" + propsGroupes.length + " lignes superposées</b><br/><i>Cliquez pour le détail</i>";
+        texteTooltip = "<b>" + propsGroupes.length + " lignes superposÃ©es</b><br/><i>Cliquez pour le dÃ©tail</i>";
 
 	} else {
     // CAS STANDARD (Sans doublon) 
     var tableauContenuPopup = [], tableauContenuTooltip = [];
-    var pps = élément.properties;
-    for (var nomPpté in pps) {
-        if (nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/)) {
-            tableauContenuPopup.unshift("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+    var pps = Ã©lÃ©ment.properties;
+    for (var nomPptÃ© in pps) {
+        if (nomPptÃ©.match(/^([Nn]umÃ©ro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/)) {
+            tableauContenuPopup.unshift("<b>"+ nomPptÃ© + ":</b> " + pps[nomPptÃ©]);
         } else {
-            if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
-                tableauContenuPopup.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+            if (!nomPptÃ©.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
+                tableauContenuPopup.push("<b>"+ nomPptÃ© + ":</b> " + pps[nomPptÃ©]);
             }
-            if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)/)) {
-                tableauContenuTooltip.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+            if (!nomPptÃ©.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)/)) {
+                tableauContenuTooltip.push("<b>"+ nomPptÃ© + ":</b> " + pps[nomPptÃ©]);
             }
         }
     }
@@ -551,7 +551,7 @@ function CarteLeaflet(conteneurId) {
     texteTooltip = tableauContenuTooltip.join("<br />");
 	}
 
-	// APPLICATION À TOUS LES OBJETS 
+	// APPLICATION Ã€ TOUS LES OBJETS 
 		var optionsPopup = { 
 			maxWidth: estMulti ? 650 : 400, 
 			minWidth: estMulti ? 250 : 125,
@@ -563,75 +563,75 @@ function CarteLeaflet(conteneurId) {
 
 		// Application sur la couche principale (GeoJSON)
 		couche.bindPopup(contenuFinalPopup, optionsPopup);
-		// Tooltip allégé sur polygones 2 premières propriétés
-		if (élément.geometry.type === "MultiPolygon" || élément.geometry.type === "Polygon") {
+		// Tooltip allÃ©gÃ© sur polygones 2 premiÃ¨res propriÃ©tÃ©s
+		if (Ã©lÃ©ment.geometry.type === "MultiPolygon" || Ã©lÃ©ment.geometry.type === "Polygon") {
 			var tooltipCourt = tableauContenuTooltip.slice(0, 2).join("<br />");
 			couche.bindTooltip(tooltipCourt, { sticky: true, opacity: 0.9, className: ''tooltip-polygone'' });
 		} else {
 			couche.bindTooltip(texteTooltip, optionsTooltip);
 		}
 
-		// Application sur les Markers (Légende)
-		if (élément.properties.icone && élément.properties.legende && (élément.geometry.type == "Point" || élément.geometry.type == "MultiPoint")){
-			var iconeMarker = L.icon({iconUrl: élément.properties.icone, iconSize: [38,38], iconAnchor: [19,39], popupAnchor: [-1,-39]});
-			var élémentsPoint = L.marker(élément.geometry.coordinates.slice().reverse(), {icon: iconeMarker, cleUniqueLegende: élément.properties.legende + "_" + élément.properties.icone});    
-			tabEltsMarkerLeg.push(élémentsPoint);
-			élémentsPoint.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
+		// Application sur les Markers (LÃ©gende)
+		if (Ã©lÃ©ment.properties.icone && Ã©lÃ©ment.properties.legende && (Ã©lÃ©ment.geometry.type == "Point" || Ã©lÃ©ment.geometry.type == "MultiPoint")){
+			var iconeMarker = L.icon({iconUrl: Ã©lÃ©ment.properties.icone, iconSize: [38,38], iconAnchor: [19,39], popupAnchor: [-1,-39]});
+			var Ã©lÃ©mentsPoint = L.marker(Ã©lÃ©ment.geometry.coordinates.slice().reverse(), {icon: iconeMarker, cleUniqueLegende: Ã©lÃ©ment.properties.legende + "_" + Ã©lÃ©ment.properties.icone});    
+			tabEltsMarkerLeg.push(Ã©lÃ©mentsPoint);
+			Ã©lÃ©mentsPoint.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
 		}
 
-	// Application sur les MultiLineString (Légende)
-	if (élément.properties.couleur && élément.properties.legende && élément.geometry.type == "MultiLineString"){
+	// Application sur les MultiLineString (LÃ©gende)
+	if (Ã©lÃ©ment.properties.couleur && Ã©lÃ©ment.properties.legende && Ã©lÃ©ment.geometry.type == "MultiLineString"){
 	// Remplacement de librairie turf par fonction native flipGeoJSON
-    var coordsMLS = flipGeoJSON(élément.geometry.coordinates);
-    var couleurOrigine = élément.properties.couleur;
+    var coordsMLS = flipGeoJSON(Ã©lÃ©ment.geometry.coordinates);
+    var couleurOrigine = Ã©lÃ©ment.properties.couleur;
 
     var styleMLS = { 
         color: couleurOrigine, 
         weight: 3, 
         opacity: 1,
-    	nomCoucheMLSEtCouleur: élément.properties.nomcouche.concat(élément.properties.couleur).concat("||").concat(élément.properties.legende) 
+    	nomCoucheMLSEtCouleur: Ã©lÃ©ment.properties.nomcouche.concat(Ã©lÃ©ment.properties.couleur).concat("||").concat(Ã©lÃ©ment.properties.legende) 
 	};
     
-    if (valeurTitre1.includes("fauchage") && élément.properties["Traitement       "] == ''Ponctuel'') {
+    if (valeurTitre1.includes("fauchage") && Ã©lÃ©ment.properties["Traitement       "] == ''Ponctuel'') {
         styleMLS.dashArray = ''5,10'';
     }
 
-    var élémentsMLS = L.polyline(coordsMLS, styleMLS);
-    élémentsMLS._estSélectionné = false;
+    var Ã©lÃ©mentsMLS = L.polyline(coordsMLS, styleMLS);
+    Ã©lÃ©mentsMLS._estSÃ©lectionnÃ© = false;
 
-    élémentsMLS.on({
+    Ã©lÃ©mentsMLS.on({
         click: function(e) {
-            e.target._estSélectionné = true;
+            e.target._estSÃ©lectionnÃ© = true;
             e.target.setStyle({ color: "#ff6600", weight: 10, opacity: 0.5 });
         },
         popupclose: function(e) {
-            e.target._estSélectionné = false;
+            e.target._estSÃ©lectionnÃ© = false;
             e.target.setStyle({ color: couleurOrigine, weight: 3, opacity: 1 });
         },
         mouseover: function(e) {
             // ON REPREND LA LOGIQUE DU FLAG ICI
-            if (flagHoverSurlignage && !e.target._estSélectionné) {
+            if (flagHoverSurlignage && !e.target._estSÃ©lectionnÃ©) {
                 e.target.setStyle({ color: ''red'', weight: 6, opacity: 0.6 });
             }
         },
         mouseout: function(e) {
             // ON REPREND LA LOGIQUE DU FLAG ICI
-            if (flagHoverSurlignage && !e.target._estSélectionné) {
+            if (flagHoverSurlignage && !e.target._estSÃ©lectionnÃ©) {
                 e.target.setStyle({ color: couleurOrigine, weight: 3, opacity: 1 });
             }
         }
     });
     
-    tabEltsMLSLeg.push(élémentsMLS);
-    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
+    tabEltsMLSLeg.push(Ã©lÃ©mentsMLS);
+    Ã©lÃ©mentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
 }
 
-		if (élément.properties.couleur && élément.properties.legende && élément.geometry.type == "MultiPolygon"){
-			var coordsMP = flipGeoJSON(élément.geometry.coordinates);
+		if (Ã©lÃ©ment.properties.couleur && Ã©lÃ©ment.properties.legende && Ã©lÃ©ment.geometry.type == "MultiPolygon"){
+			var coordsMP = flipGeoJSON(Ã©lÃ©ment.geometry.coordinates);
 			var coucheMP = L.polygon(coordsMP, {
-				color: élément.properties.couleur, 
-				//nomCoucheMPEtCouleur: élément.properties.nomcouche.concat(élément.properties.couleur), 
-				nomCoucheMPEtCouleur: élément.properties.nomcouche.concat(élément.properties.couleur).concat("||").concat(élément.properties.legende),
+				color: Ã©lÃ©ment.properties.couleur, 
+				//nomCoucheMPEtCouleur: Ã©lÃ©ment.properties.nomcouche.concat(Ã©lÃ©ment.properties.couleur), 
+				nomCoucheMPEtCouleur: Ã©lÃ©ment.properties.nomcouche.concat(Ã©lÃ©ment.properties.couleur).concat("||").concat(Ã©lÃ©ment.properties.legende),
 				fill: true
 			});
 			tabEltsMPLeg.push(coucheMP);
@@ -647,19 +647,19 @@ function CarteLeaflet(conteneurId) {
 	creerPopupEtLegende();
 	}
 	
-	function creerIconeCusto (élément, latlng) {
+	function creerIconeCusto (Ã©lÃ©ment, latlng) {
 		var marker;
-		if (élément.properties.icone) {	
+		if (Ã©lÃ©ment.properties.icone) {	
 			presenceIcone = true;			
-			var geojsonIcone = L.icon({iconUrl: élément.properties.icone, iconSize: [38,38], iconAnchor: [19,39], popupAnchor: [-1,-39]});
-			return L.marker(élément.geometry.coordinates.slice().reverse(), {icon: geojsonIcone});
+			var geojsonIcone = L.icon({iconUrl: Ã©lÃ©ment.properties.icone, iconSize: [38,38], iconAnchor: [19,39], popupAnchor: [-1,-39]});
+			return L.marker(Ã©lÃ©ment.geometry.coordinates.slice().reverse(), {icon: geojsonIcone});
 		}
 		else {
 			presenceIcone = false;
 			var customIcone = new L.Icon({iconUrl: "/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
 			return L.marker(latlng, {icon: customIcone});
 		}
-		// Stocker pour ajout ultérieur à OMS
+		// Stocker pour ajout ultÃ©rieur Ã  OMS
 		markersOmsCouche.push(marker);
 		return marker;
 	}
@@ -668,7 +668,7 @@ function CarteLeaflet(conteneurId) {
 	for (i=0; i < tabCoucheMetier.length; i++){
 	    var donneesCouche = tabCoucheMetier[i][0];
 	    
-	    // Convertir couche MultiPoint à 1 element[[x, x]] en Point
+	    // Convertir couche MultiPoint Ã  1 element[[x, x]] en Point
 	    var aDesMultiPoints = donneesCouche && donneesCouche.features && 
 	        donneesCouche.features.some(function(f) { 
 	            return f.geometry && f.geometry.type === ''MultiPoint''; 
@@ -683,7 +683,7 @@ function CarteLeaflet(conteneurId) {
 	    }
 	    
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
-	        style: styleCoucheMétier, 
+	        style: styleCoucheMÃ©tier, 
 	        onEachFeature: traiterEltsCouche, 
 	        pointToLayer: creerIconeCusto
 	    }));
@@ -776,7 +776,7 @@ function CarteLeaflet(conteneurId) {
 			}
 		});
 
-		// Priorité affichage selon type geom couche
+		// PrioritÃ© affichage selon type geom couche
 		// Points dessus
 		var zIndexDynamiquePoints = 200000;
 		var zIndexReactivation = 1000000;
@@ -813,7 +813,7 @@ function CarteLeaflet(conteneurId) {
 			}, 20); 
 		});
 
-		// FdC N&B plus foncé pr carto surveillance réseau
+		// FdC N&B plus foncÃ© pr carto surveillance rÃ©seau
 		if (valeurTitre1.includes("Surveillance")) {
 			var tilePane = document.querySelector(''.leaflet-tile-pane'');
 			if (tilePane && maCarte.hasLayer(cartoDB)) {
@@ -828,13 +828,13 @@ function CarteLeaflet(conteneurId) {
 		
 		// ctrl zoom
 		if (!L.Browser.mobile){
-			var ctrlZoom = L.control.zoom({zoomInTitle: "Zoom avant", zoomOutTitle: "Zoom arrière"});
+			var ctrlZoom = L.control.zoom({zoomInTitle: "Zoom avant", zoomOutTitle: "Zoom arriÃ¨re"});
 			ctrlZoom.addTo(maCarte);
 		}
 		
 		// copyright
 		var copyright = L.control.attribution({position:"bottomleft"});
-		copyright.setPrefix(false).addAttribution("<a href=''https://intranet.gard.fr/fr/organigramme/organigramme-presidente-fr/organigramme-direction-generale-des-services-fr/organigramme-dgs-direction-fr/organigramme-dga-mobilites-et-logistique-fr/organigramme-dgaml-direction-d-appui-fr/organigramme-dgaml-dapp-pole-systemes-d-information-fr.html'' target=''_blank''>Pôle des Systèmes d''Information (DGaML - DAppui)</a>");
+		copyright.setPrefix(false).addAttribution("<a href=''https://intranet.gard.fr/fr/organigramme/organigramme-presidente-fr/organigramme-direction-generale-des-services-fr/organigramme-dgs-direction-fr/organigramme-dga-mobilites-et-logistique-fr/organigramme-dgaml-direction-d-appui-fr/organigramme-dgaml-dapp-pole-systemes-d-information-fr.html'' target=''_blank''>PÃ´le des SystÃ¨mes d''Information (DGaML - DAppui)</a>");
 		copyright.addTo(maCarte);
 		
 		// Echelle 
@@ -859,22 +859,22 @@ function CarteLeaflet(conteneurId) {
 		}	
 		
 		if (presenceLegende) {	
-			tabNettoyé = filtrerDoublons(tabComposantLeg);
+			tabNettoyÃ© = filtrerDoublons(tabComposantLeg);
 	
-				for (i=0; i<tabNettoyé.length; i++){
-					if (tabNettoyé[i][0] == "MultiLineString"){
-						tabNettoyé[i][0] = "polyline";
+				for (i=0; i<tabNettoyÃ©.length; i++){
+					if (tabNettoyÃ©[i][0] == "MultiLineString"){
+						tabNettoyÃ©[i][0] = "polyline";
 						}
-					if (tabNettoyé[i][0] == "MultiPolygon" ){
-						tabNettoyé[i][0] = "polygon";
+					if (tabNettoyÃ©[i][0] == "MultiPolygon" ){
+						tabNettoyÃ©[i][0] = "polygon";
 					}
-					if (tabNettoyé[i][0] == "Point") {
-						tabNettoyé[i][0] = "image";
+					if (tabNettoyÃ©[i][0] == "Point") {
+						tabNettoyÃ©[i][0] = "image";
 					}
 				}	
 	
-				// Tri stable de tabNettoyé pour s''aligner sur l''ordre imposé par Object.assign
-				tabNettoyé = tabNettoyé.map((item, index) => ({ item, index }))
+				// Tri stable de tabNettoyÃ© pour s''aligner sur l''ordre imposÃ© par Object.assign
+				tabNettoyÃ© = tabNettoyÃ©.map((item, index) => ({ item, index }))
 					.sort((a, b) => {
 						function getPrio(type) {
 							if (type === "image") return 1;
@@ -887,7 +887,7 @@ function CarteLeaflet(conteneurId) {
 						
 						// On force l''ordre : 1. Points, 2. Lignes, 3. Polygones
 						if (prioA !== prioB) return prioA - prioB;
-						// A type égal, on conserve l''ordre d''apparition d''origine
+						// A type Ã©gal, on conserve l''ordre d''apparition d''origine
 						return a.index - b.index;
 					})
 					.map(obj => obj.item);			
@@ -904,37 +904,37 @@ function CarteLeaflet(conteneurId) {
 			//console.log("tabCouchesLGLeg : ", tabCouchesLGLeg);
 			
 			for (i=0; i < tabCouchesLGLeg.length; i++){
-				if (tabNettoyé[i][4] === true || typeof tabNettoyé[i][4] === "undefined" ){
+				if (tabNettoyÃ©[i][4] === true || typeof tabNettoyÃ©[i][4] === "undefined" ){
 					tabCouchesLGLeg[i].addTo(maCarte);
 				}
 			}
-			for (i=0; i < tabNettoyé.length; i++){
-				if (typeof tabNettoyé[i][4] === "undefined"){
-					tabNettoyé[i][4] = true;
+			for (i=0; i < tabNettoyÃ©.length; i++){
+				if (typeof tabNettoyÃ©[i][4] === "undefined"){
+					tabNettoyÃ©[i][4] = true;
 				}
 			}	
-			for (i=0; i<tabNettoyé.length; i++){
-					tabNettoyé[i][4] = !tabNettoyé[i][4];
+			for (i=0; i<tabNettoyÃ©.length; i++){
+					tabNettoyÃ©[i][4] = !tabNettoyÃ©[i][4];
 			}
 		
-			//console.log("tabNettoyé : " , tabNettoyé);
+			//console.log("tabNettoyÃ© : " , tabNettoyÃ©);
 		
 			var tabCtrlLegendeObj = [];
-			for (i=0; i < tabNettoyé.length; i++) {	
+			for (i=0; i < tabNettoyÃ©.length; i++) {	
 				tabCtrlLegendeObj.push({
-					label: tabNettoyé[i][1], 
-					type: tabNettoyé[i][0], 
-					color: tabNettoyé[i][2], 
-					url: tabNettoyé[i][3], 
-					inactive: tabNettoyé[i][4], 
-					nomCouche: tabNettoyé[i][5], 
+					label: tabNettoyÃ©[i][1], 
+					type: tabNettoyÃ©[i][0], 
+					color: tabNettoyÃ©[i][2], 
+					url: tabNettoyÃ©[i][3], 
+					inactive: tabNettoyÃ©[i][4], 
+					nomCouche: tabNettoyÃ©[i][5], 
 					layers: tabCouchesLGLeg[i],
 					originalIndex: i
 				});	
 			}
 		
-			// Z-index décroissant pour les couches points légende au chargement initial :
-			// le 1er libellé légende sera affiché par-dessus les autres sur la carte
+			// Z-index dÃ©croissant pour les couches points lÃ©gende au chargement initial :
+			// le 1er libellÃ© lÃ©gende sera affichÃ© par-dessus les autres sur la carte
 			var zIndexLegPoints = 900000;
 			for (var idx = 0; idx < tabCtrlLegendeObj.length; idx++) {
 				if (tabCtrlLegendeObj[idx].type === "image") {
@@ -956,11 +956,11 @@ function CarteLeaflet(conteneurId) {
 			tabCtrlLegendeObj.sort(function(a, b) {
 				// Si A ET B sont des lignes, on applique le tri
 				if (estUneLigne(a.type) && estUneLigne(b.type)) {			
-					// 1. STATUT : Actifs en premier, Inactifs (grisés) en dessous
+					// 1. STATUT : Actifs en premier, Inactifs (grisÃ©s) en dessous
 					if (a.inactive !== b.inactive) {
 						return a.inactive ? 1 : -1; 
 					}	
-					// 2. ALPHABÉTIQUE : Tri A-Z, 1-10...
+					// 2. ALPHABÃ‰TIQUE : Tri A-Z, 1-10...
 					return a.label.localeCompare(b.label, ''fr'', { numeric: true, sensitivity: ''base'' });
 				}
 			
@@ -972,14 +972,14 @@ function CarteLeaflet(conteneurId) {
 			    var container = maCarte.getContainer().querySelector(''.leaflet-legend-contents.deux-colonnes'');
 			    if (!container) return;
 			
-			    // Largeur réelle du libellé le plus long
+			    // Largeur rÃ©elle du libellÃ© le plus long
 			    var spans = container.querySelectorAll(''.leaflet-legend-item span'');
 			    var largeurMaxLib = 0;
 			    spans.forEach(function(span) {
 			        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
 			    });
 			
-			    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
+			    // Largeur colonne = libellÃ© + icÃ´ne/picto + petite marge de sÃ©curitÃ©
 			    var largeurColonne = largeurMaxLib + 30;
 			
 			    container.querySelectorAll(''.leaflet-legend-column'').forEach(function(col) {
@@ -999,20 +999,20 @@ function CarteLeaflet(conteneurId) {
 		
 		}						
 	
-		tabNettoyé = filtrerDoublons(tabGeomCouche);	
+		tabNettoyÃ© = filtrerDoublons(tabGeomCouche);	
 			
-		for (i=0; i < tabNettoyé.length; i++) {
+		for (i=0; i < tabNettoyÃ©.length; i++) {
 			// On s''assure que les polygones initiaux restent bien au fond
-			if (tabNettoyé[i][0] == "MultiPolygon")  {
+			if (tabNettoyÃ©[i][0] == "MultiPolygon")  {
 				tabCoucheMG[i].bringToBack();
 			}
-			// Sécurité pour nommer les couches vides/anonymes (à conserver !)
-			if (tabNettoyé[i][1] == null) {
-				tabNettoyé[i][1] = "Couche " + (i+1);
+			// SÃ©curitÃ© pour nommer les couches vides/anonymes (Ã  conserver !)
+			if (tabNettoyÃ©[i][1] == null) {
+				tabNettoyÃ©[i][1] = "Couche " + (i+1);
 			}	
 		}
 		
-		// On repousse au fond les éléments Lignes/Polygones liés à la légende
+		// On repousse au fond les Ã©lÃ©ments Lignes/Polygones liÃ©s Ã  la lÃ©gende
 		for (i=0; i < tabEltsMLSLeg.length; i++) {
 			tabEltsMLSLeg[i].bringToBack();		
 		}
@@ -1031,7 +1031,7 @@ function CarteLeaflet(conteneurId) {
 		var tabCtrlboxNom = [];
 		var libelleCouche = {};
 		for (i=0; i < nbreDeVues; i++) {	
-			tabCtrlboxNom.push({nom: tabNettoyé[i][1], couche: tabCoucheMG[i]});	
+			tabCtrlboxNom.push({nom: tabNettoyÃ©[i][1], couche: tabCoucheMG[i]});	
 		}	
 		// alim box couches
 		libelleCouche = Object.assign({}, ...tabCtrlboxNom.map(item => ({ [item.nom]: item.couche })));
@@ -1051,7 +1051,7 @@ function CarteLeaflet(conteneurId) {
 				var trigger2Repli = (nbrColonnes === 2 && nbrEltsLegende > 45);
 				var trigger3Repli = (nbrColonnes === 1 && nbrEltsLegende + nbreDeVues > 25);
 				var trigger4Repli = (nbrColonnes === 2 && nbrEltsLegende + nbreDeVues > 40);
-				// trigger5 inactif (false) si carto "surveillance" (car définie sans sous-titre ds legende.js)
+				// trigger5 inactif (false) si carto "surveillance" (car dÃ©finie sans sous-titre ds legende.js)
 				var trigger5Repli = valeurTitre1.indexOf("Surveillance") === -1 && nbrColonnes === 1 && (nbreDeVues + nbrEltsLegende + nbrSousTitresLeg > 26);
 				
 				if (trigger1Repli || trigger2Repli || trigger3Repli || trigger4Repli || trigger5Repli || L.Browser.mobile) {
@@ -1080,7 +1080,7 @@ function CarteLeaflet(conteneurId) {
 				ctrlBoxCouches.addTo(maCarte);			
 			}
 		}
-		// Pas de légende pas de repli
+		// Pas de lÃ©gende pas de repli
 		else {
 	    	ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
 	    	ctrlBoxCouches.addTo(maCarte);
@@ -1105,15 +1105,15 @@ function CarteLeaflet(conteneurId) {
 		}
 		
 		for (i=0; i < nbreDeVues; i++) {
-			if (tabNettoyé[i][0] == "Point" || tabNettoyé[i][0] == "MultiPoint") {							
+			if (tabNettoyÃ©[i][0] == "Point" || tabNettoyÃ©[i][0] == "MultiPoint") {							
 				zoomMarkerG(maCarte, tabCoucheMG[i]);			
 			}
-			else if (tabNettoyé[i][0] == "MultiLineString") {
+			else if (tabNettoyÃ©[i][0] == "MultiLineString") {
 				zoomPolyG(maCarte, tabCoucheMG[i]);
 			}
 		}
 		
-		function créerSurlignageClicLeg (couche) {
+		function crÃ©erSurlignageClicLeg (couche) {
 			couche.setStyle({
 				color: "#ff6600",
 				weight: 10,
@@ -1132,13 +1132,13 @@ function CarteLeaflet(conteneurId) {
 		function zoomPolyLeg(carte, coucheLine, coucheLineColor) {
 			coucheLine.on("click", function zoomPolyL () {
 				carte.fitBounds(coucheLine.getBounds(), {maxZoom: 17});		
-				créerSurlignageClicLeg(coucheLine);
+				crÃ©erSurlignageClicLeg(coucheLine);
 				resetSurlignageLeg(coucheLine, coucheLineColor);
 			});
 		}	
 		function surlignagePolyLeg(coucheLine, coucheLineColor) {
 			coucheLine.on("click", function () {
-				créerSurlignageClicLeg(coucheLine);
+				crÃ©erSurlignageClicLeg(coucheLine);
 				resetSurlignageLeg(coucheLine, coucheLineColor);
 			});
 		}	
@@ -1152,12 +1152,12 @@ function CarteLeaflet(conteneurId) {
 		}
 
 		function zoomMarkerLeg(carte, couchePt) {
-		    // Pour les markers spiderfiés
+		    // Pour les markers spiderfiÃ©s
 		    couchePt.on("popupopen", function(evt) {
 		        var maxZ = valeurTitre1.endsWith("3D") ? 19 : 17;
 		        carte.setView(evt.popup.getLatLng(), maxZ);
 		    });
-		    // Pour les markers non spiderfiés
+		    // Pour les markers non spiderfiÃ©s
 		    couchePt.on("click", function() {
 		        var maxZ = valeurTitre1.endsWith("3D") ? 19 : 17;
 		        carte.fitBounds([couchePt.getLatLng()], {maxZoom: maxZ});
@@ -1169,7 +1169,7 @@ function CarteLeaflet(conteneurId) {
 		}
 	}	
 	else {
-		function créerSurlignageClicLeg (couche) {
+		function crÃ©erSurlignageClicLeg (couche) {
 			couche.setStyle({
 				color: "#ff6600",
 				weight: 10,
@@ -1187,7 +1187,7 @@ function CarteLeaflet(conteneurId) {
 		}
 		function zoomPolyLeg(carte, coucheLine, coucheLineColor) {
 			coucheLine.on("click", function zoomPolyL () {	
-				créerSurlignageClicLeg(coucheLine);
+				crÃ©erSurlignageClicLeg(coucheLine);
 				resetSurlignageLeg(coucheLine, coucheLineColor);
 			});
 		}	
@@ -1295,7 +1295,7 @@ function CarteLeaflet(conteneurId) {
 					.openOn(maCarte);
 
 				setTimeout(function () {
-				    // Réduction des marges de la popup
+				    // RÃ©duction des marges de la popup
 					var contentNode = fenetreCoord.getElement().querySelector(''.leaflet-popup-content'');
 					if (contentNode) {
 						contentNode.style.margin = ''7px 10px'';
@@ -1365,7 +1365,7 @@ this.rechercherLieu = function() {
 						{animate: true}
 					);
 					
-					// 3. On enlève l''ancienne punaise et on met la nouvelle
+					// 3. On enlÃ¨ve l''ancienne punaise et on met la nouvelle
 					if (punaiseLocation !== null) {
 						maCarte.removeLayer(punaiseLocation);
 					}
@@ -1396,7 +1396,7 @@ this.rechercherLieu = function() {
 		    if (searchInput) {
 		        searchInput.setAttribute(''placeholder'', ''Rechercher un lieu...'');
 		    } else {
-		        console.log("Le champ de recherche n''a pas pu être trouvé.");
+		        console.log("Le champ de recherche n''a pas pu Ãªtre trouvÃ©.");
 		    }
 		}, 500);	
 	}
@@ -1415,10 +1415,10 @@ this.rechercherLieu = function() {
 
 this.importFichier = function () {	
     let indexSpatialImport = {};
-    let couchesImportées = [];
+    let couchesImportÃ©es = [];
     let metadonneesCouches = [];
     let indexCouche = 0;
-    let coucheEffacée = false;
+    let coucheEffacÃ©e = false;
 
     var btnImporter = L.Control.betterFileLayer({
 		style: function(feature) {
@@ -1438,7 +1438,7 @@ this.importFichier = function () {
         text: { title: "Import de couches"},
         formats:[''.zip'', ''.shp'', ''.csv'', ''.geojson'', ''.gpx'', ''.kml'', ''.kmz'', ''.json'', ''.dbf'', ''.shx'', ''.prj''],
         
-        // RÉ-INSERTION DE LA CONFIGURATION CSV
+        // RÃ‰-INSERTION DE LA CONFIGURATION CSV
         importOptions: {
             csv: {
                 delimiter: '';'',
@@ -1447,7 +1447,7 @@ this.importFichier = function () {
             }
         },
 
-        // 1. COLLECTE : On remplit lindex spatial par type et géométrie
+        // 1. COLLECTE : On remplit lindex spatial par type et gÃ©omÃ©trie
         onEachFeature: function(feature, layer) {        
             if (feature.geometry && feature.geometry.coordinates) {
                 let geoKey = feature.geometry.type + "_" + JSON.stringify(feature.geometry.coordinates);
@@ -1462,36 +1462,36 @@ this.importFichier = function () {
         }	
     });
 
-		// FICHIER MAL FORMÉ 
+		// FICHIER MAL FORMÃ‰ 
 		maCarte.on(''bfl:layerloaderror'', function(e) {
-			alert("Erreur de chargement : le fichier est mal formé ou dans un format non reconnu.");
+			alert("Erreur de chargement : le fichier est mal formÃ© ou dans un format non reconnu.");
 		});
 
-		// FICHIER VIDE / AUCUNE GÉOMÉTRIE 
+		// FICHIER VIDE / AUCUNE GÃ‰OMÃ‰TRIE 
 		maCarte.on(''bfl:layerisempty'', function(e) {
-			alert("Le fichier importé ne contient aucune géométrie exploitable.");
+			alert("Le fichier importÃ© ne contient aucune gÃ©omÃ©trie exploitable.");
 		});
 
-		// FORMAT NON SUPPORTÉ 
+		// FORMAT NON SUPPORTÃ‰ 
 		maCarte.on(''bfl:filenotsupported'', function(e) {
-			alert("Le format du fichier n''est pas supporté.");
+			alert("Le format du fichier n''est pas supportÃ©.");
 		});
 		maCarte.on(''bfl:filesizelimit'', function(e) {
-			alert("Le fichier \"" + e.layer + "\" dépasse la taille limite autorisée (300 Mo). Import annulé.");
+			alert("Le fichier \"" + e.layer + "\" dÃ©passe la taille limite autorisÃ©e (300 Mo). Import annulÃ©.");
 		});
 
     // 2. TRAITEMENT POST-CHARGEMENT
     maCarte.on(''bfl:layerloaded'', function(e) {
-        let fichierImporté = e.layer.options.name || ''Fichier importé'';
+        let fichierImportÃ© = e.layer.options.name || ''Fichier importÃ©'';
 		
-		// REMPLACEMENT DES ICÔNES POUR LES POINTS IMPORTÉS 
+		// REMPLACEMENT DES ICÃ”NES POUR LES POINTS IMPORTÃ‰S 
 		e.layer.eachLayer(function(l) {
-		    // si aucune propriété, injecter le nom de fichier comme clé unique
+		    // si aucune propriÃ©tÃ©, injecter le nom de fichier comme clÃ© unique
 		    if (l.feature && (!l.feature.properties || Object.keys(l.feature.properties).length === 0)) {
-		        l.feature.properties = { [fichierImporté]: "" };
+		        l.feature.properties = { [fichierImportÃ©]: "" };
 		    }
 		    if (l instanceof L.Marker) {
-		        // Si la feature a une propriété "icone", on l''utilise
+		        // Si la feature a une propriÃ©tÃ© "icone", on l''utilise
 		        if (l.feature && l.feature.properties && l.feature.properties.icone) {
 		            l.setIcon(L.icon({
 		                iconUrl: l.feature.properties.icone,
@@ -1502,11 +1502,11 @@ this.importFichier = function () {
 		        } 
 		    }
 		});
-		// Synchro index avec injection fallback (au cas où les features de l''index sont distinctes)
+		// Synchro index avec injection fallback (au cas oÃ¹ les features de l''index sont distinctes)
 		for (let key in indexSpatialImport) {
 		    indexSpatialImport[key].features.forEach(function(f) {
 		        if (!f.properties || Object.keys(f.properties).length === 0) {
-		            f.properties = { [fichierImporté]: "" };
+		            f.properties = { [fichierImportÃ©]: "" };
 		        }
 		    });
 		}
@@ -1516,28 +1516,28 @@ this.importFichier = function () {
 			let propsGroupes = groupe.features ? groupe.features.map(f => f.properties) : groupe.proprietes;
 			let estMulti = propsGroupes.length > 1;
 
-            // Tri par année décroissante
-            propsGroupes.sort((a, b) => (parseInt(b["Année "] || b["Année"] || 0) - parseInt(a["Année "] || a["Année"] || 0)));
+            // Tri par annÃ©e dÃ©croissante
+            propsGroupes.sort((a, b) => (parseInt(b["AnnÃ©e "] || b["AnnÃ©e"] || 0) - parseInt(a["AnnÃ©e "] || a["AnnÃ©e"] || 0)));
 
             let htmlParts = [];
             propsGroupes.forEach(function(pps, idx) {
                 let details = [];
                 // Titre de section gris uniquement si multi
                 if (estMulti) {
-                    let nom = pps["nomcouche"] || pps["Année "] || pps["Année"] || pps["Route   "] || pps["Route"] || pps["Numéro Route "] || pps.legende || ("Entité " + (idx+1));
-                    let label = (pps["Année "] || pps["Année"]) ? "Année " + nom : nom;
+                    let nom = pps["nomcouche"] || pps["AnnÃ©e "] || pps["AnnÃ©e"] || pps["Route   "] || pps["Route"] || pps["NumÃ©ro Route "] || pps.legende || ("EntitÃ© " + (idx+1));
+                    let label = (pps["AnnÃ©e "] || pps["AnnÃ©e"]) ? "AnnÃ©e " + nom : nom;
                     details.push("<div style=''border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px 8px; font-weight:bold; font-size:12px; color:#333;''>" + label + "</div>");
                 }
                 
                 details.push("<div style=''padding:5px;''>");
                 let corps = [];
-                for (let nomPpté in pps) {
-                    let k = nomPpté.trim();
+                for (let nomPptÃ© in pps) {
+                    let k = nomPptÃ©.trim();
                     if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|leafletsearch|stroke|fill|color|X en WGS84|Y en WGS84)$/i)) {
-                        let val = pps[nomPpté];
+                        let val = pps[nomPptÃ©];
                         if (val !== null && val !== undefined) {
-						let ligne = "<b>" + nomPpté + (val !== "" ? ":</b> " + (String(val).startsWith(''http'') ? `<a href="${val}" target="_blank">Lien</a>` : val) : "</b>");
-						k.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? corps.unshift(ligne) : corps.push(ligne);
+						let ligne = "<b>" + nomPptÃ© + (val !== "" ? ":</b> " + (String(val).startsWith(''http'') ? `<a href="${val}" target="_blank">Lien</a>` : val) : "</b>");
+						k.match(/^([Nn]umÃ©ro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? corps.unshift(ligne) : corps.push(ligne);
                         }
                     }
                 }
@@ -1546,18 +1546,18 @@ this.importFichier = function () {
                 htmlParts.push(details.join(""));
             });
 
-            // PRÉPARATION CONTENUS 
+            // PRÃ‰PARATION CONTENUS 
             let contenuPopup, contenuTooltip;
             
             if (estMulti) {
                 let dataGroupJSON = encodeURIComponent(JSON.stringify(propsGroupes));
                 let boutonExport = `<div style=''text-align:center; padding:10px; border-top:1px solid #ddd;''>
                     <button onclick=''window.exportTronconCSV("${dataGroupJSON}", "Export")'' class=''btn-export-csv'' style=''cursor:pointer;''>
-                    <i class=''fa fa-file-excel-o''></i> Exporter les ${propsGroupes.length} entités (CSV)</button>
+                    <i class=''fa fa-file-excel-o''></i> Exporter les ${propsGroupes.length} entitÃ©s (CSV)</button>
                 </div>`;
                 
                 contenuPopup = `<div class=''popup-scroll grille-active'' style=''max-height:300px; overflow-y:auto;''>${htmlParts.join("<hr class=''sep-grille'' />")}</div>${boutonExport}`;
-                contenuTooltip = `<b>${propsGroupes.length} entités superposées</b><br/><i>Cliquez pour le détail</i>`;
+                contenuTooltip = `<b>${propsGroupes.length} entitÃ©s superposÃ©es</b><br/><i>Cliquez pour le dÃ©tail</i>`;
             } else {
                 // Pour les mono : Tooltip et Popup identiques (contenu complet)
                 contenuPopup = htmlParts[0];
@@ -1573,17 +1573,17 @@ this.importFichier = function () {
         
         // GESTION SUPPRESSION (CLIC DROIT) 
         indexCouche++;
-        couchesImportées.push(e.layer);
-        metadonneesCouches.push({ layer: e.layer, nom: fichierImporté, index: indexCouche });
+        couchesImportÃ©es.push(e.layer);
+        metadonneesCouches.push({ layer: e.layer, nom: fichierImportÃ©, index: indexCouche });
 
         e.layer.on(''contextmenu'', function(event) {
-            if (coucheEffacée) return;
-            coucheEffacée = true;
+            if (coucheEffacÃ©e) return;
+            coucheEffacÃ©e = true;
             let meta = metadonneesCouches.find(m => m.layer === this);
             if (confirm(`Supprimer la couche "${meta ? meta.nom : ''Fichier''}" ?`)) {
                 maCarte.removeLayer(this); 
             }        
-            setTimeout(() => { coucheEffacée = false; }, 500);
+            setTimeout(() => { coucheEffacÃ©e = false; }, 500);
         });
 
         indexSpatialImport = {}; // Reset index pour le prochain fichier
@@ -1592,10 +1592,10 @@ this.importFichier = function () {
     btnImporter.addTo(maCarte);	
 }
 	
-	this.iconeClé = function() {  
+	this.iconeClÃ© = function() {  
 	
 		var iconesVisible = false;
-		var sousBoutonsCréés = false;	
+		var sousBoutonsCrÃ©Ã©s = false;	
 		
 		var btnMesurer = new L.control.ruler({position: "topleft"});
 		var btnIsochrone = new L.geoportalControl.Isocurve({});
@@ -1607,7 +1607,7 @@ this.importFichier = function () {
 			printModes: [
 				L.control.browserPrint.mode.landscape("Vue courante"),
 				L.control.browserPrint.mode.auto("Auto Gard"),
-				L.control.browserPrint.mode.custom("Sélec. zone", "A4")					
+				L.control.browserPrint.mode.custom("SÃ©lec. zone", "A4")					
 				//L.control.browserPrint.mode.portrait("Portrait"),
 			],
 		});
@@ -1635,8 +1635,8 @@ this.importFichier = function () {
 		const btnGeosearch = new GeoSearch.GeoSearchControl({
 		  provider: new GeoSearch.OpenStreetMapProvider(),
 		  style: ''button'',
-		  searchLabel: ''Coordonnées GPS (lat, lng)'',
-		  notFoundMessage: ''Adresse introuvable. Veuillez réessayer.'',
+		  searchLabel: ''CoordonnÃ©es GPS (lat, lng)'',
+		  notFoundMessage: ''Adresse introuvable. Veuillez rÃ©essayer.'',
 		  showMarker: false
 		});
 
@@ -1649,7 +1649,7 @@ this.importFichier = function () {
 			const lat = result.location.y.toFixed(5);
 			const lon = result.location.x.toFixed(5);
 
-			const popupText = `<b>Coordonnées :</b> ${lat}, ${lon}<br>?? ${label}`;
+			const popupText = `<b>CoordonnÃ©es :</b> ${lat}, ${lon}<br>?? ${label}`;
 
 		const iconeGeosearch = L.icon({
 			  iconUrl: ''/Ressources/API_JS/images/geosearch.png'',
@@ -1678,34 +1678,34 @@ this.importFichier = function () {
 		  });
 		}
 		
-		// bouton clé
-		var boutonClé = L.easyButton("fa-key fa-lg", function() { 
+		// bouton clÃ©
+		var boutonClÃ© = L.easyButton("fa-key fa-lg", function() { 
 			deployerIcones(); 
 		}, "Autres fonctions").addTo(maCarte);
 		
-		ajouterHoverEtClic(boutonClé.button, {
+		ajouterHoverEtClic(boutonClÃ©.button, {
 		    isVisible: () => iconesVisible,
 		    afficher: deployerIcones,
 		    masquer: deployerIcones
 		});
 		
-		boutonClé.button.classList.add(''bouton-cle'');
-		var container = boutonClé.button.parentNode;
+		boutonClÃ©.button.classList.add(''bouton-cle'');
+		var container = boutonClÃ©.button.parentNode;
 		container.style.backgroundColor = "lightgrey";		
-		boutonClé.button.style.backgroundColor = "lightgrey"; 
+		boutonClÃ©.button.style.backgroundColor = "lightgrey"; 
 			
 	function deployerIcones() {
 			iconesVisible = !iconesVisible;
-			if (!sousBoutonsCréés) {
+			if (!sousBoutonsCrÃ©Ã©s) {
 				btnImprimer.addTo(maCarte);
 				btnMesurer.addTo(maCarte);
 				btnIsochrone.addTo(maCarte);					
 				btnGeosearch.addTo(maCarte);
 				activerPopupRaccourci(maCarte);					
-				sousBoutonsCréés = true;
+				sousBoutonsCrÃ©Ã©s = true;
 			}			
 			if (iconesVisible) {
-				boutonClé.button.style.backgroundColor = "#ffff5b"; 
+				boutonClÃ©.button.style.backgroundColor = "#ffff5b"; 
 				btnImprimer.addTo(maCarte);
 				btnMesurer.addTo(maCarte);
 				btnIsochrone.addTo(maCarte);					
@@ -1718,90 +1718,90 @@ this.importFichier = function () {
 				btnIsochrone.remove();				
 				btnGeosearch.remove();
 				container.style.backgroundColor = "lightgrey";
-				boutonClé.button.style.backgroundColor = "lightgrey"; 					
+				boutonClÃ©.button.style.backgroundColor = "lightgrey"; 					
 			}	
 		}
 	}
 	
 	this.aide = function () {
 		var contenuAideInitial =
-		`<div class=''encadré-aide''>Afficher la carte depuis le Système d''Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
-		<p><img src=''/ressources/API_JS/images/Aide/recentrer.png'' width=''27'' height=''27''><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l''UT selon carte).</p>
+		`<div class=''encadrÃ©-aide''>Afficher la carte depuis le SystÃ¨me d''Information du CD 30.<br>Une connexion internet est nÃ©cessaire pour les fonds de carte.</div>
+		<p><img src=''/ressources/API_JS/images/Aide/recentrer.png'' width=''27'' height=''27''><b> Recentrer carte: </b> recentrer automatiquement la carte sur le dÃ©partement du Gard (ou sur l''UT selon carte).</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/rechGoogle.gif'' width=''27'' height=''27''><b> Rechercher localisation:</b> commune, adresse, bâtiment, route, lieu, etc. Géocodage Google Maps, Gard priorisé.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/rechGoogle.gif'' width=''27'' height=''27''><b> Rechercher localisation:</b> commune, adresse, bÃ¢timent, route, lieu, etc. GÃ©ocodage Google Maps, Gard priorisÃ©.</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/dossier.gif'' width=''27'' height=''27''><b>Import couches:</b> afficher des fichiers de couches au format Shape, GeoJSON, csv, GPX, Kml sur la carte. Projection en WGS84, possibilité de faire un glisser/déposer,
-		de zipper (1 couche par .zip), clic droit pour effacer couche importée, import csv de points uniquement.</p>	
+		<p><img src=''/ressources/API_JS/images/Aide/dossier.gif'' width=''27'' height=''27''><b>Import couches:</b> afficher des fichiers de couches au format Shape, GeoJSON, csv, GPX, Kml sur la carte. Projection en WGS84, possibilitÃ© de faire un glisser/dÃ©poser,
+		de zipper (1 couche par .zip), clic droit pour effacer couche importÃ©e, import csv de points uniquement.</p>	
 		
-		<p><img src=''/ressources/API_JS/images/Aide/export.png'' width=''27'' height=''27''><b>Export couches:</b> exporter après confirmation, la ou les couches cochées en haut a droite aux formats GeoJSON, Shape ou GPX.</p>	
+		<p><img src=''/ressources/API_JS/images/Aide/export.png'' width=''27'' height=''27''><b>Export couches:</b> exporter aprÃ¨s confirmation, la ou les couches cochÃ©es en haut a droite aux formats GeoJSON, Shape ou GPX.</p>	
 		
-		<p><img src=''/ressources/API_JS/images/Aide/clé.png'' width=''27'' height=''27''> <b>Autres fonctions:</b> déploiement de 4 fonctions: imprimer carte, mesure distance, calcul isochrone, recherche par coord. GPS. Détails <span class=''text-highlighted''>(*)</span>.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/clÃ©.png'' width=''27'' height=''27''> <b>Autres fonctions:</b> dÃ©ploiement de 4 fonctions: imprimer carte, mesure distance, calcul isochrone, recherche par coord. GPS. DÃ©tails <span class=''text-highlighted''>(*)</span>.</p>
 
-		<p><img src=''/ressources/API_JS/images/Aide/surlignage.png'' height=''35''> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l''ouverture.
-		Selon leurs nature, les lignes surlignées peuvent être disjointes (''multilignes'').</p>
+		<p><img src=''/ressources/API_JS/images/Aide/surlignage.png'' height=''35''> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif Ã  l''ouverture.
+		Selon leurs nature, les lignes surlignÃ©es peuvent Ãªtre disjointes (''multilignes'').</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/recherche.gif'' width=''27'' height=''27''><b> Rechercher élément de couche:</b> disponible selon les cartes, saisir les caractères pour afficher les correspondances et zoomer dessus. La nature de l''entité à rechercher est indiquée dans l''invite de saisie.	Touche ''Espace'' pour afficher la liste entière. Bouton d''export GeoJSON.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/recherche.gif'' width=''27'' height=''27''><b> Rechercher Ã©lÃ©ment de couche:</b> disponible selon les cartes, saisir les caractÃ¨res pour afficher les correspondances et zoomer dessus. La nature de l''entitÃ© Ã  rechercher est indiquÃ©e dans l''invite de saisie.	Touche ''Espace'' pour afficher la liste entiÃ¨re. Bouton d''export GeoJSON.</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/legende.gif'' height=''35''> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en bas à droite en cliquant dessus. Le bloc des cases à cocher en h. à dr. affiche/masque une couche entière tandis que le bloc légende 
-		permet en + d''afficher/masquer les éléments d''une même couche.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/legende.gif'' height=''35''> <b> LÃ©gende dynamique:</b> afficher/masquer chaque Ã©lÃ©ment de la lÃ©gende en bas Ã  droite en cliquant dessus. Le bloc des cases Ã  cocher en h. Ã  dr. affiche/masque une couche entiÃ¨re tandis que le bloc lÃ©gende 
+		permet en + d''afficher/masquer les Ã©lÃ©ments d''une mÃªme couche.</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/streetview.gif'' height=''30''> <b>Accès Street View </b>+ Panoramax, Google Maps, Waze:
-		après clic, positionner Pegman (personnage orange) sur la carte et cliquer sur l''un des services de visualisation. Pour désactiver, appuyer sur une touche clavier ou recliquer le bouton.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/streetview.gif'' height=''30''> <b>AccÃ¨s Street View </b>+ Panoramax, Google Maps, Waze:
+		aprÃ¨s clic, positionner Pegman (personnage orange) sur la carte et cliquer sur l''un des services de visualisation. Pour dÃ©sactiver, appuyer sur une touche clavier ou recliquer le bouton.</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/info.png'' height=''30''> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l''icone ''i'' (ou via croix).</p>
+		<p><img src=''/ressources/API_JS/images/Aide/info.png'' height=''30''> <b>Informations: </b> afficher les infos relatives aux donnÃ©es reprÃ©sentÃ©es. Fermer la fenÃªtre en rÃ©appuyant sur l''icone ''i'' (ou via croix).</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/coordGPS.png'' width=''90'' height=''35''> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d''un point sous la forme ''latitude, longitude''. 
-		Le menu d''origine est toujours accessible par clic droit sur les blocs fonds de carte ou légende.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/coordGPS.png'' width=''90'' height=''35''> <b>CoordonnÃ©es GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d''un point sous la forme ''latitude, longitude''. 
+		Le menu d''origine est toujours accessible par clic droit sur les blocs fonds de carte ou lÃ©gende.</p>
 		
-		<p><a href=''#'' id=''lienExtensible''><b>(*) Voir plus de détails sur les autres fonctionnalités</b></a></p>
+		<p><a href=''#'' id=''lienExtensible''><b>(*) Voir plus de dÃ©tails sur les autres fonctionnalitÃ©s</b></a></p>
 		<div id=''contenuExtensible'' style=''display:none;''</div>`;
 		
 		var contenuAideExtensible = 
-		`<p><img src=''/ressources/API_JS/images/Aide/imprimer.gif'' width=''27'' height=''27''> <b> Imprimer carte:</b> ''Vue courante'': imprimer au format paysage la portion de carte représentée à l''écran. ''Auto Gard'': imprimer l''ensemble du département (mise à l''échelle auto). ''Sélec. zone'' : 
-		imprimer une portion de la carte selon un rectangle tracé à la souris.</p>
+		`<p><img src=''/ressources/API_JS/images/Aide/imprimer.gif'' width=''27'' height=''27''> <b> Imprimer carte:</b> ''Vue courante'': imprimer au format paysage la portion de carte reprÃ©sentÃ©e Ã  l''Ã©cran. ''Auto Gard'': imprimer l''ensemble du dÃ©partement (mise Ã  l''Ã©chelle auto). ''SÃ©lec. zone'' : 
+		imprimer une portion de la carte selon un rectangle tracÃ© Ã  la souris.</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/distance.gif'' width=''27''><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d''un segment (dernière valeur = longeur totale du segment)
-		, appuyer sur la touche ''Echap'' ou double-cliquer. Il est ainsi possible de mesurer plusieurs tronçons. ré-appuyer sur le bouton ''Régle'' ou la touche ''Echap'' pour tout effacer.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/distance.gif'' width=''27''><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 dÃ©cimales), angles possibles aprÃ¨s clic. Pour terminer la mesure d''un segment (derniÃ¨re valeur = longeur totale du segment)
+		, appuyer sur la touche ''Echap'' ou double-cliquer. Il est ainsi possible de mesurer plusieurs tronÃ§ons. rÃ©-appuyer sur le bouton ''RÃ©gle'' ou la touche ''Echap'' pour tout effacer.</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/isochrone.gif'' width=''27'' height=''27''> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton) 
-		affichant l''isochrone ou l''isodistance autour ou depuis le point (valeurs Départ/Arrivée). 
-		Les calculs prennent en compte le réseau routier.</p>
+		<p><img src=''/ressources/API_JS/images/Aide/isochrone.gif'' width=''27'' height=''27''> <b> Calcul isochrone et isodistance:</b> aprÃ¨s activation, placer un point sur la carte puis lancer le calcul (voiture ou piÃ©ton) 
+		affichant l''isochrone ou l''isodistance autour ou depuis le point (valeurs DÃ©part/ArrivÃ©e). 
+		Les calculs prennent en compte le rÃ©seau routier.</p>
 		
-		<p><img src=''/ressources/API_JS/images/Aide/rech_GPS.png'' width=''27'' height=''26''> <b> Recherche par coordonnées GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : ''43.83494, 4.35965'')
-		pour afficher sur la carte icones et fenêtres correspondants. Géocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>		
+		<p><img src=''/ressources/API_JS/images/Aide/rech_GPS.png'' width=''27'' height=''26''> <b> Recherche par coordonnÃ©es GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : ''43.83494, 4.35965'')
+		pour afficher sur la carte icones et fenÃªtres correspondants. GÃ©ocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>		
 
-    	<p class=''text-warning''>Les rendus liés à l''utilisation des fonctions importer, mesurer, calcul isochrone seront perdus à la réouverture de la carte.<br>
-		Pour conserver une trace, effectuer une impression au format papier ou pdf via f° ''Imprimer'' ou faire une capture écran.</p>
+    	<p class=''text-warning''>Les rendus liÃ©s Ã  l''utilisation des fonctions importer, mesurer, calcul isochrone seront perdus Ã  la rÃ©ouverture de la carte.<br>
+		Pour conserver une trace, effectuer une impression au format papier ou pdf via fÂ° ''Imprimer'' ou faire une capture Ã©cran.</p>
 		</div>`;
 
 		var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
 
 		if (!L.Browser.mobile){
-			var fenêtreAide = new L.control.dialog({size: [812,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
+			var fenÃªtreAide = new L.control.dialog({size: [812,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
 		} else {
-			var fenêtreAide = new L.control.dialog({size: [290,300], anchor: [0,50], position:"topleft", initOpen: true, minSize: [260,250], maxSize: [600,400]});
+			var fenÃªtreAide = new L.control.dialog({size: [290,300], anchor: [0,50], position:"topleft", initOpen: true, minSize: [260,250], maxSize: [600,400]});
 		}
 				
 		var estOuverte = false;
 		function aide(maCarte) {
 			estOuverte = !estOuverte; 
 			if (estOuverte) {
-				fenêtreAide.setContent(contenuAideComplet).addTo(maCarte);
-				fenêtreAide._container.classList.add(''dialog-aide'');
+				fenÃªtreAide.setContent(contenuAideComplet).addTo(maCarte);
+				fenÃªtreAide._container.classList.add(''dialog-aide'');
 				var lien = document.getElementById(''lienExtensible'');
 				var contenu = document.getElementById(''contenuExtensible'');
 				lien.addEventListener(''click'', function(e) {
 					e.preventDefault();
 					if (contenu.style.display === ''none'') {
 						contenu.style.display = ''block'';
-						lien.textContent = ''Voir moins de détails'';
+						lien.textContent = ''Voir moins de dÃ©tails'';
 					} else {
 						contenu.style.display = ''none'';
-						lien.textContent = ''(*) Voir plus de détails sur les autres fonctions'';
+						lien.textContent = ''(*) Voir plus de dÃ©tails sur les autres fonctions'';
 					}
 				});
 			} else {
-				maCarte.removeControl(fenêtreAide);
+				maCarte.removeControl(fenÃªtreAide);
 			}
 		}
 
@@ -1895,7 +1895,7 @@ this.importFichier = function () {
     
     // bouton info
     var contenuInfo = "<br>" + "' || panel_info || '";
-	var fenêtreInfo = new L.control.dialog({size: [380, 350], anchor: [300, 800], position:"topleft", initOpen: true, minSize: [100, 100], maxSize: [500, 600]});
+	var fenÃªtreInfo = new L.control.dialog({size: [380, 350], anchor: [300, 800], position:"topleft", initOpen: true, minSize: [100, 100], maxSize: [500, 600]});
     
     var estOuverte = false;
     function info(carteA) {
@@ -1908,7 +1908,7 @@ this.importFichier = function () {
                         .replace(/&amp;/g, ''&'');
 			var div = document.createElement(''div'');
 			div.innerHTML = contenuInfo;
-			fenêtreInfo.setContent(div).addTo(carteA);
+			fenÃªtreInfo.setContent(div).addTo(carteA);
 			
 			boutonInfo.button.classList.add(''bouton-info-actif'');				
             carteA.on(''dialog:closed'', function(e) {
@@ -1917,7 +1917,7 @@ this.importFichier = function () {
             });
             
         } else {
-            carteA.removeControl(fenêtreInfo);
+            carteA.removeControl(fenÃªtreInfo);
             boutonInfo.button.classList.remove(''bouton-info-actif'');
         }
     }
@@ -1979,32 +1979,32 @@ this.ajouterLogo = function() {
     var LogoControlClass = L.Control.extend({
         options: { position: "bottomleft" },
         onAdd: function(map) {
-            // On crée le conteneur vide
+            // On crÃ©e le conteneur vide
             container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-logos-container");
             return container;
         }
     });
 
-    // ajout à la carte (vide au départ)
+    // ajout Ã  la carte (vide au dÃ©part)
     logoControl = new LogoControlClass();
     logoControl.addTo(maCarte);
 
     function updateLogos() {
         if (!container) return;
 
-        // On vide le contenu actuel sans supprimer le contrôle
+        // On vide le contenu actuel sans supprimer le contrÃ´le
         container.innerHTML = "";
 
         var icones = [];        
         if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
             icones = [
                 {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+                {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page prÃ©cedente", lienSite: "javascript:history.back()", typeLien: "_self"}
             ];
         } else {
             icones = [
                 {imgSource: "/Ressources/c3po_gr.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+                {imgSource: "/Ressources/backward.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page prÃ©cedente", lienSite: "javascript:history.back()", typeLien: "_self"}
             ];
         }
         
@@ -2042,7 +2042,7 @@ this.ajouterLogo = function() {
 this.ajouterSwitch = function() {
 
     // switch de surlignage lignes au hover		
-    var ToggleHoverOrangé = L.Control.extend({
+    var ToggleHoverOrangÃ© = L.Control.extend({
         options: { position: ''bottomleft'' },
         onAdd: function (map) {
             var container = L.DomUtil.create(''div'', ''switch-control-container-discret'');            
@@ -2050,13 +2050,13 @@ this.ajouterSwitch = function() {
 				flagHoverSurlignage = true;
 		    }
             var switchBtn = L.DomUtil.create(''div'', ''leaflet-control-switch-discret'', container);   
-			// On construit le bouton différemment selon que le flag est déjà actif ou non
+			// On construit le bouton diffÃ©remment selon que le flag est dÃ©jÃ  actif ou non
             if (flagHoverSurlignage) {
                 // Si actif : on ajoute la classe active et le texte ON
                 switchBtn.classList.add(''switch-active-discret'');
                 switchBtn.innerHTML = ''<span class="switch-text-discret">ON</span><div class="switch-handle-discret"></div>'';
             } else {
-                // Sinon (défaut) : texte OFF
+                // Sinon (dÃ©faut) : texte OFF
                 switchBtn.innerHTML = ''<span class="switch-text-discret">OFF</span><div class="switch-handle-discret"></div>'';
             }
             
@@ -2082,7 +2082,7 @@ this.ajouterSwitch = function() {
         }
     });
 
-    maCarte.addControl(new ToggleHoverOrangé());
+    maCarte.addControl(new ToggleHoverOrangÃ©());
 
 }
 
@@ -2124,7 +2124,7 @@ this.rechercherJson = function(){
 					return resultats;
 				},
                 moveToLocation: function(latlng, title, maCarte) {
-                    if (tabNettoyé[numRechCouche][0] === ''Point'') {
+                    if (tabNettoyÃ©[numRechCouche][0] === ''Point'') {
                         maCarte.setView(latlng, 16); 
                     } else {
                         var zoom = maCarte.getBoundsZoom(latlng.layer.getBounds());
@@ -2134,16 +2134,16 @@ this.rechercherJson = function(){
             });
             
  			ctrlRechJson.on("search:locationfound", function(e) {    
-				// Calcul des features superposées AVANT le bindPopup				
-				// Sécurité au cas où le résultat trouvé est sans géométrie
+				// Calcul des features superposÃ©es AVANT le bindPopup				
+				// SÃ©curitÃ© au cas oÃ¹ le rÃ©sultat trouvÃ© est sans gÃ©omÃ©trie
 				if (!e.layer.feature || !e.layer.feature.geometry) return; 
 				var geoRef = JSON.stringify(e.layer.feature.geometry.coordinates);
 				var featuresSuperposees = [];				
 				tabCoucheMetier.forEach(function(c) {
-					// On vérifie que c[0] et features existent
+					// On vÃ©rifie que c[0] et features existent
 					if (c[0] && c[0].features) {
 						c[0].features.forEach(function(f) {
-							// On vérifie que f.geometry existe et non null
+							// On vÃ©rifie que f.geometry existe et non null
 							if (f.geometry && f.geometry.coordinates) {
 								if (JSON.stringify(f.geometry.coordinates) === geoRef) {
 									featuresSuperposees.push(f);
@@ -2155,7 +2155,7 @@ this.rechercherJson = function(){
 				
 				var estMulti = featuresSuperposees.length > 1;
 				
-                var estPoint = (tabNettoyé[numRechCouche][0] === ''Point'');
+                var estPoint = (tabNettoyÃ©[numRechCouche][0] === ''Point'');
 			    var monOffset = (estMulti && !estPoint) ? [200, -50] : [0, 0];
                 var optionsPopup = {
                     maxWidth: estMulti ? 650 : 400,
@@ -2174,12 +2174,12 @@ this.rechercherJson = function(){
                 e.layer.unbindPopup();
                 e.layer.bindPopup(contenuPopup, optionsPopup);
                 
-                // Afficher uniquement le layer trouvé
+                // Afficher uniquement le layer trouvÃ©
                 ctrlRechJson.showFeatureOnly(e.layer);
                 e.layer.openPopup();
                 
                 var styleOrigine = null;
-                if (tabNettoyé[numRechCouche][0] !== ''Point''){
+                if (tabNettoyÃ©[numRechCouche][0] !== ''Point''){
                     styleOrigine = {
                         fillColor: e.layer.options.fillColor || e.layer.options.color,
                         color: e.layer.options.color
@@ -2198,16 +2198,16 @@ this.rechercherJson = function(){
                     var btn = document.getElementById(btnId);
                     if (btn) {
                         btn.onclick = function() {
-                            // SÉCURITÉ : Si la liste calculée est vide, on arrête tout
+                            // SÃ‰CURITÃ‰ : Si la liste calculÃ©e est vide, on arrÃªte tout
                             if (featuresSuperposees.length === 0) {
-                                alert("Erreur : Données introuvables à ces coordonnées.");
+                                alert("Erreur : DonnÃ©es introuvables Ã  ces coordonnÃ©es.");
                                 return;
                             }
 
                             var featuresAExporter = [];
 
                             if (estPoint) {
-                                // CAS POINT : On prend le PREMIER élément de la liste trouvée
+                                // CAS POINT : On prend le PREMIER Ã©lÃ©ment de la liste trouvÃ©e
                                 featuresAExporter = [featuresSuperposees[0]];
                             } else {
                                 // CAS LIGNE : On garde toute la liste (superpositions incluses)
@@ -2279,19 +2279,19 @@ this.rechercherJson = function(){
 			const Geojson3DConverti = { type:''FeatureCollection'', features: [] };
 			geoJSON3D.features.forEach(function(objets, i) {
 				const objetGeojson = JSON.parse(JSON.stringify(objets));
-				const propriété = objetGeojson.properties;
-				objetGeojson.id = propriété.cleabs;
+				const propriÃ©tÃ© = objetGeojson.properties;
+				objetGeojson.id = propriÃ©tÃ©.cleabs;
 				let hauteurReelle = 8;
-				if (''height'' in propriété && propriété.height != null && propriété.height !== '''') {
-				  hauteurReelle = propriété.height;
+				if (''height'' in propriÃ©tÃ© && propriÃ©tÃ©.height != null && propriÃ©tÃ©.height !== '''') {
+				  hauteurReelle = propriÃ©tÃ©.height;
 				}
 				const couleurHT = couleurToitSelonHauteur(hauteurReelle);
 				const couleurHM = couleurMurSelonHauteur(hauteurReelle);
-				propriété.wallColor = couleurHM;
-				propriété.roofColor = couleurHT;
+				propriÃ©tÃ©.wallColor = couleurHM;
+				propriÃ©tÃ©.roofColor = couleurHT;
 				const echelle = 0.9;
-				propriété.height = hauteurReelle * echelle;
-				propriété.hauteurReelleInfo = hauteurReelle;
+				propriÃ©tÃ©.height = hauteurReelle * echelle;
+				propriÃ©tÃ©.hauteurReelleInfo = hauteurReelle;
 				// push wallColor et roofColor ds geojson
 				Geojson3DConverti.features.push(objetGeojson);
 			});
@@ -2349,7 +2349,7 @@ this.rechercherJson = function(){
 			legendeDiv.innerHTML = `
 				<div class="item"><div class="color" style="background:#c4e1ea"></div> = 5 m</div>
 				<div class="item"><div class="color" style="background:#55add0"></div> 5-10 m</div>
-				<div class="item"><div class="color" style="background:#5f85c4"></div> 10–20 m</div>
+				<div class="item"><div class="color" style="background:#5f85c4"></div> 10Â–20 m</div>
 				<div class="item"><div class="color" style="background:#a33a3c"></div> > 20 m</div>
 			`;
 			document.body.appendChild(legendeDiv);
@@ -2358,7 +2358,7 @@ this.rechercherJson = function(){
 	
 	this.spiderfyPoints = function() {
 	
-		// popup spiderfy points superposés
+		// popup spiderfy points superposÃ©s
 		maCarte.on(''popupopen'', function(e) {
 		    var content = e.popup.getContent();
 		    if (content && content.indexOf(''popup-scroll'') !== -1) {
@@ -2386,7 +2386,7 @@ this.rechercherJson = function(){
 			nearbyDistance: 5
 		});	
 
-		// Ajouter les marqueurs légende à omsLegende
+		// Ajouter les marqueurs lÃ©gende Ã  omsLegende
 		for (let i = 0; i < tabEltsMarkerLeg.length; i++) {
 			omsLegende.addMarker(tabEltsMarkerLeg[i]);
 		}		
@@ -2435,7 +2435,7 @@ this.rechercherJson = function(){
 		
 		maCarte.on(''zoomend'', function() {
 			const zoomActuel = maCarte.getZoom();
-			// Tooltips polygones masqués si zoom fort
+			// Tooltips polygones masquÃ©s si zoom fort
 			var containerCarte = maCarte.getContainer();
 			if (zoomActuel > 16) {
 				containerCarte.classList.add(''masquer-tooltips-polygones'');
@@ -2500,7 +2500,7 @@ function main() {
 	carteLeaflet.rechercherLieu();
 	carteLeaflet.importFichier();
 	carteLeaflet.exportCouches();
-	carteLeaflet.iconeClé();	
+	carteLeaflet.iconeClÃ©();	
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();	
 	carteLeaflet.ajouterSwitch();	
@@ -2514,13 +2514,13 @@ function main() {
 </script> 
 <!-- export couches - dev CD30 -->
 <script src="/Ressources/API_JS/librairies_cd30/export-couches.js"></script>
-<!-- génération shapes zippés -->
+<!-- gÃ©nÃ©ration shapes zippÃ©s -->
 <script src="/Ressources/API_JS/librairies_cd30/shpwrite.js"></script>
 <script src="/Ressources/API_JS/librairies_cd30/jszip.min.js"></script> 
 '; 
 
 begin
-return partieDébut || versgeojson_n (_nom_vue) || partieCodeJS;
+return partieDÃ©but || versgeojson_n (_nom_vue) || partieCodeJS;
 end;
 $BODY$;
 
