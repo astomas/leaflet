@@ -145,6 +145,10 @@ body {
 .modern-sidebar-resizer {
   position: relative;
   background: var(--modern-border);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  transition: background 0.15s;
 }
 
 .modern-sidebar-resizer::before {
@@ -158,6 +162,27 @@ body {
   transform: translate(-50%, -50%);
   background: #94a3b8;
   opacity: .55;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.modern-sidebar-resizer:hover {
+  background: #cbd5e1;
+}
+
+.modern-sidebar-resizer:hover::before,
+.modern-sidebar-resizer.is-dragging::before {
+  opacity: 1;
+  background: #3498DB;
+}
+
+.modern-sidebar-resizer.is-dragging {
+  background: #93c5fd;
+}
+
+body.is-resizing,
+body.is-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
 }
 
 .modern-map-area {

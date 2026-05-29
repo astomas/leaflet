@@ -92,7 +92,71 @@
     dockElement(getControlElement(control), label);
   };
 
+  function setupSidebarResizer() {
+    var resizer = document.querySelector(".modern-sidebar-resizer");
+    var mainContent = document.querySelector(".modern-main-content");
+    if (!resizer || !mainContent) return;
+
+    var MIN_WIDTH = 200;
+    var MAX_WIDTH = 560;
+
+    try {
+      var saved = parseInt(localStorage.getItem("modernSidebarWidth") || "", 10);
+      if (isFinite(saved) && saved >= MIN_WIDTH && saved <= MAX_WIDTH) {
+        mainContent.style.setProperty("--modern-sidebar-width", saved + "px");
+      }
+    } catch (_) {}
+
+    var dragging = false;
+    var pendingWidth = null;
+
+    function onPointerMove(e) {
+      if (!dragging) return;
+      var rect = mainContent.getBoundingClientRect();
+      var next = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, e.clientX - rect.left));
+      pendingWidth = next;
+      mainContent.style.setProperty("--modern-sidebar-width", next + "px");
+    }
+
+    function onPointerUp() {
+      if (!dragging) return;
+      dragging = false;
+      document.body.classList.remove("is-resizing");
+      resizer.classList.remove("is-dragging");
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      if (pendingWidth != null) {
+        try { localStorage.setItem("modernSidebarWidth", Math.round(pendingWidth)); } catch (_) {}
+      }
+      var mapContainer = document.getElementById("carteId");
+      if (mapContainer && mapContainer._leaflet_map) {
+        mapContainer._leaflet_map.invalidateSize();
+      }
+    }
+
+    resizer.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      dragging = true;
+      pendingWidth = null;
+      document.body.classList.add("is-resizing");
+      resizer.classList.add("is-dragging");
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+    });
+
+    resizer.addEventListener("dblclick", function () {
+      mainContent.style.removeProperty("--modern-sidebar-width");
+      try { localStorage.removeItem("modernSidebarWidth"); } catch (_) {}
+      var mapContainer = document.getElementById("carteId");
+      if (mapContainer && mapContainer._leaflet_map) {
+        mapContainer._leaflet_map.invalidateSize();
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    setupSidebarResizer();
+
     document.querySelectorAll(".modern-family").forEach(function (section) {
       var title = section.querySelector(".modern-family-title");
       if (!title) return;
