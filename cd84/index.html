@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réseau Routier Départemental - Vaucluse (84)</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="css/styles.css?v=20260526-6">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a class="header-logo-link" href="https://www.vaucluse.fr/" target="_blank" rel="noopener noreferrer" title="Département de Vaucluse — vaucluse.fr">
+                <img class="header-logo-mark" src="assets/cd84-logo-mark.jpg" width="100" height="100" alt="Département de Vaucluse">
+            </a>
+            <div class="header-titles">
+                <h1>Réseau Routier Départemental</h1>
+                <div class="subtitle">Département de Vaucluse • Outils Numériques Routiers</div>
+            </div>
+            <div id="weather" style="display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                <div style="font-size: 2rem;" id="weatherIcon">⏳</div>
+                <div>
+                    <div style="font-size: 1.5rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;" id="weatherTemp">--°C</div>
+                    <div style="font-size: 0.75rem; opacity: 0.9;" id="weatherDesc">Chargement...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <section class="legend-family" data-family="factual" data-expanded="false">
+                    <button class="legend-family-header" type="button" aria-expanded="false">
+                        <span class="legend-family-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
+                        <span class="legend-family-label">Cartographie factuelle</span>
+                        <span class="legend-family-meta"></span>
+                        <span class="legend-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></span>
+                    </button>
+                    <div class="legend-family-body">
+                <div class="legend-section">
+                    <div class="legend-title">Territoire</div>
+                    <span class="freshness-badge" id="freshness-boundary" data-schedule-key="static"></span>
+                    
+                    <div class="legend-item" style="pointer-events: none;">
+                        <div class="legend-color" style="background: transparent; border: 2px dashed #2C3E50; height: 0px; width: 40px;"></div>
+                        <div class="legend-label">Limite du Vaucluse (84)</div>
+                        <div class="legend-count"></div>
+                    </div>
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-title" onclick="toggleAllHierarchy()" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                        <span>Hiérarchie du Réseau</span>
+                        <span id="hierarchyToggleIcon" class="toggle-icon" title="Couche visible — cliquer pour masquer" aria-label="Couche visible (cliquer pour masquer)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                    </div>
+                    <span class="freshness-badge" id="freshness-hierarchy" data-schedule-key="osm"></span>
+                    
+                    <div class="legend-item" data-hierarchy="regional" onclick="toggleHierarchy('regional')" style="cursor: pointer; transition: all 0.3s;">
+                        <div class="legend-color" style="background: #E74C3C; height: 6px;"></div>
+                        <div class="legend-label">Réseau d'intérêt régional</div>
+                        <div class="legend-count">...</div>
+                    </div>
+                    
+                    <div class="legend-item" data-hierarchy="territorial" onclick="toggleHierarchy('territorial')" style="cursor: pointer; transition: all 0.3s;">
+                        <div class="legend-color" style="background: #F39C12; height: 5px;"></div>
+                        <div class="legend-label">Réseau de développement territorial</div>
+                        <div class="legend-count">...</div>
+                    </div>
+                    
+                    <div class="legend-item" data-hierarchy="local" onclick="toggleHierarchy('local')" style="cursor: pointer; transition: all 0.3s;">
+                        <div class="legend-color" style="background: #3498DB; height: 4px;"></div>
+                        <div class="legend-label">Réseau d'intérêt local</div>
+                        <div class="legend-count">...</div>
+                    </div>
+                    
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-title" onclick="console.log('CLIC DÉTECTÉ sur Routes en Construction'); window.toggleConstruction && window.toggleConstruction();" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                        <span>Routes en Construction</span>
+                        <span id="constructionToggleIcon" class="toggle-icon is-hidden" title="Couche masquée — cliquer pour afficher" aria-label="Couche masquée (cliquer pour afficher)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg></span>
+                    </div>
+                    <span class="freshness-badge" id="freshness-construction" data-schedule-key="osm"></span>
+                    
+                    <div class="legend-item" data-construction="highway" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: none; border: 3px dashed #F39C12; height: 0px; width: 40px;"></div>
+                        <div class="legend-label">Routes en construction</div>
+                        <div class="legend-count" id="count-construction">-</div>
+                    </div>
+                    
+                    <div class="legend-item" data-construction="proposed" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: none; border: 2px dotted #9B59B6; height: 0px; width: 40px;"></div>
+                        <div class="legend-label">Projets de routes</div>
+                        <div class="legend-count" id="count-proposed">-</div>
+                    </div>
+                    
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-title" onclick="toggleCities()" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                        <span>Villes Principales</span>
+                        <span id="citiesToggleIcon" class="toggle-icon" title="Couche visible — cliquer pour masquer" aria-label="Couche visible (cliquer pour masquer)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                    </div>
+
+                    <div class="legend-item" data-city="main" style="pointer-events: none;">
+                        <div class="legend-color" style="background: #2C3E50; width: 10px; height: 10px; border-radius: 50%; border: 2px solid #fff;"></div>
+                        <div class="legend-label">Chefs-lieux et grandes villes</div>
+                        <div class="legend-count">7</div>
+                    </div>
+                </div>
+
+                <div class="legend-section" id="limitationsLegend" style="display:none;">
+                    <div class="legend-title">Limitations & Restrictions</div>
+                    <!-- Contenu généré dynamiquement par updateLimitationsLegend() -->
+                </div>
+                    </div>
+                </section>
+
+                <section class="legend-family" data-family="stats" data-expanded="false">
+                    <button class="legend-family-header" type="button" aria-expanded="false">
+                        <span class="legend-family-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>
+                        <span class="legend-family-label">Données statistiques</span>
+                        <span class="legend-family-meta"></span>
+                        <span class="legend-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></span>
+                    </button>
+                    <div class="legend-family-body">
+                <div class="legend-section">
+                    <div class="legend-title" onclick="toggleAccidents()" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                        <span>Accidentologie</span>
+                        <span id="accidentToggleIcon" class="toggle-icon is-hidden" title="Couche masquée — cliquer pour afficher" aria-label="Couche masquée (cliquer pour afficher)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg></span>
+                    </div>
+                    <span class="freshness-badge" id="freshness-accidents" data-schedule-key="static"></span>
+                    
+                    <div class="legend-item" data-accident="mortel" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: #000000; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff;"></div>
+                        <div class="legend-label">Accident mortel</div>
+                        <div class="legend-count" id="count-fatal">-</div>
+                    </div>
+                    
+                    <div class="legend-item" data-accident="grave" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: #E74C3C; width: 10px; height: 10px; border-radius: 50%; border: 2px solid #fff;"></div>
+                        <div class="legend-label">Blessés hospitalisés</div>
+                        <div class="legend-count" id="count-hospitalized">-</div>
+                    </div>
+                    
+                    <div class="legend-item" data-accident="leger" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: #F39C12; width: 8px; height: 8px; border-radius: 50%; border: 2px solid #fff;"></div>
+                        <div class="legend-label">Blessés légers</div>
+                        <div class="legend-count" id="count-light">-</div>
+                    </div>
+                    
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-title" onclick="toggleTraffic()" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; font-weight: 600;">
+                        <span>Stations de Comptage</span>
+                        <span id="trafficToggleIcon" class="toggle-icon is-hidden" title="Couche masquée — cliquer pour afficher" aria-label="Couche masquée (cliquer pour afficher)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg></span>
+                    </div>
+                    <span class="freshness-badge" id="freshness-traffic" data-schedule-key="external"></span>
+                    
+                    <div class="legend-item" data-traffic="high" style="opacity: 0.5;">
+                        <div class="legend-color" style="background: #34495E; width: 12px; height: 12px; border-radius: 50%;"></div>
+                        <div class="legend-label">Trafic élevé (&gt;20k véh/j)</div>
+                        <div class="legend-count" id="count-high">-</div>
+                    </div>
+                    
+                    <div class="legend-item" data-traffic="medium" style="opacity: 0.5;">
+                        <div class="legend-color" style="background: #95A5A6; width: 10px; height: 10px; border-radius: 50%;"></div>
+                        <div class="legend-label">Trafic moyen (5k-20k)</div>
+                        <div class="legend-count" id="count-medium">-</div>
+                    </div>
+                    
+                    <div class="legend-item" data-traffic="low" style="opacity: 0.5;">
+                        <div class="legend-color" style="background: #D5DBDB; width: 8px; height: 8px; border-radius: 50%; border: 1px solid #7F8C8D;"></div>
+                        <div class="legend-label">Trafic faible (&lt;5k véh/j)</div>
+                        <div class="legend-count" id="count-low">-</div>
+                    </div>
+                </div>
+                    </div>
+                </section>
+
+                <section class="legend-family" data-family="realtime" data-expanded="false">
+                    <button class="legend-family-header" type="button" aria-expanded="false">
+                        <span class="legend-family-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                        <span class="legend-family-label">Temps réel</span>
+                        <span class="legend-family-meta"></span>
+                        <span class="legend-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></span>
+                    </button>
+                    <div class="legend-family-body">
+                <div class="legend-section">
+                    <div class="legend-title" onclick="toggleBisonFute()" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; font-weight: 600;">
+                        <span>Événements Routiers</span>
+                        <span id="bisonFuteToggleIcon" class="toggle-icon is-hidden" title="Couche masquée — cliquer pour afficher" aria-label="Couche masquée (cliquer pour afficher)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg></span>
+                    </div>
+                    <span class="freshness-badge" id="freshness-bison-fute" data-schedule-key="external"></span>
+
+                    <div class="legend-item" data-bison-fute="travaux" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: transparent; width: 18px; height: 18px; text-align: center; line-height: 18px;">🚧</div>
+                        <div class="legend-label">Travaux</div>
+                        <div class="legend-count"></div>
+                    </div>
+
+                    <div class="legend-item" data-bison-fute="bouchons" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: transparent; width: 18px; height: 18px; text-align: center; line-height: 18px;">🚗</div>
+                        <div class="legend-label">Bouchons</div>
+                        <div class="legend-count"></div>
+                    </div>
+
+                    <div class="legend-item" data-bison-fute="accidents" style="pointer-events: none; opacity: 0.5;">
+                        <div class="legend-color" style="background: transparent; width: 18px; height: 18px; text-align: center; line-height: 18px;">⚠️</div>
+                        <div class="legend-label">Accidents en cours</div>
+                        <div class="legend-count"></div>
+                    </div>
+
+                </div>
+                    </div>
+                </section>
+
+                <section class="legend-family" data-family="tools" data-expanded="false">
+                    <button class="legend-family-header" type="button" aria-expanded="false">
+                        <span class="legend-family-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+                        <span class="legend-family-label">Outils &amp; méta</span>
+                        <span class="legend-family-meta"></span>
+                        <span class="legend-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></span>
+                    </button>
+                    <div class="legend-family-body">
+                <div class="legend-section">
+                    <div class="legend-title">Rechercher une Route</div>
+                    
+                    <input type="text" id="road-search" placeholder="Ex: D900, D4..." 
+                           style="width: 100%; padding: 8px; border: 1px solid #dfe6e9; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin-bottom: 10px;">
+                    
+                    <div id="road-list" style="max-height: 300px; overflow-y: auto; background: white; border-radius: 6px; border: 1px solid #dfe6e9;">
+                        <div style="padding: 20px; text-align: center; color: #999; font-size: 0.85rem;">
+                            Chargement des routes...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="legend-section" id="road-info-section" style="display: none;">
+                    <div class="legend-title">Informations Route</div>
+                    <div id="road-info-panel" style="background: white; border-radius: 8px; border: 1px solid #dfe6e9; padding: 15px;">
+                    </div>
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-title quality-section-header">
+                        <span>Qualité OSM / Wikidata</span>
+                        <button type="button" class="sidebar-quality-btn" id="qualityBtn" onclick="toggleQualityPanel()" title="Ouvrir le panneau détaillé Qualité OSM (Wikidata, relations)">
+                            <span class="sidebar-quality-btn-icon" aria-hidden="true">🔍</span>
+                            <span class="sidebar-quality-btn-label">Panneau détaillé</span>
+                        </button>
+                    </div>
+                    <span class="freshness-badge" id="freshness-wikidata" data-schedule-key="osm"></span>
+                    <div id="wikidataSummary" style="background:white;border-radius:8px;border:1px solid #dfe6e9;padding:10px;">
+                        <div style="font-size:0.8rem;color:#7f8c8d;">Calcul en cours…</div>
+                    </div>
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-title">Informations Réseau</div>
+                    <div class="network-stats" id="networkStatsBox">
+                        <div class="network-tile">
+                            <div class="network-tile-value" id="networkStat-refs">…</div>
+                            <div class="network-tile-label">Routes</div>
+                        </div>
+                        <div class="network-tile">
+                            <div class="network-tile-value" id="networkStat-segments">…</div>
+                            <div class="network-tile-label">Tronçons OSM</div>
+                        </div>
+                        <div class="network-tile network-tile-wide">
+                            <div class="network-tile-value" id="networkStat-length">…</div>
+                            <div class="network-tile-label">Longueur cumulée</div>
+                        </div>
+                        <div class="network-tile network-tile-wide">
+                            <div class="network-tile-value" id="networkStat-traffic">…</div>
+                            <div class="network-tile-label">Trafic MJA min / max</div>
+                        </div>
+                        <div class="network-tile">
+                            <div class="network-tile-value" id="networkStat-bridges">…</div>
+                            <div class="network-tile-label">Ponts</div>
+                        </div>
+                        <div class="network-tile">
+                            <div class="network-tile-value" id="networkStat-tunnels">…</div>
+                            <div class="network-tile-label">Tunnels</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-title">Formule de rafraîchissement</div>
+
+                    <div class="refresh-formula">
+                        <div class="refresh-formula-row" data-schedule-key="osm">
+                            <div>
+                                <div class="refresh-formula-label">OSM (routes, communes, constructions)</div>
+                                <div style="font-size:0.7rem;color:#7f8c8d;">Source&nbsp;: Overpass → workflow GitHub Actions</div>
+                            </div>
+                            <div class="refresh-formula-meta" id="refreshMetaOsm">
+                                Hebdo · lun. 03:17 UTC<br>—
+                            </div>
+                        </div>
+
+                        <div class="refresh-formula-row" data-schedule-key="external">
+                            <div>
+                                <div class="refresh-formula-label">Externe (comptages, événements)</div>
+                                <div style="font-size:0.7rem;color:#7f8c8d;">data.gouv.fr · Bison Futé DATEX II</div>
+                            </div>
+                            <div class="refresh-formula-meta" id="refreshMetaExternal">
+                                Toutes les 3 h · xx:23 UTC<br>—
+                            </div>
+                        </div>
+
+                        <div class="refresh-formula-row" data-schedule-key="live">
+                            <div>
+                                <div class="refresh-formula-label">Météo Open-Meteo</div>
+                                <div style="font-size:0.7rem;color:#7f8c8d;">Live navigateur</div>
+                            </div>
+                            <div class="refresh-formula-meta">Toutes les 10 min</div>
+                        </div>
+
+                        <div class="refresh-formula-row" data-schedule-key="static">
+                            <div>
+                                <div class="refresh-formula-label">Statique (limite 84, accidents)</div>
+                                <div style="font-size:0.7rem;color:#7f8c8d;">Snapshot versionné dans le dépôt</div>
+                            </div>
+                            <div class="refresh-formula-meta">Figé · mise à jour manuelle</div>
+                        </div>
+                    </div>
+
+                    <div id="externalRefreshStatus" style="margin-top: 12px; padding: 9px; background: #eef6ff; border-radius: 6px; font-size: 0.7rem; color: #2C3E50; text-align: center; line-height: 1.4;">
+                        Chargement de l'état des sources…
+                    </div>
+
+                </div>
+
+                <div class="legend-section credits-section">
+                    <div class="legend-title">Crédits</div>
+                    <div class="credits-box">
+                        <div class="credits-author">
+                            <a href="https://www.openstreetmap.org/user/JLZIMMERMANN" target="_blank" rel="noopener noreferrer">Jean-Louis&nbsp;Zimmermann</a> Département Vaucluse&nbsp;(84)
+                        </div>
+                        <div class="credits-repo">
+                            <a href="https://github.com/thepriben/demo-inforoute-084" target="_blank" rel="noopener noreferrer" title="Ouvrir le dépôt">
+                                <img src="https://img.shields.io/github/stars/thepriben/demo-inforoute-084?style=flat-square&logo=github&label=&logoColor=white&color=24292f" alt="thepriben/demo-inforoute-084" loading="lazy">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="sidebar-resizer" id="sidebarResizer" role="separator" aria-orientation="vertical" aria-label="Redimensionner la barre latérale" tabindex="0" title="Glissez pour redimensionner la barre latérale"></div>
+
+            <div style="position: relative;">
+                <!-- Barre d'outils unifiée : modes spéciaux groupés en haut à droite -->
+                <div class="map-toolbar" role="toolbar" aria-label="Modes d'affichage spéciaux">
+                    <button type="button" class="map-tool" data-accent="#7F8C8D" onclick="toggleWazeTraffic()" id="wazeBtn" title="Mettre en évidence les stations de comptage CD84">
+                        <span class="map-tool-icon">📊</span><span class="map-tool-label">Comptages CD84</span>
+                    </button>
+                    <button type="button" class="map-tool" data-accent="#9B59B6" onclick="toggleConvoisExceptionnels()" id="convoiBtn" title="Afficher les itinéraires adaptés aux convois exceptionnels">
+                        <span class="map-tool-icon">🚛</span><span class="map-tool-label">Convois&nbsp;Except.</span>
+                    </button>
+                    <button type="button" class="map-tool" data-accent="#F39C12" onclick="toggleLimitationsMode()" id="limitsBtn" title="Afficher les limitations de vitesse (dégradé chaud/froid) et les restrictions ponts/PL (hauteur, poids, longueur, largeur)">
+                        <span class="map-tool-icon">🚦</span><span class="map-tool-label">Limitations</span>
+                    </button>
+                </div>
+
+                <!-- Panneau de qualité des données -->
+                <div class="quality-panel" id="qualityPanel">
+                    <div class="quality-header">
+                        <h3>📊 Qualité des Données OSM</h3>
+                        <button class="quality-close" onclick="toggleQualityPanel()">×</button>
+                    </div>
+                    <div class="quality-content" id="qualityContent">
+                        <p style="text-align: center; color: #999; padding: 20px;">
+                            Chargement des métriques...
+                        </p>
+                    </div>
+                </div>
+
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js?v=20260524-2"></script>
+    <script src="js/api.js?v=20260524-2"></script>
+    <script src="js/app.js?v=20260526-6"></script>
+</body>
+</html>
