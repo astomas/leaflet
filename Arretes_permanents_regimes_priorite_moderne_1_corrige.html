@@ -3,10 +3,10 @@
 <html>    
   <head>
   
-	<link rel="stylesheet" href="/Ressources 26/API_JS/librairies_cd30/leaflet.css" />
-	<link rel="stylesheet" href="/Ressources 26/API_JS/librairies_cd30/leaflet-si3p0.css" />
-	<link rel="stylesheet" href="/Ressources 26/API_JS/librairies_cd30/pc-portable.css" />	
-	<script src="/Ressources 26/API_JS/librairies_cd30/leaflet.js"></script>
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/librairies_cd30/leaflet.css" />
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/librairies_cd30/leaflet-si3p0.css" />
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/librairies_cd30/pc-portable.css" />	
+	<script src="/leaflet/Ressources 26/API_JS/librairies_cd30/leaflet.js"></script>
 
 	<link rel="stylesheet" href="Arretes_permanents_regimes_priorite_modernisee_1_corrige_merge.css" />
 	<script src="./modern-dock.js"></script>	
@@ -16,66 +16,66 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	
 	<!-- limite geojson du Gard -->
-	<script src="/Ressources 26/API_JS/librairies_cd30/gard.js"></script>
+	<script src="/leaflet/Ressources 26/API_JS/librairies_cd30/gard.js"></script>
 
 	<!-- création boutons - lib. fontawesome d'icones pr boutons -->
-	<script type="text/javascript" src="/Ressources 26/API_JS/easy-button.js"></script>
-	<link rel="stylesheet" href = "/Ressources 26/API_JS/easy-button.css" />	 
-	<link rel="stylesheet" href="/Ressources 26/API_JS/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
+	<script type="text/javascript" src="/leaflet/Ressources 26/API_JS/easy-button.js"></script>
+	<link rel="stylesheet" href = "/leaflet/Ressources 26/API_JS/easy-button.css" />	 
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
 
 	<!-- clé API google - limite appels/mois -->
 	<script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbn4agQo3A4Hp3Yyyros9hD7vFw0WSNOM&callback=Function.prototype&loading=async&v=beta"></script>
 	<!-- Fonds carte Google -->
-	<script src="/Ressources 26/API_JS/Leaflet.GoogleMutant.js"></script>
+	<script src="/leaflet/Ressources 26/API_JS/Leaflet.GoogleMutant.js"></script>
 	<!-- Rech. lieux Google -->
-	<script src="/Ressources 26/API_JS/GPlaceAutocomplete.js"></script>
-  	<link rel="stylesheet" href="/Ressources 26/API_JS/GPlaceAutocomplete.css" />	  
+	<script src="/leaflet/Ressources 26/API_JS/GPlaceAutocomplete.js"></script>
+  	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/GPlaceAutocomplete.css" />	  
 
 	<!-- Impression carte -->
-	<script src="/Ressources 26/API_JS/leaflet.browser.print.js"></script>
+	<script src="/leaflet/Ressources 26/API_JS/leaflet.browser.print.js"></script>
 
 	<!-- Panneau texte Aide et Info -->
-	<script src="/Ressources 26/API_JS/Leaflet.Dialog.js"></script>
-  	<link rel="stylesheet" href="/Ressources 26/API_JS/Leaflet.Dialog.css" /> 
+	<script src="/leaflet/Ressources 26/API_JS/Leaflet.Dialog.js"></script>
+  	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/Leaflet.Dialog.css" /> 
 
 	<!-- Permalink pr centrage dyn graflex -->
-	<script src="/Ressources 26/API_JS/leaflet.permalink.js"></script>
+	<script src="/leaflet/Ressources 26/API_JS/leaflet.permalink.js"></script>
 
 	<!-- mesure distance -->
 	<link rel="stylesheet" type="text/css" href="/Ressources 26/API_JS/leaflet-ruler.css">
-	<script src="/Ressources 26/API_JS/leaflet-ruler.js"></script>
+	<script src="/leaflet/Ressources 26/API_JS/leaflet-ruler.js"></script>
 
 	<!-- acces streetview, panoramax... -->
-	<script src="/Ressources 26/API_JS/streetview.js"></script>
+	<script src="/leaflet/Ressources 26/API_JS/streetview.js"></script>
 	
 	<!-- bloc legende dyn -->
-	<script type="text/javascript" src="/Ressources 26/API_JS/leaflet.legend.js"></script>	
-	<link rel="stylesheet" href="/Ressources 26/API_JS/leaflet.legend.css" />
+	<script type="text/javascript" src="/leaflet/Ressources 26/API_JS/leaflet.legend.js"></script>	
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/leaflet.legend.css" />
 
 	<!-- rech Json -->
-	<link rel="stylesheet" href="/Ressources 26/API_JS/leaflet-search.css"/>
-	<script src="/Ressources 26/API_JS/leaflet-search.js"></script>
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/leaflet-search.css"/>
+	<script src="/leaflet/Ressources 26/API_JS/leaflet-search.js"></script>
 
 	<!-- clic droit coord GPS -->
-	<script src="/Ressources 26/API_JS/leaflet.contextmenu.js"></script> 
+	<script src="/leaflet/Ressources 26/API_JS/leaflet.contextmenu.js"></script> 
 
 	<!-- IGN calcul isochrones -->
-	<script src="/Ressources 26/API_JS/GpPluginLeaflet.js"></script> 
-	<link rel="stylesheet" href="/Ressources 26/API_JS/GpPluginLeaflet.css"/>	
+	<script src="/leaflet/Ressources 26/API_JS/GpPluginLeaflet.js"></script> 
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/GpPluginLeaflet.css"/>	
 
 	<!-- Import fichiers Geo -->
-	<script src="/Ressources 26/API_JS/betterFileLayer.js"></script> 
-	<link rel="stylesheet" href="/Ressources 26/API_JS/betterFileLayer.css"/>	
+	<script src="/leaflet/Ressources 26/API_JS/betterFileLayer.js"></script> 
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/betterFileLayer.css"/>	
 
 	<!-- Rech par coord -->
-	<link rel="stylesheet" href="/Ressources 26/API_JS/geosearch.css"/>
-	<script src="/Ressources 26/API_JS/geosearch.js"></script>
+	<link rel="stylesheet" href="/leaflet/Ressources 26/API_JS/geosearch.css"/>
+	<script src="/leaflet/Ressources 26/API_JS/geosearch.js"></script>
 
 	<!-- Effet 3D sur batis -->
-	<script type="text/javascript" src="/Ressources 26/API_JS/OSMBuildings-leaflet.js"></script>	
+	<script type="text/javascript" src="/leaflet/Ressources 26/API_JS/OSMBuildings-leaflet.js"></script>	
 	
 	<!-- spiderfy points superposés -->
-	<script src="/Ressources 26/API_JS/overlap-marker.js"></script>
+	<script src="/leaflet/Ressources 26/API_JS/overlap-marker.js"></script>
 
 </head>	
 	
