@@ -250,7 +250,7 @@
     var badge = document.querySelector(".modern-family-business .modern-family-title em");
     if (!badge) return;
     if (typeof nomVues !== "undefined" && nomVues.length) {
-      badge.textContent = nomVues.join(" · ");
+      badge.textContent = nomVues.length + (nomVues.length > 1 ? " couches" : " couche");
     }
   }
 
