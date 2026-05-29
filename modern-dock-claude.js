@@ -241,6 +241,20 @@
   }
 
   // =========================================================================
+  // Badge "Données métier" : remplace le texte statique par le nom de couche
+  // =========================================================================
+
+  // Injecte le(s) nom(s) de couche issus de nomVues dans le badge <em>
+  // de la section "Données métier", évitant de le coder en dur dans le HTML.
+  function setupBadgeMetier() {
+    var badge = document.querySelector(".modern-family-business .modern-family-title em");
+    if (!badge) return;
+    if (typeof nomVues !== "undefined" && nomVues.length) {
+      badge.textContent = nomVues.join(" · ");
+    }
+  }
+
+  // =========================================================================
   // Initialisation au chargement du DOM
   // =========================================================================
 
@@ -248,6 +262,7 @@
     setupSidebarResizer();
     setupTitre();
     setupAccordion();
+    setupBadgeMetier();
   });
 
 })();
