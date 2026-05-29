@@ -126,7 +126,7 @@ body {
   height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-columns: var(--modern-sidebar-width) 6px 1fr;
+  grid-template-columns: var(--modern-sidebar-width) 10px 1fr;
 }
 
 .modern-sidebar {
@@ -144,6 +144,7 @@ body {
 
 .modern-sidebar-resizer {
   position: relative;
+  z-index: 10;
   background: var(--modern-border);
   cursor: col-resize;
   user-select: none;
@@ -465,7 +466,7 @@ body.is-resizing * {
 }
 
 @media (max-width: 1100px) {
-  .modern-main-content { grid-template-columns: 300px 6px 1fr; }
+  .modern-main-content { grid-template-columns: 300px 10px 1fr; }
   .modern-tools-dock { grid-template-columns: 1fr; }
 }
 
