@@ -2601,7 +2601,7 @@ function main() {
 	carteLeaflet.importFichier();
 	carteLeaflet.exportCouches();
 	// Déplace le bouton Exporter dans "Outils carte", en 2e position après Importer.
-	[100, 500, 1200].forEach(function (delay) {
+	/*[100, 500, 1200].forEach(function (delay) {
 		setTimeout(function () {
 			if (window.modernDockExistingControl) {
 				window.modernDockExistingControl("Exporter", {
@@ -2610,7 +2610,7 @@ function main() {
 				});
 			}
 		}, delay);
-	});
+	});*/
 	carteLeaflet.iconeClé();	
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();	
