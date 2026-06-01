@@ -1594,7 +1594,6 @@ this.importFichier = function () {
 	
 	this.iconeClé = function() {  
 	
-		var iconesVisible = false;
 		var sousBoutonsCréés = false;	
 		
 		var btnMesurer = new L.control.ruler({position: "topleft"});
@@ -1702,8 +1701,8 @@ this.importFichier = function () {
 				blocLegendeElement.style.paddingBottom = '0';
 				blocLegende.remove();				
 				blocLegende.addTo(maCarte);	
-				conteneurVisuInfo.remove();
-				conteneurVisuInfo.addTo(maCarte);	
+				conteneurStreetView.remove();
+				conteneurStreetView.addTo(maCarte);	
 			}	
 		});	
 		
@@ -1756,76 +1755,26 @@ this.importFichier = function () {
 		  });
 		}
 		
-		// bouton clé
-		var boutonClé = L.easyButton("fa-key fa-lg", function() { 
-			deployerIcones(); 
-		}, "Autres fonctions").addTo(maCarte);
-		
-		ajouterHoverEtClic(boutonClé.button, {
-		    isVisible: () => iconesVisible,
-		    afficher: deployerIcones,
-		    masquer: deployerIcones
-		});
-		
-		boutonClé.button.classList.add('bouton-cle');
-		var container = boutonClé.button.parentNode;
-		container.style.backgroundColor = "lightgrey";		
-		boutonClé.button.style.backgroundColor = "lightgrey"; 
-
-        // Interface modernisée : la clé n'est plus utilisée.
-        // On expose directement les outils utiles, sans appeler deployerIcones(),
-        // donc sans effet de bord sur les autres plugins.
-        try {
-            boutonClé.remove();
-        } catch (e) {
-            if (boutonClé.button && boutonClé.button.parentNode) boutonClé.button.parentNode.style.display = 'none';
-        }
-        setTimeout(function () {
-            if (!sousBoutonsCréés) {
-                btnImprimer.addTo(maCarte);
-                if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnImprimer, "Imprimer");
-                btnMesurer.addTo(maCarte);
-                if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnMesurer, "Mesurer");
-                btnIsochrone.addTo(maCarte);
-                btnGeosearch.addTo(maCarte);
-                setTimeout(function () {
-                    if (window.modernDockSpecificControl) {
-                        window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
-                        window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
-                    }
-                }, 80);
-                activerPopupRaccourci(maCarte);
-                sousBoutonsCréés = true;
-            }
-        }, 0);
-			
-	function deployerIcones() {
-			iconesVisible = !iconesVisible;
+		// Interface modernisée : le bouton « clé » (qui déployait les 4 fonctions) est supprimé.
+		// Les outils utiles sont exposés directement et dockés dans « Outils carte ».
+		setTimeout(function () {
 			if (!sousBoutonsCréés) {
 				btnImprimer.addTo(maCarte);
+				if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnImprimer, "Imprimer");
 				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
+				if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnMesurer, "Mesurer");
+				btnIsochrone.addTo(maCarte);
 				btnGeosearch.addTo(maCarte);
-				activerPopupRaccourci(maCarte);					
-				sousBoutonsCréés = true;
-			}			
-			if (iconesVisible) {
-				boutonClé.button.style.backgroundColor = "#ffff5b"; 
-				btnImprimer.addTo(maCarte);
-				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
-				btnGeosearch.addTo(maCarte);
+				setTimeout(function () {
+					if (window.modernDockSpecificControl) {
+						window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
+						window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
+					}
+				}, 80);
 				activerPopupRaccourci(maCarte);
-						
-			} else {
-				btnImprimer.remove();
-				btnMesurer.remove();
-				btnIsochrone.remove();				
-				btnGeosearch.remove();
-				container.style.backgroundColor = "lightgrey";
-				boutonClé.button.style.backgroundColor = "lightgrey"; 					
-			}	
-		}
+				sousBoutonsCréés = true;
+			}
+		}, 0);
 	}
 	
 	this.aide = function () {
@@ -2058,8 +2007,8 @@ this.importFichier = function () {
         }
     });
 
-    conteneurVisuInfo = new conteneur();
-    maCarte.addControl(conteneurVisuInfo);
+    conteneurStreetView = new conteneur();
+    maCarte.addControl(conteneurStreetView);
 
     var headerInfoDock = document.getElementById('modernHeaderInfoDock');
     if (headerInfoDock) {
