@@ -456,6 +456,39 @@ body.is-resizing * {
   line-height: 1.45 !important;
 }
 
+/* ===== En-tête des popups : nom de couche + icône / pastille couleur ===== */
+.popup-entete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 7px;
+  margin-bottom: 9px;
+  position: relative;
+  font-weight: 800;
+  font-size: 15px;
+  color: #1f2d3d;
+}
+.popup-entete::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--modern-primary), var(--modern-primary-2));
+}
+.popup-entete-titre { line-height: 1.2; }
+.popup-entete-icone {
+  width: 24px; height: 24px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+.popup-entete-pastille {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.25);
+  flex: 0 0 auto;
+}
+
 .legend-container {
   color: #334155 !important;
   background: rgba(255, 255, 255, .96) !important;

@@ -298,7 +298,21 @@ window.exportTronconCSV = function(dataGroupEncoded, nomFichier) {
     link.click();
 };
 
-function CarteLeaflet(conteneurId) {   
+// En-tête de popup : nom de la couche + icône (ou pastille de couleur)
+function construireEntetePopup(pps, nomForce) {
+    var nom = nomForce || (pps && (pps.nomcouche || pps.legende)) || "";
+    if (!nom) return "";
+    var visuel = "";
+    if (pps && pps.icone) {
+        visuel = "<img class='popup-entete-icone' src='" + pps.icone + "' alt='' />";
+    } else if (pps && pps.couleur && pps.couleur !== "Non défini") {
+        visuel = "<span class='popup-entete-pastille' style='background:" + pps.couleur + "'></span>";
+    }
+    return "<div class='popup-entete'>" + visuel +
+           "<span class='popup-entete-titre'>" + nom + "</span></div>";
+}
+
+function CarteLeaflet(conteneurId) {
     
  	var googleSat = L.gridLayer.googleMutant({
 		maxZoom: 22	, 
@@ -517,7 +531,7 @@ function CarteLeaflet(conteneurId) {
             var p = [];
             var nom = pps.nomcouche || pps.legende || ("Entité " + (idx + 1));
             
-            p.push("<div style='border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px; font-weight:bold; font-size:12px; color:#333;'>" + nom + "</div>");
+            p.push(construireEntetePopup(pps, nom));
             p.push("<div style='padding:5px;'>");
             var details = [];
             for (var nomPpté in pps) {
@@ -557,7 +571,7 @@ function CarteLeaflet(conteneurId) {
             }
         }
     }
-    contenuFinalPopup = tableauContenuPopup.join("<br />");
+    contenuFinalPopup = construireEntetePopup(élément.properties) + tableauContenuPopup.join("<br />");
     texteTooltip = tableauContenuTooltip.join("<br />");
 	}
 
@@ -1522,7 +1536,7 @@ this.importFichier = function () {
                 if (estMulti) {
                     let nom = pps["nomcouche"] || pps["Année "] || pps["Année"] || pps["Route   "] || pps["Route"] || pps["Numéro Route "] || pps.legende || ("Entité " + (idx+1));
                     let label = (pps["Année "] || pps["Année"]) ? "Année " + nom : nom;
-                    details.push("<div style='border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px 8px; font-weight:bold; font-size:12px; color:#333;'>" + label + "</div>");
+                    details.push(construireEntetePopup(pps, label));
                 }
                 
                 details.push("<div style='padding:5px;'>");

@@ -209,31 +209,6 @@ img.leaflet-marker-icon[src*="geosearch"] {
     border: none;
 }
 
-.leaflet-control-logos-icon {
-    margin-right: 5px;
-    cursor: pointer;
-}
-
-.leaflet-control-logos-icon:last-child {
-    margin-right: 0;
-}
-
-/* Forcer la transparence */
-.leaflet-control-logos-container {
-    display: flex;
-    flex-direction: row;
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-.leaflet-control-logos-container.leaflet-bar {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    margin-bottom: 0px;
-}
-
 .leaflet-control-logos-img {
     cursor: pointer;
     margin-right: 5px;
@@ -443,54 +418,9 @@ img.leaflet-marker-icon[src*="geosearch"] {
     /* border-width: 2px; */
 }
 
-/* cle */
-.bouton-cle {
-    background-color: lightgrey !important;
-}
-
-.bouton-cle:hover {
-    background-color: #ffff5b !important;
-}
-
-/* Styles pour les icônes de visualisation */
-.leaflet-control .pegman-icon {
-    width: 34px;
-    height: 42px;
-}
-
 /* chemin original des layers pr bouton repli couches */
 .leaflet-control-layers-toggle {
     background-image: url(/Ressources/API_JS/images/layers.png) !important;
-}
-
-/* thematiques legende */
-.legend-container {
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-    max-height: 400px;
-    overflow-y: auto;
-    line-height: 18px;
-    color: #555;
-    min-width: 180px;
-}
-
-.legend-container summary {
-    list-style: none; /* Cache la flèche par défaut selon les navigateurs */
-}
-
-.legend-container summary::-webkit-details-marker {
-    display: none;
-}
-
-.legend-container summary:before {
-    content: '▶ ';
-    font-size: 10px;
-}
-
-.legend-container details[open] summary:before {
-    content: '▼ ';
 }
 
 /* masquer tooltip polygone a niv de zoom (js) */
