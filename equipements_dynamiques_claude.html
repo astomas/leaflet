@@ -1584,7 +1584,8 @@ this.importFichier = function () {
         indexSpatialImport = {}; // Reset index pour le prochain fichier
     });
 
-    btnImporter.addTo(maCarte);	
+    btnImporter.addTo(maCarte);
+    if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnImporter, "Importer");
 }
 	
 	this.iconeClé = function() {  
