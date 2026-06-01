@@ -312,6 +312,13 @@ function construireEntetePopup(pps, nomForce) {
            "<span class='popup-entete-titre'>" + nom + "</span></div>";
 }
 
+// Formate une ligne de champ : libellé (gras sombre) + valeur (atténuée)
+function formaterChampPopup(label, valeurHtml) {
+    var vide = (valeurHtml === "" || valeurHtml == null);
+    var cle = "<span class='popup-cle'>" + label + (vide ? "" : ":") + "</span>";
+    return vide ? cle : cle + " <span class='popup-val'>" + valeurHtml + "</span>";
+}
+
 function CarteLeaflet(conteneurId) {
     
  	var googleSat = L.gridLayer.googleMutant({
@@ -536,7 +543,7 @@ function CarteLeaflet(conteneurId) {
             var details = [];
             for (var nomPpté in pps) {
                 if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
-                    var ligne = "<b>"+ nomPpté + ":</b> " + pps[nomPpté];
+                    var ligne = formaterChampPopup(nomPpté, pps[nomPpté]);
                     nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? details.unshift(ligne) : details.push(ligne);
                 }
             }
@@ -561,10 +568,10 @@ function CarteLeaflet(conteneurId) {
     var pps = élément.properties;
     for (var nomPpté in pps) {
         if (nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/)) {
-            tableauContenuPopup.unshift("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+            tableauContenuPopup.unshift(formaterChampPopup(nomPpté, pps[nomPpté]));
         } else {
             if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
-                tableauContenuPopup.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+                tableauContenuPopup.push(formaterChampPopup(nomPpté, pps[nomPpté]));
             }
             if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)/)) {
                 tableauContenuTooltip.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
@@ -1546,7 +1553,8 @@ this.importFichier = function () {
                     if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|leafletsearch|stroke|fill|color|X en WGS84|Y en WGS84)$/i)) {
                         let val = pps[nomPpté];
                         if (val !== null && val !== undefined) {
-						let ligne = "<b>" + nomPpté + (val !== "" ? ":</b> " + (String(val).startsWith('http') ? `<a href="${val}" target="_blank">Lien</a>` : val) : "</b>");
+						let valFormatee = (val !== "" ? (String(val).startsWith('http') ? `<a href="${val}" target="_blank">Lien</a>` : val) : "");
+						let ligne = formaterChampPopup(nomPpté, valFormatee);
 						k.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? corps.unshift(ligne) : corps.push(ligne);
                         }
                     }

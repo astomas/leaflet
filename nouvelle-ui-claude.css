@@ -489,6 +489,10 @@ body.is-resizing * {
   flex: 0 0 auto;
 }
 
+/* Champs de popup : libellé (gras sombre) + valeur (atténuée) */
+.popup-cle { font-weight: 700; color: #1f2d3d; }
+.popup-val { color: #5b6b7b; }
+
 .legend-container {
   color: #334155 !important;
   background: rgba(255, 255, 255, .96) !important;
