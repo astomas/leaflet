@@ -455,6 +455,7 @@ body.is-resizing * {
   font-size: 13px !important;
   line-height: 1.45 !important;
   overflow-wrap: break-word;
+  max-width: 500px !important;
 }
 
 /* ===== En-tête des popups : nom de couche + icône / pastille couleur ===== */
