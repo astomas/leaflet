@@ -2100,10 +2100,16 @@ this.importFichier = function () {
 				return new L.CtrlTitre(options);
 			}
 
-			// Titre déjà présent dans l'en-tête : pas d'ajout du contrôle titre sur la carte.
+			// Titre déjà présent dans l'en-tête à l'écran : pas d'ajout du contrôle titre sur la carte.
 			document.getElementById("ti").innerHTML = valeurTitre;
 			var titreHeader = document.querySelector('.modern-header h1');
 			if (titreHeader) titreHeader.innerHTML = valeurTitre;
+
+			// À l'impression, l'en-tête HTML n'est pas capturé : on réinjecte le titre
+			// dans la carte imprimée (bas gauche), comme avant la modernisation.
+			maCarte.on("browser-print-start", function(e){
+				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
+			});
 	}
 		
 this.ajouterLogo = function() {
