@@ -58,24 +58,32 @@ body {
   background: rgba(255, 255, 255, .08);
 }
 
-.modern-dept-code,
+.modern-header-logos,
 .modern-header-titles,
 .modern-header-actions {
   position: relative;
   z-index: 1;
 }
 
-.modern-dept-code {
-  width: 48px;
-  height: 48px;
-  flex: 0 0 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  font-weight: 800;
-  background: rgba(255, 255, 255, .12);
-  border: 1px solid rgba(255, 255, 255, .22);
+/* Logos de navigation remontés dans l'en-tête (remplacent le badge CD30). */
+.modern-header-logos {
+  width: auto !important;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding: 0 !important;
+}
+
+.modern-header-logos img,
+.modern-header-logos .leaflet-control-logos-img {
+  height: 46px !important;
+  width: auto !important;
+  cursor: pointer;
+  transition: transform .15s, opacity .15s;
+}
+
+.modern-header-logos img:hover {
+  transform: translateY(-1px);
+  opacity: .85;
 }
 
 .modern-header-titles {

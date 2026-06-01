@@ -82,7 +82,7 @@
   <body onload="main()">
   <div class="modern-carte-shell">
     <header class="modern-header">
-      <div class="modern-dept-code">CD30</div>
+      <div id="modernLogosDock" class="modern-logos-dock modern-header-logos" aria-label="Liens rapides"></div>
       <div class="modern-header-titles">
 		<h1>valeurTitre1</h1>
         <div class="modern-subtitle">Arrêtés permanents • DGAML</div>
@@ -106,7 +106,6 @@
           <!-- <p class="modern-tools-intro">Les outils métier sont regroupés ici.</p> -->
           <div id="modernToolsDock" class="modern-tools-dock" aria-label="Outils de la carte"></div>
         </section>
-        <div id="modernLogosDock" class="modern-logos-dock" aria-label="Liens rapides"></div>
       </aside>
       <div class="modern-sidebar-resizer" tabindex="0" role="separator" aria-label="Redimensionner le panneau"></div>
       <main class="modern-map-area"><div id="carteId"></div></main>
@@ -2069,18 +2068,11 @@ this.ajouterLogo = function() {
         if (!container) return;
         container.innerHTML = "";
 
-        var icones = [];        
-        if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
-            icones = [
-                {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward-blanc.png", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        } else {
-            icones = [
-                {imgSource: "/Ressources/c3po_gr.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward.png", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        }
+        // Logos remontés dans l'en-tête (fond foncé) : on utilise toujours les variantes blanches.
+        var icones = [
+            {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+            {imgSource: "/Ressources/backward-blanc.png", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+        ];
         
         if (valeurTitre1.endsWith("Waze")){
             icones.push({
