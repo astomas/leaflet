@@ -837,6 +837,16 @@ body.is-resizing * {
   z-index: 200003 !important;
 }
 
+/* Modale d'export : au-dessus du système de z-index de la sidebar (max 200003)
+   pour que l'overlay assombrisse uniformément tous les boutons Outils carte. */
+.export-overlay {
+  z-index: 300000 !important;
+}
+
+.export-dialog {
+  z-index: 300001 !important;
+}
+
 .modern-tools-dock label[id^="GPshowIsochronPicto"] {
   width: 30px !important;
   height: 30px !important;
