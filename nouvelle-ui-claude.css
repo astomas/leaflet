@@ -474,7 +474,7 @@ body.is-resizing * {
   left: 0; right: 0; bottom: 0;
   height: 2px;
   border-radius: 2px;
-  background: linear-gradient(90deg, var(--modern-primary), var(--modern-primary-2));
+  background: linear-gradient(90deg, #f39c12, #f9b062);
 }
 .popup-entete-titre { line-height: 1.2; }
 .popup-entete-icone {
@@ -490,8 +490,8 @@ body.is-resizing * {
 }
 
 /* Champs de popup : libellé (gras sombre) + valeur (atténuée) */
-.popup-cle { font-weight: 700; color: #1f2d3d; }
-.popup-val { color: #5b6b7b; }
+.popup-cle { font-weight: 700; color: #16222e; }
+.popup-val { color: #7a8896; font-weight: 400; }
 
 .legend-container {
   color: #334155 !important;
