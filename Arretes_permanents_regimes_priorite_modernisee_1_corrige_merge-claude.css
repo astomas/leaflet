@@ -283,6 +283,9 @@ body.is-resizing * {
 /* Fonds de carte (radios Leaflet) déplacés dans la sidebar */
 .modern-fonds-plan {
   padding: 4px 8px 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 6px;
 }
 
 .modern-fonds-plan label {
