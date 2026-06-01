@@ -510,6 +510,13 @@ body.is-resizing * {
 }
 .popup-scroll::-webkit-scrollbar-track { background: transparent; }
 
+/* Tooltips sans gestion dédiée : autoriser le retour à la ligne + plafond 500px */
+.leaflet-tooltip:not(.tooltip-import) {
+  max-width: 500px;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
 .legend-container {
   color: #334155 !important;
   background: rgba(255, 255, 255, .96) !important;
