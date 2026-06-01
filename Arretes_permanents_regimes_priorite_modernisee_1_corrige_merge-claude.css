@@ -837,10 +837,13 @@ body.is-resizing * {
   z-index: 200003 !important;
 }
 
-/* Modale d'export : au-dessus du système de z-index de la sidebar (max 200003)
-   pour que l'overlay assombrisse uniformément tous les boutons Outils carte. */
+/* Modale d'export : écran laissé clair (pas d'assombrissement). L'overlay
+   reste présent et transparent — il continue d'intercepter les clics pour
+   fermer la modale (overlay.onclick). z-index au-dessus de la sidebar
+   (max 200003) pour qu'un clic hors modale ferme au lieu d'activer un outil. */
 .export-overlay {
   z-index: 300000 !important;
+  background: transparent !important;
 }
 
 .export-dialog {
