@@ -255,6 +255,56 @@
   }
 
   // =========================================================================
+  // Fonds de plan : déplace les boutons radio des fonds de carte (générés par
+  // le contrôle Leaflet en haut à droite) dans la section "Fonds de plan"
+  // de la sidebar. Appelée depuis main() une fois le contrôle créé.
+  // =========================================================================
+
+  // API publique : relocalise le bloc .leaflet-control-layers-base dans la
+  // section .modern-family-factual. Idempotente (ne déplace qu'une fois) et
+  // dotée d'un filet de retry si le contrôle n'est pas encore prêt.
+  window.modernDockFondsDePlan = function (essaisRestants) {
+    var section = document.querySelector(".modern-family-factual");
+    var base    = document.querySelector(".leaflet-control-layers-base");
+
+    // Contrôle pas encore créé : on retente quelques fois
+    if (!section || !base) {
+      var n = (typeof essaisRestants === "number") ? essaisRestants : 10;
+      if (n > 0) setTimeout(function () { window.modernDockFondsDePlan(n - 1); }, 200);
+      return false;
+    }
+
+    // Déjà déplacé : rien à faire
+    if (base.dataset.modernMoved === "true") return true;
+    base.dataset.modernMoved = "true";
+
+    // Masque le texte descriptif statique de la section
+    var intro = section.querySelector("p");
+    if (intro) intro.style.display = "none";
+
+    // Nettoie le contrôle d'origine : séparateur orphelin + contrôle vide
+    var control = base.closest(".leaflet-control-layers");
+    if (control) {
+      var sep = control.querySelector(".leaflet-control-layers-separator");
+      if (sep) sep.style.display = "none";
+      var overlays = control.querySelector(".leaflet-control-layers-overlays");
+      if (!overlays || !overlays.children.length) control.style.display = "none";
+    }
+
+    // Déplace le bloc des radios dans la sidebar (devient enfant de la section,
+    // donc soumis à l'accordéon expand/collapse)
+    base.classList.add("modern-fonds-plan");
+    section.appendChild(base);
+
+    // Met à jour le badge <em> avec le nombre de fonds de carte
+    var badge = section.querySelector(".modern-family-title em");
+    var nb = base.querySelectorAll("input").length;
+    if (badge && nb) badge.textContent = nb + (nb > 1 ? " fonds" : " fond");
+
+    return true;
+  };
+
+  // =========================================================================
   // Initialisation au chargement du DOM
   // =========================================================================
 

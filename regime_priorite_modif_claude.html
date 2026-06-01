@@ -2611,7 +2611,9 @@ function main() {
 			}
 		}, delay);
 	});
-	carteLeaflet.iconeClé();	
+	// Déplace les radios "Fonds de plan" dans la sidebar (logique dans modern-dock).
+	if (window.modernDockFondsDePlan) window.modernDockFondsDePlan();
+	carteLeaflet.iconeClé();
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();	
 	carteLeaflet.ajouterSwitch();	
