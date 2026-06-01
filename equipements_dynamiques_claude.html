@@ -716,13 +716,13 @@ function CarteLeaflet(conteneurId) {
 	this.dessinerCarte = function () {	
 	
 		this.conteneurId = conteneurId;
-		this.coordCarte = [43.96, 4.1];			
-		this.zoomInitial = 9.8;
+		this.coordCarte = [43.96, 4.2];
+		this.zoomInitial = 9.6;
 		
 		maPosition = L.Permalink.getMapLocation();
 		
 		if (L.Browser.mobile) {this.zoomInitial = 8.7}
-		if (screen.width < 1920 && !L.Browser.mobile) {this.zoomInitial = 9.4}
+		if (screen.width < 1920 && !L.Browser.mobile) {this.zoomInitial = 9.6}
 		if (valeurTitre1.startsWith("Graflex")) {
 			this.zoomInitial = maPosition.zoom;
 			this.coordCarte = maPosition.center;
