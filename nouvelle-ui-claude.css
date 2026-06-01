@@ -211,7 +211,7 @@ body.is-resizing * {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 }
 
-.modern-family-factual { --family-accent: var(--modern-primary); }
+.modern-family-fonds-plan { --family-accent: var(--modern-primary); }
 .modern-family-business { --family-accent: var(--modern-warning); }
 .modern-family-tools { --family-accent: var(--modern-tools); }
 

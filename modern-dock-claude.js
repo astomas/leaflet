@@ -261,10 +261,10 @@
   // =========================================================================
 
   // API publique : relocalise le bloc .leaflet-control-layers-base dans la
-  // section .modern-family-factual. Idempotente (ne déplace qu'une fois) et
+  // section .modern-family-fonds-plan. Idempotente (ne déplace qu'une fois) et
   // dotée d'un filet de retry si le contrôle n'est pas encore prêt.
   window.modernDockFondsDePlan = function (essaisRestants) {
-    var section = document.querySelector(".modern-family-factual");
+    var section = document.querySelector(".modern-family-fonds-plan");
     var base    = document.querySelector(".leaflet-control-layers-base");
 
     // Contrôle pas encore créé : on retente quelques fois
