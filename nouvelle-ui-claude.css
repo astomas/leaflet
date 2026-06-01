@@ -454,6 +454,7 @@ body.is-resizing * {
   font-family: "Segoe UI", Arial, sans-serif !important;
   font-size: 13px !important;
   line-height: 1.45 !important;
+  overflow-wrap: break-word;
 }
 
 /* ===== En-tête des popups : nom de couche + icône / pastille couleur ===== */
