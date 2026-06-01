@@ -315,6 +315,10 @@ function construireEntetePopup(pps, nomForce) {
 // Formate une ligne de champ : libellé (gras sombre) + valeur (atténuée)
 function formaterChampPopup(label, valeurHtml) {
     var vide = (valeurHtml === "" || valeurHtml == null);
+    // Valeur = URL brute → lien compact au lieu de l'URL entière
+    if (!vide && /^https?:\/\//i.test(String(valeurHtml))) {
+        valeurHtml = "<a href='" + valeurHtml + "' target='_blank' rel='noopener'>Accéder au lien</a>";
+    }
     var cle = "<span class='popup-cle'>" + label + (vide ? "" : ":") + "</span>";
     return vide ? cle : cle + " <span class='popup-val'>" + valeurHtml + "</span>";
 }
@@ -1553,8 +1557,7 @@ this.importFichier = function () {
                     if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|leafletsearch|stroke|fill|color|X en WGS84|Y en WGS84)$/i)) {
                         let val = pps[nomPpté];
                         if (val !== null && val !== undefined) {
-						let valFormatee = (val !== "" ? (String(val).startsWith('http') ? `<a href="${val}" target="_blank">Lien</a>` : val) : "");
-						let ligne = formaterChampPopup(nomPpté, valFormatee);
+						let ligne = formaterChampPopup(nomPpté, val);
 						k.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? corps.unshift(ligne) : corps.push(ligne);
                         }
                     }
