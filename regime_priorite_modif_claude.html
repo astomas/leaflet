@@ -2051,7 +2051,9 @@ this.importFichier = function () {
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
             boutonConteneur.appendChild(boutonServiceVisu.button);
-            boutonConteneur.appendChild(boutonInfo.button);
+            // Le bouton Info vit désormais dans l'en-tête (modernHeaderInfoDock).
+            // On ne le rapatrie plus ici, sinon un remove()/addTo() (ex. fin d'impression)
+            // le réinjecterait sur la carte.
             return boutonConteneur;
         }
     });
