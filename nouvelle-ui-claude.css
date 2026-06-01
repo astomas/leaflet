@@ -278,8 +278,6 @@ body.is-resizing * {
   line-height: 1.45;
 }
 
-.modern-tools-intro { padding-bottom: 8px !important; }
-
 /* Fonds de carte (radios Leaflet) déplacés dans la sidebar */
 .modern-fonds-plan {
   padding: 4px 8px 10px;
@@ -464,26 +462,12 @@ body.is-resizing * {
 .bouton-aide,
 .bouton-info,
 .bouton-service-visu,
-.visualisation-button,
-.info-button,
 .switch-control-container-discret {
   border-radius: 8px !important;
   box-shadow: 0 3px 10px rgba(0, 0, 0, .14) !important;
 }
 
 .switch-control-container-discret { border-radius: 12px !important; }
-
-.modern-logo-card,
-.modern-sidebar > #modernLogosDock.modern-logos-dock {
-  margin-top: auto;
-}
-
-.modern-logo-card {
-  padding: 0;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-}
 
 #modernLogosDock.modern-logos-dock,
 .modern-logos-dock {
@@ -545,7 +529,6 @@ body.is-resizing * {
 
   .modern-main-content { grid-template-columns: 1fr !important; }
 }
-
 
 /* Correctif boutons Info / Aide dans l'en-tête : garde le rendu compact d'origine */
 .modern-header-help .leaflet-control,
@@ -624,71 +607,6 @@ body.is-resizing * {
   .modern-header-help { padding: 5px; }
 }
 
-/* ================================
-   Outils carte : fenêtres plugins stables
-   - fenêtre en surimpression dans le menu
-   - pas de remontée en haut au hover-out
-   - décalage horizontal de 20px
-   ================================ */
-
-.modern-sidebar,
-.modern-family,
-.modern-tools-dock,
-.modern-tool-button,
-.modern-tool-icon-slot {
-  overflow: visible !important;
-}
-
-/* Base stable : le repère de position existe toujours, pas seulement au hover */
-.modern-tool-button {
-  position: relative !important;
-  z-index: 1 !important;
-  transform: none !important;
-}
-
-.modern-tool-button:hover {
-  z-index: 1000 !important;
-  transform: none !important;
-}
-
-/* Si un plugin est ouvert, le bouton support reste au-dessus même hors hover */
-.modern-tool-button:focus-within,
-.modern-tool-button:has(form),
-.modern-tool-button:has(.results),
-.modern-tool-button:has(.menu),
-.modern-tool-button:has(.panel),
-.modern-tool-button:has([class*="isocurve"]),
-.modern-tool-button:has([class*="isochrone"]),
-.modern-tool-button:has([class*="browser-print"]),
-.modern-tool-button:has([class*="print"]) {
-  z-index: 99999 !important;
-}
-
-/* Fenêtres internes des plugins dockés */
-.modern-tools-dock .leaflet-control form,
-.modern-tools-dock .leaflet-control-geosearch form,
-.modern-tools-dock .leaflet-control-search .search-tooltip,
-.modern-tools-dock .leaflet-control-search .search-input,
-.modern-tools-dock .leaflet-control .results,
-.modern-tools-dock .leaflet-control .menu,
-.modern-tools-dock .leaflet-control .panel {
-  position: absolute !important;
-  left: 20px !important;
-  top: 38px !important;
-  z-index: 100000 !important;
-  margin: 0 !important;
-  transform: none !important;
-  background: #fff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
-  border-radius: 8px;
-}
-
-
-/* Isochrone toujours au-dessus des autres plugins ouverts */
-.modern-tool-button:has([class*="isocurve"]),
-.modern-tool-button:has([class*="isochrone"]) {
-  z-index: 200000 !important;
-}
 /* Outils carte : fenêtres plugins en surimpression, sans décaler le menu */
 .modern-sidebar,
 .modern-family,
