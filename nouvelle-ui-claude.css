@@ -510,8 +510,9 @@ body.is-resizing * {
 }
 .popup-scroll::-webkit-scrollbar-track { background: transparent; }
 
-/* Tooltips sans gestion dédiée : autoriser le retour à la ligne + plafond 500px */
+/* Tooltips sans gestion dédiée : largeur du contenu, plafond 500px, wrap au-delà */
 .leaflet-tooltip:not(.tooltip-import) {
+  width: max-content;
   max-width: 500px;
   white-space: normal;
   overflow-wrap: break-word;
