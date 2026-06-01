@@ -465,7 +465,7 @@ body.is-resizing * {
   margin-bottom: 9px;
   position: relative;
   font-weight: 800;
-  font-size: 15px;
+  font-size: 14px;
   color: #1f2d3d;
 }
 .popup-entete::after {
@@ -474,7 +474,7 @@ body.is-resizing * {
   left: 0; right: 0; bottom: 0;
   height: 2px;
   border-radius: 2px;
-  background: linear-gradient(90deg, #f39c12, #f9b062);
+  background: linear-gradient(90deg, #e8530e, #f9c489);
 }
 .popup-entete-titre { line-height: 1.2; }
 .popup-entete-icone {
