@@ -301,6 +301,9 @@
     var nb = base.querySelectorAll("input").length;
     if (badge && nb) badge.textContent = nb + (nb > 1 ? " fonds" : " fond");
 
+    // Replie la section par défaut à l'ouverture
+    section.dataset.expanded = "false";
+
     return true;
   };
 
