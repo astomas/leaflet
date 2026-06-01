@@ -493,6 +493,21 @@ body.is-resizing * {
 .popup-cle { font-weight: 700; color: #16222e; }
 .popup-val { color: #7a8896; font-weight: 400; }
 
+/* Conteneur scrollable des popups multi-entités (lignes superposées + import) */
+.popup-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,.22) transparent;
+}
+.popup-scroll::-webkit-scrollbar { width: 8px; }
+.popup-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.22);
+  border-radius: 4px;
+}
+.popup-scroll::-webkit-scrollbar-track { background: transparent; }
+
 .legend-container {
   color: #334155 !important;
   background: rgba(255, 255, 255, .96) !important;

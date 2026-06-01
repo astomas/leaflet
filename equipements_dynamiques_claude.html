@@ -1574,7 +1574,7 @@ this.importFichier = function () {
                     <i class='fa fa-file-excel-o'></i> Exporter les ${propsGroupes.length} entités (CSV)</button>
                 </div>`;
                 
-                contenuPopup = `<div class='popup-scroll grille-active' style='max-height:300px; overflow-y:auto;'>${htmlParts.join("<hr class='sep-grille' />")}</div>${boutonExport}`;
+                contenuPopup = `<div class='popup-scroll grille-active'>${htmlParts.join("<hr class='sep-grille' />")}</div>${boutonExport}`;
                 contenuTooltip = `<b>${propsGroupes.length} entités superposées</b><br/><i>Cliquez pour le détail</i>`;
             } else {
                 // Pour les mono : Tooltip et Popup identiques (contenu complet)
