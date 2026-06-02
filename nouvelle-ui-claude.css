@@ -364,12 +364,21 @@ body.is-resizing * {
   pointer-events: none;
 }
 
-/* Libellé : occupe toute la largeur pour pousser l'œil à droite */
+/* Libellé : occupe toute la largeur pour pousser l'œil à droite.
+   Couche inactive (case décochée, œil barré) → libellé grisé. */
 .modern-donnees-metier input + span {
   flex: 1;
   display: flex;
   align-items: center;
   font-weight: 600;
+  color: #94a3b8;
+  transition: color .15s;
+}
+
+/* Couche active (case cochée, œil ouvert) → libellé dégrisé.
+   Bascule automatiquement à l'ouverture et en cours de session. */
+.modern-donnees-metier input:checked + span {
+  color: var(--modern-text);
 }
 
 /* Icône œil — état par défaut "masqué" : œil barré gris */
