@@ -1980,8 +1980,11 @@ this.importFichier = function () {
         }
     });
     
-    // Interface modernisée : pas d'ouverture au survol pour éviter l'activation automatique.
-    // Le bouton EasyButton conserve son onClick natif : afficherPluginStreetview.
+    ajouterHoverEtClic(boutonServiceVisu.button, {
+        isVisible: () => !flagBlocVisu,
+        afficher: afficherPluginStreetview,
+        masquer: masquerPluginStreetview
+    });
     
     // bouton info
     var contenuInfo = "<br>" + "Cette carte pr&#233;sente les arr&#234;t&#233;s permanents actifs traitant de r&#233;gimes de priorit&#233;s.<br><br>Mise &#224; jour quotidienne.";
