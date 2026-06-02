@@ -398,6 +398,28 @@ body.is-resizing * {
   color: var(--modern-text);
 }
 
+/* Chevron de repli/dépli du détail légende (à gauche du libellé de couche) */
+.detail-couches-toggle {
+  flex: 0 0 auto;
+  width: 14px;
+  font-size: .7rem;
+  line-height: 1;
+  color: #94a3b8;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  transition: transform .15s;
+}
+
+.detail-couches-toggle.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Détail replié : masqué */
+.detail-couches-sidebar.collapsed {
+  display: none !important;
+}
+
 /* ===== Légende plugin injectée sous chaque couche métier ===== */
 /* Neutralise les styles flottants/carte du plugin dans le contexte sidebar */
 .detail-couches-sidebar {

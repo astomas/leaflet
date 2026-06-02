@@ -415,6 +415,25 @@
       if (titre) titre.remove();
 
       label.insertAdjacentElement("afterend", container);
+
+      // Chevron de repli/dépli du détail légende, ajouté à gauche du libellé.
+      // Le clic est neutralisé (preventDefault/stopPropagation) pour ne pas
+      // basculer la visibilité de la couche (action de la case/œil).
+      var chevron = document.createElement("span");
+      chevron.className = "detail-couches-toggle";
+      chevron.setAttribute("role", "button");
+      chevron.setAttribute("aria-label", "Replier ou déplier le détail");
+      chevron.textContent = "▾";
+
+      var rangee = label.querySelector(":scope > span");
+      if (rangee) rangee.insertBefore(chevron, rangee.firstChild);
+
+      chevron.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var replie = container.classList.toggle("collapsed");
+        chevron.classList.toggle("collapsed", replie);
+      });
     });
   }
 
