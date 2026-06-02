@@ -1,0 +1,425 @@
+/* ============================================================
+   leaflet-si3p0-claude.css
+   Version nettoyée de leaflet-si3p0.css (l'original n'est pas modifié).
+   Changements : suppression de règles invalides / dupliquées / vides
+   et de classes mortes. Aucun changement de rendu visuel.
+   ============================================================ */
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+#carteId {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+.leaflet-control-scale-line {
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.8);
+    cursor: grab;
+}
+
+/* titre carte */
+.titre {
+    text-align: left;
+    line-height: 30px;
+    color: #555;
+    overflow-wrap: break-word;
+    max-width: 560px;
+}
+.infotitre {
+    padding: 6px 8px;
+    font: 9px/11px Arial, Helvetica, sans-serif;
+    background: #fff3d8;
+    font-size: 1.5em;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    line-height: 20px;
+    cursor: grab;
+}
+
+a[href^="http://maps.google.com/maps"] {
+    display: none !important;
+}
+
+a[href^="https://maps.google.com/maps"] {
+    display: none !important;
+}
+
+
+.pac-container:after {
+    background-image: none !important;
+    height: 0px; padding: 0; margin: 0;
+}
+
+/* aide */
+.bouton-aide {
+    width: 42px !important;
+    height: 31px !important;
+    font-size: 7px !important;
+    margin-top: 2px !important;
+    border-width: 2px !important;
+    font-weight: bolder !important;
+    color: white !important;
+    background-color: #f9b062 !important;
+}
+
+.bouton-aide:hover {
+    background-color: #f79731 !important;
+}
+
+.encadré-aide {
+    text-align: center;
+    font-weight: bold;
+    border: 2px solid orange;
+    padding: 2px;
+    background-color: #CEE6F3;
+    color: #007079;
+    display: block;
+    font-size: 1.4em;
+    margin-block-start: 0em;
+    margin-block-end: 1em;
+    margin-inline-start: 30px;
+    margin-inline-end: 30px;
+}
+
+p {
+    margin: 10px 0;
+    line-height: 1.5;
+    text-align: left;
+}
+
+p img {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+p b {
+    font-weight: bold;
+}
+
+.text-highlighted {
+    color: #0078A8;
+    font-weight: bold;
+}
+
+.text-warning {
+    color: #3d546a;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    background-color: #dcd9db;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#lienExtensible {
+    color: #0078A8;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#lienExtensible:hover {
+    color: #005a8a;
+}
+
+#contenuExtensible {
+    display: none;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    margin-top: 10px;
+}
+
+/* info */
+.bouton-info {
+    width: 66px !important;
+    height: 46px !important;
+    color: #4f5697 !important;
+    background-color: white !important;
+    border-width: 1px !important;
+}
+
+.bouton-info:hover {
+    background-color: #e7e7e7;
+}
+
+.bouton-info-actif {
+    background-color: #e7e7e7;
+}
+
+/* Service Visualisation */
+.popupgps .leaflet-popup-content-wrapper, .popupgps .leaflet-popup-tip {
+    background: white;
+}
+
+.button-container .easy-button-button[title="Service Visualisation"]:hover {
+    background-color: #ffff00 !important;
+}
+
+.bouton-service-visu {
+    width: 66px;
+    height: 46px;
+    border-radius: 5px;
+    background-color: white;
+    border-width: 1px;
+    margin-right: 8px;
+    background-color: #fff1cd;
+}
+
+.bouton-service-visu-actif {
+    background-color: yellow;
+}
+
+.bouton-service-visu img {
+    width: 34px;
+    height: 42px;
+}
+
+img.leaflet-marker-icon[src*="geosearch"] {
+    filter: drop-shadow(5px 5px 6px rgba(0, 0, 0, 0.3));
+}
+
+/* conteneurs de boutons */
+.button-container,
+.boutons-conteneur {
+    display: flex;
+    margin-bottom: -5px !important;
+}
+
+/* logos */
+.leaflet-control-logos {
+    display: flex;
+    flex-direction: row;
+    background: none;
+    border: none;
+}
+
+.leaflet-control-logos-img {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.leaflet-control-logos-img:last-child {
+    margin-right: 0;
+}
+
+.leaflet-control-logos img {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+/* legende 3D */
+.legende3D {
+    background: rgba(241, 241, 241);
+    padding: 8px 12px;
+    font: 12px Arial;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    position: absolute;
+    right: 210px;
+    bottom: 37px;
+    z-index: 999;
+}
+.legende3D .item {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+}
+.legende3D .color {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 1px solid #999;
+}
+
+/* Styles pour la boite de dialogue d'export */
+.export-dialog {
+    color-scheme: light dark;
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: Canvas;
+    color: CanvasText;
+    border: 2px solid ButtonBorder;
+    border-radius: 8px;
+    padding-top: 0px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    z-index: 10000;
+    min-width: 240px;
+    font-family: system-ui, sans-serif;
+}
+
+.export-dialog h3 {
+    margin-top: 0;
+    color: CanvasText;
+}
+
+.export-dialog-options {
+    margin: 15px 0;
+}
+
+.export-dialog-label {
+    display: block;
+    margin: 10px 0;
+    cursor: pointer;
+    color: CanvasText;
+    font-size: 0.9em;
+}
+
+.export-dialog-label input {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.export-dialog-buttons {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.export-dialog-btn {
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+}
+
+.export-dialog-btn-cancel {
+    background: ButtonFace;
+    color: ButtonText;
+    /* border: 1px solid ButtonBorder; */
+    margin-right: 8px;
+}
+.export-dialog-btn-cancel:focus {
+    outline: none;
+}
+
+.export-dialog-btn-export {
+    background: AccentColor;
+    color: AccentColorText;
+    border: 1px solid ButtonBorder;
+    font-weight: bold;
+}
+
+.export-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+}
+
+/* separation popup multi entités et ascenceur */
+.sep-grille {
+    border: 0;
+    border-top: 1px dashed #999;
+    margin: 10px 0;
+}
+/* forme popup multi entités */
+.popup-multi .leaflet-popup-tip-container {
+    display: none !important;
+}
+
+/* interrupteur surlignage */
+.switch-control-container-discret {
+    background: #fcd689;
+    border: 1px solid rgba(250, 181, 41, 0.4);
+    border-radius: 12px;
+    padding: 6px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+.switch-label-discret {
+    display: block;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 8.5px;
+    font-weight: 900;
+    color: black;
+    margin-top: 5px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.leaflet-control-switch-discret {
+    background: #bbb;
+    border-radius: 15px;
+    width: 46px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.switch-text-discret {
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-weight: 900;
+    font-size: 9px;
+    color: #000;
+    margin-left: 21px;
+    transition: all 0.3s;
+    user-select: none;
+    letter-spacing: -0.2px;
+}
+
+.switch-handle-discret {
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    left: 3px;
+    transition: all 0.3s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.switch-active-discret {
+    background: #e60000;
+}
+
+.switch-active-discret .switch-handle-discret {
+    left: 29px;
+}
+
+.switch-active-discret .switch-text-discret {
+    color: #fff;
+    margin-left: 7px;
+}
+
+/* Styles pour les boutons */
+.leaflet-control .easy-button-button {
+    width: 65px;
+    height: 46px;
+    /* border-width: 2px; */
+}
+
+
+/* masquer tooltip polygone a niv de zoom (js) */
+.masquer-tooltips-polygones .tooltip-polygone {
+    display: none !important;
+}
+/* tronquer tooltips trop longs */
+.tooltip-import {
+    min-width: 220px;
+    max-width: 480px;
+    max-height: 260px;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.35;
+}
