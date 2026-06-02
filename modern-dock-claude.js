@@ -69,13 +69,18 @@
     icon.appendChild(el);
     row.append(icon, text);
 
-    // Délègue le clic sur le premier élément interactif du contrôle ; à défaut
-    // (contrôle dont le conteneur est lui-même cliquable, ex. leaflet-ruler),
-    // on déclenche le clic sur le contrôle lui-même. Le clic direct sur un
-    // bouton/lien natif ou le contrôle est ignoré (handler natif déjà actif).
+    // Délègue le clic sur l'élément interactif du contrôle. Priorité :
+    // 1) lien / élément à rôle bouton (ex. bascule geosearch <a>, Imprimer <a>)
+    // 2) bouton natif (easyButton : Importer, Exporter…)
+    // 3) le contrôle lui-même (ex. leaflet-ruler dont le conteneur est cliquable).
+    // Le champ texte n'est jamais ciblé (il n'active pas l'outil). Le clic direct
+    // sur un bouton/lien natif ou le contrôle est ignoré (handler natif déjà actif).
     row.addEventListener("click", function (event) {
       if (event.target.closest("button,a,input,[role='button'],.leaflet-control")) return;
-      const clickable = el.querySelector("button,a,input,[role='button']") || el;
+      const clickable =
+        el.querySelector("a,[role='button']") ||
+        el.querySelector("button") ||
+        el;
       clickable.click();
     });
 
