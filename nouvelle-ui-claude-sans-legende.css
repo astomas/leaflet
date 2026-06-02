@@ -398,48 +398,45 @@ body.is-resizing * {
   color: var(--modern-text);
 }
 
-/* ===== Mini-légende injectée sous chaque couche métier ===== */
-.modern-leg-items {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 2px 8px 6px 16px;
+/* ===== Légende plugin injectée sous chaque couche métier ===== */
+/* Neutralise les styles flottants/carte du plugin dans le contexte sidebar */
+.modern-leg-plugin-inline {
+  position: static !important;
+  float: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 0 4px 12px !important;
+  margin: 0 !important;
 }
 
-.modern-leg-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: .76rem;
-  color: #64748b;
-  line-height: 1.3;
+/* Les contents sont forcément visibles (pas de repli en sidebar) */
+.modern-leg-plugin-inline .leaflet-legend-contents {
+  display: block !important;
+  padding: 2px 4px 0 4px !important;
 }
 
-.modern-leg-item.inactive {
-  opacity: .45;
+/* Chaque item : texte plus petit, couleur atténuée */
+.modern-leg-plugin-inline .leaflet-legend-item {
+  margin: 1px 0 !important;
 }
 
-/* Picto ligne */
-.modern-leg-line {
-  flex: 0 0 18px;
-  height: 3px;
-  border-radius: 2px;
+.modern-leg-plugin-inline .leaflet-legend-item span {
+  font-size: .76rem !important;
+  color: #64748b !important;
+  white-space: normal !important;
 }
 
-/* Picto polygone */
-.modern-leg-poly {
-  flex: 0 0 14px;
-  height: 14px;
-  border-radius: 3px;
-  border: 1px solid rgba(0,0,0,.15);
+/* Item actif (cliquable) : légère indication au hover */
+.modern-leg-plugin-inline .leaflet-legend-item-clickable:hover {
+  background: rgba(0,0,0,.04);
+  border-radius: 4px;
 }
 
-/* Picto point (icône image) */
-.modern-leg-icon {
-  flex: 0 0 auto;
-  max-width: 20px;
-  max-height: 20px;
-  object-fit: contain;
+/* Item inactif : grisé via plugin + texte encore plus atténué */
+.modern-leg-plugin-inline .leaflet-legend-item-inactive span {
+  color: #adb5bd !important;
 }
 
 /* Icône œil — état par défaut "masqué" : œil barré gris */
