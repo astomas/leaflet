@@ -286,41 +286,58 @@ body.is-resizing * {
   line-height: 1.45;
 }
 
-/* Fonds de carte (radios Leaflet) déplacés dans la sidebar */
+/* Fonds de carte déplacés dans la sidebar : présentés en pastilles.
+   Le radio natif est masqué ; chaque fond devient une pastille cliquable et
+   la pastille active (fond sélectionné) est remplie de la couleur du bloc. */
 .modern-fonds-plan {
   padding: 4px 8px 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2px 6px;
+  gap: 6px;
 }
 
 .modern-fonds-plan label {
   display: block;
   margin: 0;
-  font-weight: 500;
 }
 
+/* Chaque fond de plan = une pastille */
 .modern-fonds-plan label > span {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  font-size: .84rem;
+  justify-content: center;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid #d7dbf5;
+  background: #eef0fd;
+  font-size: .8rem;
+  font-weight: 600;
+  line-height: 1.15;
   color: var(--modern-text);
   cursor: pointer;
-  transition: background .15s;
+  transition: background .15s, color .15s, border-color .15s;
 }
 
 .modern-fonds-plan label > span:hover {
   background: #e0e3fb;
 }
 
+/* Pastille active : fond sélectionné, rempli de la couleur du bloc */
+.modern-fonds-plan label > span:has(input:checked) {
+  background: var(--family-accent, #6366F1);
+  border-color: var(--family-accent, #6366F1);
+  color: #fff;
+}
+
+/* Radio natif masqué (conservé dans le DOM : le clic sur la pastille le bascule) */
 .modern-fonds-plan input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
   margin: 0;
-  flex: 0 0 auto;
-  accent-color: var(--modern-accent);
-  cursor: pointer;
+  pointer-events: none;
 }
 
 /* Couches métier (cases à cocher Leaflet) déplacées dans la sidebar.
