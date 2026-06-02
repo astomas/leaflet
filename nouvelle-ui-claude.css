@@ -369,7 +369,7 @@ body.is-resizing * {
   flex: 1;
   display: flex;
   align-items: center;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Icône œil — état par défaut "masqué" : œil barré gris */
