@@ -309,6 +309,52 @@
   };
 
   // =========================================================================
+  // Données métier : déplace les cases à cocher des couches métier (générées
+  // par le contrôle Leaflet en haut à droite) dans la section "Données métier"
+  // de la sidebar. Miroir de modernDockFondsDePlan pour le bloc overlays.
+  // =========================================================================
+
+  // API publique : relocalise le bloc .leaflet-control-layers-overlays dans la
+  // section .modern-family-business. Idempotente (ne déplace qu'une fois) et
+  // dotée d'un filet de retry si le contrôle n'est pas encore prêt.
+  window.modernDockDonneesMetier = function (essaisRestants) {
+    var section  = document.querySelector(".modern-family-business");
+    var overlays = document.querySelector(".leaflet-control-layers-overlays");
+
+    // Contrôle pas encore créé : on retente quelques fois
+    if (!section || !overlays) {
+      var n = (typeof essaisRestants === "number") ? essaisRestants : 10;
+      if (n > 0) setTimeout(function () { window.modernDockDonneesMetier(n - 1); }, 200);
+      return false;
+    }
+
+    // Déjà déplacé : rien à faire
+    if (overlays.dataset.modernMoved === "true") return true;
+    overlays.dataset.modernMoved = "true";
+
+    // Référence du conteneur d'origine AVANT de sortir le bloc overlays
+    var control = overlays.closest(".leaflet-control-layers");
+
+    // Masque le texte descriptif statique de la section
+    var intro = section.querySelector("p");
+    if (intro) intro.style.display = "none";
+
+    // Déplace le bloc des cases à cocher dans la sidebar (devient enfant de la
+    // section, donc soumis à l'accordéon expand/collapse)
+    overlays.classList.add("modern-donnees-metier");
+    section.appendChild(overlays);
+
+    // Conteneur d'origine vidé (radios + cases relocalisés) : on le masque
+    if (control) {
+      var sep = control.querySelector(".leaflet-control-layers-separator");
+      if (sep) sep.style.display = "none";
+      control.style.display = "none";
+    }
+
+    return true;
+  };
+
+  // =========================================================================
   // Initialisation au chargement du DOM
   // =========================================================================
 

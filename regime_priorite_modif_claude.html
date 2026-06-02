@@ -96,7 +96,7 @@
         <section class="modern-family modern-family-fonds-plan" data-expanded="true">
           <div class="modern-family-title"><span>Fonds de plan</span><em>couches</em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
         </section>
-        <section class="modern-family modern-family-business" data-expanded="true">
+        <section class="modern-family modern-family-business" data-expanded="false">
           <div class="modern-family-title"><span>Données métier</span><em></em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
           <!-- <p>nomcouche</p> -->
         </section>
@@ -2587,6 +2587,8 @@ function main() {
 	});
 	// Déplace les radios "Fonds de plan" dans la sidebar (logique dans modern-dock).
 	if (window.modernDockFondsDePlan) window.modernDockFondsDePlan();
+	// Déplace les cases à cocher des couches métier dans "Données métier".
+	if (window.modernDockDonneesMetier) window.modernDockDonneesMetier();
 	carteLeaflet.afficherOutils();
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();	

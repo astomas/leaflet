@@ -323,6 +323,40 @@ body.is-resizing * {
   cursor: pointer;
 }
 
+/* Couches métier (cases à cocher Leaflet) déplacées dans la sidebar */
+.modern-donnees-metier {
+  padding: 4px 8px 10px;
+}
+
+.modern-donnees-metier label {
+  display: block;
+  margin: 0;
+  font-weight: 500;
+}
+
+.modern-donnees-metier label > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: .84rem;
+  color: var(--modern-text);
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.modern-donnees-metier label > span:hover {
+  background: #eef4fb;
+}
+
+.modern-donnees-metier input {
+  margin: 0;
+  flex: 0 0 auto;
+  accent-color: var(--modern-accent);
+  cursor: pointer;
+}
+
 .modern-tools-dock {
   display: grid;
   grid-template-columns: 1fr 1fr;
