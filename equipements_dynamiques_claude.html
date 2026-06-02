@@ -222,7 +222,7 @@ function flipGeoJSON(coords) {
     return coords.map(elementTableau => flipGeoJSON(elementTableau));
 }
 
-// gestion interactions icone clé 
+// gestion survol + clic des boutons (service visu, recherche)
 function ajouterHoverEtClic(bouton, params) {
     let isLocked = false;
     const {
