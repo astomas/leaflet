@@ -219,7 +219,7 @@ body.is-resizing * {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 }
 
-.modern-family-fonds-plan { --family-accent: var(--modern-accent); background: #edf5fc; }
+.modern-family-fonds-plan { --family-accent: #6366F1; background: #eef0fd; }
 .modern-family-business { --family-accent: var(--modern-warning); background: #fdf4e7; }
 .modern-family-tools { --family-accent: var(--modern-tools); background: #e9f7f3; }
 
@@ -313,7 +313,7 @@ body.is-resizing * {
 }
 
 .modern-fonds-plan label > span:hover {
-  background: #d8e9f8;
+  background: #e0e3fb;
 }
 
 .modern-fonds-plan input {
@@ -416,8 +416,8 @@ body.is-resizing * {
 }
 
 .modern-tool-button:hover {
-  background: #f8fbff;
-  border-color: #93c5fd;
+  background: #f0faf7;
+  border-color: #5fc2ad;
   transform: translateY(-1px);
 }
 
