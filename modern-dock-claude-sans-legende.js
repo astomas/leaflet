@@ -406,7 +406,7 @@
 
       // onAdd(map) initialise _map (requis par _toggleLegend) et retourne le container DOM
       var container = ctrl.onAdd(map);
-      container.classList.add("modern-leg-plugin-inline");
+      container.classList.add("detail-couches-sidebar");
 
       // Nettoie les éléments inutiles en sidebar (lien repli, titre vide)
       var toggle = container.querySelector(".leaflet-legend-toggle");

@@ -400,7 +400,7 @@ body.is-resizing * {
 
 /* ===== Légende plugin injectée sous chaque couche métier ===== */
 /* Neutralise les styles flottants/carte du plugin dans le contexte sidebar */
-.modern-leg-plugin-inline {
+.detail-couches-sidebar {
   position: static !important;
   float: none !important;
   background: transparent !important;
@@ -412,40 +412,40 @@ body.is-resizing * {
 }
 
 /* Les contents sont forcément visibles (pas de repli en sidebar) */
-.modern-leg-plugin-inline .leaflet-legend-contents {
+.detail-couches-sidebar .leaflet-legend-contents {
   display: block !important;
   padding: 2px 4px 0 4px !important;
 }
 
 /* Bandeau gris "▼ Nom couche" masqué : doublon du nom de couche au-dessus */
-.modern-leg-plugin-inline .leaflet-legend-group-header {
+.detail-couches-sidebar .leaflet-legend-group-header {
   display: none !important;
 }
 
 /* Contenu de groupe : supprime l'indentation/padding liés au header masqué */
-.modern-leg-plugin-inline .leaflet-legend-group-content {
+.detail-couches-sidebar .leaflet-legend-group-content {
   padding: 0 !important;
 }
 
 /* Chaque item : texte plus petit, couleur atténuée */
-.modern-leg-plugin-inline .leaflet-legend-item {
+.detail-couches-sidebar .leaflet-legend-item {
   margin: 1px 0 !important;
 }
 
-.modern-leg-plugin-inline .leaflet-legend-item span {
+.detail-couches-sidebar .leaflet-legend-item span {
   font-size: .76rem !important;
   color: #64748b !important;
   white-space: nowrap !important;
 }
 
 /* Item actif (cliquable) : légère indication au hover */
-.modern-leg-plugin-inline .leaflet-legend-item-clickable:hover {
+.detail-couches-sidebar .leaflet-legend-item-clickable:hover {
   background: rgba(0,0,0,.04);
   border-radius: 4px;
 }
 
 /* Item inactif : grisé via plugin + texte encore plus atténué */
-.modern-leg-plugin-inline .leaflet-legend-item-inactive span {
+.detail-couches-sidebar .leaflet-legend-item-inactive span {
   color: #adb5bd !important;
 }
 
