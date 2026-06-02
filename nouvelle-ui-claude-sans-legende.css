@@ -435,7 +435,7 @@ body.is-resizing * {
 .modern-leg-plugin-inline .leaflet-legend-item span {
   font-size: .76rem !important;
   color: #64748b !important;
-  white-space: normal !important;
+  white-space: nowrap !important;
 }
 
 /* Item actif (cliquable) : légère indication au hover */
