@@ -57,7 +57,6 @@
     const row  = document.createElement("div");
     row.className       = "modern-tool-button";
     row.dataset.toolLabel = key;
-    row.title           = label;
 
     const icon = document.createElement("span");
     icon.className = "modern-tool-icon-slot";

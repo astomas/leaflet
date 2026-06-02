@@ -863,7 +863,7 @@ body.is-resizing * {
 }
 
 .modern-tools-dock .leaflet-control-browser-print .browser-print-mode {
-  display: none !important;
+  display: none;
   background: #919187 !important;
   color: #fff !important;
   opacity: 1 !important;
@@ -875,11 +875,6 @@ body.is-resizing * {
 
 .modern-tools-dock .leaflet-control-browser-print .browser-print-mode:hover {
   background: #757570 !important;
-}
-
-/* Déroulement des 3 modes au survol de tout le bouton (icône + libellé) */
-.modern-tool-button:hover .browser-print-mode {
-  display: inline-block !important;
 }
 
 /* ===== ISOCHRONE ICON VISIBLE WHEN PANEL OPEN ===== */
