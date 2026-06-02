@@ -49,12 +49,6 @@ a[href^="https://maps.google.com/maps"] {
     display: none !important;
 }
 
-.gmnoprint a, .gmnoprint span, .gm-style-cc {
-    display: none;
-}
-.gmnoprint div {
-    background: none !important;
-}
 
 .pac-container:after {
     background-image: none !important;
@@ -165,10 +159,6 @@ p b {
 
 .button-container .easy-button-button[title="Service Visualisation"]:hover {
     background-color: #ffff00 !important;
-}
-
-.button-container .easy-button-button[title="Informations"]:hover {
-    background-color: #f4f4f4 !important;
 }
 
 .bouton-service-visu {
@@ -418,10 +408,6 @@ img.leaflet-marker-icon[src*="geosearch"] {
     /* border-width: 2px; */
 }
 
-/* chemin original des layers pr bouton repli couches */
-.leaflet-control-layers-toggle {
-    background-image: url(/Ressources/API_JS/images/layers.png) !important;
-}
 
 /* masquer tooltip polygone a niv de zoom (js) */
 .masquer-tooltips-polygones .tooltip-polygone {
