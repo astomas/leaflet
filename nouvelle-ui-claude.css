@@ -219,7 +219,7 @@ body.is-resizing * {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 }
 
-.modern-family-fonds-plan { --family-accent: #7C3AED; background: #f5f3ff; }
+.modern-family-fonds-plan { --family-accent: #7E6BC4; background: #f5f3ff; }
 .modern-family-business { --family-accent: var(--modern-warning); background: #fdf4e7; }
 .modern-family-tools { --family-accent: var(--modern-tools); }
 
@@ -325,8 +325,8 @@ body.is-resizing * {
 
 /* Pastille active : fond sélectionné, rempli de la couleur du bloc */
 .modern-fonds-plan label > span:has(input:checked) {
-  background: var(--family-accent, #7C3AED);
-  border-color: var(--family-accent, #7C3AED);
+  background: var(--family-accent, #7E6BC4);
+  border-color: var(--family-accent, #7E6BC4);
   color: #fff;
 }
 
