@@ -1072,54 +1072,12 @@ function CarteLeaflet(conteneurId) {
 		libelleCouche = Object.assign({}, ...tabCtrlboxNom.map(item => ({ [item.nom]: item.couche })));
 		//console.log("libelleCouche : " , libelleCouche);
 	
-		// Repli box couches si legende trop grande en hauteur ecran	
-		if (presenceLegende) {
-			
-			const nbrEltsLegende = tabCtrlLegendeObj.length;	
-			const largeurEcran = screen.width;
-			// Set filtre les doublons, size compte le nbr sous-titres uniques
-			const nbrSousTitresLeg = new Set(tabCtrlLegendeObj.map(o => o.nomCouche)).size;
-
-			// Repli ecrans HD et moins selon nbr elts legende, nbr couches (vues) et nbr col. legende
-			if (largeurEcran <= 1920) {
-				var trigger1Repli = (nbrColonnes === 1 && nbrEltsLegende > 25);
-				var trigger2Repli = (nbrColonnes === 2 && nbrEltsLegende > 45);
-				var trigger3Repli = (nbrColonnes === 1 && nbrEltsLegende + nbreDeVues > 25);
-				var trigger4Repli = (nbrColonnes === 2 && nbrEltsLegende + nbreDeVues > 40);
-				// trigger5 inactif (false) si carto "surveillance" (car définie sans sous-titre ds legende.js)
-				var trigger5Repli = valeurTitre1.indexOf("Surveillance") === -1 && nbrColonnes === 1 && (nbreDeVues + nbrEltsLegende + nbrSousTitresLeg > 26);
-				
-				if (trigger1Repli || trigger2Repli || trigger3Repli || trigger4Repli || trigger5Repli || L.Browser.mobile) {
-					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: true});
-					ctrlBoxCouches.addTo(maCarte);
-					// repli bloc legende si tablettes/mobiles				
-					if ((nbrEltsLegende >= 23 && largeurEcran < 1900) || (L.Browser.mobile && nbrEltsLegende >= 8)) {
-						blocLegende.remove();
-						blocLegende = L.control.Legend({title: null, collapsed: true, position: "bottomright", opacity: 0.8, legends: tabCtrlLegendeObj});
-						blocLegende.addTo(maCarte);
-						if (nbrColonnes === 2) {
-							var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
-							if (container) container.classList.add('deux-colonnes');
-							requestAnimationFrame(ajusterLargeurColonnesLegende);
-						}
-					}
-				}				
-				else {
-					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-					ctrlBoxCouches.addTo(maCarte);
-				}
-			}
-			// ecrans au dela de HD pas de repli
-			else {
-				ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-				ctrlBoxCouches.addTo(maCarte);			
-			}
-		}
-		// Pas de légende pas de repli
-		else {
-	    	ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-	    	ctrlBoxCouches.addTo(maCarte);
-		}	
+		// Box des couches : son contenu est déplacé dans la sidebar par modernDock*,
+		// puis la box est masquée. L'option "collapsed" et le repli selon la taille
+		// d'écran n'ont donc plus d'effet visuel. La légende sera gérée séparément
+		// (contrôle de minimisation dans l'en-tête). On crée simplement la box.
+		ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
+		ctrlBoxCouches.addTo(maCarte);
 	}
 
 	this.zoomObjet = function () {	
