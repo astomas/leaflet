@@ -69,13 +69,14 @@
     icon.appendChild(el);
     row.append(icon, text);
 
-    // Délègue le clic sur le premier élément interactif du contrôle
-    // (évite de déclencher l'action si l'utilisateur clique directement
-    //  sur un bouton/lien natif à l'intérieur du contrôle)
+    // Délègue le clic sur le premier élément interactif du contrôle ; à défaut
+    // (contrôle dont le conteneur est lui-même cliquable, ex. leaflet-ruler),
+    // on déclenche le clic sur le contrôle lui-même. Le clic direct sur un
+    // bouton/lien natif ou le contrôle est ignoré (handler natif déjà actif).
     row.addEventListener("click", function (event) {
       if (event.target.closest("button,a,input,[role='button'],.leaflet-control")) return;
-      const clickable = el.querySelector("button,a,input,[role='button']");
-      if (clickable) clickable.click();
+      const clickable = el.querySelector("button,a,input,[role='button']") || el;
+      clickable.click();
     });
 
     // Insertion à la position souhaitée ou en fin de liste
