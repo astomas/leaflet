@@ -370,8 +370,67 @@
       control.style.display = "none";
     }
 
+    // Injection des items légende sous chaque label de couche
+    injecterLegende(overlays);
+
     return true;
   };
+
+  // Injecte les éléments de légende sous chaque label de couche dans la sidebar.
+  // Utilise window.modernLegendeParCouche (objet indexé par nomCouche)
+  // exposé par la carte avant l'appel à modernDockDonneesMetier().
+  function injecterLegende(overlays) {
+    var data = window.modernLegendeParCouche;
+    if (!data) return;
+
+    var labels = overlays.querySelectorAll("label");
+    labels.forEach(function (label) {
+      // Texte du libellé : "Nom couche (N)" → extraire "Nom couche"
+      var span = label.querySelector("span");
+      if (!span) return;
+      var texte = span.textContent || "";
+      var nomCouche = texte.replace(/\s*\(\d+\)\s*$/, "").trim();
+
+      var items = data[nomCouche];
+      if (!items || items.length === 0) return;
+
+      var container = document.createElement("div");
+      container.className = "modern-leg-items";
+
+      items.forEach(function (item) {
+        var div = document.createElement("div");
+        div.className = "modern-leg-item" + (item.inactive ? " inactive" : "");
+
+        var picto;
+        var type = (item.type || "").toLowerCase();
+        if (type === "image" || type === "point") {
+          picto = document.createElement("img");
+          picto.className = "modern-leg-icon";
+          picto.src = item.url || "";
+          picto.alt = "";
+        } else if (type === "polyline" || type.includes("line")) {
+          picto = document.createElement("span");
+          picto.className = "modern-leg-line";
+          picto.style.backgroundColor = item.color || "#888";
+        } else {
+          // polygon / multipolygon / autres
+          picto = document.createElement("span");
+          picto.className = "modern-leg-poly";
+          picto.style.backgroundColor = item.color || "#888";
+        }
+
+        var txt = document.createElement("span");
+        txt.textContent = item.label || "";
+
+        div.appendChild(picto);
+        div.appendChild(txt);
+        container.appendChild(div);
+      });
+
+      // Insère le bloc légende après le label (pas à l'intérieur)
+      label.insertAdjacentElement("afterend", container);
+    });
+  }
 
   // =========================================================================
   // Initialisation au chargement du DOM

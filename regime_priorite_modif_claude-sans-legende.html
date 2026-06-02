@@ -954,19 +954,29 @@ function CarteLeaflet(conteneurId) {
 			//console.log("tabNettoyé : " , tabNettoyé);
 		
 			var tabCtrlLegendeObj = [];
-			for (i=0; i < tabNettoyé.length; i++) {	
+			for (i=0; i < tabNettoyé.length; i++) {
 				tabCtrlLegendeObj.push({
-					label: tabNettoyé[i][1], 
-					type: tabNettoyé[i][0], 
-					color: tabNettoyé[i][2], 
-					url: tabNettoyé[i][3], 
-					inactive: tabNettoyé[i][4], 
-					nomCouche: tabNettoyé[i][5], 
+					label: tabNettoyé[i][1],
+					type: tabNettoyé[i][0],
+					color: tabNettoyé[i][2],
+					url: tabNettoyé[i][3],
+					inactive: tabNettoyé[i][4],
+					nomCouche: tabNettoyé[i][5],
 					layers: tabCouchesLGLeg[i],
 					originalIndex: i
-				});	
+				});
 			}
-		
+
+			// Expose les items légende groupés par couche pour injection dans la sidebar.
+			window.modernLegendeParCouche = {};
+			for (i = 0; i < tabCtrlLegendeObj.length; i++) {
+				var nomC = tabCtrlLegendeObj[i].nomCouche;
+				if (!window.modernLegendeParCouche[nomC]) {
+					window.modernLegendeParCouche[nomC] = [];
+				}
+				window.modernLegendeParCouche[nomC].push(tabCtrlLegendeObj[i]);
+			}
+
 			// Z-index décroissant pour les couches points légende au chargement initial :
 			// le 1er libellé légende sera affiché par-dessus les autres sur la carte
 			var zIndexLegPoints = 900000;

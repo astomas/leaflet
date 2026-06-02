@@ -398,6 +398,50 @@ body.is-resizing * {
   color: var(--modern-text);
 }
 
+/* ===== Mini-légende injectée sous chaque couche métier ===== */
+.modern-leg-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 8px 6px 16px;
+}
+
+.modern-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .76rem;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+.modern-leg-item.inactive {
+  opacity: .45;
+}
+
+/* Picto ligne */
+.modern-leg-line {
+  flex: 0 0 18px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* Picto polygone */
+.modern-leg-poly {
+  flex: 0 0 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,.15);
+}
+
+/* Picto point (icône image) */
+.modern-leg-icon {
+  flex: 0 0 auto;
+  max-width: 20px;
+  max-height: 20px;
+  object-fit: contain;
+}
+
 /* Icône œil — état par défaut "masqué" : œil barré gris */
 .modern-donnees-metier input + span::after {
   content: "";
