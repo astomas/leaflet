@@ -512,10 +512,11 @@ body.is-resizing * {
 
 /* Tooltips sans gestion dédiée : largeur du contenu, plafond 500px, wrap au-delà */
 .leaflet-tooltip:not(.tooltip-import) {
-  display: table;
+  width: max-content;
   max-width: 400px !important;
   white-space: normal;
   overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 .legend-container {
