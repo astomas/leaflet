@@ -417,6 +417,16 @@ body.is-resizing * {
   padding: 2px 4px 0 4px !important;
 }
 
+/* Bandeau gris "▼ Nom couche" masqué : doublon du nom de couche au-dessus */
+.modern-leg-plugin-inline .leaflet-legend-group-header {
+  display: none !important;
+}
+
+/* Contenu de groupe : supprime l'indentation/padding liés au header masqué */
+.modern-leg-plugin-inline .leaflet-legend-group-content {
+  padding: 0 !important;
+}
+
 /* Chaque item : texte plus petit, couleur atténuée */
 .modern-leg-plugin-inline .leaflet-legend-item {
   margin: 1px 0 !important;
