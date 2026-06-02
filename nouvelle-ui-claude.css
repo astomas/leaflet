@@ -450,19 +450,6 @@ body.is-resizing * {
 .modern-tools-dock .leaflet-bar a,
 .modern-tools-dock .leaflet-control button,
 .modern-tools-dock .leaflet-control .easy-button-button,
-.modern-tools-dock .leaflet-control-layers-toggle {
-  width: 32px !important;
-  height: 32px !important;
-  min-width: 32px !important;
-  line-height: 32px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border-radius: 8px !important;
-  border: 1px solid #cbd5e1 !important;
-  color: var(--modern-primary) !important;
-  background: #fff !important;
-}
-
 .modern-tools-dock .leaflet-control img,
 .modern-tools-dock .leaflet-control .easy-button-button img {
   max-width: 25px !important;
@@ -470,7 +457,6 @@ body.is-resizing * {
 }
 
 .leaflet-bar,
-.leaflet-control-layers,
 .legend-container,
 .leaflet-legend,
 .infotitre {
@@ -579,7 +565,7 @@ body.is-resizing * {
 }
 .popup-scroll::-webkit-scrollbar-track { background: transparent; }
 
-/* Tooltips sans gestion dédiée : largeur du contenu, plafond 500px, wrap au-delà */
+/* Tooltips sans gestion dédiée : largeur du contenu, plafond 400px, wrap au-delà */
 .leaflet-tooltip:not(.tooltip-import) {
   width: max-content;
   max-width: 400px !important;
