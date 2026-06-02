@@ -127,6 +127,21 @@
     dockElement(getControlElement(control), label);
   };
 
+  // Docke le bouton "Exporter" (créé par export-couches.js via L.easyButton)
+  // dans "Outils carte", en 2e position après "Importer".
+  // Le bouton peut ne pas être encore rendu : on réessaie tant qu'il est absent
+  // (dockElement est idempotent, les essais superflus sont sans effet).
+  window.modernDockExporter = function (essaisRestants) {
+    var ok = window.modernDockExistingControl("Exporter", {
+      terms: ["export", "arrow-up-from-bracket", "fa-arrow-up-from-bracket"],
+      position: 1
+    });
+    if (ok) return true;
+    var n = (typeof essaisRestants === "number") ? essaisRestants : 10;
+    if (n > 0) setTimeout(function () { window.modernDockExporter(n - 1); }, 200);
+    return false;
+  };
+
   // =========================================================================
   // Resizer : redimensionnement horizontal de la sidebar par drag
   // =========================================================================

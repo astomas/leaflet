@@ -2572,15 +2572,8 @@ function main() {
 	carteLeaflet.rechercherLieu();
 	carteLeaflet.importFichier();
 	carteLeaflet.exportCouches();
-	// Déplace le bouton Exporter dans "Outils carte", en 2e position après Importer.
-	[100, 500, 1200].forEach(function (delay) {
-		setTimeout(function () {
-			window.modernDockExistingControl("Exporter", {
-				terms: ["export", "arrow-up-from-bracket", "fa-arrow-up-from-bracket"],
-				position: 1
-			});
-		}, delay);
-	});
+	// Déplace le bouton Exporter dans "Outils carte" (logique dans modern-dock).
+	window.modernDockExporter();
 	// Déplace les radios "Fonds de plan" dans la sidebar (logique dans modern-dock).
 	window.modernDockFondsDePlan();
 	// Déplace les cases à cocher des couches métier dans "Données métier".
