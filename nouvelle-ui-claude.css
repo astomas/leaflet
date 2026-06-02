@@ -219,8 +219,8 @@ body.is-resizing * {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 }
 
-.modern-family-fonds-plan { --family-accent: var(--modern-primary); }
-.modern-family-business { --family-accent: var(--modern-warning); }
+.modern-family-fonds-plan { --family-accent: var(--modern-accent); background: #edf5fc; }
+.modern-family-business { --family-accent: var(--modern-warning); background: #fdf4e7; }
 .modern-family-tools { --family-accent: var(--modern-tools); }
 
 .modern-family-title {
@@ -313,7 +313,7 @@ body.is-resizing * {
 }
 
 .modern-fonds-plan label > span:hover {
-  background: #eef4fb;
+  background: #d8e9f8;
 }
 
 .modern-fonds-plan input {
@@ -350,7 +350,7 @@ body.is-resizing * {
 }
 
 .modern-donnees-metier label > span:hover {
-  background: #eef4fb;
+  background: #fbe7c8;
 }
 
 /* Case native masquée mais conservée dans le DOM : le clic sur le label
