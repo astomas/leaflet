@@ -144,9 +144,13 @@
     var MIN_WIDTH = 200;  // largeur minimale en px
     var MAX_WIDTH = 560;  // largeur maximale en px
 
+    // Clé de persistance propre à chaque carte (basée sur l'URL de la page),
+    // pour que la largeur soit mémorisée indépendamment d'une carte à l'autre.
+    var CLE_LARGEUR = "modernSidebarWidth:" + location.pathname;
+
     // Restaure la largeur sauvegardée lors de la session précédente
     try {
-      var saved = parseInt(localStorage.getItem("modernSidebarWidth") || "", 10);
+      var saved = parseInt(localStorage.getItem(CLE_LARGEUR) || "", 10);
       if (isFinite(saved) && saved >= MIN_WIDTH && saved <= MAX_WIDTH) {
         mainContent.style.setProperty("--modern-sidebar-width", saved + "px");
       }
@@ -173,7 +177,7 @@
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
       if (pendingWidth != null) {
-        try { localStorage.setItem("modernSidebarWidth", Math.round(pendingWidth)); } catch (_) {}
+        try { localStorage.setItem(CLE_LARGEUR, Math.round(pendingWidth)); } catch (_) {}
       }
       // Demande à Leaflet de recalculer les dimensions de la carte
       var mapContainer = document.getElementById("carteId");
@@ -196,7 +200,7 @@
     // Double-clic : retour à la largeur par défaut du CSS
     resizer.addEventListener("dblclick", function () {
       mainContent.style.removeProperty("--modern-sidebar-width");
-      try { localStorage.removeItem("modernSidebarWidth"); } catch (_) {}
+      try { localStorage.removeItem(CLE_LARGEUR); } catch (_) {}
       var mapContainer = document.getElementById("carteId");
       if (mapContainer && mapContainer._leaflet_map) {
         mapContainer._leaflet_map.invalidateSize();
