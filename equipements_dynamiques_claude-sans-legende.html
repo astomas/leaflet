@@ -1011,8 +1011,9 @@ function CarteLeaflet(conteneurId) {
 				return 0;
 			});
 	
-			function ajusterLargeurColonnesLegende() {
-			    var container = maCarte.getContainer().querySelector('.leaflet-legend-contents.deux-colonnes');
+			function ajusterLargeurColonnesLegende(racineLegende) {
+			    var base = racineLegende || maCarte.getContainer();
+			    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
 			    if (!container) return;
 			
 			    // Largeur réelle du libellé le plus long
@@ -1030,18 +1031,12 @@ function CarteLeaflet(conteneurId) {
 			    });
 			}
 				
-			/* [sans-legende] Plugin légende masqué sur la carte — gardé pour l'impression
+			// [sans-legende] La légende vit dans la sidebar : le contrôle plugin n'est PAS ajouté
+			// à la carte. Il est créé ici puis ajouté uniquement à l'impression (browser-print-start).
 			// legende sur 2 col si nbr elts legende > 27
 			var nbrColonnes = (tabCtrlLegendeObj.length > 27) ? 2 : 1;
 			//var nbrColonnes = (tabCtrlLegendeObj.length || (nbreDeVues + tabCtrlLegendeObj.length) > 27) ? 2 : 1;
 			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, legends: tabCtrlLegendeObj});
-			blocLegende.addTo(maCarte);
-			if (nbrColonnes === 2) {
-				var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
-				if (container) container.classList.add('deux-colonnes');
-				requestAnimationFrame(ajusterLargeurColonnesLegende);
-			}
-			[sans-legende] */
 
 		}
 	
@@ -1637,8 +1632,16 @@ this.importFichier = function () {
 		}		
 		
 		maCarte.on("browser-print-start", function(e){
-			if (presenceLegende) {			
-				blocLegende.addTo(e.printMap);						
+			if (presenceLegende) {
+				blocLegende.addTo(e.printMap);
+				// [sans-legende] applique la mise en 2 colonnes sur la légende d'impression
+				if (nbrColonnes === 2) {
+					var contenuLegPrint = blocLegende.getContainer().querySelector('.leaflet-legend-contents');
+					if (contenuLegPrint) contenuLegPrint.classList.add('deux-colonnes');
+					requestAnimationFrame(function() {
+						ajusterLargeurColonnesLegende(e.printMap.getContainer());
+					});
+				}
 			// ajout logo avant print
 			setTimeout(function() {
 				const conteneurCartePrint = e.printMap.getContainer();
@@ -1695,10 +1698,10 @@ this.importFichier = function () {
 			 	var blocLegendeElement = blocLegende.getContainer();
 				blocLegendeElement.style.marginTop = '12px';
 				blocLegendeElement.style.paddingBottom = '0';
-				blocLegende.remove();				
-				blocLegende.addTo(maCarte);	
+				blocLegende.remove();
+				// [sans-legende] pas de re-ajout sur la carte : la légende reste dans la sidebar
 				conteneurStreetView.remove();
-				conteneurStreetView.addTo(maCarte);	
+				conteneurStreetView.addTo(maCarte);
 			}	
 		});	
 		
