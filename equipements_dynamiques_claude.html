@@ -1611,7 +1611,7 @@ this.importFichier = function () {
     });
 
     btnImporter.addTo(maCarte);
-    if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnImporter, "Importer");
+    window.modernDockSpecificControl(btnImporter, "Importer");
 }
 	
 	this.afficherOutils = function() {  
@@ -1783,16 +1783,14 @@ this.importFichier = function () {
 		setTimeout(function () {
 			if (!sousBoutonsCréés) {
 				btnImprimer.addTo(maCarte);
-				if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnImprimer, "Imprimer");
+				window.modernDockSpecificControl(btnImprimer, "Imprimer");
 				btnMesurer.addTo(maCarte);
-				if (window.modernDockSpecificControl) window.modernDockSpecificControl(btnMesurer, "Mesurer");
+				window.modernDockSpecificControl(btnMesurer, "Mesurer");
 				btnIsochrone.addTo(maCarte);
 				btnGeosearch.addTo(maCarte);
 				setTimeout(function () {
-					if (window.modernDockSpecificControl) {
-						window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
-						window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
-					}
+					window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
+					window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
 				}, 80);
 				activerPopupRaccourci(maCarte);
 				sousBoutonsCréés = true;
@@ -2574,18 +2572,16 @@ function main() {
 	// Déplace le bouton Exporter dans "Outils carte", en 2e position après Importer.
 	[100, 500, 1200].forEach(function (delay) {
 		setTimeout(function () {
-			if (window.modernDockExistingControl) {
-				window.modernDockExistingControl("Exporter", {
-					terms: ["export", "arrow-up-from-bracket", "fa-arrow-up-from-bracket"],
-					position: 1
-				});
-			}
+			window.modernDockExistingControl("Exporter", {
+				terms: ["export", "arrow-up-from-bracket", "fa-arrow-up-from-bracket"],
+				position: 1
+			});
 		}, delay);
 	});
 	// Déplace les radios "Fonds de plan" dans la sidebar (logique dans modern-dock).
-	if (window.modernDockFondsDePlan) window.modernDockFondsDePlan();
+	window.modernDockFondsDePlan();
 	// Déplace les cases à cocher des couches métier dans "Données métier".
-	if (window.modernDockDonneesMetier) window.modernDockDonneesMetier();
+	window.modernDockDonneesMetier();
 	carteLeaflet.afficherOutils();
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();	
