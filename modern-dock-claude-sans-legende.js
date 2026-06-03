@@ -500,8 +500,10 @@
   }
 
   // Construit / met à jour le bandeau dans l'en-tête. niveau null => le retire.
+  // Placé dans la barre d'actions, à gauche des boutons Info / Aide.
   function afficherBandeauVigilance(niveau, phenomenes) {
-    var hote = document.querySelector(".modern-header-titles");
+    var hote = document.querySelector(".modern-header-actions")
+            || document.querySelector(".modern-header-titles");
     if (!hote) return;
     var bandeau = hote.querySelector(".modern-vigilance-banner");
 
@@ -515,10 +517,10 @@
       bandeau = document.createElement("div");
       bandeau.className = "modern-vigilance-banner";
       bandeau.style.cssText =
-        "display:inline-flex;align-items:center;gap:6px;margin-top:4px;" +
+        "display:inline-flex;align-items:center;gap:6px;align-self:center;margin-right:10px;" +
         "padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:700;" +
-        "line-height:1.2;box-shadow:0 2px 6px rgba(0,0,0,.18);";
-      hote.appendChild(bandeau);
+        "line-height:1.2;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.18);";
+      hote.insertBefore(bandeau, hote.firstChild);          // avant Info / Aide
     }
     bandeau.style.background = style.bg;
     bandeau.style.color = style.fg;
