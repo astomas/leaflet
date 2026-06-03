@@ -470,9 +470,18 @@ body.is-resizing * {
   padding: 0 !important;
 }
 
-/* Chaque item : texte plus petit, couleur atténuée */
+/* Chaque item de légende = une étiquette sur fond blanc, séparée de la suivante
+   par quelques pixels. Plate au repos, effet 3D (ombre + soulèvement) au survol. */
 .detail-couches-sidebar .leaflet-legend-item {
-  margin: 1px 0 !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px !important;
+  padding: 4px 8px !important;
+  background: #fff;
+  border: 1px solid var(--modern-border);
+  border-radius: 6px;
+  transition: box-shadow .15s, transform .15s, border-color .15s;
 }
 
 .detail-couches-sidebar .leaflet-legend-item span {
@@ -481,10 +490,11 @@ body.is-resizing * {
   white-space: nowrap !important;
 }
 
-/* Item actif (cliquable) : légère indication au hover */
-.detail-couches-sidebar .leaflet-legend-item-clickable:hover {
-  background: rgba(0,0,0,.04);
-  border-radius: 4px;
+/* Survol : effet 3D (ombre portée + léger soulèvement) */
+.detail-couches-sidebar .leaflet-legend-item:hover {
+  border-color: #f0c896;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, .12);
+  transform: translateY(-1px);
 }
 
 /* Item inactif : grisé via plugin + texte encore plus atténué */
