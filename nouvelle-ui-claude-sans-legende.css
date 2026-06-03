@@ -457,7 +457,7 @@ body.is-resizing * {
 /* Les contents sont forcément visibles (pas de repli en sidebar) */
 .detail-couches-sidebar .leaflet-legend-contents {
   display: block !important;
-  padding: 4px 6px 0 0 !important;
+  padding: 4px 0 0 0 !important;
 }
 
 /* Bandeau gris "▼ Nom couche" masqué : doublon du nom de couche au-dessus */
@@ -470,23 +470,25 @@ body.is-resizing * {
   padding: 0 !important;
 }
 
-/* Chaque item de légende = une carte blanche généreuse, séparée de la suivante.
-   Légère ombre au repos, effet 3D (ombre + soulèvement) au survol. */
+/* Chaque item de légende = une carte blanche pleine largeur, plate au repos,
+   avec effet 3D (ombre + soulèvement) seulement au survol. */
 .detail-couches-sidebar .leaflet-legend-item {
   display: flex !important;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 0 0 6px !important;
   padding: 12px 14px !important;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, .07);
   border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
   transition: box-shadow .18s, transform .18s, border-color .18s;
 }
 
 .detail-couches-sidebar .leaflet-legend-item span {
   font-size: .82rem !important;
+  font-weight: 600 !important;
   color: #374151 !important;
   white-space: normal !important;
   line-height: 1.35;
@@ -503,7 +505,6 @@ body.is-resizing * {
 .detail-couches-sidebar .leaflet-legend-item-inactive {
   background: #f9fafb !important;
   border-color: rgba(0, 0, 0, .05) !important;
-  box-shadow: none !important;
 }
 
 .detail-couches-sidebar .leaflet-legend-item-inactive span {
