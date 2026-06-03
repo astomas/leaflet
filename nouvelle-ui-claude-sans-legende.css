@@ -460,6 +460,11 @@ body.is-resizing * {
   padding: 4px 0 0 0 !important;
 }
 
+/* Bouton toggle (expand/collapse) inutile en sidebar : masqué */
+.detail-couches-sidebar .leaflet-legend-toggle {
+  display: none !important;
+}
+
 /* Colonne flottante du plugin → on retire le float pour qu'elle prenne toute la largeur */
 .detail-couches-sidebar .leaflet-legend-column {
   float: none !important;
