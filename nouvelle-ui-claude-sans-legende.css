@@ -586,9 +586,9 @@ body.is-resizing * {
   max-height: 25px !important;
 }
 
-.leaflet-bar,
+.leaflet-bar:not(.detail-couches-sidebar),
 .legend-container,
-.leaflet-legend,
+.leaflet-legend:not(.detail-couches-sidebar),
 .infotitre {
   border-radius: 10px !important;
   border: 1px solid rgba(15, 23, 42, .12) !important;
