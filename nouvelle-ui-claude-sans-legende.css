@@ -720,7 +720,7 @@ body.is-resizing * {
   transform: translate(-50%, -50%);
   white-space: nowrap;
   background: rgba(255, 255, 255, .88);
-  border: 1px solid rgba(0, 0, 0, .15);
+  border: 2px solid rgba(0, 0, 0, .15);
   border-radius: 4px;
   padding: 1px 5px;
   font-size: .72rem;
