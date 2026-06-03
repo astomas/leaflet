@@ -481,8 +481,8 @@ body.is-resizing * {
    texte coulent inline. Plate au repos, effet 3D (ombre + soulèvement) au survol. */
 .detail-couches-sidebar .leaflet-legend-item {
   display: block !important;
-  margin: 0 0 6px !important;
-  padding: 8px 10px !important;
+  margin: 0 0 4px !important;
+  padding: 6px 10px !important;
   background: #fff !important;
   border: 1px solid rgba(0, 0, 0, .08) !important;
   border-radius: 8px;
@@ -505,8 +505,8 @@ body.is-resizing * {
 }
 
 .detail-couches-sidebar .leaflet-legend-item-inactive {
-  background: #f9fafb !important;
-  border-color: rgba(0, 0, 0, .05) !important;
+  background: #eceef1 !important;
+  border-color: rgba(0, 0, 0, .06) !important;
 }
 
 .detail-couches-sidebar .leaflet-legend-item-inactive span {
