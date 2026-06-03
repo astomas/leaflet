@@ -338,8 +338,8 @@ function gererEtiquettesRD(map) {
         map.eachLayer(function (couche) {
             if (!(couche instanceof L.Polyline)) return;
             if (!couche.options || !couche.options.rdLabel) return;
-            // Réseau de proximité : étiquette seulement en zoom rapproché (> 14)
-            if (couche.options.rdProximite && map.getZoom() <= 14) return;
+            // Réseau de proximité : étiquette seulement en zoom rapproché (> 11.8)
+            if (couche.options.rdProximite && map.getZoom() <= 11.8) return;
             // Aplatit les coordonnées (MultiLineString => tableaux imbriqués)
             var points = [];
             (function aplatir(arr) {
