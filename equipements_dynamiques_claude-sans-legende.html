@@ -657,14 +657,7 @@ function CarteLeaflet(conteneurId) {
     });
     
     tabEltsMLSLeg.push(élémentsMLS);
-    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
-    // Réseau routier : étiquette RD permanente (visible à tous les zooms, suit l'activation de la couche)
-    if (élément.properties.nomcouche === "Réseau routier") {
-        var rdVal = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
-        élémentsMLS.bindTooltip(rdVal || texteTooltip, { permanent: true, direction: "center", className: "label-route-rd" });
-    } else {
-        élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
-    }
+    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
 }
 
 		if (élément.properties.couleur && élément.properties.legende && élément.geometry.type == "MultiPolygon"){
