@@ -548,11 +548,6 @@
   }
 
   function chargerVigilance() {
-    // ===== TEST TEMPORAIRE : force une vigilance orange à chaque chargement =====
-    // Pour valider le rendu du bandeau. À RETIRER ensuite (les 2 lignes ci-dessous).
-    afficherBandeauVigilance(3, ["orages", "pluie-inondation"]);
-    return;
-    // ===========================================================================
     // Mode test : ?vigilanceTest=orange|rouge force un bandeau factice.
     var test = new URLSearchParams(window.location.search).get("vigilanceTest");
     if (test) {
