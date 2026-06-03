@@ -483,7 +483,7 @@ body.is-resizing * {
   display: block !important;
   margin: 0 0 4px !important;
   padding: 6px 10px !important;
-  background: #fff !important;
+  background: #f7f8fa !important;
   border: 1px solid rgba(0, 0, 0, .08) !important;
   border-radius: 8px;
   transition: box-shadow .18s, transform .18s, border-color .18s;
