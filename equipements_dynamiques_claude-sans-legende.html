@@ -334,7 +334,6 @@ function gererEtiquettesRD(map) {
 
     function rafraichirEtiquettesRD() {
         groupeEtiquettesRD.clearLayers();
-        var centre = map.getCenter();
         var limites = map.getBounds();
         map.eachLayer(function (couche) {
             if (!(couche instanceof L.Polyline)) return;
@@ -349,14 +348,19 @@ function gererEtiquettesRD(map) {
                     else points.push(arr[i]);
                 }
             })(couche.getLatLngs());
-            // Point visible le plus proche du centre de la carte
-            var meilleur = null, distMin = Infinity;
-            for (var j = 0; j < points.length; j++) {
-                if (!limites.contains(points[j])) continue;
-                var d = centre.distanceTo(points[j]);
-                if (d < distMin) { distMin = d; meilleur = points[j]; }
+            // Milieu (par longueur cumulée) de la portion visible : évite que
+            // l'étiquette se colle à une extrémité de la route.
+            var visibles = points.filter(function (p) { return limites.contains(p); });
+            if (!visibles.length) return; // route hors écran : pas d'étiquette
+            var longTotale = 0;
+            for (var j = 1; j < visibles.length; j++) {
+                longTotale += visibles[j - 1].distanceTo(visibles[j]);
             }
-            if (!meilleur) return; // route hors écran : pas d'étiquette
+            var cible = longTotale / 2, parcouru = 0, meilleur = visibles[0];
+            for (var k = 1; k < visibles.length; k++) {
+                parcouru += visibles[k - 1].distanceTo(visibles[k]);
+                if (parcouru >= cible) { meilleur = visibles[k]; break; }
+            }
             L.marker(meilleur, {
                 icon: L.divIcon({
                     className: "label-route-rd-wrap",
