@@ -707,6 +707,21 @@ body.is-resizing * {
 .popup-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* Tooltips sans gestion dédiée : largeur du contenu, plafond 400px, wrap au-delà */
+/* Étiquette RD permanente sur les polylignes du Réseau routier */
+.label-route-rd {
+  background: rgba(255, 255, 255, .88);
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #1e293b;
+  box-shadow: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.label-route-rd::before { display: none; }
+
 .leaflet-tooltip:not(.tooltip-import) {
   width: max-content;
   max-width: 400px !important;

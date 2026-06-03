@@ -606,6 +606,15 @@ function CarteLeaflet(conteneurId) {
 			couche.bindTooltip(texteTooltip, optionsTooltip);
 		}
 
+			// Étiquette RD permanente pour le Réseau routier (visible à tous les zooms)
+			if (élément.properties.nomcouche === "Réseau routier") {
+				var rdVal = (élément.properties["RD "] || élément.properties["RD"] || "").trim();
+				if (rdVal) {
+					couche.unbindTooltip();
+					couche.bindTooltip(rdVal, { permanent: true, direction: "center", className: "label-route-rd" });
+				}
+			}
+
 		// Application sur les Markers (Légende)
 		if (élément.properties.icone && élément.properties.legende && (élément.geometry.type == "Point" || élément.geometry.type == "MultiPoint")){
 			var iconeMarker = L.icon({iconUrl: élément.properties.icone, iconSize: [38,38], iconAnchor: [19,39], popupAnchor: [-1,-39]});
