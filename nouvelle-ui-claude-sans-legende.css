@@ -500,7 +500,7 @@ body.is-resizing * {
 .detail-couches-sidebar .leaflet-legend-item i:has(canvas) + span {
   margin-left: 4px;
   position: relative;
-  top: 4px;
+  top: 2px;
 }
 
 /* Survol : effet 3D (ombre portée + léger soulèvement) */
