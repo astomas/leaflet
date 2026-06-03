@@ -706,9 +706,19 @@ body.is-resizing * {
 }
 .popup-scroll::-webkit-scrollbar-track { background: transparent; }
 
-/* Tooltips sans gestion dédiée : largeur du contenu, plafond 400px, wrap au-delà */
-/* Étiquette RD permanente sur les polylignes du Réseau routier */
+/* Étiquette RD du Réseau routier (DivIcon repositionné dynamiquement).
+   Le conteneur fait 0×0 et est positionné par Leaflet sur le point de la route ;
+   le span interne se centre dessus via translate(-50%, -50%). */
+.label-route-rd-wrap {
+  width: 0;
+  height: 0;
+  background: none;
+  border: none;
+}
 .label-route-rd {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
   background: rgba(255, 255, 255, .88);
   border: 1px solid rgba(0, 0, 0, .15);
   border-radius: 4px;
@@ -716,11 +726,8 @@ body.is-resizing * {
   font-size: .72rem;
   font-weight: 700;
   color: #1e293b;
-  box-shadow: none;
   pointer-events: none;
-  white-space: nowrap;
 }
-.label-route-rd::before { display: none; }
 
 .leaflet-tooltip:not(.tooltip-import) {
   width: max-content;

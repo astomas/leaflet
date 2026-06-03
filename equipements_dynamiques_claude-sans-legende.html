@@ -323,6 +323,60 @@ function formaterChampPopup(label, valeurHtml) {
     return vide ? cle : cle + " <span class='popup-val'>" + valeurHtml + "</span>";
 }
 
+// Étiquettes RD du Réseau routier : une seule étiquette par route, repositionnée
+// dynamiquement au point de la route le plus proche du centre du viewport. Toujours
+// visible (quel que soit le zoom / la position de la souris), jamais en surnombre,
+// et affichée/masquée automatiquement selon l'activation de la couche.
+var groupeEtiquettesRD = null;
+function gererEtiquettesRD(map) {
+    if (!map) return;
+    if (!groupeEtiquettesRD) groupeEtiquettesRD = L.layerGroup().addTo(map);
+
+    function rafraichirEtiquettesRD() {
+        groupeEtiquettesRD.clearLayers();
+        var centre = map.getCenter();
+        var limites = map.getBounds();
+        map.eachLayer(function (couche) {
+            if (!(couche instanceof L.Polyline)) return;
+            if (!couche.options || !couche.options.rdLabel) return;
+            // Aplatit les coordonnées (MultiLineString => tableaux imbriqués)
+            var points = [];
+            (function aplatir(arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (Array.isArray(arr[i])) aplatir(arr[i]);
+                    else points.push(arr[i]);
+                }
+            })(couche.getLatLngs());
+            // Point visible le plus proche du centre de la carte
+            var meilleur = null, distMin = Infinity;
+            for (var j = 0; j < points.length; j++) {
+                if (!limites.contains(points[j])) continue;
+                var d = centre.distanceTo(points[j]);
+                if (d < distMin) { distMin = d; meilleur = points[j]; }
+            }
+            if (!meilleur) return; // route hors écran : pas d'étiquette
+            L.marker(meilleur, {
+                icon: L.divIcon({
+                    className: "label-route-rd-wrap",
+                    html: "<span class=\"label-route-rd\">" + couche.options.rdLabel + "</span>",
+                    iconSize: [0, 0]
+                }),
+                interactive: false,
+                keyboard: false
+            }).addTo(groupeEtiquettesRD);
+        });
+    }
+
+    // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage des couches routières.
+    map.on("moveend zoomend", rafraichirEtiquettesRD);
+    map.on("layeradd layerremove", function (e) {
+        if (e.layer instanceof L.Polyline && e.layer.options && e.layer.options.rdLabel) {
+            rafraichirEtiquettesRD();
+        }
+    });
+    rafraichirEtiquettesRD();
+}
+
 function CarteLeaflet(conteneurId) {
     
  	var googleSat = L.gridLayer.googleMutant({
@@ -658,6 +712,10 @@ function CarteLeaflet(conteneurId) {
     
     tabEltsMLSLeg.push(élémentsMLS);
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
+    // Réseau routier : mémorise la valeur RD pour l'étiquette permanente (gererEtiquettesRD)
+    if (élément.properties.nomcouche === "Réseau routier") {
+        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+    }
 }
 
 		if (élément.properties.couleur && élément.properties.legende && élément.geometry.type == "MultiPolygon"){
@@ -2558,6 +2616,7 @@ function main() {
 	carteLeaflet.visuEtInfo(); 
 	carteLeaflet.visuBatiments3D();	
 	carteLeaflet.spiderfyPoints();
+	gererEtiquettesRD(maCarte);
 }
 		
 </script> 
