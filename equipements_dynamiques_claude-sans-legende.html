@@ -339,6 +339,8 @@ function gererEtiquettesRD(map) {
         map.eachLayer(function (couche) {
             if (!(couche instanceof L.Polyline)) return;
             if (!couche.options || !couche.options.rdLabel) return;
+            // Réseau de proximité : étiquette seulement en zoom rapproché (> 14)
+            if (couche.options.rdProximite && map.getZoom() <= 14) return;
             // Aplatit les coordonnées (MultiLineString => tableaux imbriqués)
             var points = [];
             (function aplatir(arr) {
@@ -712,9 +714,11 @@ function CarteLeaflet(conteneurId) {
     
     tabEltsMLSLeg.push(élémentsMLS);
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
-    // Réseau routier : mémorise la valeur RD pour l'étiquette permanente (gererEtiquettesRD)
+    // Réseau routier : mémorise la valeur RD + le niveau pour l'étiquette permanente (gererEtiquettesRD)
     if (élément.properties.nomcouche === "Réseau routier") {
         élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+        var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+        élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
     }
 }
 
