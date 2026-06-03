@@ -507,7 +507,6 @@ body.is-resizing * {
   flex: 1 1 0;
   min-width: 0;
   font-size: .82rem !important;
-  font-weight: 600 !important;
   color: #374151 !important;
   white-space: normal !important;
   line-height: 1.35;
@@ -527,7 +526,6 @@ body.is-resizing * {
 }
 
 .detail-couches-sidebar .leaflet-legend-item-inactive span {
-  font-weight: 400 !important;
   color: #9ca3af !important;
 }
 
