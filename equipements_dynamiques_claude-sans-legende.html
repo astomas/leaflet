@@ -364,7 +364,7 @@ function gererEtiquettesRD(map) {
             L.marker(meilleur, {
                 icon: L.divIcon({
                     className: "label-route-rd-wrap",
-                    html: "<span class=\"label-route-rd\">" + couche.options.rdLabel + "</span>",
+                    html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
                     iconSize: [0, 0]
                 }),
                 interactive: false,
