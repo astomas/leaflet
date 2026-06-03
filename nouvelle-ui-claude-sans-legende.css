@@ -442,21 +442,27 @@ body.is-resizing * {
 }
 
 /* ===== Légende plugin injectée sous chaque couche métier ===== */
-/* Neutralise les styles flottants/carte du plugin dans le contexte sidebar */
+/* Neutralise les styles flottants/carte du plugin dans le contexte sidebar.
+   width:auto + box-sizing border-box pour ne jamais déborder du panneau. */
 .detail-couches-sidebar {
   position: static !important;
   float: none !important;
+  width: auto !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-  padding: 0 0 6px 8px !important;
+  padding: 0 8px 6px 8px !important;
   margin: 0 !important;
 }
 
 /* Les contents sont forcément visibles (pas de repli en sidebar) */
 .detail-couches-sidebar .leaflet-legend-contents {
   display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
   padding: 4px 0 0 0 !important;
 }
 
@@ -465,11 +471,16 @@ body.is-resizing * {
   display: none !important;
 }
 
-/* Colonne flottante du plugin → on retire le float pour qu'elle prenne toute la largeur */
+/* Colonne flottante du plugin → float none + pleine largeur. On neutralise
+   aussi min-width:160px et margin-right:5px (base CSS) qui faisaient déborder
+   la colonne au-delà du panneau (cartes rognées à droite, fond crème visible). */
 .detail-couches-sidebar .leaflet-legend-column {
   float: none !important;
   width: 100% !important;
-  margin-left: 0 !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Bandeau gris "▼ Nom couche" masqué : doublon du nom de couche au-dessus */
