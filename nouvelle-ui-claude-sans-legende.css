@@ -152,6 +152,27 @@ body {
   border-right: 1px solid var(--modern-border);
 }
 
+/* Conteneur scrollable de la sidebar : absorbe le débordement vertical des
+   sections de données (Fonds de plan, Données métier). La section « Outils
+   carte » reste HORS de ce conteneur (cf. setupSidebarScroll dans le JS) car
+   ses fenêtres plugins doivent déborder en surimpression sur la carte, ce qui
+   est incompatible avec un parent en overflow:auto. */
+.modern-sidebar-scroll {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, .22) transparent;
+}
+
+.modern-sidebar-scroll::-webkit-scrollbar { width: 8px; }
+.modern-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, .22);
+  border-radius: 4px;
+}
+.modern-sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+
 .modern-sidebar-resizer {
   position: relative;
   z-index: 10;

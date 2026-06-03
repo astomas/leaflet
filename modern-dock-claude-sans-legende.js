@@ -438,10 +438,39 @@
   }
 
   // =========================================================================
+  // Scroll vertical de la sidebar
+  // =========================================================================
+
+  // Enveloppe les sections de données (Fonds de plan, Données métier) dans un
+  // conteneur scrollable, afin que le débordement vertical y soit absorbé. La
+  // section « Outils carte » reste épinglée hors de ce conteneur : ses fenêtres
+  // plugins doivent déborder en surimpression sur la carte, ce qui est
+  // incompatible avec un parent en overflow:auto. Idempotente.
+  function setupSidebarScroll() {
+    var sidebar = document.querySelector(".modern-sidebar");
+    if (!sidebar) return;
+    if (sidebar.querySelector(":scope > .modern-sidebar-scroll")) return;
+
+    var tools = sidebar.querySelector(":scope > .modern-family-tools");
+
+    var scroll = document.createElement("div");
+    scroll.className = "modern-sidebar-scroll";
+
+    // Déplace toutes les sections SAUF « Outils carte » dans le conteneur
+    sidebar.querySelectorAll(":scope > .modern-family:not(.modern-family-tools)")
+      .forEach(function (fam) { scroll.appendChild(fam); });
+
+    // Insère le conteneur scrollable avant la section Outils (qui reste épinglée)
+    if (tools) sidebar.insertBefore(scroll, tools);
+    else sidebar.appendChild(scroll);
+  }
+
+  // =========================================================================
   // Initialisation au chargement du DOM
   // =========================================================================
 
   document.addEventListener("DOMContentLoaded", function () {
+    setupSidebarScroll();
     setupSidebarResizer();
     setupTitre();
     setupAccordion();
