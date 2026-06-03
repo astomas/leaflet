@@ -508,6 +508,7 @@ body.is-resizing * {
 }
 
 .detail-couches-sidebar .leaflet-legend-item-inactive span {
+  font-weight: 400 !important;
   color: #9ca3af !important;
 }
 
