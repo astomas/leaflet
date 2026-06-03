@@ -466,6 +466,106 @@
   }
 
   // =========================================================================
+  // Vigilance météo France (Nîmes / Gard) — bandeau d'alerte conditionnel
+  // =========================================================================
+
+  // N'affiche un bandeau QUE lorsqu'une vigilance >= orange est en cours sur le
+  // Gard (jour J), et UNIQUEMENT sur la carte des régimes de priorité. Donnée
+  // libre via Opendatasoft (pas de clé, CORS ouvert) ; bascule possible vers
+  // l'API officielle Météo France plus tard sans toucher au reste.
+  var VIGILANCE_URL =
+    "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/" +
+    "weatherref-france-vigilance-meteo-departement/records" +
+    "?where=domain_id%3D%2230%22%20AND%20echeance%3D%22J%22&limit=30";
+  var VIGILANCE_SEUIL = 3;                        // 3 = orange, 4 = rouge
+  var VIGILANCE_EXCLUS = ["avalanches", "vagues-submersion"];
+  var VIGILANCE_REFRESH_MS = 30 * 60 * 1000;
+  var VIGILANCE_NIVEAUX = {
+    3: { bg: "#F07D00", fg: "#2b1700", libelle: "ORANGE" },
+    4: { bg: "#E2001A", fg: "#ffffff", libelle: "ROUGE" }
+  };
+  var VIGILANCE_PHENOMENES = {
+    "vent": "Vent violent",
+    "pluie-inondation": "Pluie-inondation",
+    "orages": "Orages",
+    "inondation": "Inondation",
+    "crues": "Crues",
+    "neige": "Neige-verglas",
+    "canicule": "Canicule",
+    "grand-froid": "Grand froid"
+  };
+
+  function libellePhenomene(p) {
+    return VIGILANCE_PHENOMENES[p] || (p ? p.charAt(0).toUpperCase() + p.slice(1) : "");
+  }
+
+  // Construit / met à jour le bandeau dans l'en-tête. niveau null => le retire.
+  function afficherBandeauVigilance(niveau, phenomenes) {
+    var hote = document.querySelector(".modern-header-titles");
+    if (!hote) return;
+    var bandeau = hote.querySelector(".modern-vigilance-banner");
+
+    if (!niveau || niveau < VIGILANCE_SEUIL) {                 // RAS : pas de bandeau
+      if (bandeau) bandeau.remove();
+      return;
+    }
+
+    var style = VIGILANCE_NIVEAUX[niveau] || VIGILANCE_NIVEAUX[3];
+    if (!bandeau) {
+      bandeau = document.createElement("div");
+      bandeau.className = "modern-vigilance-banner";
+      bandeau.style.cssText =
+        "display:inline-flex;align-items:center;gap:6px;margin-top:4px;" +
+        "padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:700;" +
+        "line-height:1.2;box-shadow:0 2px 6px rgba(0,0,0,.18);";
+      hote.appendChild(bandeau);
+    }
+    bandeau.style.background = style.bg;
+    bandeau.style.color = style.fg;
+    var liste = phenomenes.map(libellePhenomene).filter(Boolean).join(", ");
+    bandeau.innerHTML =
+      "<span aria-hidden=\"true\">⚠️</span>" +
+      "<span>Vigilance " + style.libelle +
+      (liste ? " — " + liste : "") + "</span>";
+    bandeau.setAttribute("title", "Vigilance météo France en cours sur le Gard (Nîmes)");
+  }
+
+  // Agrège les enregistrements (un par phénomène) en un niveau max + la liste
+  // des phénomènes atteignant le seuil.
+  function traiterVigilance(resultats) {
+    var max = 0;
+    var phenos = [];
+    (resultats || []).forEach(function (r) {
+      var p = (r.phenomenon || "").toLowerCase();
+      if (VIGILANCE_EXCLUS.indexOf(p) !== -1) return;
+      var c = Number(r.color_id) || 0;
+      if (c > max) max = c;
+      if (c >= VIGILANCE_SEUIL) phenos.push(p);
+    });
+    afficherBandeauVigilance(max, phenos);
+  }
+
+  function chargerVigilance() {
+    // Mode test : ?vigilanceTest=orange|rouge force un bandeau factice.
+    var test = new URLSearchParams(window.location.search).get("vigilanceTest");
+    if (test) {
+      var n = test === "rouge" ? 4 : 3;
+      afficherBandeauVigilance(n, ["orages", "pluie-inondation"]);
+      return;
+    }
+    fetch(VIGILANCE_URL, { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (data) { traiterVigilance(data && data.results); })
+      .catch(function (e) { console.warn("Vigilance indisponible:", e); });
+  }
+
+  function setupVigilanceNimes() {
+    if (typeof valeurTitre1 === "undefined" || !/priorit/i.test(valeurTitre1)) return;
+    chargerVigilance();
+    window.setInterval(chargerVigilance, VIGILANCE_REFRESH_MS);
+  }
+
+  // =========================================================================
   // Initialisation au chargement du DOM
   // =========================================================================
 
@@ -475,6 +575,7 @@
     setupTitre();
     setupAccordion();
     setupBadgeMetier();
+    setupVigilanceNimes();
   });
 
 })();

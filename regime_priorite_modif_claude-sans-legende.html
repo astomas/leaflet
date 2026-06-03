@@ -324,6 +324,73 @@ function formaterChampPopup(label, valeurHtml) {
     return vide ? cle : cle + " <span class='popup-val'>" + valeurHtml + "</span>";
 }
 
+// Étiquettes RD du Réseau routier : une seule étiquette par route, repositionnée
+// dynamiquement au point de la route le plus proche du centre du viewport. Toujours
+// visible (quel que soit le zoom / la position de la souris), jamais en surnombre,
+// et affichée/masquée automatiquement selon l'activation de la couche.
+var groupeEtiquettesRD = null;
+function gererEtiquettesRD(map) {
+    if (!map) return;
+    // Pane dédié (z-index 450) : au-dessus des lignes de route (overlayPane 400),
+    // en-dessous des marqueurs (markerPane 600) → les icônes de points passent devant.
+    if (!map.getPane("etiquettesRD")) {
+        map.createPane("etiquettesRD");
+        map.getPane("etiquettesRD").style.zIndex = 450;
+    }
+    if (!groupeEtiquettesRD) groupeEtiquettesRD = L.layerGroup().addTo(map);
+
+    function rafraichirEtiquettesRD() {
+        groupeEtiquettesRD.clearLayers();
+        var limites = map.getBounds();
+        map.eachLayer(function (couche) {
+            if (!(couche instanceof L.Polyline)) return;
+            if (!couche.options || !couche.options.rdLabel) return;
+            // Réseau de proximité : étiquette seulement en zoom rapproché (> 11.8)
+            if (couche.options.rdProximite && map.getZoom() <= 11.8) return;
+            // Aplatit les coordonnées (MultiLineString => tableaux imbriqués)
+            var points = [];
+            (function aplatir(arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (Array.isArray(arr[i])) aplatir(arr[i]);
+                    else points.push(arr[i]);
+                }
+            })(couche.getLatLngs());
+            // Milieu (par longueur cumulée) de la portion visible : évite que
+            // l'étiquette se colle à une extrémité de la route.
+            var visibles = points.filter(function (p) { return limites.contains(p); });
+            if (!visibles.length) return; // route hors écran : pas d'étiquette
+            var longTotale = 0;
+            for (var j = 1; j < visibles.length; j++) {
+                longTotale += visibles[j - 1].distanceTo(visibles[j]);
+            }
+            var cible = longTotale / 2, parcouru = 0, meilleur = visibles[0];
+            for (var k = 1; k < visibles.length; k++) {
+                parcouru += visibles[k - 1].distanceTo(visibles[k]);
+                if (parcouru >= cible) { meilleur = visibles[k]; break; }
+            }
+            L.marker(meilleur, {
+                icon: L.divIcon({
+                    className: "label-route-rd-wrap",
+                    html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
+                    iconSize: [0, 0]
+                }),
+                pane: "etiquettesRD",
+                interactive: false,
+                keyboard: false
+            }).addTo(groupeEtiquettesRD);
+        });
+    }
+
+    // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage des couches routières.
+    map.on("moveend zoomend", rafraichirEtiquettesRD);
+    map.on("layeradd layerremove", function (e) {
+        if (e.layer instanceof L.Polyline && e.layer.options && e.layer.options.rdLabel) {
+            rafraichirEtiquettesRD();
+        }
+    });
+    rafraichirEtiquettesRD();
+}
+
 function CarteLeaflet(conteneurId) {
     
  	var googleSat = L.gridLayer.googleMutant({
@@ -659,7 +726,18 @@ function CarteLeaflet(conteneurId) {
     });
     
     tabEltsMLSLeg.push(élémentsMLS);
-    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
+    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
+    // Réseau routier : mémorise la valeur RD + le niveau pour l'étiquette permanente (gererEtiquettesRD)
+    if (élément.properties.nomcouche === "Réseau routier") {
+        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+        var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+        élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
+        // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place).
+        // Pour le réactiver, décommenter la ligne ci-dessous :
+        //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+    } else {
+        élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+    }
 }
 
 		if (élément.properties.couleur && élément.properties.legende && élément.geometry.type == "MultiPolygon"){
@@ -2562,6 +2640,7 @@ function main() {
 	carteLeaflet.visuEtInfo(); 
 	carteLeaflet.visuBatiments3D();	
 	carteLeaflet.spiderfyPoints();
+	gererEtiquettesRD(maCarte);
 }
 		
 </script> 
