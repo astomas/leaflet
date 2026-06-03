@@ -266,7 +266,7 @@
   // Injecte le(s) nom(s) de couche issus de nomVues dans le badge <em>
   // de la section "Données métier", évitant de le coder en dur dans le HTML.
   function setupBadgeMetier() {
-    var badge = document.querySelector(".modern-family-business .modern-family-title em");
+    var badge = document.querySelector(".modern-family-metier .modern-family-title em");
     if (!badge) return;
     if (typeof nomVues !== "undefined" && nomVues.length) {
       badge.textContent = nomVues.length + (nomVues.length > 1 ? " couches" : " couche");
@@ -321,7 +321,7 @@
     if (badge && nb) badge.textContent = nb + (nb > 1 ? " fonds" : " fond");
 
     // Place la section "Fonds de plan" juste sous "Données métier"
-    var business = document.querySelector(".modern-family-business");
+    var business = document.querySelector(".modern-family-metier");
     if (business && business.parentNode) business.after(section);
 
     return true;
@@ -334,10 +334,10 @@
   // =========================================================================
 
   // API publique : relocalise le bloc .leaflet-control-layers-overlays dans la
-  // section .modern-family-business. Idempotente (ne déplace qu'une fois) et
+  // section .modern-family-metier. Idempotente (ne déplace qu'une fois) et
   // dotée d'un filet de retry si le contrôle n'est pas encore prêt.
   window.modernDockDonneesMetier = function (essaisRestants) {
-    var section  = document.querySelector(".modern-family-business");
+    var section  = document.querySelector(".modern-family-metier");
     var overlays = document.querySelector(".leaflet-control-layers-overlays");
 
     // Contrôle pas encore créé : on retente quelques fois
