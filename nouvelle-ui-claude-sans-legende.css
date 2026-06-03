@@ -442,100 +442,66 @@ body.is-resizing * {
 }
 
 /* ===== Légende plugin injectée sous chaque couche métier ===== */
-/* Neutralise les styles flottants/carte du plugin dans le contexte sidebar.
-   width:auto + box-sizing border-box pour ne jamais déborder du panneau. */
 .detail-couches-sidebar {
   position: static !important;
   float: none !important;
-  width: auto !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-  padding: 0 8px 6px 8px !important;
+  padding: 4px 8px 6px !important;
   margin: 0 !important;
 }
 
-/* Les contents sont forcément visibles (pas de repli en sidebar) */
 .detail-couches-sidebar .leaflet-legend-contents {
   display: block !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  padding: 4px 0 0 0 !important;
+  padding: 0 !important;
 }
 
-/* Bouton toggle (expand/collapse) inutile en sidebar : masqué */
 .detail-couches-sidebar .leaflet-legend-toggle {
   display: none !important;
 }
 
-/* Colonne flottante du plugin → float none + pleine largeur. On neutralise
-   aussi min-width:160px et margin-right:5px (base CSS) qui faisaient déborder
-   la colonne au-delà du panneau (cartes rognées à droite, fond crème visible). */
 .detail-couches-sidebar .leaflet-legend-column {
   float: none !important;
-  width: 100% !important;
+  width: auto !important;
   min-width: 0 !important;
-  box-sizing: border-box !important;
   margin: 0 !important;
-  padding: 0 !important;
 }
 
-/* Bandeau gris "▼ Nom couche" masqué : doublon du nom de couche au-dessus */
 .detail-couches-sidebar .leaflet-legend-group-header {
   display: none !important;
 }
 
-/* Contenu de groupe : supprime l'indentation/padding liés au header masqué */
 .detail-couches-sidebar .leaflet-legend-group-content {
   padding: 0 !important;
 }
 
-/* Chaque item de légende = une carte blanche pleine largeur, plate au repos,
-   avec effet 3D (ombre + soulèvement) seulement au survol. */
+/* Étiquette blanche simple : display block remplace display table,
+   l'icône et le texte coulent naturellement inline. */
 .detail-couches-sidebar .leaflet-legend-item {
-  display: flex !important;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0 0 6px !important;
-  padding: 12px 14px !important;
-  background: #fff !important;
-  border: 1px solid rgba(0, 0, 0, .07) !important;
-  border-radius: 10px;
-  transition: box-shadow .18s, transform .18s, border-color .18s;
-}
-
-/* Icône symbole (canvas/img) : flex-shrink 0 pour éviter l'écrasement */
-.detail-couches-sidebar .leaflet-legend-item i {
-  flex: 0 0 auto;
-  display: inline-flex !important;
-  align-items: center;
-  vertical-align: middle;
-}
-
-/* Label : remplit l'espace restant, display normal (pas table-cell) */
-.detail-couches-sidebar .leaflet-legend-item span {
   display: block !important;
-  flex: 1 1 0;
-  min-width: 0;
+  margin: 0 0 6px !important;
+  padding: 10px 12px !important;
+  background: #fff !important;
+  border: 1px solid rgba(0, 0, 0, .08) !important;
+  border-radius: 8px;
+  transition: box-shadow .18s, transform .18s;
+}
+
+.detail-couches-sidebar .leaflet-legend-item span {
+  display: inline !important;
   font-size: .82rem !important;
   color: #374151 !important;
   white-space: normal !important;
-  line-height: 1.35;
+  vertical-align: middle;
 }
 
-/* Survol : effet 3D (ombre portée + léger soulèvement) */
 .detail-couches-sidebar .leaflet-legend-item:hover {
-  border-color: #fed7aa !important;
-  box-shadow: 0 5px 14px rgba(0, 0, 0, .13);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
   transform: translateY(-2px);
 }
 
-/* Item inactif : fond très léger + texte encore plus atténué */
 .detail-couches-sidebar .leaflet-legend-item-inactive {
   background: #f9fafb !important;
   border-color: rgba(0, 0, 0, .05) !important;
