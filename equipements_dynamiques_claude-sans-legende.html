@@ -717,12 +717,17 @@ function CarteLeaflet(conteneurId) {
     });
     
     tabEltsMLSLeg.push(élémentsMLS);
-    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
+    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // Réseau routier : mémorise la valeur RD + le niveau pour l'étiquette permanente (gererEtiquettesRD)
     if (élément.properties.nomcouche === "Réseau routier") {
         élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
         var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
+        // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place).
+        // Pour le réactiver, décommenter la ligne ci-dessous :
+        //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+    } else {
+        élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
 }
 
