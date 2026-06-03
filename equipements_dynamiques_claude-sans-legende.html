@@ -330,6 +330,12 @@ function formaterChampPopup(label, valeurHtml) {
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
+    // Pane dédié (z-index 450) : au-dessus des lignes de route (overlayPane 400),
+    // en-dessous des marqueurs (markerPane 600) → les icônes de points passent devant.
+    if (!map.getPane("etiquettesRD")) {
+        map.createPane("etiquettesRD");
+        map.getPane("etiquettesRD").style.zIndex = 450;
+    }
     if (!groupeEtiquettesRD) groupeEtiquettesRD = L.layerGroup().addTo(map);
 
     function rafraichirEtiquettesRD() {
@@ -367,6 +373,7 @@ function gererEtiquettesRD(map) {
                     html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
                     iconSize: [0, 0]
                 }),
+                pane: "etiquettesRD",
                 interactive: false,
                 keyboard: false
             }).addTo(groupeEtiquettesRD);
