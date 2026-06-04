@@ -75,7 +75,7 @@ body {
 
 .modern-header-logos img,
 .modern-header-logos .leaflet-control-logos-img {
-  height: 46px !important;
+  height: 55px !important;
   width: auto !important;
   cursor: pointer;
   transition: transform .15s, opacity .15s;
@@ -92,7 +92,7 @@ body {
 }
 
 .modern-header h1 {
-  margin: 0;
+  margin-left: 10px;
   font-size: 1.65rem;
   line-height: 1.1;
   font-weight: 800;
@@ -770,7 +770,7 @@ body.is-resizing * {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
   padding: 8px 0 0 0;
   background: transparent;
   border: 0;
