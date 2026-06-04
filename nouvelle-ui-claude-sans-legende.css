@@ -770,7 +770,7 @@ body.is-resizing * {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 7px;
+  gap: 9px;
   padding: 8px 0 0 0;
   background: transparent;
   border: 0;
