@@ -36,7 +36,7 @@ body {
 
 .modern-header {
   min-height: 74px;
-  padding: 14px 24px;
+  padding: 14px;
   display: flex;
   align-items: center;
   gap: 18px;
