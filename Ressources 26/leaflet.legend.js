@@ -253,12 +253,16 @@
                 for (var g = 0; g < groupesOrdonnes.length; g++) {*/
 
 				// Répartition des groupes sur N colonnes (1 ou 2)
+				// + coupe simple du premier groupe > 20 items en mode 2 colonnes.
 				var colSize = Math.ceil(groupesOrdonnes.length / this.options.column);
 				var legendContainer;
+				var nbColonnesCreees = 0;
+				var splitGroupeDejaFait = false;
 
 				for (var g = 0; g < groupesOrdonnes.length; g++) {
-					if (g % colSize === 0) {
+					if (g % colSize === 0 && nbColonnesCreees < this.options.column) {
 						legendContainer = L.DomUtil.create("div", "leaflet-legend-column", this._contents);
+						nbColonnesCreees++;
 					}
 					
                     var nomGroupe = groupesOrdonnes[g];
@@ -275,10 +279,59 @@
                     // Conteneur des items, toujours déplié à l'ouverture (style Lizmap)
                     var groupeContenu = L.DomUtil.create("div", "leaflet-legend-group-content", legendContainer);
 
-                    // Ajouter chaque item de légende dans ce conteneur
-                    for (var j = 0; j < itemsDuGroupe.length; j++) {
-                        this._buildLegendItems(groupeContenu, itemsDuGroupe[j]);
-                    }
+					// Couper un gros groupe sur 2 colonnes si plus de 20 éléments
+					if (
+						this.options.column === 2 &&
+						itemsDuGroupe.length > 20 &&
+						nbColonnesCreees < 2 &&
+						!splitGroupeDejaFait
+					) {
+						// 20 premiers éléments dans la colonne actuelle
+						for (var j = 0; j < 20; j++) {
+							this._buildLegendItems(groupeContenu, itemsDuGroupe[j]);
+						}
+
+						// Nouvelle colonne pour la suite du groupe
+						legendContainer = L.DomUtil.create("div", "leaflet-legend-column", this._contents);
+						nbColonnesCreees++;
+						splitGroupeDejaFait = true;
+
+						var headerDivSuite = L.DomUtil.create("div", "leaflet-legend-group-header", legendContainer);
+
+						var flecheSuite = L.DomUtil.create("span", "leaflet-legend-group-arrow", headerDivSuite);
+						flecheSuite.innerText = "▼";
+
+						var titreGroupeSuite = L.DomUtil.create("span", "leaflet-legend-group-title", headerDivSuite);
+						titreGroupeSuite.innerText = nomGroupe + " - suite";
+
+						var groupeContenuSuite = L.DomUtil.create("div", "leaflet-legend-group-content", legendContainer);
+
+						// Le reste des éléments dans la 2e colonne
+						for (var j = 20; j < itemsDuGroupe.length; j++) {
+							this._buildLegendItems(groupeContenuSuite, itemsDuGroupe[j]);
+						}
+
+						// Repli/dépli de la suite
+						(function(contenu, flecheRef) {
+							L.DomEvent.on(headerDivSuite, "click", function(e) {
+								L.DomEvent.stopPropagation(e);
+
+								if (contenu.classList.contains("leaflet-legend-group-collapsed")) {
+									contenu.classList.remove("leaflet-legend-group-collapsed");
+									flecheRef.innerText = "▼";
+								} else {
+									contenu.classList.add("leaflet-legend-group-collapsed");
+									flecheRef.innerText = "▶";
+								}
+							});
+						})(groupeContenuSuite, flecheSuite);
+
+					} else {
+						// Cas normal
+						for (var j = 0; j < itemsDuGroupe.length; j++) {
+							this._buildLegendItems(groupeContenu, itemsDuGroupe[j]);
+						}
+					}
 
                     // Événement clic sur le header pour replier/déplier
                     // Closure nécessaire pour capturer les bonnes références dans la boucle
