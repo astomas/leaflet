@@ -946,8 +946,8 @@ body.is-resizing * {
 /* Isochrone : on déplace le panneau complet, pas son form */
 .modern-tools-dock div[id^="GPisochronPanel-"] {
   position: absolute !important;
-  left: 20px !important;
-  top: 38px !important;
+  left: 35px !important;
+  top: -263px !important;
   z-index: 130000 !important;
   margin: 0 !important;
   transform: none !important;
