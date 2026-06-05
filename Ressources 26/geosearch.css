@@ -99,11 +99,12 @@
 
 .leaflet-geosearch-button form {
   max-width: 350px;
+  width:130px;
 }
 
 .leaflet-control-geosearch form input {
   min-width: 200px;
-  width: 100%;
+  width: 130px;
   outline: none;
   margin: 0;
   padding: 0;
@@ -236,14 +237,14 @@
 }
 
 /* modif cd 30 */
-/* Supprime la loupe CSS d'origine (uniquement hors états pending/error) */
+/* Supprime la loupe CSS d'origine (uniquement hors Ã©tats pending/error) */
 .leaflet-control-geosearch:not(.pending):not(.error) a.leaflet-bar-part::before,
 .leaflet-control-geosearch:not(.pending):not(.error) a.leaflet-bar-part::after {
   content: none !important;
   border: 0 !important;
 }
 
-/* Ajoute l'icône Font Awesome crosshair*/
+/* Ajoute l'icÃ´ne Font Awesome crosshair*/
 .leaflet-control-geosearch:not(.pending):not(.error) a.leaflet-bar-part {
   position: relative;
 }
