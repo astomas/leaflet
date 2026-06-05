@@ -341,7 +341,7 @@ body.is-resizing * {
 }
 
 .modern-fonds-plan label > span:hover {
-  background: #ffcba5;
+  background: #ffdac0;
 }
 
 /* Pastille active : fond sélectionné, rempli de la couleur du bloc */
