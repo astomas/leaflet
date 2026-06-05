@@ -144,7 +144,7 @@ body {
   min-height: 0;
   height: 100%;
   box-sizing: border-box;
-  padding: 14px 12px 5px 10px;
+  padding: 5px 3px 3px 3px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -449,7 +449,7 @@ body.is-resizing * {
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-  padding: 4px 8px 6px !important;
+  padding: 4px 8px 0px !important;
   margin: 0 !important;
 }
 
