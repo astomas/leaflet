@@ -389,7 +389,7 @@ body.is-resizing * {
 }
 
 .modern-donnees-metier label > span:hover {
-  background: #ffd56b;
+  background: #ffd975;
 }
 
 /* Case native masquée mais conservée dans le DOM : le clic sur le label
