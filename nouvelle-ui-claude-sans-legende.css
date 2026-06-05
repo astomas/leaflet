@@ -303,7 +303,7 @@ body.is-resizing * {
   margin: 0;
   padding: 0 12px 12px;
   color: var(--modern-muted);
-  font-size: .82rem;
+  font-size: .75rem;
   line-height: 1.45;
 }
 
@@ -482,7 +482,7 @@ body.is-resizing * {
 .detail-couches-sidebar .leaflet-legend-item {
   display: block !important;
   margin: 0 0 4px !important;
-  padding: 6px 10px !important;
+  padding: 3px 3px !important;
   background: #f7f8fa !important;
   border: 1px solid rgba(0, 0, 0, .08) !important;
   border-radius: 8px;
@@ -491,7 +491,7 @@ body.is-resizing * {
 
 .detail-couches-sidebar .leaflet-legend-item span {
   display: inline !important;
-  font-size: .82rem !important;
+  font-size: .75rem !important;
   color: #374151 !important;
   white-space: normal !important;
   vertical-align: middle;
