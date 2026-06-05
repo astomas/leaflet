@@ -372,6 +372,7 @@ body.is-resizing * {
   display: block;
   margin: 0;
   font-weight: 500;
+  background: #fbe7c8;
 }
 
 /* Ligne complète cliquable (le clic sur le label bascule la couche) */
@@ -388,7 +389,7 @@ body.is-resizing * {
 }
 
 .modern-donnees-metier label > span:hover {
-  background: #fbe7c8;
+  background: #ffd56b;
 }
 
 /* Case native masquée mais conservée dans le DOM : le clic sur le label
