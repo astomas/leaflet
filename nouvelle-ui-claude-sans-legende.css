@@ -933,8 +933,8 @@ body.is-resizing * {
 .modern-tools-dock .leaflet-control .menu,
 .modern-tools-dock .leaflet-control .panel {
   position: absolute !important;
-  left: 20px !important;
-  top: 38px !important;
+  left: 47px !important;
+  top: -4px !important;
   z-index: 100000 !important;
   margin: 0 !important;
   transform: none !important;
