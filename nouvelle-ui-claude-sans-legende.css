@@ -20,7 +20,7 @@ body {
   overflow: hidden !important;
   font-family: "Segoe UI", Arial, Helvetica, sans-serif;
   color: var(--modern-text);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  linear-gradient(135deg, #007079 0%, rgb(227, 227, 227) 100%)
 }
 
 .modern-carte-shell {
