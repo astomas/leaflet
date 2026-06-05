@@ -540,15 +540,9 @@ body.is-resizing * {
 // sur 3 colonnes et 2 lignes
 .modern-tools-dock {
   display: grid;
-  /*grid-template-columns: 1fr 1fr;*/
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
   padding: 0 10px 12px;
-}
-
-.modern-tools-dock > * {
-  width: 100%;
-  min-width: 0;
 }
 
 .modern-tool-button {
