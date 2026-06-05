@@ -423,7 +423,7 @@ body.is-resizing * {
 .detail-couches-toggle {
   flex: 0 0 auto;
   width: 18px;
-  font-size: .9rem;
+  font-size: 1.4rem;
   line-height: 1;
   color: var(--modern-tools);
   cursor: pointer;
