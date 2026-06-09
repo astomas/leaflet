@@ -431,6 +431,7 @@
       chevron.addEventListener("click", function (event) {
         event.preventDefault();
         event.stopPropagation();
+        container.removeAttribute("data-collapsed-init"); // l'utilisateur prend la main
         var replie = container.classList.toggle("collapsed");
         chevron.classList.toggle("collapsed", replie);
       });
@@ -476,11 +477,19 @@
       };
 
       // Clic œil : tout allumer si rien d'actif, tout éteindre sinon.
+      // Si la couche était repliée à l'init (data-collapsed-init), on la déplie
+      // à la première activation — une seule fois, le flag est ensuite retiré.
       // preventDefault neutralise la case native (pas de doublon System A).
       label.addEventListener("click", function (event) {
         if (event.target.closest(".detail-couches-toggle")) return;
         event.preventDefault();
-        basculerTousItems(!unItemActif());
+        var doitActiver = !unItemActif();
+        basculerTousItems(doitActiver);
+        if (doitActiver && container.hasAttribute("data-collapsed-init")) {
+          container.removeAttribute("data-collapsed-init");
+          container.classList.remove("collapsed");
+          chevron.classList.remove("collapsed");
+        }
       });
 
       // Clic item individuel : le plugin bascule layers + classe ; on recolore
@@ -492,8 +501,10 @@
       });
 
       // Alignement initial de l'œil + repli si aucun item actif à l'ouverture.
+      // Le flag data-collapsed-init permet au clic œil de déplier une seule fois.
       majOeil();
       if (!unItemActif()) {
+        container.setAttribute("data-collapsed-init", "");
         container.classList.add("collapsed");
         chevron.classList.add("collapsed");
       }
