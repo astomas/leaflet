@@ -491,8 +491,12 @@
         });
       });
 
-      // Alignement initial de l'œil sur ce qui est réellement sur la carte.
+      // Alignement initial de l'œil + repli si aucun item actif à l'ouverture.
       majOeil();
+      if (!unItemActif()) {
+        container.classList.add("collapsed");
+        chevron.classList.add("collapsed");
+      }
     });
   }
 
