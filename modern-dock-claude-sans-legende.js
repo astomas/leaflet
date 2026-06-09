@@ -434,6 +434,71 @@
         var replie = container.classList.toggle("collapsed");
         chevron.classList.toggle("collapsed", replie);
       });
+
+      // === Œil = maître de visibilité de la couche, piloté sur System B ===
+      // Ce qui est réellement affiché provient des layerGroups de légende
+      // (tabCouchesLGLeg, System B), pas de la copie geoJson de la case
+      // (tabCoucheMG, System A, invisible par défaut : strCaseACocher="0").
+      // On repointe donc l'œil sur System B et on neutralise la bascule native
+      // (qui ne ferait qu'ajouter un doublon superposé). L'œil est vert dès
+      // qu'au moins un item de légende est actif.
+      var caseOeil = label.querySelector('input[type="checkbox"]');
+
+      // Paires {div légende ↔ layerGroup} : le plugin crée un div cliquable par
+      // item doté de layers, dans le même ordre que les items filtrés.
+      var itemsAvecLayers = items.filter(function (it) { return it.layers; });
+      var divsItems = container.querySelectorAll(".leaflet-legend-item-clickable");
+      var pairesLeg = [];
+      for (var p = 0; p < divsItems.length && p < itemsAvecLayers.length; p++) {
+        pairesLeg.push({ div: divsItems[p], layers: itemsAvecLayers[p].layers });
+      }
+
+      var unItemActif = function () {
+        return pairesLeg.some(function (pr) {
+          return !pr.div.classList.contains("leaflet-legend-item-inactive");
+        });
+      };
+
+      // Œil vert si au moins un item actif (case cochée = œil vert via CSS).
+      var majOeil = function () {
+        if (caseOeil) caseOeil.checked = unItemActif();
+      };
+
+      // Bascule TOUS les items de la couche d'un coup (même effet que le plugin
+      // item par item : classe inactive + add/removeLayer du layerGroup).
+      var basculerTousItems = function (actif) {
+        pairesLeg.forEach(function (pr) {
+          var eteint = pr.div.classList.contains("leaflet-legend-item-inactive");
+          if (actif && eteint) {
+            pr.div.classList.remove("leaflet-legend-item-inactive");
+            map.addLayer(pr.layers);
+          } else if (!actif && !eteint) {
+            pr.div.classList.add("leaflet-legend-item-inactive");
+            map.removeLayer(pr.layers);
+          }
+        });
+      };
+
+      // Clic sur l'œil / la barre de couche : si quelque chose est actif → tout
+      // éteindre, sinon tout allumer. preventDefault neutralise la case native
+      // (pas de doublon System A ajouté sur la carte).
+      label.addEventListener("click", function (event) {
+        if (event.target.closest(".detail-couches-toggle")) return; // chevron
+        event.preventDefault();
+        basculerTousItems(!unItemActif());
+        majOeil();
+      });
+
+      // Clic sur un item individuel : le plugin le bascule (System B) ; on
+      // recolore ensuite l'œil selon qu'il reste ou non un item actif.
+      pairesLeg.forEach(function (pr) {
+        pr.div.addEventListener("click", function () {
+          setTimeout(majOeil, 0);
+        });
+      });
+
+      // État initial de l'œil aligné sur ce qui est réellement visible.
+      majOeil();
     });
   }
 
