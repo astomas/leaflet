@@ -240,7 +240,7 @@ body.is-resizing * {
   box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 }
 
-.modern-family-fonds-plan {--family-accent: #ff9b52;background: #fee9da;}
+.modern-family-fonds-plan {--family-accent: #ff9b52;background: #ebebeb;}
 .modern-family-metier { --family-accent: var(--modern-warning); background: #fdf4e7; }
 .modern-family-tools { --family-accent: var(--modern-tools); }
 
@@ -340,12 +340,12 @@ body.is-resizing * {
   transition: background .15s, color .15s, border-color .15s;
 }
 
-.modern-fonds-plan label > span:hover {
+.modern- label > span:hover {
   background: #ffdac0;
 }
 
 /* Pastille active : fond sélectionné, rempli de la couleur du bloc */
-.modern-fonds-plan label > span:has(input:checked) {
+.modern- label > span:has(input:checked) {
   background: var(--family-accent, #ff9b52);
   border-color: var(--family-accent, #ff9b52);
   color: #fff;
