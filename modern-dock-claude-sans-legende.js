@@ -385,6 +385,11 @@
     var map  = window.maCarte;
     if (!data || !map || typeof L === "undefined" || !L.control || !L.control.Legend) return;
 
+    // Registre nomCouche -> { container, paires:[{div, layers}] } utilisé pour
+    // synchroniser l'état des items légende (System B) avec la case de la couche
+    // entière (System A) — voir synchroniserCouchesEtLegende().
+    var registre = {};
+
     overlays.querySelectorAll("label").forEach(function (label) {
       var span = label.querySelector("span");
       if (!span) return;
@@ -416,6 +421,18 @@
 
       label.insertAdjacentElement("afterend", container);
 
+      // Apparie chaque item légende cliquable (= doté de layers, System B) à son
+      // L.layerGroup. Le plugin crée les divs dans l'ordre des items ; les items
+      // sans layers (non cliquables) sont sautés des deux côtés, l'ordre est donc
+      // préservé. Sert à réappliquer l'état individuel après recoche de la couche.
+      var itemsLayers = items.filter(function (it) { return it.layers; });
+      var divsClic = container.querySelectorAll(".leaflet-legend-item-clickable");
+      var paires = [];
+      for (var k = 0; k < divsClic.length && k < itemsLayers.length; k++) {
+        paires.push({ div: divsClic[k], layers: itemsLayers[k].layers });
+      }
+      registre[nomCouche] = { container: container, paires: paires };
+
       // Chevron de repli/dépli du détail légende, ajouté à gauche du libellé.
       // Le clic est neutralisé (preventDefault/stopPropagation) pour ne pas
       // basculer la visibilité de la couche (action de la case/œil).
@@ -433,6 +450,48 @@
         event.stopPropagation();
         var replie = container.classList.toggle("collapsed");
         chevron.classList.toggle("collapsed", replie);
+      });
+    });
+
+    synchroniserCouchesEtLegende(map, registre);
+  }
+
+  // Pont entre les deux mécanismes de visibilité agissant sur les mêmes entités :
+  //   System A — case à cocher de la couche entière (L.geoJson via L.control.layers)
+  //   System B — items de légende (L.layerGroup togglés par le plugin légende)
+  // Les deux partagent les mêmes objets markers/polylignes sans se synchroniser.
+  // On écoute overlayadd/overlayremove (émis par les cases System A) pour :
+  //   - décoché  : griser et neutraliser le détail légende de la couche ;
+  //   - recoché  : restaurer le détail, puis re-masquer les items individuellement
+  //                éteints que le ré-ajout du L.geoJson a fait réapparaître.
+  // Aucune modification du HTML/SQL : tout part de window.modernLegendeParCouche.
+  function synchroniserCouchesEtLegende(map, registre) {
+    if (!map || !registre || map.__syncCouchesLegende) return;
+    map.__syncCouchesLegende = true;
+
+    function nomDepuisEvt(e) {
+      return (e && e.name ? e.name : "").replace(/\s*\(\d+\)\s*$/, "").trim();
+    }
+
+    map.on("overlayremove", function (e) {
+      var rec = registre[nomDepuisEvt(e)];
+      if (rec) rec.container.classList.add("couche-masquee");
+    });
+
+    map.on("overlayadd", function (e) {
+      var rec = registre[nomDepuisEvt(e)];
+      if (!rec) return;
+      rec.container.classList.remove("couche-masquee");
+      // Le L.geoJson recoché a remis TOUS les markers : on retire à nouveau ceux
+      // des items que l'utilisateur avait individuellement éteints (System B).
+      rec.paires.forEach(function (p) {
+        if (p.div.classList.contains("leaflet-legend-item-inactive")) {
+          if (L.Util.isArray(p.layers)) {
+            p.layers.forEach(function (lg) { map.removeLayer(lg); });
+          } else {
+            map.removeLayer(p.layers);
+          }
+        }
       });
     });
   }

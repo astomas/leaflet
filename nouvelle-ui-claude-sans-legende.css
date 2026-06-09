@@ -454,6 +454,14 @@ body.is-resizing * {
   margin: 0 !important;
 }
 
+/* Couche entière décochée (case System A) : son détail légende est grisé et
+   ses items rendus inertes, pour rester cohérent avec la carte (markers retirés)
+   et empêcher de rallumer un item sous une couche masquée. */
+.detail-couches-sidebar.couche-masquee {
+  opacity: .45;
+  pointer-events: none;
+}
+
 .detail-couches-sidebar .leaflet-legend-contents {
   display: block !important;
   padding: 0 !important;
