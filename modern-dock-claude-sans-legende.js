@@ -436,68 +436,62 @@
       });
 
       // === Œil = maître de visibilité de la couche, piloté sur System B ===
-      // Ce qui est réellement affiché provient des layerGroups de légende
-      // (tabCouchesLGLeg, System B), pas de la copie geoJson de la case
-      // (tabCoucheMG, System A, invisible par défaut : strCaseACocher="0").
-      // On repointe donc l'œil sur System B et on neutralise la bascule native
-      // (qui ne ferait qu'ajouter un doublon superposé). L'œil est vert dès
-      // qu'au moins un item de légende est actif.
+      // System B = layerGroups de légende (tabCouchesLGLeg) — ce qui est
+      // réellement affiché. map.hasLayer() est la seule source de vérité.
       var caseOeil = label.querySelector('input[type="checkbox"]');
-
-      // Paires {div légende ↔ layerGroup} : le plugin crée un div cliquable par
-      // item doté de layers, dans le même ordre que les items filtrés.
       var itemsAvecLayers = items.filter(function (it) { return it.layers; });
-      var divsItems = container.querySelectorAll(".leaflet-legend-item-clickable");
-      var pairesLeg = [];
-      for (var p = 0; p < divsItems.length && p < itemsAvecLayers.length; p++) {
-        pairesLeg.push({ div: divsItems[p], layers: itemsAvecLayers[p].layers });
-      }
 
+      // Vrai si au moins un layerGroup de cette couche est sur la carte.
       var unItemActif = function () {
-        return pairesLeg.some(function (pr) {
-          return !pr.div.classList.contains("leaflet-legend-item-inactive");
-        });
+        return itemsAvecLayers.some(function (it) { return map.hasLayer(it.layers); });
       };
 
-      // Œil vert si au moins un item actif (case cochée = œil vert via CSS).
-      var majOeil = function () {
-        if (caseOeil) caseOeil.checked = unItemActif();
-      };
+      // Coche/décoche la case native (= icône œil vert/barré via CSS).
+      var majOeil = function () { if (caseOeil) caseOeil.checked = unItemActif(); };
 
-      // Bascule TOUS les items de la couche d'un coup (même effet que le plugin
-      // item par item : classe inactive + add/removeLayer du layerGroup).
-      var basculerTousItems = function (actif) {
-        pairesLeg.forEach(function (pr) {
-          var eteint = pr.div.classList.contains("leaflet-legend-item-inactive");
-          if (actif && eteint) {
-            pr.div.classList.remove("leaflet-legend-item-inactive");
-            map.addLayer(pr.layers);
-          } else if (!actif && !eteint) {
-            pr.div.classList.add("leaflet-legend-item-inactive");
-            map.removeLayer(pr.layers);
+      // Synchronise les classes DOM d'inactivité avec l'état réel de la carte.
+      // Appariement par ordre : item[k] avec layers ↔ k-ième div cliquable du plugin.
+      var syncClasses = function () {
+        var divsClic = container.querySelectorAll(".leaflet-legend-item-clickable");
+        var idx = 0;
+        itemsAvecLayers.forEach(function (it) {
+          var div = divsClic[idx++];
+          if (!div) return;
+          if (map.hasLayer(it.layers)) {
+            div.classList.remove("leaflet-legend-item-inactive");
+          } else {
+            div.classList.add("leaflet-legend-item-inactive");
           }
         });
       };
 
-      // Clic sur l'œil / la barre de couche : si quelque chose est actif → tout
-      // éteindre, sinon tout allumer. preventDefault neutralise la case native
-      // (pas de doublon System A ajouté sur la carte).
+      // Allume ou éteint tous les layerGroups de la couche d'un coup.
+      var basculerTousItems = function (actif) {
+        itemsAvecLayers.forEach(function (it) {
+          if (actif && !map.hasLayer(it.layers)) map.addLayer(it.layers);
+          else if (!actif && map.hasLayer(it.layers)) map.removeLayer(it.layers);
+        });
+        syncClasses();
+        majOeil();
+      };
+
+      // Clic œil : tout allumer si rien d'actif, tout éteindre sinon.
+      // preventDefault neutralise la case native (pas de doublon System A).
       label.addEventListener("click", function (event) {
-        if (event.target.closest(".detail-couches-toggle")) return; // chevron
+        if (event.target.closest(".detail-couches-toggle")) return;
         event.preventDefault();
         basculerTousItems(!unItemActif());
-        majOeil();
       });
 
-      // Clic sur un item individuel : le plugin le bascule (System B) ; on
-      // recolore ensuite l'œil selon qu'il reste ou non un item actif.
-      pairesLeg.forEach(function (pr) {
-        pr.div.addEventListener("click", function () {
-          setTimeout(majOeil, 0);
+      // Clic item individuel : le plugin bascule layers + classe ; on recolore
+      // ensuite l'œil. layeradd/layerremove est l'événement fiable post-plugin.
+      itemsAvecLayers.forEach(function (it) {
+        map.on("layeradd layerremove", function (e) {
+          if (e.layer === it.layers) majOeil();
         });
       });
 
-      // État initial de l'œil aligné sur ce qui est réellement visible.
+      // Alignement initial de l'œil sur ce qui est réellement sur la carte.
       majOeil();
     });
   }
