@@ -263,9 +263,33 @@ function CarteLeaflet(conteneurId) {
 	var markersOmsCouche = [];
 	
 	
+	// En-tête de popup : nom de la couche + icône (ou pastille de couleur)
+	function construireEntetePopup(pps, nomForce) {
+	    var nom = nomForce || (pps && (pps.nomcouche || pps.legende)) || "";
+	    if (!nom) return "";
+	    var visuel = "";
+	    if (pps && pps.icone) {
+	        visuel = "<img class='popup-entete-icone' src='" + pps.icone + "' alt='' />";
+	    } else if (pps && pps.couleur && pps.couleur !== "Non défini") {
+	        visuel = "<span class='popup-entete-pastille' style='background:" + pps.couleur + "'></span>";
+	    }
+	    return "<div class='popup-entete'>" + visuel +
+	           "<span class='popup-entete-titre'>" + nom + "</span></div>";
+	}
+
+	// Formate une ligne de champ : libellé (gras sombre) + valeur (atténuée)
+	function formaterChampPopup(label, valeurHtml) {
+	    var vide = (valeurHtml === "" || valeurHtml == null);
+	    if (!vide && /^https?:\/\//i.test(String(valeurHtml))) {
+	        valeurHtml = "<a href='" + valeurHtml + "' target='_blank' rel='noopener'>Accéder au lien</a>";
+	    }
+	    var cle = "<span class='popup-cle'>" + label + (vide ? "" : ":") + "</span>";
+	    return vide ? cle : cle + " <span class='popup-val'>" + valeurHtml + "</span>";
+	}
+
 	this.ajoutCoucheGeojson = function () {
 
-		// stockage des lignes de memes coord 
+		// stockage des lignes de memes coord
 		var indexSpatial = {};
 			tabCoucheMetier.forEach(function(c) {
 				// verif existence features
@@ -472,12 +496,12 @@ function CarteLeaflet(conteneurId) {
             var p = [];
             var nom = pps.nomcouche || pps.legende || ("Entité " + (idx + 1));
             
-            p.push("<div style='border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px; font-weight:bold; font-size:12px; color:#333;'>" + nom + "</div>");
+            p.push(construireEntetePopup(pps, nom));
             p.push("<div style='padding:5px;'>");
             var details = [];
             for (var nomPpté in pps) {
                 if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
-                    var ligne = "<b>"+ nomPpté + ":</b> " + pps[nomPpté];
+                    var ligne = formaterChampPopup(nomPpté, pps[nomPpté]);
                     nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? details.unshift(ligne) : details.push(ligne);
                 }
             }
@@ -502,17 +526,17 @@ function CarteLeaflet(conteneurId) {
     var pps = élément.properties;
     for (var nomPpté in pps) {
         if (nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/)) {
-            tableauContenuPopup.unshift("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+            tableauContenuPopup.unshift(formaterChampPopup(nomPpté, pps[nomPpté]));
         } else {
             if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
-                tableauContenuPopup.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+                tableauContenuPopup.push(formaterChampPopup(nomPpté, pps[nomPpté]));
             }
             if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)/)) {
-                tableauContenuTooltip.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+                tableauContenuTooltip.push(formaterChampPopup(nomPpté, pps[nomPpté]));
             }
         }
     }
-    contenuFinalPopup = tableauContenuPopup.join("<br />");
+    contenuFinalPopup = construireEntetePopup(pps) + tableauContenuPopup.join("<br />");
     texteTooltip = tableauContenuTooltip.join("<br />");
 	}
 
@@ -1392,7 +1416,7 @@ this.importFichier = function () {
                 if (estMulti) {
                     let nom = pps["nomcouche"] || pps["Année "] || pps["Année"] || pps["Route   "] || pps["Route"] || pps["Numéro Route "] || pps.legende || ("Entité " + (idx+1));
                     let label = (pps["Année "] || pps["Année"]) ? "Année " + nom : nom;
-                    details.push("<div style='border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px 8px; font-weight:bold; font-size:12px; color:#333;'>" + label + "</div>");
+                    details.push(construireEntetePopup(pps, label));
                 }
                 
                 details.push("<div style='padding:5px;'>");
@@ -1402,7 +1426,7 @@ this.importFichier = function () {
                     if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|leafletsearch|stroke|fill|color|X en WGS84|Y en WGS84)$/i)) {
                         let val = pps[nomPpté];
                         if (val !== null && val !== undefined) {
-                            let ligne = "<b>"+ nomPpté + ":</b> " + (String(val).startsWith('http') ? `<a href="${val}" target="_blank">Lien</a>` : val);
+                            let ligne = formaterChampPopup(nomPpté, val);
                             k.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? corps.unshift(ligne) : corps.push(ligne);
                         }
                     }
