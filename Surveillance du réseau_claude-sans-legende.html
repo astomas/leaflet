@@ -77,7 +77,56 @@
 	<!-- spiderfy points superposés -->
 	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
 	
-	</head>	
+	<style>
+	/* //// modif nouvelle UI - widget météo en-tête //// */
+	.modern-meteo-widget {
+		display: none;
+		align-items: center;
+		gap: 6px;
+		padding: 0 10px;
+		flex-shrink: 0;
+	}
+	.meteo-current {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		cursor: default;
+	}
+	.meteo-icone-emoji {
+		font-size: 22px;
+		line-height: 1;
+	}
+	.meteo-temp {
+		font-size: 15px;
+		font-weight: bold;
+		color: #fff;
+		white-space: nowrap;
+	}
+	.meteo-vent {
+		font-size: 11px;
+		color: rgba(255,255,255,0.75);
+		white-space: nowrap;
+	}
+	.meteo-ville {
+		font-size: 11px;
+		color: rgba(255,255,255,0.65);
+		white-space: nowrap;
+	}
+	.meteo-alerte {
+		display: flex;
+		align-items: center;
+	}
+	.meteo-alerte-badge {
+		padding: 2px 7px;
+		border-radius: 10px;
+		font-size: 11px;
+		font-weight: bold;
+		cursor: pointer;
+		white-space: nowrap;
+	}
+	</style>
+
+	</head>
 	
   <body onload="main()">
   <div class="modern-carte-shell">
@@ -86,6 +135,7 @@
       <div class="modern-header-titles">
         <h1>Surveillance du réseau - source CD30 - Waze</h1>
       </div>
+      <div id="meteoWidget" class="modern-meteo-widget"><div class="meteo-current"></div></div>
       <div class="modern-header-actions">
         <div id="modernHeaderInfoDock" class="modern-header-help" title="Informations"></div>
         <div id="modernHeaderHelpDock" class="modern-header-help" title="Aide"></div>
@@ -2515,6 +2565,71 @@ function main() {
 	carteLeaflet.visuEtInfo();
 	carteLeaflet.visuBatiments3D();
 	carteLeaflet.spiderfyPoints();
+
+	// //// modif nouvelle UI - widget météo (Open-Meteo sans clé + vigilance MF Gard) ////
+	(function() {
+		if (!valeurTitre1 || !valeurTitre1.toLowerCase().includes('surveillance')) return;
+		var widget = document.getElementById('meteoWidget');
+		if (!widget) return;
+		var LAT = 43.8367, LON = 4.3601;
+		var WMO_ICONE = {
+			0:'☀️',1:'🌤️',2:'⛅',3:'☁️',
+			45:'🌫️',48:'🌫️',
+			51:'🌦️',53:'🌦️',55:'🌧️',
+			61:'🌧️',63:'🌧️',65:'🌧️',
+			71:'🌨️',73:'🌨️',75:'❄️',
+			80:'🌦️',81:'🌦️',82:'⛈️',
+			95:'⛈️',96:'⛈️',99:'⛈️'
+		};
+		var WMO_DESC = {
+			0:'Ciel dégagé',1:'Peu nuageux',2:'Partiellement nuageux',3:'Couvert',
+			45:'Brouillard',48:'Brouillard givrant',
+			51:'Bruine légère',53:'Bruine',55:'Bruine forte',
+			61:'Pluie légère',63:'Pluie',65:'Pluie forte',
+			71:'Neige légère',73:'Neige',75:'Neige forte',
+			80:'Averses légères',81:'Averses',82:'Averses violentes',
+			95:'Orage',96:'Orage avec grêle',99:'Orage violent'
+		};
+		function chargerMeteo() {
+			fetch('https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+LON+
+				'&current=temperature_2m,weather_code,wind_speed_10m&timezone=Europe%2FParis')
+			.then(function(r){return r.json();})
+			.then(function(data){
+				var cur = data.current;
+				var code = cur.weather_code;
+				var temp = Math.round(cur.temperature_2m);
+				var vent = Math.round(cur.wind_speed_10m);
+				var icone = WMO_ICONE[code] || '🌡️';
+				var desc = WMO_DESC[code] || '';
+				widget.querySelector('.meteo-current').innerHTML =
+					'<span class="meteo-icone-emoji" title="'+desc+'">'+icone+'</span>'+
+					'<span class="meteo-temp">'+temp+'°C</span>'+
+					'<span class="meteo-vent">'+vent+' km/h</span>'+
+					'<span class="meteo-ville">Nîmes</span>';
+				widget.style.display = 'flex';
+			}).catch(function(){});
+
+			fetch('https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/vigilance-meteorologique/records?where=dep_code%3D%2230%22&limit=10')
+			.then(function(r){return r.json();})
+			.then(function(data){
+				var old = widget.querySelector('.meteo-alerte');
+				if (old) old.remove();
+				if (!data.results || data.results.length === 0) return;
+				var alertes = data.results.filter(function(a){return a.niveau && parseInt(a.niveau) >= 2;});
+				if (alertes.length === 0) return;
+				var niveauMax = Math.max.apply(null, alertes.map(function(a){return parseInt(a.niveau);}));
+				var couleur = niveauMax >= 4 ? '#c0392b' : niveauMax >= 3 ? '#e67e22' : '#f1c40f';
+				var textCouleur = niveauMax >= 3 ? '#fff' : '#333';
+				var texte = alertes.map(function(a){return a.phenomene_lib || a.type || '';}).join(', ');
+				var badge = document.createElement('div');
+				badge.className = 'meteo-alerte';
+				badge.innerHTML = '<span class="meteo-alerte-badge" style="background:'+couleur+';color:'+textCouleur+'" title="'+texte+'">⚠ '+alertes.length+' alerte'+(alertes.length>1?'s':'')+'</span>';
+				widget.appendChild(badge);
+			}).catch(function(){});
+		}
+		chargerMeteo();
+		setInterval(chargerMeteo, 10*60*1000);
+	})();
 }
 
 </script>
