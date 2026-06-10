@@ -500,11 +500,12 @@
       });
 
       // Clic item individuel : le plugin bascule layers + classe ; on recolore
-      // ensuite l'œil. layeradd/layerremove est l'événement fiable post-plugin.
-      itemsAvecLayers.forEach(function (it) {
-        map.on("layeradd layerremove", function (e) {
-          if (e.layer === it.layers) majOeil();
-        });
+      // ensuite l'œil. On écoute le clic sur le container (une fois par clic
+      // utilisateur) plutôt que layeradd/layerremove qui se déclenche pour
+      // chaque enfant du layerGroup (758 fois pour le réseau routier → lag).
+      container.addEventListener("click", function (event) {
+        if (!event.target.closest(".leaflet-legend-item-clickable")) return;
+        setTimeout(majOeil, 0);
       });
 
       // Alignement initial de l'œil + repli si aucun item actif à l'ouverture.
