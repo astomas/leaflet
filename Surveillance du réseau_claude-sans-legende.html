@@ -1809,7 +1809,21 @@ this.importFichier = function () {
 		var containerAide = boutonAide.button.parentNode;
 		containerAide.style.backgroundColor = "#f9b062";
 		containerAide.style.border = "2px #f9b062";
-		window.modernHeaderHelpDock.appendChild(boutonAide.button);
+		containerAide.dataset.modernDocked = 'true';
+		containerAide.classList.add('modern-header-help-control');
+		var headerHelpDock = document.getElementById('modernHeaderHelpDock');
+		if (headerHelpDock) {
+			headerHelpDock.innerHTML = '';
+			headerHelpDock.appendChild(containerAide);
+			var headerHelpLabel = document.createElement('span');
+			headerHelpLabel.className = 'modern-header-help-label';
+			headerHelpLabel.textContent = 'Aide';
+			headerHelpDock.appendChild(headerHelpLabel);
+			headerHelpDock.addEventListener('click', function(e) {
+				if (e.target.closest('.leaflet-control')) return;
+				boutonAide.button.click();
+			});
+		}
 	}
 
 	this.visuEtInfo = function () {		
@@ -1923,19 +1937,35 @@ this.importFichier = function () {
     }, "Informations", {position: "bottomright"});
     boutonInfo.button.classList.add('bouton-info');
     boutonInfo.addTo(maCarte);
-    window.modernHeaderInfoDock.appendChild(boutonInfo.button);
 
     var conteneur = L.Control.extend({
         options: {position: 'bottomright'},
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
             boutonConteneur.appendChild(boutonServiceVisu.button);
+            // boutonInfo vit dans l'en-tête (modernHeaderInfoDock) : ne pas le rapatrier ici
             return boutonConteneur;
         }
     });
 
     conteneurVisuInfo = new conteneur();
     maCarte.addControl(conteneurVisuInfo);
+
+    var headerInfoDock = document.getElementById('modernHeaderInfoDock');
+    if (headerInfoDock) {
+        headerInfoDock.innerHTML = '';
+        boutonInfo.button.dataset.modernDocked = 'true';
+        boutonInfo.button.classList.add('modern-header-info-control');
+        headerInfoDock.appendChild(boutonInfo.button);
+        var headerInfoLabel = document.createElement('span');
+        headerInfoLabel.className = 'modern-header-help-label';
+        headerInfoLabel.textContent = 'Info';
+        headerInfoDock.appendChild(headerInfoLabel);
+        headerInfoDock.addEventListener('click', function(e) {
+            if (e.target.closest('.easy-button-button')) return;
+            boutonInfo.button.click();
+        });
+    }
 }
 	
 	this.titre = function(){
@@ -1946,13 +1976,11 @@ this.importFichier = function () {
 	    } else {
 	        valeurTitre = valeurTitre1 + valeurTitre2;
 	    }
-		var titreHeader = document.querySelector('.modern-header h1');
-		if (titreHeader) titreHeader.innerHTML = valeurTitre;
-
 		L.CtrlTitre = L.Control.extend ({
 			onAdd : function () {
 				var divTitre = L.DomUtil.create("div", "titre infotitre");
 				divTitre.innerHTML += valeurTitre;
+				document.getElementById("ti").innerHTML = valeurTitre;
 				return divTitre;
 			}
 		});
@@ -1960,42 +1988,53 @@ this.importFichier = function () {
 				return new L.CtrlTitre(options);
 			}
 
+			document.getElementById("ti").innerHTML = valeurTitre;
+			var titreHeader = document.querySelector('.modern-header h1');
+			if (titreHeader) titreHeader.innerHTML = valeurTitre;
+
 			(maCarte).on("browser-print-start", function(e){
 				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
 			});
 	}
 		
 this.ajouterLogo = function() {
-    var icones = [
-        {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-        {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-    ];
+    var container = document.getElementById("modernLogosDock");
 
-    if (valeurTitre1.endsWith("Waze")){
-        icones.push({
-            imgSource: "/Ressources/waze.png",
-            largeur: "68px",
-            marginLeft: "10px",
-            imgTooltip: "Waze",
-            lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu",
-            typeLien: "_blank"
+    function updateLogos() {
+        if (!container) return;
+        container.innerHTML = "";
+
+        var icones = [
+            {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+            {imgSource: "/Ressources/backward-blanc.png", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+        ];
+
+        if (valeurTitre1.endsWith("Waze")){
+            icones.push({
+                imgSource: "/Ressources/waze.png",
+                largeur: "68px",
+                imgTooltip: "Waze",
+                lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu",
+                typeLien: "_blank"
+            });
+        }
+
+        icones.forEach(function(icone) {
+            var img = L.DomUtil.create("img", "leaflet-control-logos-img", container);
+            img.src = icone.imgSource;
+            img.style.width = icone.largeur;
+            img.style.height = icone.hauteur;
+            img.style.marginLeft = "0";
+            img.title = icone.imgTooltip;
+            img.onclick = function(e) {
+                e.preventDefault();
+                window.open(icone.lienSite, icone.typeLien);
+            };
         });
     }
 
-    icones.forEach(function(icone) {
-        var img = document.createElement("img");
-        img.src = icone.imgSource;
-        img.style.width = icone.largeur;
-        if (icone.hauteur) img.style.height = icone.hauteur;
-        if (icone.marginLeft) img.style.marginLeft = icone.marginLeft;
-        img.title = icone.imgTooltip;
-        img.style.cursor = "pointer";
-        img.onclick = function(e) {
-            e.preventDefault();
-            window.open(icone.lienSite, icone.typeLien);
-        };
-        window.modernLogosDock.appendChild(img);
-    });
+    updateLogos();
+    maCarte.on("baselayerchange", updateLogos);
 }
 
 this.ajouterSwitch = function() {
