@@ -574,7 +574,11 @@ body.is-resizing * {
 
 .modern-tool-button:hover {
   border-color: #5fc2ad;
-  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(22,160,133,.18);
+}
+.modern-tools-dock .leaflet-control .easy-button-button:hover,
+.modern-tools-dock .leaflet-bar a:hover {
+  background: transparent !important;
 }
 
 .modern-tool-icon-slot {
