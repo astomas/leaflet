@@ -3,82 +3,112 @@
 <html>    
   <head>
   
-	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet.css" />
-	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet-si3p0.css" />
-	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/pc-portable.css" />	
-	<script src="/Ressources/API_JS/librairies_cd30/leaflet.js"></script>
-	
+	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet.css" />
+	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet-si3p0-claude-sans-legende.css" />
+	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/pc-portable.css" />	
+	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
+
+	<link rel="stylesheet" href="nouvelle-ui-claude-sans-legende.css" />
+	<script src="./modern-dock-claude-sans-legende.js"></script>
+
 	<title id="ti">Carte Leaflet</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	
 	<!-- limite geojson du Gard -->
-	<script src="/Ressources/API_JS/librairies_cd30/gard.js"></script>
+	<script src="/leaflet/Ressources 26/librairies_cd30/gard.js"></script>
 
 	<!-- création boutons - lib. fontawesome d'icones pr boutons -->
-	<script type="text/javascript" src="/Ressources/API_JS/easy-button.js"></script>
-	<link rel="stylesheet" href = "/Ressources/API_JS/easy-button.css" />	 
-	<link rel="stylesheet" href="/Ressources/API_JS/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
+	<script type="text/javascript" src="/leaflet/Ressources 26/easy-button.js"></script>
+	<link rel="stylesheet" href = "/leaflet/Ressources 26/easy-button.css" />	 
+	<link rel="stylesheet" href="/leaflet/Ressources 26/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
 
 	<!-- clé API google - limite appels/mois -->
 	<script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbn4agQo3A4Hp3Yyyros9hD7vFw0WSNOM&callback=Function.prototype&loading=async&v=beta"></script>
 	<!-- Fonds carte Google -->
-	<script src="/Ressources/API_JS/Leaflet.GoogleMutant.js"></script>
+	<script src="/leaflet/Ressources 26/Leaflet.GoogleMutant.js"></script>
 	<!-- Rech. lieux Google -->
-	<script src="/Ressources/API_JS/GPlaceAutocomplete.js"></script>
-  	<link rel="stylesheet" href="/Ressources/API_JS/GPlaceAutocomplete.css" />	  
+	<script src="/leaflet/Ressources 26/GPlaceAutocomplete.js"></script>
+  	<link rel="stylesheet" href="/leaflet/Ressources 26/GPlaceAutocomplete.css" />	  
 
 	<!-- Impression carte -->
-	<script src="/Ressources/API_JS/leaflet.browser.print.js"></script>
+	<script src="/leaflet/Ressources 26/leaflet.browser.print.js"></script>
 
 	<!-- Panneau texte Aide et Info -->
-	<script src="/Ressources/API_JS/Leaflet.Dialog.js"></script>
-  	<link rel="stylesheet" href="/Ressources/API_JS/Leaflet.Dialog.css" /> 
+	<script src="/leaflet/Ressources 26/Leaflet.Dialog.js"></script>
+  	<link rel="stylesheet" href="/leaflet/Ressources 26/Leaflet.Dialog.css" /> 
 
 	<!-- Permalink pr centrage dyn graflex -->
-	<script src="/Ressources/API_JS/leaflet.permalink.js"></script>
+	<script src="/leaflet/Ressources 26/leaflet.permalink.js"></script>
 
 	<!-- mesure distance -->
-	<link rel="stylesheet" type="text/css" href="/Ressources/API_JS/leaflet-ruler.css">
-	<script src="/Ressources/API_JS/leaflet-ruler.js"></script>
+	<link rel="stylesheet" type="text/css" href="/leaflet/Ressources 26/leaflet-ruler.css">
+	<script src="/leaflet/Ressources 26/leaflet-ruler.js"></script>
 
 	<!-- acces streetview, panoramax... -->
-	<script src="/Ressources/API_JS/streetview.js"></script>
+	<script src="/leaflet/Ressources 26/streetview.js"></script>
 	
 	<!-- bloc legende dyn -->
-	<script type="text/javascript" src="/Ressources/API_JS/leaflet.legend.js"></script>	
-	<link rel="stylesheet" href="/Ressources/API_JS/leaflet.legend.css" />
+	<script type="text/javascript" src="/leaflet/Ressources 26/leaflet.legend.js"></script>	
+	<link rel="stylesheet" href="/leaflet/Ressources 26/leaflet.legend.css" />
 
 	<!-- rech Json -->
-	<link rel="stylesheet" href="/Ressources/API_JS/leaflet-search.css"/>
-	<script src="/Ressources/API_JS/leaflet-search.js"></script>
+	<link rel="stylesheet" href="/leaflet/Ressources 26/leaflet-search.css"/>
+	<script src="/leaflet/Ressources 26/leaflet-search.js"></script>
 
 	<!-- clic droit coord GPS -->
-	<script src="/Ressources/API_JS/leaflet.contextmenu.js"></script> 
+	<script src="/leaflet/Ressources 26/leaflet.contextmenu.js"></script> 
 
 	<!-- IGN calcul isochrones -->
-	<script src="/Ressources/API_JS/GpPluginLeaflet.js"></script> 
-	<link rel="stylesheet" href="/Ressources/API_JS/GpPluginLeaflet.css"/>	
+	<script src="/leaflet/Ressources 26/GpPluginLeaflet.js"></script> 
+	<link rel="stylesheet" href="/leaflet/Ressources 26/GpPluginLeaflet.css"/>	
 
 	<!-- Import fichiers Geo -->
-	<script src="/Ressources/API_JS/betterFileLayer.js"></script> 
-	<link rel="stylesheet" href="/Ressources/API_JS/betterFileLayer.css"/>	
+	<script src="/leaflet/Ressources 26/betterFileLayer.js"></script> 
+	<link rel="stylesheet" href="/leaflet/Ressources 26/betterFileLayer.css"/>	
 
 	<!-- Rech par coord -->
-	<link rel="stylesheet" href="/Ressources/API_JS/geosearch.css"/>
-	<script src="/Ressources/API_JS/geosearch.js"></script>
+	<link rel="stylesheet" href="/leaflet/Ressources 26/geosearch.css"/>
+	<script src="/leaflet/Ressources 26/geosearch.js"></script>
 
 	<!-- Effet 3D sur batis -->
-	<script type="text/javascript" src="/Ressources/API_JS/OSMBuildings-leaflet.js"></script>	
+	<script type="text/javascript" src="/leaflet/Ressources 26/OSMBuildings-leaflet.js"></script>	
 	
 	<!-- spiderfy points superposés -->
-	<script src="/Ressources/API_JS/overlap-marker.js"></script>
+	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
 	
 	</head>	
 	
-    <body onload="main()">
-        <div id="carteId" />
-    </body>	
+  <body onload="main()">
+  <div class="modern-carte-shell">
+    <header class="modern-header">
+      <div id="modernLogosDock" class="modern-logos-dock modern-header-logos" aria-label="Liens rapides"></div>
+      <div class="modern-header-titles">
+        <h1>Surveillance du réseau</h1>
+      </div>
+      <div class="modern-header-actions">
+        <div id="modernHeaderInfoDock" class="modern-header-help" title="Informations"></div>
+        <div id="modernHeaderHelpDock" class="modern-header-help" title="Aide"></div>
+      </div>
+    </header>
+    <div class="modern-main-content">
+      <aside class="modern-sidebar" aria-label="Panneau de pilotage cartographique">
+        <section class="modern-family modern-family-fonds-plan" data-expanded="true">
+          <div class="modern-family-title"><span>Fonds de plan</span><em>couches</em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+        </section>
+        <section class="modern-family modern-family-metier" data-expanded="true">
+          <div class="modern-family-title"><span>Données métier</span><em></em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+        </section>
+        <section class="modern-family modern-family-tools" id="modernToolsSection" data-expanded="true">
+          <div class="modern-family-title"><span>Outils carte</span><em id="modernToolsCount">plugins</em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+          <div id="modernToolsDock" class="modern-tools-dock" aria-label="Outils de la carte"></div>
+        </section>
+      </aside>
+      <div class="modern-sidebar-resizer" tabindex="0" role="separator" aria-label="Redimensionner le panneau"></div>
+      <main class="modern-map-area"><div id="carteId"></div></main>
+    </div>
+  </div>
+</body>
 
 </html>
  
@@ -96,7 +126,7 @@
 	
 	console.log("nomVues : ", nomVues);
 	
-	L.Icon.Default.imagePath = '/Ressources/API_JS/images/';
+	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
 	
 	var tabNettoyé = [];
 
@@ -634,7 +664,7 @@ function CarteLeaflet(conteneurId) {
 		}
 		else {
 			presenceIcone = false;
-			var customIcone = new L.Icon({iconUrl: "/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
+			var customIcone = new L.Icon({iconUrl: "/leaflet/Ressources 26/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
 			return L.marker(latlng, {icon: customIcone});
 		}
 	}
@@ -909,7 +939,17 @@ function CarteLeaflet(conteneurId) {
 					originalIndex: i
 				});	
 			}
-		
+
+			// Expose les items légende groupés par couche pour injection dans la sidebar.
+			window.modernLegendeParCouche = {};
+			for (i = 0; i < tabCtrlLegendeObj.length; i++) {
+				var nomC = tabCtrlLegendeObj[i].nomCouche;
+				if (!window.modernLegendeParCouche[nomC]) {
+					window.modernLegendeParCouche[nomC] = [];
+				}
+				window.modernLegendeParCouche[nomC].push(tabCtrlLegendeObj[i]);
+			}
+
 			// Z-index décroissant pour les couches points légende au chargement initial :
 			// le 1er libellé légende sera affiché par-dessus les autres sur la carte
 			var zIndexLegPoints = 900000;
@@ -945,37 +985,28 @@ function CarteLeaflet(conteneurId) {
 				return 0;
 			});
 	
-			function ajusterLargeurColonnesLegende() {
-			    var container = maCarte.getContainer().querySelector('.leaflet-legend-contents.deux-colonnes');
+			function ajusterLargeurColonnesLegende(racineLegende) {
+			    var base = racineLegende || maCarte.getContainer();
+			    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
 			    if (!container) return;
-			
-			    // Largeur réelle du libellé le plus long
 			    var spans = container.querySelectorAll('.leaflet-legend-item span');
 			    var largeurMaxLib = 0;
 			    spans.forEach(function(span) {
 			        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
 			    });
-			
-			    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
-				var largeurColonne = largeurMaxLib + 30;
-
-			
+			    var largeurColonne = largeurMaxLib + 30;
 			    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
 			        col.style.minWidth = largeurColonne + 'px';
 			    });
 			}
-				
-			// legende sur 2 col si nbr elts legende > 27 
+
+			// [sans-legende] La légende vit dans la sidebar : le contrôle plugin n'est PAS ajouté
+			// à la carte. Il est créé ici puis ajouté uniquement à l'impression (browser-print-start).
 			var nbrColonnes = (tabCtrlLegendeObj.length > 27) ? 2 : 1;
 			//var nbrColonnes = (tabCtrlLegendeObj.length || (nbreDeVues + tabCtrlLegendeObj.length) > 27) ? 2 : 1;
 			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, legends: tabCtrlLegendeObj});
-			blocLegende.addTo(maCarte);
-			if (nbrColonnes === 2) {
-				var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
-				if (container) container.classList.add('deux-colonnes');
-				requestAnimationFrame(ajusterLargeurColonnesLegende);
-			}
-		
+			// NO blocLegende.addTo(maCarte);
+
 		}						
 	
 		tabNettoyé = filtrerDoublons(tabGeomCouche);	
@@ -999,71 +1030,26 @@ function CarteLeaflet(conteneurId) {
 			tabEltsMPLeg[i].bringToBack();		
 		}
 		
-		var fondsCarte = {		
-			"CartoDB N&B": cartoDB, 		
+		var fondsCarte = {
+			"CartoDB N&B": cartoDB,
 			"Stadia Map": StadiaMap,
-			"Plan IGN": fdcIGN,		
-			"Google Satellite": googleSat,	
-			"Ortho IGN": orthoIGN			
-		};	
-	
+			"Plan IGN": fdcIGN,
+			//"Google Satellite": googleSat,
+			"Ortho IGN": orthoIGN
+		};
+
 		var tabCtrlboxNom = [];
 		var libelleCouche = {};
-		for (i=0; i < nbreDeVues; i++) {	
-			tabCtrlboxNom.push({nom: tabNettoyé[i][1], couche: tabCoucheMG[i]});	
-		}	
+		for (i=0; i < nbreDeVues; i++) {
+			var nbEltsCouche = tabCoucheMG[i].getLayers().length;
+			tabCtrlboxNom.push({nom: tabNettoyé[i][1] + " (" + nbEltsCouche + ")", couche: tabCoucheMG[i]});
+		}
 		// alim box couches
 		libelleCouche = Object.assign({}, ...tabCtrlboxNom.map(item => ({ [item.nom]: item.couche })));
-		//console.log("libelleCouche : " , libelleCouche);
-	
-		// Repli box couches si legende trop grande en hauteur ecran	
-		if (presenceLegende) {
-			
-			const nbrEltsLegende = tabCtrlLegendeObj.length;	
-			const largeurEcran = screen.width;
-			// Set filtre les doublons, size compte le nbr sous-titres uniques
-			const nbrSousTitresLeg = new Set(tabCtrlLegendeObj.map(o => o.nomCouche)).size;
 
-			// Repli ecrans HD et moins selon nbr elts legende, nbr couches (vues) et nbr col. legende
-			if (largeurEcran <= 1920) {
-				var trigger1Repli = (nbrColonnes === 1 && nbrEltsLegende > 25);
-				var trigger2Repli = (nbrColonnes === 2 && nbrEltsLegende > 45);
-				var trigger3Repli = (nbrColonnes === 1 && nbrEltsLegende + nbreDeVues > 25);
-				var trigger4Repli = (nbrColonnes === 2 && nbrEltsLegende + nbreDeVues > 40);
-				// trigger5 inactif (false) si carto "surveillance" (car définie sans sous-titre ds legende.js)
-				var trigger5Repli = valeurTitre1.indexOf("Surveillance") === -1 && nbrColonnes === 1 && (nbreDeVues + nbrEltsLegende + nbrSousTitresLeg > 26);
-				
-				if (trigger1Repli || trigger2Repli || trigger3Repli || trigger4Repli || trigger5Repli || L.Browser.mobile) {
-					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: true});
-					ctrlBoxCouches.addTo(maCarte);
-					// repli bloc legende si tablettes/mobiles				
-					if ((nbrEltsLegende >= 23 && largeurEcran < 1900) || (L.Browser.mobile && nbrEltsLegende >= 8)) {
-						blocLegende.remove();
-						blocLegende = L.control.Legend({title: null, collapsed: true, position: "bottomright", opacity: 0.8, legends: tabCtrlLegendeObj});
-						blocLegende.addTo(maCarte);
-						if (nbrColonnes === 2) {
-							var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
-							if (container) container.classList.add('deux-colonnes');
-							requestAnimationFrame(ajusterLargeurColonnesLegende);
-						}
-					}
-				}				
-				else {
-					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-					ctrlBoxCouches.addTo(maCarte);
-				}
-			}
-			// ecrans au dela de HD pas de repli
-			else {
-				ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-				ctrlBoxCouches.addTo(maCarte);			
-			}
-		}
-		// Pas de légende pas de repli
-		else {
-	    	ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-	    	ctrlBoxCouches.addTo(maCarte);
-		}	
+		// Box des couches : son contenu est déplacé dans la sidebar par modernDock*.
+		ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
+		ctrlBoxCouches.addTo(maCarte);
 	}
 
 	this.zoomObjet = function () {	
@@ -1555,12 +1541,12 @@ this.importFichier = function () {
         indexSpatialImport = {}; // Reset index pour le prochain fichier
     });
 
-    btnImporter.addTo(maCarte);	
+    btnImporter.addTo(maCarte);
+	window.modernDockSpecificControl(btnImporter, "Importer");
 }
-	
-	this.iconeClé = function() {  
-	
-		var iconesVisible = false;
+
+	this.afficherOutils = function() {
+
 		var sousBoutonsCréés = false;	
 		
 		var btnMesurer = new L.control.ruler({position: "topleft"});
@@ -1608,8 +1594,16 @@ this.importFichier = function () {
 		}		
 		
 		maCarte.on("browser-print-start", function(e){
-			if (presenceLegende) {			
-				blocLegende.addTo(e.printMap);						
+			if (presenceLegende) {
+				blocLegende.addTo(e.printMap);
+				// [sans-legende] applique la mise en 2 colonnes sur la légende d'impression
+				if (blocLegende.options.column === 2) {
+					var contenuLegPrint = blocLegende.getContainer().querySelector('.leaflet-legend-contents');
+					if (contenuLegPrint) contenuLegPrint.classList.add('deux-colonnes');
+					requestAnimationFrame(function() {
+						ajusterLargeurColonnesLegende(e.printMap.getContainer());
+					});
+				}
 			// ajout logo avant print
 			setTimeout(function() {
 				const conteneurCartePrint = e.printMap.getContainer();
@@ -1659,18 +1653,17 @@ this.importFichier = function () {
 			}	
 		});		
 	
-		maCarte.on("browser-print-end", function(){		
-			if (presenceLegende) {			
-        		// remet la légende comme avant impression
+		maCarte.on("browser-print-end", function(){
+			if (presenceLegende) {
         		restaurerStyleLegende();
 			 	var blocLegendeElement = blocLegende.getContainer();
 				blocLegendeElement.style.marginTop = '12px';
 				blocLegendeElement.style.paddingBottom = '0';
-				blocLegende.remove();				
-				blocLegende.addTo(maCarte);	
+				blocLegende.remove();
+				// [sans-legende] pas de re-ajout sur la carte : la légende reste dans la sidebar
 				conteneurVisuInfo.remove();
-				conteneurVisuInfo.addTo(maCarte);	
-			}	
+				conteneurVisuInfo.addTo(maCarte);
+			}
 		});	
 		
 		
@@ -1695,7 +1688,7 @@ this.importFichier = function () {
 			const popupText = `<b>Coordonnées :</b> ${lat}, ${lon}<br>📍 ${label}`;
 
 		const iconeGeosearch = L.icon({
-			  iconUrl: '/Ressources/API_JS/images/geosearch.png',
+			  iconUrl: '/leaflet/Ressources 26/images/geosearch.png',
 			  iconSize: [40, 41],
 			  iconAnchor: [12, 41],
 			  popupAnchor: [9, -36]
@@ -1721,49 +1714,24 @@ this.importFichier = function () {
 		  });
 		}
 		
-		// bouton clé
-		var boutonClé = L.easyButton("fa-key fa-lg", function() { 
-			deployerIcones(); 
-		}, "Autres fonctions").addTo(maCarte);
-		
-		ajouterHoverEtClic(boutonClé.button, {
-		    isVisible: () => iconesVisible,
-		    afficher: deployerIcones,
-		    masquer: deployerIcones
-		});
-		
-		boutonClé.button.classList.add('bouton-cle');
-		var container = boutonClé.button.parentNode;
-		container.style.backgroundColor = "lightgrey";		
-		boutonClé.button.style.backgroundColor = "lightgrey"; 
-			
-	function deployerIcones() {
-			iconesVisible = !iconesVisible;
+		// Interface modernisée : le bouton « clé » est supprimé.
+		// Les outils sont exposés directement et dockés dans « Outils carte ».
+		setTimeout(function() {
 			if (!sousBoutonsCréés) {
 				btnImprimer.addTo(maCarte);
+				window.modernDockSpecificControl(btnImprimer, "Imprimer");
 				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
+				window.modernDockSpecificControl(btnMesurer, "Mesurer");
+				btnIsochrone.addTo(maCarte);
 				btnGeosearch.addTo(maCarte);
-				activerPopupRaccourci(maCarte);					
-				sousBoutonsCréés = true;
-			}			
-			if (iconesVisible) {
-				boutonClé.button.style.backgroundColor = "#ffff5b"; 
-				btnImprimer.addTo(maCarte);
-				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
-				btnGeosearch.addTo(maCarte);
+				setTimeout(function() {
+					window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
+					window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
+				}, 80);
 				activerPopupRaccourci(maCarte);
-						
-			} else {
-				btnImprimer.remove();
-				btnMesurer.remove();
-				btnIsochrone.remove();				
-				btnGeosearch.remove();
-				container.style.backgroundColor = "lightgrey";
-				boutonClé.button.style.backgroundColor = "lightgrey"; 					
-			}	
-		}
+				sousBoutonsCréés = true;
+			}
+		}, 0);
 	}
 	
 	this.aide = function () {
@@ -1856,7 +1824,22 @@ this.importFichier = function () {
 		
 		var containerAide = boutonAide.button.parentNode;
 		containerAide.style.backgroundColor = "#f9b062";
-		containerAide.style.border = "2px #f9b062";			
+		containerAide.style.border = "2px #f9b062";
+		containerAide.dataset.modernDocked = 'true';
+		containerAide.classList.add('modern-header-help-control');
+		var headerHelpDock = document.getElementById('modernHeaderHelpDock');
+		if (headerHelpDock) {
+			headerHelpDock.innerHTML = '';
+			headerHelpDock.appendChild(containerAide);
+			var headerHelpLabel = document.createElement('span');
+			headerHelpLabel.className = 'modern-header-help-label';
+			headerHelpLabel.textContent = 'Aide';
+			headerHelpDock.appendChild(headerHelpLabel);
+			headerHelpDock.addEventListener('click', function(e) {
+				if (e.target.closest('.leaflet-control')) return;
+				boutonAide.button.click();
+			});
+		}
 	}
 
 	this.visuEtInfo = function () {		
@@ -1890,13 +1873,13 @@ this.importFichier = function () {
             stateName: 'click',
             onClick: afficherPluginStreetview,
             title: 'Service Visualisation',
-            icon:'<img src="/Ressources/API_JS/images/icones visu/pegman.png">'
+            icon:'<img src="/leaflet/Ressources 26/images/icones visu/pegman.png">'
         }]	
     });
     
     boutonServiceVisu.button.classList.add('bouton-service-visu');
             
-    pegmanIcon = new L.Icon({iconUrl: "/Ressources/API_JS/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
+    pegmanIcon = new L.Icon({iconUrl: "/leaflet/Ressources 26/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
     pegman = L.marker(maCarte.getCenter(),{icon:pegmanIcon});
     maCarte.on("move", function() {
         pegman.setLatLng(maCarte.getCenter()); 
@@ -1972,19 +1955,35 @@ this.importFichier = function () {
     boutonInfo.addTo(maCarte);	
 
     var conteneur = L.Control.extend({
-        options: {position: 'bottomright'}, 
+        options: {position: 'bottomright'},
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
             boutonConteneur.appendChild(boutonServiceVisu.button);
-            boutonConteneur.appendChild(boutonInfo.button);
+            // boutonInfo vit dans l'en-tête (modernHeaderInfoDock) : ne pas le rapatrier ici
             return boutonConteneur;
         }
     });
 
     conteneurVisuInfo = new conteneur();
     maCarte.addControl(conteneurVisuInfo);
+
+    var headerInfoDock = document.getElementById('modernHeaderInfoDock');
+    if (headerInfoDock) {
+        headerInfoDock.innerHTML = '';
+        boutonInfo.button.dataset.modernDocked = 'true';
+        boutonInfo.button.classList.add('modern-header-info-control');
+        headerInfoDock.appendChild(boutonInfo.button);
+        var headerInfoLabel = document.createElement('span');
+        headerInfoLabel.className = 'modern-header-help-label';
+        headerInfoLabel.textContent = 'Info';
+        headerInfoDock.appendChild(headerInfoLabel);
+        headerInfoDock.addEventListener('click', function(e) {
+            if (e.target.closest('.easy-button-button')) return;
+            boutonInfo.button.click();
+        });
+    }
 }
-	
+
 	this.titre = function(){
 		var ctrlTitre = L.control({position: "bottomleft"});		
 		
@@ -2003,81 +2002,58 @@ this.importFichier = function () {
 				return divTitre;
 			}
 		});		
-			L.ctrlTitre = function(options) {			  	
+			L.ctrlTitre = function(options) {
 				return new L.CtrlTitre(options);
 			}
 
-			L.ctrlTitre({position: "bottomleft"}).addTo(maCarte);
-			 
-			(maCarte).on("browser-print-start", function(e){
+			// Titre déjà présent dans l'en-tête à l'écran : pas d'ajout du contrôle titre sur la carte.
+			document.getElementById("ti").innerHTML = valeurTitre;
+			var titreHeader = document.querySelector('.modern-header h1');
+			if (titreHeader) titreHeader.innerHTML = valeurTitre;
+
+			// À l'impression, l'en-tête HTML n'est pas capturé : on réinjecte le titre.
+			maCarte.on("browser-print-start", function(e){
 				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
 			});
 	}
-		
+
 this.ajouterLogo = function() {
-    var self = this;
-    var logoControl = null;
-    var container = null;
-
-    var LogoControlClass = L.Control.extend({
-        options: { position: "bottomleft" },
-        onAdd: function(map) {
-            // On crée le conteneur vide
-            container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-logos-container");
-            return container;
-        }
-    });
-
-    // ajout à la carte (vide au départ)
-    logoControl = new LogoControlClass();
-    logoControl.addTo(maCarte);
+    var container = document.getElementById("modernLogosDock");
 
     function updateLogos() {
         if (!container) return;
-
-        // On vide le contenu actuel sans supprimer le contrôle
         container.innerHTML = "";
 
-        var icones = [];        
-        if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
-            icones = [
-                {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        } else {
-            icones = [
-                {imgSource: "/Ressources/c3po_gr.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        }
-        
+        // Logos remontés dans l'en-tête (fond foncé) : on utilise toujours les variantes blanches.
+        var icones = [
+            {imgSource: "/leaflet/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+            {imgSource: "/leaflet/Ressources/backward-blanc.png", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+        ];
+
         if (valeurTitre1.endsWith("Waze")){
             icones.push({
-                imgSource: "/Ressources/waze.png", 
-                largeur: "68px", 
-                marginLeft: "10px", 
-                imgTooltip: "Waze", 
-                lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu", 
+                imgSource: "/leaflet/Ressources/waze.png",
+                largeur: "68px",
+                imgTooltip: "Waze",
+                lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu",
                 typeLien: "_blank"
             });
         }
 
-        // On injecte les nouvelles images dans le conteneur existant
         icones.forEach(function(icone) {
             var img = L.DomUtil.create("img", "leaflet-control-logos-img", container);
             img.src = icone.imgSource;
             img.style.width = icone.largeur;
             img.style.height = icone.hauteur;
-            if (icone.marginLeft) img.style.marginLeft = icone.marginLeft;
+            img.style.marginLeft = "0";
             img.title = icone.imgTooltip;
-            
             img.onclick = function(e) {
                 e.preventDefault();
                 window.open(icone.lienSite, icone.typeLien);
             };
         });
     }
-    
+
     updateLogos();
     maCarte.on("baselayerchange", updateLogos);
 }
@@ -2526,21 +2502,27 @@ function main() {
 	carteLeaflet.rechercherLieu();
 	carteLeaflet.importFichier();
 	carteLeaflet.exportCouches();
-	carteLeaflet.iconeClé();	
+	// Déplace le bouton Exporter dans "Outils carte" (logique dans modern-dock).
+	window.modernDockExporter();
+	// Déplace les radios "Fonds de plan" dans la sidebar (logique dans modern-dock).
+	window.modernDockFondsDePlan();
+	// Déplace les cases à cocher des couches métier dans "Données métier".
+	window.modernDockDonneesMetier();
+	carteLeaflet.afficherOutils();
 	carteLeaflet.titre();
-	carteLeaflet.ajouterLogo();	
-	carteLeaflet.ajouterSwitch();	
-	carteLeaflet.aide();		
+	carteLeaflet.ajouterLogo();
+	carteLeaflet.ajouterSwitch();
+	carteLeaflet.aide();
 	carteLeaflet.rechercherJson();
-	carteLeaflet.visuEtInfo(); 
-	carteLeaflet.visuBatiments3D();	
+	carteLeaflet.visuEtInfo();
+	carteLeaflet.visuBatiments3D();
 	carteLeaflet.spiderfyPoints();
 }
 		
 </script> 
 <!-- export couches - dev CD30 -->
-<script src="/Ressources/API_JS/librairies_cd30/export-couches.js"></script>
+<script src="/leaflet/Ressources 26/librairies_cd30/export-couches.js"></script>
 <!-- génération shapes zippés -->
-<script src="/Ressources/API_JS/librairies_cd30/shpwrite.js"></script>
-<script src="/Ressources/API_JS/librairies_cd30/jszip.min.js"></script> 
+<script src="/leaflet/Ressources 26/librairies_cd30/shpwrite.js"></script>
+<script src="/leaflet/Ressources 26/librairies_cd30/jszip.min.js"></script> 
 
