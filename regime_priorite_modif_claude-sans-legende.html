@@ -382,10 +382,18 @@ function gererEtiquettesRD(map) {
     }
 
     // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage des couches routières.
-    map.on("moveend zoomend", rafraichirEtiquettesRD);
+    // Debounce : l'activation d'une couche routière déclenche un layeradd PAR
+    // polyligne (750+ pour le réseau routier) ; on regroupe ces rafales en un
+    // seul rafraîchissement, 80 ms après le dernier événement.
+    var timerEtiquettesRD = null;
+    function planifierEtiquettesRD() {
+        clearTimeout(timerEtiquettesRD);
+        timerEtiquettesRD = setTimeout(rafraichirEtiquettesRD, 80);
+    }
+    map.on("moveend zoomend", planifierEtiquettesRD);
     map.on("layeradd layerremove", function (e) {
         if (e.layer instanceof L.Polyline && e.layer.options && e.layer.options.rdLabel) {
-            rafraichirEtiquettesRD();
+            planifierEtiquettesRD();
         }
     });
     rafraichirEtiquettesRD();
@@ -890,6 +898,7 @@ function CarteLeaflet(conteneurId) {
 		// Points dessus
 		var zIndexDynamiquePoints = 200000;
 		var zIndexReactivation = 1000000;
+		var timerPolygonesFond = null;
 		maCarte.on("layeradd", function(e) {
 			var coucheAjoutee = e.layer;
 			if (coucheAjoutee instanceof L.Marker) {
@@ -907,8 +916,9 @@ function CarteLeaflet(conteneurId) {
 					zIndexReactivation += 100;
 				}
 			}
-			// Polygones dessous
-			setTimeout(function() {				
+			// Polygones dessous (debounce : un seul passage après une rafale de layeradd)
+			clearTimeout(timerPolygonesFond);
+			timerPolygonesFond = setTimeout(function() {				
 				for (var i = 0; i < tabCoucheMG.length; i++) {
 					if (maCarte.hasLayer(tabCoucheMG[i])) {
 						var donnees = tabCoucheMetier[i][0];
