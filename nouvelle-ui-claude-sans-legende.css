@@ -415,8 +415,12 @@ body.is-resizing * {
 }
 
 /* Couche active (case cochée, œil ouvert) → libellé dégrisé.
-   Bascule automatiquement à l'ouverture et en cours de session. */
-.modern-donnees-metier input:checked + span {
+   Bascule automatiquement à l'ouverture et en cours de session.
+   .modern-couche-active : couches à items de légende, dont l'œil est piloté
+   par modern-dock via cette classe (case native laissée décochée pour que le
+   contrôle Leaflet ne rajoute pas sa copie doublon de la couche). */
+.modern-donnees-metier input:checked + span,
+.modern-donnees-metier label.modern-couche-active input + span {
   color: var(--modern-text);
 }
 
@@ -531,8 +535,9 @@ body.is-resizing * {
   transition: background-color .15s;
 }
 
-/* État "visible" (couche cochée) : œil ouvert vert */
-.modern-donnees-metier input:checked + span::after {
+/* État "visible" (couche cochée ou .modern-couche-active) : œil ouvert vert */
+.modern-donnees-metier input:checked + span::after,
+.modern-donnees-metier label.modern-couche-active input + span::after {
   background-color: #16a34a;
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");

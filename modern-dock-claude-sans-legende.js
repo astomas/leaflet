@@ -447,8 +447,15 @@
         return itemsAvecLayers.some(function (it) { return map.hasLayer(it.layers); });
       };
 
-      // Coche/décoche la case native (= icône œil vert/barré via CSS).
-      var majOeil = function () { if (caseOeil) caseOeil.checked = unItemActif(); };
+      // Coche/décoche l'icône œil via une classe sur le label — PAS via la case
+      // native : une case cochée serait resynchronisée par le contrôle Leaflet
+      // (_onInputClick) au moindre clic dans le contrôle, qui rajouterait alors
+      // la copie System A (doublon geoJson) sur la carte. La case reste donc
+      // toujours décochée pour neutraliser définitivement System A.
+      var majOeil = function () {
+        if (caseOeil) caseOeil.checked = false;
+        label.classList.toggle("modern-couche-active", unItemActif());
+      };
 
       // Synchronise les classes DOM d'inactivité avec l'état réel de la carte.
       // Appariement par ordre : item[k] avec layers ↔ k-ième div cliquable du plugin.
