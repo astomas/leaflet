@@ -569,11 +569,11 @@ body.is-resizing * {
   cursor: pointer;
   font: 700 .76rem "Segoe UI", Arial, sans-serif;
   text-align: left;
-  transition: background .15s, border-color .15s, transform .15s;
+  transition: box-shadow .18s ease;
 }
 
 .modern-tool-button:hover {
-  box-shadow: 0 2px 6px rgba(15, 23, 42, .14);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .28);
 }
 .modern-tools-dock .leaflet-control .easy-button-button:hover,
 .modern-tools-dock .leaflet-bar a:hover {
