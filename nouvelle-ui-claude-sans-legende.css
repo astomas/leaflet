@@ -241,6 +241,7 @@ body.is-resizing * {
 }
 
 .modern-family-fonds-plan {--family-accent: #2e7eb8; background: #eef5fb;}
+.modern-family-fonds-plan .modern-family-title:hover {background: #d6e8f7; transition: background .18s ease;}
 .modern-family-metier { --family-accent: var(--modern-warning); background: #fdf4e7; }
 .modern-family-tools { --family-accent: var(--modern-tools); }
 .modern-family-tools .modern-family-title:hover {background: #d2eee6; transition: background .18s ease;}
@@ -572,7 +573,6 @@ body.is-resizing * {
 }
 
 .modern-tool-button:hover {
-  background: #f0faf7;
   border-color: #5fc2ad;
   transform: translateY(-1px);
 }
