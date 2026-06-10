@@ -331,24 +331,26 @@ body.is-resizing * {
   text-align: center;
   padding: 7px 10px;
   border-radius: 999px;
-  border: 1px solid #fbd4b8;
-  background: #fff2e6;
+  border: 1px solid #b8d8f0;
+  background: #f0f7fc;
   font-size: .8rem;
   font-weight: 600;
   line-height: 1.15;
-  color: #4e8392;
+  color: #2e6a9a;
   cursor: pointer;
   transition: background .15s, color .15s, border-color .15s;
 }
 
-.modern- label > span:hover {
-  background: #ffdac0;
+.modern-fonds-plan label > span:hover {
+  background: #c2e0f5;
+  border-color: #2e7eb8;
+  color: #1a4f72;
 }
 
 /* Pastille active : fond sélectionné, rempli de la couleur du bloc */
-.modern- label > span:has(input:checked) {
-  background: var(--family-accent, #ff9b52);
-  border-color: var(--family-accent, #ff9b52);
+.modern-fonds-plan label > span:has(input:checked) {
+  background: var(--family-accent, #2e7eb8);
+  border-color: var(--family-accent, #2e7eb8);
   color: #fff;
 }
 
