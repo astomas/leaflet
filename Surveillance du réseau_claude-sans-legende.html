@@ -975,36 +975,38 @@ function CarteLeaflet(conteneurId) {
 				return 0;
 			});
 	
-			function ajusterLargeurColonnesLegende() {
-			    var container = maCarte.getContainer().querySelector('.leaflet-legend-contents.deux-colonnes');
+			function ajusterLargeurColonnesLegende(racineLegende) {
+			    var base = racineLegende || maCarte.getContainer();
+			    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
 			    if (!container) return;
-			
-			    // Largeur réelle du libellé le plus long
+
 			    var spans = container.querySelectorAll('.leaflet-legend-item span');
 			    var largeurMaxLib = 0;
 			    spans.forEach(function(span) {
 			        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
 			    });
-			
-			    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
+
 				var largeurColonne = largeurMaxLib + 30;
 
-			
 			    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
 			        col.style.minWidth = largeurColonne + 'px';
 			    });
+			}
+
+			window.modernLegendeParCouche = {};
+			for (i = 0; i < tabCtrlLegendeObj.length; i++) {
+				var nomC = tabCtrlLegendeObj[i].nomCouche;
+				if (!window.modernLegendeParCouche[nomC]) {
+					window.modernLegendeParCouche[nomC] = [];
+				}
+				window.modernLegendeParCouche[nomC].push(tabCtrlLegendeObj[i]);
 			}
 				
 			// legende sur 2 col si nbr elts legende > 27 
 			var nbrColonnes = (tabCtrlLegendeObj.length > 27) ? 2 : 1;
 			//var nbrColonnes = (tabCtrlLegendeObj.length || (nbreDeVues + tabCtrlLegendeObj.length) > 27) ? 2 : 1;
 			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, legends: tabCtrlLegendeObj});
-			blocLegende.addTo(maCarte);
-			if (nbrColonnes === 2) {
-				var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
-				if (container) container.classList.add('deux-colonnes');
-				requestAnimationFrame(ajusterLargeurColonnesLegende);
-			}
+			// [sans-legende] blocLegende non ajouté à la carte
 		
 		}						
 	
@@ -1033,67 +1035,19 @@ function CarteLeaflet(conteneurId) {
 			"CartoDB N&B": cartoDB, 		
 			"Stadia Map": StadiaMap,
 			"Plan IGN": fdcIGN,		
-			"Google Satellite": googleSat,	
+			//"Google Satellite": googleSat,
 			"Ortho IGN": orthoIGN			
 		};	
 	
 		var tabCtrlboxNom = [];
 		var libelleCouche = {};
-		for (i=0; i < nbreDeVues; i++) {	
-			tabCtrlboxNom.push({nom: tabNettoyé[i][1], couche: tabCoucheMG[i]});	
-		}	
-		// alim box couches
-		libelleCouche = Object.assign({}, ...tabCtrlboxNom.map(item => ({ [item.nom]: item.couche })));
-		//console.log("libelleCouche : " , libelleCouche);
-	
-		// Repli box couches si legende trop grande en hauteur ecran	
-		if (presenceLegende) {
-			
-			const nbrEltsLegende = tabCtrlLegendeObj.length;	
-			const largeurEcran = screen.width;
-			// Set filtre les doublons, size compte le nbr sous-titres uniques
-			const nbrSousTitresLeg = new Set(tabCtrlLegendeObj.map(o => o.nomCouche)).size;
-
-			// Repli ecrans HD et moins selon nbr elts legende, nbr couches (vues) et nbr col. legende
-			if (largeurEcran <= 1920) {
-				var trigger1Repli = (nbrColonnes === 1 && nbrEltsLegende > 25);
-				var trigger2Repli = (nbrColonnes === 2 && nbrEltsLegende > 45);
-				var trigger3Repli = (nbrColonnes === 1 && nbrEltsLegende + nbreDeVues > 25);
-				var trigger4Repli = (nbrColonnes === 2 && nbrEltsLegende + nbreDeVues > 40);
-				// trigger5 inactif (false) si carto "surveillance" (car définie sans sous-titre ds legende.js)
-				var trigger5Repli = valeurTitre1.indexOf("Surveillance") === -1 && nbrColonnes === 1 && (nbreDeVues + nbrEltsLegende + nbrSousTitresLeg > 26);
-				
-				if (trigger1Repli || trigger2Repli || trigger3Repli || trigger4Repli || trigger5Repli || L.Browser.mobile) {
-					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: true});
-					ctrlBoxCouches.addTo(maCarte);
-					// repli bloc legende si tablettes/mobiles				
-					if ((nbrEltsLegende >= 23 && largeurEcran < 1900) || (L.Browser.mobile && nbrEltsLegende >= 8)) {
-						blocLegende.remove();
-						blocLegende = L.control.Legend({title: null, collapsed: true, position: "bottomright", opacity: 0.8, legends: tabCtrlLegendeObj});
-						blocLegende.addTo(maCarte);
-						if (nbrColonnes === 2) {
-							var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
-							if (container) container.classList.add('deux-colonnes');
-							requestAnimationFrame(ajusterLargeurColonnesLegende);
-						}
-					}
-				}				
-				else {
-					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-					ctrlBoxCouches.addTo(maCarte);
-				}
-			}
-			// ecrans au dela de HD pas de repli
-			else {
-				ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-				ctrlBoxCouches.addTo(maCarte);			
-			}
+		for (i=0; i < nbreDeVues; i++) {
+			var nbEltsCouche = tabCoucheMG[i].getLayers().length;
+			tabCtrlboxNom.push({nom: tabNettoyé[i][1] + " (" + nbEltsCouche + ")", couche: tabCoucheMG[i]});
 		}
-		// Pas de légende pas de repli
-		else {
-	    	ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
-	    	ctrlBoxCouches.addTo(maCarte);
-		}	
+		libelleCouche = Object.assign({}, ...tabCtrlboxNom.map(item => ({ [item.nom]: item.couche })));
+		ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
+		ctrlBoxCouches.addTo(maCarte);
 	}
 
 	this.zoomObjet = function () {	
@@ -1589,14 +1543,11 @@ this.importFichier = function () {
 	window.modernDockSpecificControl(btnImporter, "Importer");
 }
 
-	this.iconeClé = function() {
-	
-		var iconesVisible = false;
-		var sousBoutonsCréés = false;	
-		
+	this.afficherOutils = function() {
+
 		var btnMesurer = new L.control.ruler({position: "topleft"});
 		var btnIsochrone = new L.geoportalControl.Isocurve({});
-		
+
 		// bouton imprimer
 		var btnImprimer = new L.control.browserPrint({
 			title: "Imprimer",
@@ -1604,14 +1555,14 @@ this.importFichier = function () {
 			printModes: [
 				L.control.browserPrint.mode.landscape("Vue courante"),
 				L.control.browserPrint.mode.auto("Auto Gard"),
-				L.control.browserPrint.mode.custom("Sélec. zone", "A4")					
+				L.control.browserPrint.mode.custom("Sélec. zone", "A4")
 				//L.control.browserPrint.mode.portrait("Portrait"),
 			],
 		});
 		L.Control.BrowserPrint.Utils.registerLayer(L.GridLayer.GoogleMutant,"L.GridLayer.GoogleMutant", function(layer) {
-			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});	
+			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});
 			}
-		);		
+		);
 
 		let sauvegardeStyleLegende = null;
 
@@ -1625,22 +1576,28 @@ this.importFichier = function () {
 		        }))
 		    };
 		}
-		
+
 		function restaurerStyleLegende() {
 		    if (!sauvegardeStyleLegende) return;
-		
+
 		    sauvegardeStyleLegende.el.setAttribute("style", sauvegardeStyleLegende.style);
-		
+
 		    sauvegardeStyleLegende.enfants.forEach(item => {
 		        item.el.setAttribute("style", item.style);
 		    });
-		
+
 		    sauvegardeStyleLegende = null;
-		}		
-		
+		}
+
 		maCarte.on("browser-print-start", function(e){
-			if (presenceLegende) {			
-				blocLegende.addTo(e.printMap);						
+			if (presenceLegende) {
+				blocLegende.addTo(e.printMap);
+				if (nbrColonnes === 2) {
+					var containerPrint = e.printMap.getContainer().querySelector('.leaflet-legend-contents');
+					if (containerPrint) containerPrint.classList.add('deux-colonnes');
+					requestAnimationFrame(function() { ajusterLargeurColonnesLegende(e.printMap.getContainer()); });
+				}
+			}
 			// ajout logo avant print
 			setTimeout(function() {
 				const conteneurCartePrint = e.printMap.getContainer();
@@ -1653,7 +1610,7 @@ this.importFichier = function () {
 				logoPrint.style.height = "50px";
 				logoPrint.style.zIndex = "10000";
 				logoPrint.style.pointerEvents = "none";
-				
+
 				const titrePrint = conteneurCartePrint.querySelector(".infotitre, .titre");
 				const hauteurTitre = titrePrint.offsetHeight;
 				logoPrint.style.bottom = (hauteurTitre + 15) + "px";
@@ -1661,50 +1618,45 @@ this.importFichier = function () {
 				conteneurCartePrint.appendChild(logoPrint);
 			}, 300);
 
-			// ajuster fontes legende et centrage avant print selon hauteur legende	
+			// ajuster fontes legende et centrage avant print selon hauteur legende
 			setTimeout(function() {
+				if (!presenceLegende) return;
 				const conteneurLegende = blocLegende.getContainer();
 				const hauteurLegende = conteneurLegende.offsetHeight;
 
-				// si hauteur < 250px, on garde le bloc original
-					if (hauteurLegende < 250) {
-						return;
-					}
-					else {
-						// sauvegarde état original avant modification
-						sauvegarderStyleLegende(conteneurLegende);
-						//diminution font size
-						const fontSize = 9;
+				if (hauteurLegende < 250) {
+					return;
+				}
+				else {
+					sauvegarderStyleLegende(conteneurLegende);
+					const fontSize = 9;
 
-						conteneurLegende.style.fontSize = fontSize + "px";
-						conteneurLegende.style.lineHeight = "1.1";
+					conteneurLegende.style.fontSize = fontSize + "px";
+					conteneurLegende.style.lineHeight = "1.1";
 
-						conteneurLegende.querySelectorAll("*").forEach(function(elementLegende) {
-							elementLegende.style.fontSize = fontSize + "px";
-							elementLegende.style.lineHeight = "1.1";
-						});
-						// decalage carte a gauche
-						e.printMap.panBy([100, 0], { animate: false });
-					}
-				}, 100);
-			}	
-		});		
-	
-		maCarte.on("browser-print-end", function(){		
-			if (presenceLegende) {			
-        		// remet la légende comme avant impression
-        		restaurerStyleLegende();
-			 	var blocLegendeElement = blocLegende.getContainer();
+					conteneurLegende.querySelectorAll("*").forEach(function(elementLegende) {
+						elementLegende.style.fontSize = fontSize + "px";
+						elementLegende.style.lineHeight = "1.1";
+					});
+					e.printMap.panBy([100, 0], { animate: false });
+				}
+			}, 100);
+		});
+
+		maCarte.on("browser-print-end", function(){
+			if (presenceLegende) {
+				restaurerStyleLegende();
+				var blocLegendeElement = blocLegende.getContainer();
 				blocLegendeElement.style.marginTop = '12px';
 				blocLegendeElement.style.paddingBottom = '0';
-				blocLegende.remove();				
-				blocLegende.addTo(maCarte);	
+				blocLegende.remove();
+				// [sans-legende] blocLegende non re-ajouté à la carte
 				conteneurVisuInfo.remove();
-				conteneurVisuInfo.addTo(maCarte);	
-			}	
-		});	
-		
-		
+				conteneurVisuInfo.addTo(maCarte);
+			}
+		});
+
+
 		// bouton geosearch
 		const btnGeosearch = new GeoSearch.GeoSearchControl({
 		  provider: new GeoSearch.OpenStreetMapProvider(),
@@ -1719,7 +1671,7 @@ this.importFichier = function () {
 
 		  carte.on('geosearch/showlocation', function(result) {
 			let label = result.location.label;
-			label = label.split(',').slice(0, 3).join(',').trim();		
+			label = label.split(',').slice(0, 3).join(',').trim();
 			const lat = result.location.y.toFixed(5);
 			const lon = result.location.x.toFixed(5);
 
@@ -1739,11 +1691,11 @@ this.importFichier = function () {
 
 			marqueursGeoSearch.push(marker);
 		  });
-		
+
 		  carte.on('click', function () {
-			carte.closePopup(); 
-		  });		
-		  
+			carte.closePopup();
+		  });
+
 		  document.querySelectorAll('.leaflet-control-geosearch a.leaflet-bar-part').forEach(btn => {
 			btn.addEventListener('click', () => {
 			  marqueursGeoSearch.forEach(m => carte.removeLayer(m));
@@ -1751,68 +1703,21 @@ this.importFichier = function () {
 			});
 		  });
 		}
-		
-		// bouton clé
-		var boutonClé = L.easyButton("fa-key fa-lg", function() { 
-			deployerIcones(); 
-		}, "Autres fonctions").addTo(maCarte);
-		
-		ajouterHoverEtClic(boutonClé.button, {
-		    isVisible: () => iconesVisible,
-		    afficher: deployerIcones,
-		    masquer: deployerIcones
-		});
-		
-		boutonClé.button.classList.add('bouton-cle');
-		var container = boutonClé.button.parentNode;
-		container.style.backgroundColor = "lightgrey";		
-		boutonClé.button.style.backgroundColor = "lightgrey"; 
-			
-	function deployerIcones() {
-			iconesVisible = !iconesVisible;
-			if (!sousBoutonsCréés) {
-				btnImprimer.addTo(maCarte);
-				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
-				btnGeosearch.addTo(maCarte);
-				activerPopupRaccourci(maCarte);					
-				sousBoutonsCréés = true;
-			}			
-			if (iconesVisible) {
-				boutonClé.button.style.backgroundColor = "#ffff5b"; 
-				btnImprimer.addTo(maCarte);
-				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
-				btnGeosearch.addTo(maCarte);
-				activerPopupRaccourci(maCarte);
-						
-			} else {
-				btnImprimer.remove();
-				btnMesurer.remove();
-				btnIsochrone.remove();				
-				btnGeosearch.remove();
-				container.style.backgroundColor = "lightgrey";
-				boutonClé.button.style.backgroundColor = "lightgrey";
-			}
-		}
+
 		setTimeout(function() {
-			if (!sousBoutonsCréés) {
-				btnImprimer.addTo(maCarte);
-				window.modernDockSpecificControl(btnImprimer, "Imprimer");
-				btnMesurer.addTo(maCarte);
-				window.modernDockSpecificControl(btnMesurer, "Mesurer");
-				btnIsochrone.addTo(maCarte);
-				btnGeosearch.addTo(maCarte);
-				setTimeout(function() {
-					window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
-					window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
-				}, 80);
-				activerPopupRaccourci(maCarte);
-				sousBoutonsCréés = true;
-			}
+			btnImprimer.addTo(maCarte);
+			window.modernDockSpecificControl(btnImprimer, "Imprimer");
+			btnMesurer.addTo(maCarte);
+			window.modernDockSpecificControl(btnMesurer, "Mesurer");
+			btnIsochrone.addTo(maCarte);
+			btnGeosearch.addTo(maCarte);
+			setTimeout(function() {
+				window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
+				window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
+			}, 80);
+			activerPopupRaccourci(maCarte);
 		}, 0);
 	}
-
 	this.aide = function () {
 		var contenuAideInitial =
 		`<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
@@ -1903,7 +1808,8 @@ this.importFichier = function () {
 		
 		var containerAide = boutonAide.button.parentNode;
 		containerAide.style.backgroundColor = "#f9b062";
-		containerAide.style.border = "2px #f9b062";			
+		containerAide.style.border = "2px #f9b062";
+		window.modernHeaderHelpDock.appendChild(boutonAide.button);
 	}
 
 	this.visuEtInfo = function () {		
@@ -2016,14 +1922,14 @@ this.importFichier = function () {
         info(maCarte);
     }, "Informations", {position: "bottomright"});
     boutonInfo.button.classList.add('bouton-info');
-    boutonInfo.addTo(maCarte);	
+    boutonInfo.addTo(maCarte);
+    window.modernHeaderInfoDock.appendChild(boutonInfo.button);
 
     var conteneur = L.Control.extend({
-        options: {position: 'bottomright'}, 
+        options: {position: 'bottomright'},
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
             boutonConteneur.appendChild(boutonServiceVisu.button);
-            boutonConteneur.appendChild(boutonInfo.button);
             return boutonConteneur;
         }
     });
@@ -2033,100 +1939,63 @@ this.importFichier = function () {
 }
 	
 	this.titre = function(){
-		var ctrlTitre = L.control({position: "bottomleft"});		
-		
 		valeurTitre2  =  " - 10/06/2026 " ;
-		valeurTitre3  =  " - 10/06/2026 06:49 " ;    
-	    if (valeurTitre1 == "Surveillance du r&#233;seau - source CD30 - Waze") {	
+		valeurTitre3  =  " - 10/06/2026 06:49 " ;
+	    if (valeurTitre1 == "Surveillance du r&#233;seau - source CD30 - Waze") {
 	        valeurTitre = valeurTitre1 + valeurTitre3;
 	    } else {
 	        valeurTitre = valeurTitre1 + valeurTitre2;
 	    }
+		var titreHeader = document.querySelector('.modern-header h1');
+		if (titreHeader) titreHeader.innerHTML = valeurTitre;
+
 		L.CtrlTitre = L.Control.extend ({
-			onAdd : function () {				
-				var divTitre = L.DomUtil.create("div", "titre infotitre"); 
+			onAdd : function () {
+				var divTitre = L.DomUtil.create("div", "titre infotitre");
 				divTitre.innerHTML += valeurTitre;
-				document.getElementById("ti").innerHTML = valeurTitre;		
 				return divTitre;
 			}
-		});		
-			L.ctrlTitre = function(options) {			  	
+		});
+			L.ctrlTitre = function(options) {
 				return new L.CtrlTitre(options);
 			}
 
-			L.ctrlTitre({position: "bottomleft"}).addTo(maCarte);
-			 
 			(maCarte).on("browser-print-start", function(e){
 				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
 			});
 	}
 		
 this.ajouterLogo = function() {
-    var self = this;
-    var logoControl = null;
-    var container = null;
+    var icones = [
+        {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+        {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+    ];
 
-    var LogoControlClass = L.Control.extend({
-        options: { position: "bottomleft" },
-        onAdd: function(map) {
-            // On crée le conteneur vide
-            container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-logos-container");
-            return container;
-        }
-    });
-
-    // ajout à la carte (vide au départ)
-    logoControl = new LogoControlClass();
-    logoControl.addTo(maCarte);
-
-    function updateLogos() {
-        if (!container) return;
-
-        // On vide le contenu actuel sans supprimer le contrôle
-        container.innerHTML = "";
-
-        var icones = [];        
-        if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
-            icones = [
-                {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        } else {
-            icones = [
-                {imgSource: "/Ressources/c3po_gr.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        }
-        
-        if (valeurTitre1.endsWith("Waze")){
-            icones.push({
-                imgSource: "/Ressources/waze.png", 
-                largeur: "68px", 
-                marginLeft: "10px", 
-                imgTooltip: "Waze", 
-                lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu", 
-                typeLien: "_blank"
-            });
-        }
-
-        // On injecte les nouvelles images dans le conteneur existant
-        icones.forEach(function(icone) {
-            var img = L.DomUtil.create("img", "leaflet-control-logos-img", container);
-            img.src = icone.imgSource;
-            img.style.width = icone.largeur;
-            img.style.height = icone.hauteur;
-            if (icone.marginLeft) img.style.marginLeft = icone.marginLeft;
-            img.title = icone.imgTooltip;
-            
-            img.onclick = function(e) {
-                e.preventDefault();
-                window.open(icone.lienSite, icone.typeLien);
-            };
+    if (valeurTitre1.endsWith("Waze")){
+        icones.push({
+            imgSource: "/Ressources/waze.png",
+            largeur: "68px",
+            marginLeft: "10px",
+            imgTooltip: "Waze",
+            lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu",
+            typeLien: "_blank"
         });
     }
-    
-    updateLogos();
-    maCarte.on("baselayerchange", updateLogos);
+
+    icones.forEach(function(icone) {
+        var img = document.createElement("img");
+        img.src = icone.imgSource;
+        img.style.width = icone.largeur;
+        if (icone.hauteur) img.style.height = icone.hauteur;
+        if (icone.marginLeft) img.style.marginLeft = icone.marginLeft;
+        img.title = icone.imgTooltip;
+        img.style.cursor = "pointer";
+        img.onclick = function(e) {
+            e.preventDefault();
+            window.open(icone.lienSite, icone.typeLien);
+        };
+        window.modernLogosDock.appendChild(img);
+    });
 }
 
 this.ajouterSwitch = function() {
@@ -2576,7 +2445,7 @@ function main() {
 	window.modernDockExporter();
 	window.modernDockFondsDePlan();
 	window.modernDockDonneesMetier();
-	carteLeaflet.iconeClé();
+	carteLeaflet.afficherOutils();
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();
 	carteLeaflet.ajouterSwitch();
