@@ -1619,8 +1619,8 @@ this.importFichier = function () {
 				window.modernDockSpecificControl(btnImprimer, "Imprimer"); // //// modif nouvelle UI - dock imprimer ////
 				btnMesurer.addTo(maCarte);
 				window.modernDockSpecificControl(btnMesurer, "Mesurer"); // //// modif nouvelle UI - dock mesurer ////
-				btnIsochrone.addTo(maCarte);
-				btnGeosearch.addTo(maCarte);
+				btnIsochrone.addTo(maCarte); // //// modif nouvelle UI - ajout au map, docké dans sidebar ensuite ////
+				btnGeosearch.addTo(maCarte); // //// modif nouvelle UI - ajout au map, docké dans sidebar ensuite ////
 				setTimeout(function() {
 					window.modernDockSpecificControl(btnIsochrone, 'Isochrone'); // //// modif nouvelle UI - dock isochrone ////
 					window.modernDockSpecificControl(btnGeosearch, 'Coord GPS'); // //// modif nouvelle UI - dock geosearch ////
@@ -1631,7 +1631,7 @@ this.importFichier = function () {
 		}, 0);
 	}
 	
-	this.aide = function () {
+	this.aide = function () { // //// modif nouvelle UI - bouton Aide déplacé dans en-tête (modernHeaderHelpDock) ////
 		var contenuAideInitial =
 		`<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
 		<p><img src='/ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).</p>
@@ -1724,8 +1724,8 @@ this.importFichier = function () {
 		containerAide.style.backgroundColor = "#f9b062";
 		containerAide.style.border = "2px #f9b062";
 		containerAide.dataset.modernDocked = 'true'; // //// modif nouvelle UI - dock aide dans en-tête ////
-		containerAide.classList.add('modern-header-help-control');
-		var headerHelpDock = document.getElementById('modernHeaderHelpDock');
+		containerAide.classList.add('modern-header-help-control'); // //// modif nouvelle UI - classe CSS en-tête aide ////
+		var headerHelpDock = document.getElementById('modernHeaderHelpDock'); // //// modif nouvelle UI - zone aide en-tête ////
 		if (headerHelpDock) {
 			headerHelpDock.innerHTML = '';
 			headerHelpDock.appendChild(containerAide);
@@ -1740,7 +1740,7 @@ this.importFichier = function () {
 		}
 	}
 
-	this.visuEtInfo = function () {		
+	this.visuEtInfo = function () { // //// modif nouvelle UI - boutonInfo déplacé dans en-tête, conteneur streetview seul en bas-droite ////
     // bouton visu
     var tabServices = [];
     if (!valeurTitre1.endsWith("3D")){
@@ -1868,9 +1868,9 @@ this.importFichier = function () {
     var headerInfoDock = document.getElementById('modernHeaderInfoDock'); // //// modif nouvelle UI - dock info dans en-tête ////
     if (headerInfoDock) {
         headerInfoDock.innerHTML = '';
-        boutonInfo.button.dataset.modernDocked = 'true';
-        boutonInfo.button.classList.add('modern-header-info-control');
-        headerInfoDock.appendChild(boutonInfo.button);
+        boutonInfo.button.dataset.modernDocked = 'true'; // //// modif nouvelle UI - flag docké ////
+        boutonInfo.button.classList.add('modern-header-info-control'); // //// modif nouvelle UI - classe CSS en-tête info ////
+        headerInfoDock.appendChild(boutonInfo.button); // //// modif nouvelle UI - déplace bouton dans en-tête ////
         var headerInfoLabel = document.createElement('span');
         headerInfoLabel.className = 'modern-header-help-label';
         headerInfoLabel.textContent = 'Info';
@@ -1882,7 +1882,7 @@ this.importFichier = function () {
     }
 }
 	
-	this.titre = function(){
+	this.titre = function(){ // //// modif nouvelle UI - titre injecté dans h1 en-tête, plus affiché sur la carte ////
 		var ctrlTitre = L.control({position: "bottomleft"});		
 		
 		valeurTitre2  =  " - 14/04/2026 " ;
