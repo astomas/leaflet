@@ -2110,8 +2110,23 @@ this.rechercherJson = function(){
 					e.layer._popupOriginal = contenuPopup;
 				}
                 var btnId = 'btnExportRecherche_';
-				contenuPopup += '<br><button id="' + btnId + '" style="margin-top:8px; padding:4px 8px; cursor:pointer;"><i class="fa-solid fa-arrow-up-from-bracket"></i>  Exporter Geojson</button>';
-				  
+				//contenuPopup += '<br><button id="' + btnId + '" style="margin-top:8px; padding:4px 8px; cursor:pointer;"><i class="fa-solid fa-arrow-up-from-bracket"></i>  Exporter Geojson</button>';
+				contenuPopup += '<br><button id="' + btnId + '" ' +
+				'style="' +
+					'margin-top:8px;' +
+					'padding:7px 12px;' +
+					'cursor:pointer;' +
+					'background:#0078d4;' +
+					'color:white;' +
+					'border:none;' +
+					'border-radius:6px;' +
+					'font-size:13px;' +
+					'font-weight:600;' +
+					'box-shadow:0 2px 4px rgba(0,0,0,0.2);' +
+				'">' +
+				'<i class="fa-solid fa-arrow-up-from-bracket" style="margin-right:6px;"></i>' +
+				'Exporter Geojson' +
+				'</button>'; 
                 e.layer.unbindPopup();
                 e.layer.bindPopup(contenuPopup, optionsPopup);
                 
