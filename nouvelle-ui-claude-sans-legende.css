@@ -1031,7 +1031,7 @@ body.is-resizing * {
 
 .modern-tools-dock .leaflet-control-browser-print .browser-print-mode {
   display: none;
-  background: #919187 !important;
+  background: #B2B2AB !important;
   color: #fff !important;
   opacity: 1 !important;
   font: 700 11px/19px "Helvetica Neue", Arial, Helvetica, sans-serif !important;
