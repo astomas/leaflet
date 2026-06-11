@@ -484,7 +484,7 @@ body.is-resizing * {
 
 .detail-couches-sidebar .leaflet-legend-group-content {
   padding: 0 !important;
-  font-weight:600px;
+  font-weight:600;
 }
 
 /* Étiquette blanche : display block remplace display table, l'icône et le
