@@ -9,7 +9,6 @@
 	['googleearth', 'Google Earth 3D', 'Google Earth 3D', false, 'https://earth.google.com/web/@{lat},{lon},32.3713819a,300d,35y,0h,60t,0r', 'url("/leaflet/Ressources/API_JS/images/icones visu/google_earth.png")', '1px solid #717D7E'],	
 	['googlemap', 'Google Map', 'Google Maps', false, 'https://www.google.com/maps/search/?api=1&query={lat},{lon}', 'url("/leaflet/Ressources/API_JS/images/icones visu/gmap.png")', '1px solid #717D7E'],
 	['Waze', 'Waze', 'Waze (livemap)', false, 'https://www.waze.com/fr/live-map/directions?to=ll.{lat}%2C{lon}', 'url("/leaflet/Ressources/API_JS/images/icones visu/waze.png")', '1px solid #717D7E'],	
-	// l'url ne prend pas inclinaison '3214a,35y,359.23h,55.56t'
 	['googlemap3D', 'Google Map 3D', 'Google Maps 3D', false, 'https://www.google.com/maps/@{lat},{lon},3214a,35y,359.23h,55.56t/data=!3m1!1e3?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D', 'url("/leaflet/Ressources/API_JS/images/icones visu/gmap3D.png")', '1px solid #717D7E'],
 	['world', 'World 3D', 'World 3D', false, 'https://maps.wrld3d.com/?lat={lat}&lon={lon}&zoom=17&orient=0.000', 'url("/leaflet/Ressources/API_JS/images/icones visu/world.png")', '1px solid #717D7E']
 	],
