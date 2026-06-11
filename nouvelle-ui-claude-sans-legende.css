@@ -426,7 +426,6 @@ body.is-resizing * {
 .modern-donnees-metier input:checked + span,
 .modern-donnees-metier label.modern-couche-active input + span {
   color: var(--modern-text);
-  font-size:0.95em;
 }
 
 /* Chevron de repli/dépli du détail légende (à gauche du libellé de couche) */
