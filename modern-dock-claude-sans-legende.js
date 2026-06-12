@@ -53,6 +53,10 @@
     el.style.float    = "none";
     el.style.clear    = "none";
 
+    // //// modif nouvelle UI - supprime les tooltips natifs, redondants avec le libellé visible ////
+    el.removeAttribute("title");
+    el.querySelectorAll("[title]").forEach(n => n.removeAttribute("title"));
+
     // Construction du bouton : slot icône + libellé texte
     const row  = document.createElement("div");
     row.className       = "modern-tool-button";
