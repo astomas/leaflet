@@ -53,13 +53,6 @@
     el.style.float    = "none";
     el.style.clear    = "none";
 
-    // //// modif nouvelle UI - force suppression cadre natif GPwidget (Isochrone) ////
-    var gpw = el.querySelector ? el.querySelector(".GPwidget") : null;
-    if (gpw) {
-      gpw.style.setProperty("border", "none", "important");
-      gpw.style.setProperty("background", "transparent", "important");
-    }
-
     // Construction du bouton : slot icône + libellé texte
     const row  = document.createElement("div");
     row.className       = "modern-tool-button";
