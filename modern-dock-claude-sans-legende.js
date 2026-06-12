@@ -57,6 +57,19 @@
     el.removeAttribute("title");
     el.querySelectorAll("[title]").forEach(n => n.removeAttribute("title"));
 
+    // //// modif nouvelle UI - input fichier (Importer) : neutralise le tooltip
+    // navigateur "Aucun fichier sélectionné" en désactivant le survol de l'input ;
+    // le clic est délégué au conteneur (le guard évite la boucle sur le click programmatique) ////
+    const inputFichier = el.querySelector('input[type="file"]');
+    if (inputFichier) {
+      inputFichier.style.pointerEvents = "none";
+      el.style.cursor = "pointer";
+      el.addEventListener("click", function (e) {
+        if (e.target === inputFichier) return;
+        inputFichier.click();
+      });
+    }
+
     // Construction du bouton : slot icône + libellé texte
     const row  = document.createElement("div");
     row.className       = "modern-tool-button";
