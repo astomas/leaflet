@@ -646,7 +646,7 @@ body.is-resizing * {
 .infotitre {
   padding: 10px 13px !important;
   color: #fff !important;
-  background: linear-gradient(135deg, var(--modern-primary), var(--modern-primary-2)) !important;
+  background: linear-gradient(135deg, #e07838, #f09a5a) !important;
   font-family: "Segoe UI", Arial, sans-serif !important;
   font-weight: 800 !important;
 }
@@ -836,6 +836,15 @@ body.is-resizing * {
   }
 
   .modern-main-content { grid-template-columns: 1fr !important; }
+
+  .infotitre {
+    font-size: 80% !important;
+    padding: 8px 10px !important;
+  }
+  .leaflet-legend:not(.detail-couches-sidebar) {
+    transform: scale(0.8);
+    transform-origin: bottom right;
+  }
 }
 
 /* Correctif boutons Info / Aide dans l'en-tête : garde le rendu compact d'origine */
