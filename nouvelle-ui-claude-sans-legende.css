@@ -646,7 +646,7 @@ body.is-resizing * {
 .infotitre {
   padding: 10px 13px !important;
   color: #fff !important;
-  background: linear-gradient(135deg, #e07838, #f09a5a) !important;
+  background: #fab529 !important;
   font-family: "Segoe UI", Arial, sans-serif !important;
   font-weight: 800 !important;
 }
