@@ -89,13 +89,18 @@
     // (contrôle dont le conteneur est lui-même cliquable, ex. leaflet-ruler),
     // on déclenche le clic sur le contrôle lui-même. Le clic direct sur un
     // bouton/lien natif ou le contrôle est ignoré (handler natif déjà actif).
-    // //// modif nouvelle UI - priorité aux liens/boutons avant les inputs : certains
-    // contrôles (ex. GeoSearch "Coord GPS") placent leur form/input avant le bouton
-    // dans le DOM, et cliquer l'input caché ne déclenchait rien ////
+    // //// modif nouvelle UI - cible le premier élément interactif VISIBLE : GeoSearch
+    // (Coord GPS) place son form caché (input + reset) avant le bouton <a> dans le DOM,
+    // et cliquer un élément caché ne déclenchait rien. Si tout est caché (ex. panneau
+    // Isochrone replié), on retombe sur le premier dans l'ordre du DOM comme avant ////
     row.addEventListener("click", function (event) {
       if (event.target.closest("button,a,input,[role='button'],.leaflet-control")) return;
-      const clickable = el.querySelector("a,button,[role='button']") ||
-                        el.querySelector("input") || el;
+      const candidats = el.querySelectorAll("a,button,input,[role='button']");
+      let clickable = null;
+      for (let i = 0; i < candidats.length; i++) {
+        if (candidats[i].offsetParent !== null) { clickable = candidats[i]; break; }
+      }
+      if (!clickable) clickable = candidats[0] || el;
       clickable.click();
     });
 
