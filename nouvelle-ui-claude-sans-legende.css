@@ -624,6 +624,15 @@ body.is-resizing * {
   box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
 }
 
+/* Importer (betterFileLayer) et Isochrone : même bordure légère que les
+   autres outils du dock (remplace leurs cadres natifs plus épais). */
+.modern-tools-dock .leaflet-control-better-filelayer,
+.modern-tools-dock label[id^="GPshowIsochronPicto"] {
+  border: 1px solid rgba(15, 23, 42, .12) !important;
+  border-radius: 5px !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
+}
+
 .leaflet-bar a,
 .leaflet-control .easy-button-button {
   color: var(--modern-primary) !important;
