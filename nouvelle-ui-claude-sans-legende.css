@@ -670,6 +670,7 @@ body.is-resizing * {
   line-height: 1.45 !important;
   overflow-wrap: break-word;
   max-width: 500px !important;
+  margin-right:20px;
 }
 
 /* ===== En-tête des popups : nom de couche + icône / pastille couleur ===== */
