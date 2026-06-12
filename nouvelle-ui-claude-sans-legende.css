@@ -593,6 +593,7 @@ body.is-resizing * {
 .modern-tool-button-label {
   white-space: normal;
   line-height: 1.1;
+  font-size: .76rem;
 }
 
 .modern-tools-dock .leaflet-control,
@@ -605,6 +606,27 @@ body.is-resizing * {
   z-index: auto !important;
   box-shadow: none !important;
 }
+
+.modern-tools-dock .leaflet-bar {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.modern-tools-dock .leaflet-control-better-filelayer {
+  border: none !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.modern-tools-dock .GPwidget {
+  border: none !important;
+  background: transparent !important;
+  font-size: .76rem !important;
+  font-family: "Segoe UI", Arial, sans-serif !important;
+}
+
 
 .modern-tools-dock .leaflet-bar a,
 .modern-tools-dock .leaflet-control button,
@@ -1051,7 +1073,7 @@ body.is-resizing * {
 .modern-tool-button:has(form[id^="GPisochronForm"]) .modern-tool-icon-slot {
   position: relative !important;
   z-index: 200002 !important;
-  background: #fff !important;
+  background: transparent !important;
 }
 
 .modern-tools-dock label[id^="GPshowIsochronPicto"],
