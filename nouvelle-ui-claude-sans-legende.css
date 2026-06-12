@@ -607,22 +607,14 @@ body.is-resizing * {
   box-shadow: none !important;
 }
 
-.modern-tools-dock .leaflet-bar {
+.modern-tool-icon-slot > * {
   border: none !important;
   border-radius: 0 !important;
-}
-
-.modern-tools-dock .leaflet-control-better-filelayer {
-  border: none !important;
-  background-color: transparent !important;
-  border-radius: 0 !important;
-  width: 25px !important;
-  height: 25px !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .modern-tools-dock .GPwidget {
-  border: none !important;
-  background: transparent !important;
   font-size: .76rem !important;
   font-family: "Segoe UI", Arial, sans-serif !important;
 }
