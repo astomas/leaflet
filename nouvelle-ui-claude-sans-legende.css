@@ -611,8 +611,8 @@ body.is-resizing * {
 .modern-tools-dock .leaflet-control .easy-button-button,
 .modern-tools-dock .leaflet-control img,
 .modern-tools-dock .leaflet-control .easy-button-button img {
-  max-width: 25px !important;
-  max-height: 25px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
 }
 
 .leaflet-bar:not(.detail-couches-sidebar),
