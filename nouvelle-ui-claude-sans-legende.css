@@ -836,15 +836,6 @@ body.is-resizing * {
   }
 
   .modern-main-content { grid-template-columns: 1fr !important; }
-
-  .infotitre {
-    font-size: 80% !important;
-    padding: 8px 10px !important;
-  }
-  .leaflet-legend:not(.detail-couches-sidebar) {
-    transform: scale(0.8);
-    transform-origin: bottom right;
-  }
 }
 
 /* Correctif boutons Info / Aide dans l'en-tête : garde le rendu compact d'origine */
