@@ -1667,7 +1667,7 @@ this.importFichier = function () {
 		maCarte.on("browser-print-start", function(e){
 			if (presenceLegende) {
 				blocLegende.addTo(e.printMap);
-				if (nbrColonnes === 2) {
+				if (blocLegende.options.column === 2) {
 					var containerPrint = e.printMap.getContainer().querySelector('.leaflet-legend-contents');
 					if (containerPrint) containerPrint.classList.add('deux-colonnes');
 					requestAnimationFrame(function() { ajusterLargeurColonnesLegende(e.printMap.getContainer()); });
