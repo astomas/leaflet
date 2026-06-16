@@ -1508,6 +1508,8 @@ this.importFichier = function () {
     // tritement post chargement
     maCarte.on('bfl:layerloaded', function(e) {
         let fichierImporté = e.layer.options.name || 'Fichier importé';
+        // //// modif nouvelle UI - nom du fichier sans extension pour titre popup ////
+        let nomFichierSansExt = fichierImporté.replace(/\.[^.]+$/, '');
 		
 		// remplacement des icone des points importés
 		e.layer.eachLayer(function(l) {
@@ -1581,11 +1583,11 @@ this.importFichier = function () {
                     <i class='fa fa-file-excel-o'></i> Exporter les ${propsGroupes.length} entités (CSV)</button>
                 </div>`;
                 
-                contenuPopup = `<div class='popup-scroll grille-active' style='max-height:300px; overflow-y:auto;'>${htmlParts.join("<hr class='sep-grille' />")}</div>${boutonExport}`;
+                contenuPopup = construireEntetePopup({}, nomFichierSansExt) + `<div class='popup-scroll grille-active' style='max-height:300px; overflow-y:auto;'>${htmlParts.join("<hr class='sep-grille' />")}</div>${boutonExport}`;
                 contenuTooltip = `<b>${propsGroupes.length} entités superposées</b><br/><i>Cliquez pour le détail</i>`;
             } else {
                 // Pour les mono : Tooltip et Popup identiques (contenu complet)
-                contenuPopup = htmlParts[0];
+                contenuPopup = construireEntetePopup(propsGroupes[0], nomFichierSansExt) + htmlParts[0];
                 contenuTooltip = htmlParts[0];
             }
 
