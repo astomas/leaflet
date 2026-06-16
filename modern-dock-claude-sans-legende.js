@@ -699,9 +699,13 @@
           map.on("browser-print-start", function (e) {
             if (map._modernPrintMode !== "Landscape") return;
             setTimeout(function () {
-              e.printMap.setZoom(e.printMap.getZoom() + 1);
+              // //// modif nouvelle UI - le plugin pose lui-même un setView(centre, zoom-0.6)
+              // juste avant cet événement. On le surcharge par un setView ABSOLU calé sur le
+              // zoom réel de la carte écran (map.getZoom()) + 1, pour un net +1 déterministe
+              // indépendant du -0.6 interne du plugin. ////
+              e.printMap.setView(map.getCenter(), map.getZoom() + 1, { animate: false });
               // //// modif nouvelle UI - décale la carte vers la gauche dans l'overlay print.
-              // panBy dans un 2e setTimeout : le setZoom déclenche des events Leaflet internes
+              // panBy dans un 2e setTimeout : le setView déclenche des events Leaflet internes
               // qui re-centrent la carte ; on attend qu'ils soient stabilisés avant de panner. ////
               setTimeout(function () {
                 e.printMap.panBy([120, 0], { animate: false });
