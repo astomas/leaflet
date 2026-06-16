@@ -654,7 +654,7 @@ body.is-resizing * {
   background: #ffe6c7 !important;
 }
 .leaflet-control .easy-button-button.bouton-service-visu-actif {
-  background: #ffe600 !important;
+  background: #ffff00 !important;
 }
 
 .leaflet-control-scale-line {
