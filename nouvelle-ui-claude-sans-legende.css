@@ -845,6 +845,28 @@ body.is-resizing * {
   }
 
   .modern-main-content { grid-template-columns: 1fr !important; }
+
+  /* //// modif nouvelle UI - titre carte dans la sortie print : fonte réduite,
+     retour à la ligne automatique au-delà de 400 px //// */
+  .infotitre, .titre {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    max-width: 600px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+}
+
+/* Même règle hors @media pour que ça s'applique aussi dans
+   l'overlay screen du plugin browser-print (body.leaflet--printing). */
+/* //// modif nouvelle UI - titre carte dans l'overlay print browser-print //// */
+body.leaflet--printing .infotitre,
+body.leaflet--printing .titre {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  max-width: 600px !important;
+  white-space: normal !important;
+  word-break: break-word !important;
 }
 
 /* Correctif boutons Info / Aide dans l'en-tête : garde le rendu compact d'origine */
