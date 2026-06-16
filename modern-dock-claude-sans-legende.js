@@ -709,9 +709,9 @@
 
   // //// modif nouvelle UI - fonction aide externalisée depuis les HTML cartes (contenu identique sur toutes les cartes).
   // Crée le dialog d'aide, le bouton easyButton et le dock en-tête.
-  // Appelé une seule fois à l'init de chaque carte via : this.aide = function(){ window.modernAideShared(maCarte); }
+  // Appelé une seule fois à l'init de chaque carte via : this.aide = function(){ window.aideCarto(maCarte); }
   // Textes mis à jour : "cases à cocher" → icône œil dans la barre latérale ; export → "barre latérale". ////
-  window.modernAideShared = function (maCarte) {
+  window.aideCarto = function (maCarte) {
     var contenuAideInitial =
     `<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
     <p><img src='/ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).</p>
