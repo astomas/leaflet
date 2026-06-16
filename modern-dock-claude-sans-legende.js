@@ -700,9 +700,12 @@
             if (map._modernPrintMode !== "Landscape") return;
             setTimeout(function () {
               e.printMap.setZoom(e.printMap.getZoom() + 1);
-              // //// modif nouvelle UI - décale la carte vers la gauche dans l'overlay print
-              // (panBy +x = le centre va vers l'est, donc le contenu glisse vers la gauche) ////
-              e.printMap.panBy([120, 0], { animate: false });
+              // //// modif nouvelle UI - décale la carte vers la gauche dans l'overlay print.
+              // panBy dans un 2e setTimeout : le setZoom déclenche des events Leaflet internes
+              // qui re-centrent la carte ; on attend qu'ils soient stabilisés avant de panner. ////
+              setTimeout(function () {
+                e.printMap.panBy([120, 0], { animate: false });
+              }, 100);
             }, 0);
           });
         }
