@@ -1,5 +1,28 @@
 ﻿	// --- Fonction commune d'export ---
-	function exportCouches(map, format, coucheSpecifique, nomCoucheSpecifique) { 
+	// Détermine si une couche métier (tabCoucheMG) est actuellement affichée.
+	// Nouvelle UI « sans légende » : la visibilité est portée par les layerGroups
+	// de légende exposés via window.modernLegendeParCouche (keyés par nomcouche),
+	// la couche tabCoucheMG d'origine restant volontairement hors carte. On lit
+	// donc le nomcouche des features et on vérifie l'état réel sur la carte.
+	// Ancienne UI (registre absent) : test historique map.hasLayer conservé.
+	function coucheMetierAffichee(map, couche) {
+		if (map.hasLayer(couche)) return true;
+		var registre = (typeof window !== 'undefined') ? window.modernLegendeParCouche : null;
+		if (!registre) return false;
+		var affichee = false;
+		couche.eachLayer(function(layer) {
+			if (affichee) return;
+			var props = layer.feature && layer.feature.properties;
+			var nom = props ? props.nomcouche : null;
+			var items = nom ? registre[nom] : null;
+			if (items && items.some(function(it) { return it.layers && map.hasLayer(it.layers); })) {
+				affichee = true;
+			}
+		});
+		return affichee;
+	}
+
+	function exportCouches(map, format, coucheSpecifique, nomCoucheSpecifique) {
 		// --- Export d'une couche spécifique (résultat de recherche) ---
 		if (coucheSpecifique) {
 			const featureCollection = { type: "FeatureCollection", features: [] };
@@ -53,7 +76,7 @@
 	  let nbCouchesVisibles = 0, nomsCouchesVisibles = [];
 
 	  tabCoucheMG.forEach((couche, index) => {
-		if (map.hasLayer(couche)) {
+		if (coucheMetierAffichee(map, couche)) {
 		  let nomCouche = 'couche_' + (index + 1);
 		  let nomCoucheOriginal = nomCouche; 
 		  if (typeof tabNettoyé !== 'undefined' && tabNettoyé[index]) {
@@ -70,7 +93,9 @@
 	  });
 
 	  if (nbCouchesVisibles === 0) {
-		alert('Aucune couche à exporter.\n\nVérifiez que des couches sont cochées en haut à droite.');
+		alert('Aucune couche à exporter.\n\n' + ((typeof window !== 'undefined' && window.modernLegendeParCouche)
+			? 'Activez au moins une couche (icône œil) dans « Données métier ».'
+			: 'Vérifiez que des couches sont cochées en haut à droite.'));
 		return;
 	  }
 
@@ -84,7 +109,7 @@
 	  let nbCouchesExportees = 0;
 
 	  tabCoucheMG.forEach((couche, index) => {
-		if (!map.hasLayer(couche)) return;
+		if (!coucheMetierAffichee(map, couche)) return;
 
 		const featureCollection = { type: "FeatureCollection", features: [] };
 		couche.eachLayer(function(layer) {
