@@ -676,6 +676,34 @@
   }
 
   // =========================================================================
+  // Patch browser-print : zoom +0.3 dans l'overlay print
+  // =========================================================================
+
+  // //// modif nouvelle UI - agrandit légèrement la carte dans l'overlay print (+0.3 niveau).
+  // On installe (une seule fois par carte) un listener "browser-print-start" qui donne
+  // e.printMap ; le setZoom est planifié en setTimeout(0) pour s'exécuter APRÈS les appels
+  // synchrones fitBounds / setView que le plugin lance juste après l'événement. Le
+  // setInterval du plugin (attente du chargement des tuiles) tient alors compte du nouveau
+  // zoom. Le patch s'accroche au prototype au 1er _print pour disposer de this._map, mais
+  // le listener n'est posé qu'une fois (flag) pour ne pas cumuler les +0.3. Aucun HTML. ////
+  (function patchBrowserPrintZoom() {
+    if (!window.L || !L.Control || !L.Control.BrowserPrint) return;
+    var _orig = L.Control.BrowserPrint.prototype._print;
+    L.Control.BrowserPrint.prototype._print = function (printMode, autoBounds) {
+      var map = this._map;
+      if (map && !map._modernPrintZoomBoost) {
+        map._modernPrintZoomBoost = true;
+        map.on("browser-print-start", function (e) {
+          setTimeout(function () {
+            e.printMap.setZoom(e.printMap.getZoom() + 0.3);
+          }, 0);
+        });
+      }
+      _orig.call(this, printMode, autoBounds);
+    };
+  })();
+
+  // =========================================================================
   // Initialisation au chargement du DOM
   // =========================================================================
 
