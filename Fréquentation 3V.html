@@ -2108,7 +2108,7 @@ this.rechercherJson = function(){
 		}
 	}
 
-	this.visuBatiments3D = function() { window.visuBati3D(maCarte, valeurTitre1, tabCoucheMetier, libelleCouche); } // //// modif nouvelle UI - visu bâtiments 3D externalisée dans Ressources 26/visuBati3D.js ////
+	this.visuBatiments3D = function() { if (valeurTitre1.endsWith("3D")) { window.visuBati3D(maCarte, tabCoucheMetier, libelleCouche); } } // //// modif nouvelle UI - visu bâtiments 3D externalisée dans Ressources 26/visuBati3D.js (test titre conservé ici car libelleCouche est local à dessinerCarte) ////
 	
 	this.spiderfyPoints = function() {
 	
