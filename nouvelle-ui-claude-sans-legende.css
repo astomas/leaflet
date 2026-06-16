@@ -1055,6 +1055,18 @@ body.is-resizing * {
   background: #757570 !important;
 }
 
+/* //// modif nouvelle UI - print « Sélec. zone » : rend le pane du rectangle de
+   sélection non-interactif. Le rectangle (décoratif, gris pointillé) est dessiné
+   dans customPrintPane (z-index 9999) via les événements souris de la CARTE.
+   Si l'utilisateur relâche la souris hors de la carte (sur le dock / la barre
+   d'outils), le mouseup de la carte ne se déclenche pas, _endAutoPoligon ne
+   s'exécute pas et le rectangle interactif restait sur la carte en interceptant
+   tous les clics sur les éléments en dessous (icônes, lignes). pointer-events:none
+   laisse le rectangle visible mais transparent au clic ; le dessin n'en dépend pas. //// */
+.leaflet-customPrint-pane {
+  pointer-events: none !important;
+}
+
 /* ===== ISOCHRONE ICON VISIBLE WHEN PANEL OPEN ===== */
 /* Le panneau Isochrone reste au-dessus, mais ne masque plus le picto du bouton. */
 .modern-tool-button:has(div[id^="GPisochronPanel-"]) .modern-tool-icon-slot,
