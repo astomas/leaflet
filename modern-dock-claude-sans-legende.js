@@ -676,17 +676,17 @@
   }
 
   // =========================================================================
-  // Patch browser-print : zoom +0.3 dans l'overlay print
+  // Patch browser-print : zoom +0.5 dans l'overlay print
   // =========================================================================
 
-  // //// modif nouvelle UI - agrandit légèrement la carte dans l'overlay print (+0.3 niveau)
+  // //// modif nouvelle UI - agrandit légèrement la carte dans l'overlay print (+0.5 niveau)
   // UNIQUEMENT pour l'option "Vue courante" (mode.landscape -> printMode.Mode === "Landscape").
   // Les modes "Auto Gard" (auto) et "Sélec. zone" (custom) calculent leurs propres bornes et
   // ne sont pas boostés. On capture le mode dans _print (qui reçoit printMode.Mode) et on le
   // stocke sur la carte ; l'événement "browser-print-start" ne portant pas le mode. Le setZoom
   // est planifié en setTimeout(0) pour s'exécuter APRÈS les fitBounds/setView synchrones du
   // plugin ; le setInterval d'attente des tuiles tient alors compte du nouveau zoom. Le listener
-  // n'est posé qu'une fois par carte (flag) pour ne pas cumuler les +0.3. Aucun HTML. ////
+  // n'est posé qu'une fois par carte (flag) pour ne pas cumuler les +0.5. Aucun HTML. ////
   (function patchBrowserPrintZoom() {
     if (!window.L || !L.Control || !L.Control.BrowserPrint) return;
     var _orig = L.Control.BrowserPrint.prototype._print;
@@ -699,7 +699,7 @@
           map.on("browser-print-start", function (e) {
             if (map._modernPrintMode !== "Landscape") return;
             setTimeout(function () {
-              e.printMap.setZoom(e.printMap.getZoom() + 0.3);
+              e.printMap.setZoom(e.printMap.getZoom() + 0.5);
             }, 0);
           });
         }
