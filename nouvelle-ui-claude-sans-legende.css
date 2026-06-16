@@ -646,6 +646,17 @@ body.is-resizing * {
   background: #eef4fb !important;
 }
 
+/* //// modif nouvelle UI - bouton pegman (Service Visualisation) : la règle
+   globale .easy-button-button { background:#fff !important } écrasait l'état
+   actif (jaune) et l'état inactif. On rétablit avec une spécificité supérieure :
+   fond orange pâle quand inactif, jaune quand ACTIF — y compris hors survol. //// */
+.leaflet-control .easy-button-button.bouton-service-visu {
+  background: #ffe6c7 !important;
+}
+.leaflet-control .easy-button-button.bouton-service-visu-actif {
+  background: #ffe600 !important;
+}
+
 .leaflet-control-scale-line {
   border-radius: 6px;
   background: rgba(255, 255, 255, .92) !important;
