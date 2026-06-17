@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet-si3p0-claude-sans-legende.css" />
 	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
 
-	<link rel="stylesheet" href="nouvelle-ui-claude-sans-legende.css" />
+	<link rel="stylesheet" href="nouvelle-ui-claude-sans-legende.css?v=2" />
 	<script src="./modern-dock-claude-sans-legende.js"></script>
 
 	<title id="ti">Carte Leaflet</title>
@@ -832,7 +832,7 @@ function CarteLeaflet(conteneurId) {
 		maPosition = L.Permalink.getMapLocation();
 		
 		if (L.Browser.mobile) {this.zoomInitial = 8.7}
-		if (screen.width < 1920 && !L.Browser.mobile) {this.zoomInitial = 9.6}
+		if (screen.width < 1920 && !L.Browser.mobile) {this.zoomInitial = 9.4}
 		if (valeurTitre1.startsWith("Graflex")) {
 			this.zoomInitial = maPosition.zoom;
 			this.coordCarte = maPosition.center;
