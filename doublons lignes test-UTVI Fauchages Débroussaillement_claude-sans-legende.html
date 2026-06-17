@@ -508,6 +508,13 @@ function CarteLeaflet(conteneurId) {
 
 	function traiterEltsCouche (élément, couche) {
 		
+		// //// modif nouvelle UI - étiquette RD permanente : marquage de la polyligne affichée de la vue ciblée (réf. vuesEtiquetteRD), sans test de nom de couche ni de champ ////
+		if (vueCouranteEtiquetteRD && couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
+			couche.options.rdLabel = propTrim(élément.properties, "RD");
+			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
+			couche.options.rdProximite = /proximit/i.test(niveauRDet);
+		}
+		
 		function nettoyerValNulles() {
 			for (var nomPpté in élément.properties) {	
 				if (élément.properties[nomPpté] == null) {
