@@ -712,7 +712,7 @@
     <p><img src='/ressources/API_JS/images/Aide/info.png' height='30'> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l'icone 'i' (ou via croix).</p>
 
     <p><img src='/ressources/API_JS/images/Aide/coordGPS.png' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'.
-    Le menu d'origine est toujours accessible par clic droit sur les blocs fonds de carte ou légende.</p>
+    Le menu d'origine est toujours accessible par clic droit sur les blocs de la barre latérale.</p>
 
     <p><a href='#' id='lienExtensible'><b>(*) Voir plus de détails sur les autres outils</b></a></p>
     <div id='contenuExtensible' style='display:none;'</div>`;
