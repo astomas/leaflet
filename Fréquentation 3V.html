@@ -1146,19 +1146,16 @@ function CarteLeaflet(conteneurId) {
 		function verifBaseLayer() {
 			if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
 				coucheLimiteAdmin.setStyle(styleLimiteOrtho);
+				maCarte.getContainer().style.background = "#3a4a3a"; // //// modif nouvelle UI - fond sombre pour masquer coutures tuiles ortho ////
 			} else {
 				coucheLimiteAdmin.setStyle(styleLimiteStandard);
+				maCarte.getContainer().style.background = "";
 			}
 		}
 		var coucheLimiteAdmin = L.geoJson(limite, {style: styleLimiteStandard});
 		verifBaseLayer();
 		maCarte.on("baselayerchange", function(e) {
-			if (e.layer === orthoIGN || e.layer === googleSat) {
-				coucheLimiteAdmin.setStyle(styleLimiteOrtho);
-			} 
-			else {
-				coucheLimiteAdmin.setStyle(styleLimiteStandard);
-			}
+			verifBaseLayer(); // simplifié : évite la duplication
 		});
 		coucheLimiteAdmin.addTo(maCarte);
     }
