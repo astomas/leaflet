@@ -695,7 +695,7 @@
 
     <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter après confirmation, la ou les couches sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres fonctions:</b> déploiement de 4 autres fonctions: imprimer carte, mesurer distance(s), calcul d'isochrones, recherche par coord. GPS. Détails d'utilisation en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
+    <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer carte, mesurer distance(s), calcul d'isochrones, recherche par coord. GPS. Voir détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
 
     <p><img src='/ressources/API_JS/images/Aide/surlignage.png' height='35'> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l'ouverture.
     Selon leurs nature, les lignes surlignées peuvent être disjointes ('multilignes').</p>
@@ -703,7 +703,8 @@
     <p><img src='/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher élément de couche:</b> disponible selon les cartes, saisir les caractères pour afficher les correspondances et zoomer dessus.
     La nature de l'entité à rechercher est indiquée dans l'invite de saisie. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en cliquant dessus. L'icône <b>œil</b> dans la barre latérale affiche/masque une couche entière, la légende permet en + de filtrer les éléments d'une même couche.</p>
+    <p><img src='/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en cliquant dessus. L'icône <b>œil</b> dans la barre latérale affiche/masque une couche entière, 
+    la légende permet en plus de filtrer les éléments d'une même couche.</p>
 
     <p><img src='/ressources/API_JS/images/Aide/streetview.gif' height='30'> <b>Accès Street View </b>+ Panoramax, Google Maps, Waze:
     après clic, positionner Pegman (personnage orange) sur la carte et cliquer sur l'un des services de visualisation. Pour désactiver, appuyer sur une touche clavier ou recliquer le bouton.</p>
