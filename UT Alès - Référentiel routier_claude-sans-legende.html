@@ -306,12 +306,12 @@ function gererEtiquettesRD(map) {
     function rafraichirEtiquettesRD() {
         groupeEtiquettesRD.clearLayers();
         var limites = map.getBounds();
+        var centre = map.getCenter();
+        var parRD = {}; // une seule étiquette par numéro RD (tronçon le plus proche du centre)
         map.eachLayer(function (couche) {
             if (!(couche instanceof L.Polyline)) return;
             if (!couche.options || !couche.options.rdLabel) return;
-            // Réseau de proximité : étiquette seulement en zoom rapproché (> 11.8)
             if (couche.options.rdProximite && map.getZoom() <= 11.8) return;
-            // Aplatit les coordonnées (MultiLineString => tableaux imbriqués)
             var points = [];
             (function aplatir(arr) {
                 for (var i = 0; i < arr.length; i++) {
@@ -319,9 +319,8 @@ function gererEtiquettesRD(map) {
                     else points.push(arr[i]);
                 }
             })(couche.getLatLngs());
-            // Milieu (par longueur cumulée) de la portion visible.
             var visibles = points.filter(function (p) { return limites.contains(p); });
-            if (!visibles.length) return; // tronçon hors écran : pas d'étiquette
+            if (!visibles.length) return;
             var longTotale = 0;
             for (var j = 1; j < visibles.length; j++) {
                 longTotale += visibles[j - 1].distanceTo(visibles[j]);
@@ -331,10 +330,19 @@ function gererEtiquettesRD(map) {
                 parcouru += visibles[k - 1].distanceTo(visibles[k]);
                 if (parcouru >= cible) { meilleur = visibles[k]; break; }
             }
-            L.marker(meilleur, {
+            var dist = centre.distanceTo(meilleur);
+            var rd = couche.options.rdLabel;
+            if (!parRD[rd] || dist < parRD[rd].dist) {
+                parRD[rd] = { point: meilleur, dist: dist, color: couche.options.color || "#888" };
+            }
+        });
+        // Pose une seule étiquette par numéro RD
+        Object.keys(parRD).forEach(function(rd) {
+            var info = parRD[rd];
+            L.marker(info.point, {
                 icon: L.divIcon({
                     className: "label-route-rd-wrap",
-                    html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
+                    html: "<span class=\"label-route-rd\" style=\"border-color:" + info.color + "\">" + rd + "</span>",
                     iconSize: [0, 0]
                 }),
                 pane: "etiquettesRD",
