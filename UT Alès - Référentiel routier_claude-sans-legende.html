@@ -289,6 +289,13 @@ window.exportTronconCSV = function(dataGroupEncoded, nomFichier) {
     link.click();
 };
 
+// //// modif nouvelle UI - lecture d'une propriété quel que soit le nombre d'espaces du libellé ("RD ", "RD     "...) ////
+function propTrim(props, nom) {
+    for (var cle in props) {
+        if (cle.trim() === nom) return (props[cle] || "").toString().trim();
+    }
+    return "";
+}
 // //// modif nouvelle UI - étiquettes RD permanentes (test sur couche Linéaire, tronçons courts) ////
 // Une seule étiquette par tronçon, repositionnée dynamiquement au point le plus proche du centre
 // du viewport. Toujours visible, jamais en surnombre, affichée/masquée selon l'activation de la
@@ -782,8 +789,8 @@ function CarteLeaflet(conteneurId) {
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // //// modif nouvelle UI - étiquette RD permanente sur la couche Linéaire (test tronçons courts) ////
     if (élément.properties.nomcouche === "Linéaire") {
-        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
-        var niveauRD = (élément.properties["Niveau "] || élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+        élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
+        var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         // Tooltip survol désactivé (étiquette permanente à la place) ; décommenter pour le réactiver :
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
