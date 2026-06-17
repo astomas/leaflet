@@ -700,7 +700,7 @@
     <p><img src='/ressources/API_JS/images/Aide/surlignage.png' height='35'> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l'ouverture.
     Selon leurs nature, les lignes surlignées peuvent être disjointes ('multilignes').</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher élément de couche:</b> disponible selon les cartes, saisir les caractères pour afficher les correspondances et zoomer dessus.
+    <p><img src='/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher élément de couche:</b> saisir les caractères pour afficher les correspondances et zoomer dessus.
     La nature de l'entité à rechercher est indiquée dans l'invite de saisie. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON.</p>
 
     <p><img src='/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en cliquant dessus. L'icône <b>œil</b> dans la barre latérale affiche/masque une couche entière, 
@@ -738,7 +738,7 @@
     var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
 
     if (!L.Browser.mobile) {
-      var fenêtreAide = new L.control.dialog({size: [810,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
+      var fenêtreAide = new L.control.dialog({size: [790,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
     } else {
       var fenêtreAide = new L.control.dialog({size: [290,300], anchor: [0,50], position:"topleft", initOpen: true, minSize: [260,250], maxSize: [600,400]});
     }
