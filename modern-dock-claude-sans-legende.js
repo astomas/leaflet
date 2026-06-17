@@ -693,7 +693,7 @@
     <p><img src='/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b>Import couches:</b> afficher des fichiers de couches au format Shape, GeoJSON, csv, GPX, Kml sur la carte. Projection en WGS84, possibilité de faire un glisser/déposer,
     de zipper (1 couche par .zip), clic droit pour effacer couche, import csv de points uniquement.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter après confirmation, la ou les couches sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+    <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter la ou les couches sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
 
     <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer carte, mesurer distance(s), calcul d'isochrones, recherche par coord. GPS. Voir détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
 
@@ -714,7 +714,7 @@
     <p><img src='/ressources/API_JS/images/Aide/coordGPS.png' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'.
     Le menu d'origine est toujours accessible par clic droit sur les blocs fonds de carte ou légende.</p>
 
-    <p><a href='#' id='lienExtensible'><b>(*) Voir plus de détails sur les autres fonctions</b></a></p>
+    <p><a href='#' id='lienExtensible'><b>(*) Voir plus de détails sur les autres outils</b></a></p>
     <div id='contenuExtensible' style='display:none;'</div>`;
 
     var contenuAideExtensible =
@@ -732,7 +732,7 @@
     pour afficher sur la carte icones et fenêtres correspondants. Géocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>
 
     <p class='text-warning'>Les rendus liés à l'utilisation des fonctions importer, mesurer, calcul isochrone seront perdus à la réouverture de la carte.<br>
-    Pour conserver une trace, effectuer une impression au format papier ou pdf via f° 'Imprimer' ou faire une capture écran.</p>
+    Pour conserver une trace, effectuer une impression papier ou pdf via l'outil 'Imprimer' ou bien faire une capture écran.</p>
     </div>`;
 
     var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
