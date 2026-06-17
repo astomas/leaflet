@@ -157,7 +157,7 @@ p b {
     background: white;
 }
 
-.button-container .easy-button-button[title="Service Visualisation"]:hover {
+.boutons-conteneur .easy-button-button[title="Service Visualisation"]:hover {
     background-color: #ffff00 !important;
 }
 
@@ -184,7 +184,6 @@ img.leaflet-marker-icon[src*="geosearch"] {
 }
 
 /* conteneurs de boutons */
-.button-container,
 .boutons-conteneur {
     display: flex;
     margin-bottom: -5px !important;
@@ -442,7 +441,7 @@ img.leaflet-marker-icon[src*="geosearch"] {
         transform-origin: bottom left !important;
     }
     /* boutons visu et info */
-    .button-container, .boutons-conteneur {
+    .boutons-conteneur {
         margin-bottom: -5px !important;
         transform: scale(0.9) !important;
         transform-origin: bottom right !important;

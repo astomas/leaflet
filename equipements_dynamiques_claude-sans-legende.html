@@ -1979,7 +1979,7 @@ this.importFichier = function () {
     var conteneur = L.Control.extend({
         options: {position: 'bottomright'}, 
         onAdd: function() {
-            var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
+            var boutonConteneur = L.DomUtil.create('div', 'boutons-conteneur');
             boutonConteneur.appendChild(boutonServiceVisu.button);
             // boutonInfo vit dans l'en-tête (modernHeaderInfoDock) : ne pas le rapatrier ici
             // sinon un remove()/addTo() (fin d'impression) le réinjecterait sur la carte.
