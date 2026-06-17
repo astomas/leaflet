@@ -738,7 +738,7 @@
     var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
 
     if (!L.Browser.mobile) {
-      var fenêtreAide = new L.control.dialog({size: [780,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
+      var fenêtreAide = new L.control.dialog({size: [790,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
     } else {
       var fenêtreAide = new L.control.dialog({size: [290,300], anchor: [0,50], position:"topleft", initOpen: true, minSize: [260,250], maxSize: [600,400]});
     }
