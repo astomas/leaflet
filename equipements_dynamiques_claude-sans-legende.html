@@ -126,6 +126,9 @@
 	});
 	
 	console.log("nomVues : ", nomVues);
+	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon"];
+	var vueCouranteEtiquetteRD = false;
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
 	
@@ -323,15 +326,25 @@ function formaterChampPopup(label, valeurHtml) {
     return vide ? cle : cle + " <span class='popup-val'>" + valeurHtml + "</span>";
 }
 
-// Étiquettes RD du Réseau routier : une seule étiquette par route, repositionnée
-// dynamiquement au point de la route le plus proche du centre du viewport. Toujours
-// visible (quel que soit le zoom / la position de la souris), jamais en surnombre,
-// et affichée/masquée automatiquement selon l'activation de la couche.
+// //// modif nouvelle UI - lecture d'une propriété quel que soit le nombre d'espaces du libellé ("RD ", "RD     "...) ////
+function propTrim(props, nom) {
+    for (var cle in props) {
+        if (cle.trim() === nom) return (props[cle] || "").toString().trim();
+    }
+    return "";
+}
+// //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
+function normaliserNomVue(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
+// //// modif nouvelle UI - étiquettes RD permanentes sur les vues ciblées (vuesEtiquetteRD) ////
+// Une seule étiquette par tronçon, repositionnée dynamiquement au point le plus proche du centre
+// du viewport. Toujours visible, jamais en surnombre, affichée/masquée selon l'activation de la
+// couche. Générique : agit sur toute polyligne portant l'option rdLabel.
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
-    // Pane dédié (z-index 450) : au-dessus des lignes de route (overlayPane 400),
-    // en-dessous des marqueurs (markerPane 600) → les icônes de points passent devant.
+    // Pane dédié (z-index 450) : au-dessus des lignes (overlayPane 400), sous les marqueurs (600).
     if (!map.getPane("etiquettesRD")) {
         map.createPane("etiquettesRD");
         map.getPane("etiquettesRD").style.zIndex = 450;
@@ -341,12 +354,12 @@ function gererEtiquettesRD(map) {
     function rafraichirEtiquettesRD() {
         groupeEtiquettesRD.clearLayers();
         var limites = map.getBounds();
+        var centre = map.getCenter();
+        var parRD = {}; // une seule étiquette par numéro RD (tronçon le plus proche du centre)
         map.eachLayer(function (couche) {
             if (!(couche instanceof L.Polyline)) return;
             if (!couche.options || !couche.options.rdLabel) return;
-            // Réseau de proximité : étiquette seulement en zoom rapproché (> 11.8)
             if (couche.options.rdProximite && map.getZoom() <= 11.8) return;
-            // Aplatit les coordonnées (MultiLineString => tableaux imbriqués)
             var points = [];
             (function aplatir(arr) {
                 for (var i = 0; i < arr.length; i++) {
@@ -354,10 +367,8 @@ function gererEtiquettesRD(map) {
                     else points.push(arr[i]);
                 }
             })(couche.getLatLngs());
-            // Milieu (par longueur cumulée) de la portion visible : évite que
-            // l'étiquette se colle à une extrémité de la route.
             var visibles = points.filter(function (p) { return limites.contains(p); });
-            if (!visibles.length) return; // route hors écran : pas d'étiquette
+            if (!visibles.length) return;
             var longTotale = 0;
             for (var j = 1; j < visibles.length; j++) {
                 longTotale += visibles[j - 1].distanceTo(visibles[j]);
@@ -367,10 +378,19 @@ function gererEtiquettesRD(map) {
                 parcouru += visibles[k - 1].distanceTo(visibles[k]);
                 if (parcouru >= cible) { meilleur = visibles[k]; break; }
             }
-            L.marker(meilleur, {
+            var dist = centre.distanceTo(meilleur);
+            var rd = couche.options.rdLabel;
+            if (!parRD[rd] || dist < parRD[rd].dist) {
+                parRD[rd] = { point: meilleur, dist: dist, color: couche.options.color || "#888" };
+            }
+        });
+        // Pose une seule étiquette par numéro RD
+        Object.keys(parRD).forEach(function(rd) {
+            var info = parRD[rd];
+            L.marker(info.point, {
                 icon: L.divIcon({
                     className: "label-route-rd-wrap",
-                    html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
+                    html: "<span class=\"label-route-rd\" style=\"border-color:" + info.color + "\">" + rd + "</span>",
                     iconSize: [0, 0]
                 }),
                 pane: "etiquettesRD",
@@ -380,10 +400,7 @@ function gererEtiquettesRD(map) {
         });
     }
 
-    // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage des couches routières.
-    // Debounce : l'activation d'une couche routière déclenche un layeradd PAR
-    // polyligne (750+ pour le réseau routier) ; on regroupe ces rafales en un
-    // seul rafraîchissement, 80 ms après le dernier événement.
+    // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage. Debounce des rafales layeradd.
     var timerEtiquettesRD = null;
     function planifierEtiquettesRD() {
         clearTimeout(timerEtiquettesRD);
@@ -733,13 +750,11 @@ function CarteLeaflet(conteneurId) {
     
     tabEltsMLSLeg.push(élémentsMLS);
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
-    // Réseau routier : mémorise la valeur RD + le niveau pour l'étiquette permanente (gererEtiquettesRD)
-    if (élément.properties.nomcouche === "Réseau routier") {
-        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
-        var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+    // //// modif nouvelle UI - étiquette RD permanente sur les vues ciblées (réf. vuesEtiquetteRD / nomVues) ////
+    if (vueCouranteEtiquetteRD) {
+        élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
+        var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
-        // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place).
-        // Pour le réactiver, décommenter la ligne ci-dessous :
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     } else {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
@@ -798,6 +813,8 @@ function CarteLeaflet(conteneurId) {
 	        });
 	    }
 	    
+	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
+	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 

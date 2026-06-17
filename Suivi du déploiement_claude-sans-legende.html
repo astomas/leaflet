@@ -125,6 +125,9 @@
 	});
 	
 	console.log("nomVues : ", nomVues);
+	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon"];
+	var vueCouranteEtiquetteRD = false;
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
 	
@@ -296,6 +299,95 @@ window.exportTronconCSV = function(dataGroupEncoded, nomFichier) {
     link.download = nomFichierFinal + ".csv";
     link.click();
 };
+
+// //// modif nouvelle UI - lecture d'une propriété quel que soit le nombre d'espaces du libellé ("RD ", "RD     "...) ////
+function propTrim(props, nom) {
+    for (var cle in props) {
+        if (cle.trim() === nom) return (props[cle] || "").toString().trim();
+    }
+    return "";
+}
+// //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
+function normaliserNomVue(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
+// //// modif nouvelle UI - étiquettes RD permanentes sur les vues ciblées (vuesEtiquetteRD) ////
+// Une seule étiquette par tronçon, repositionnée dynamiquement au point le plus proche du centre
+// du viewport. Toujours visible, jamais en surnombre, affichée/masquée selon l'activation de la
+// couche. Générique : agit sur toute polyligne portant l'option rdLabel.
+var groupeEtiquettesRD = null;
+function gererEtiquettesRD(map) {
+    if (!map) return;
+    // Pane dédié (z-index 450) : au-dessus des lignes (overlayPane 400), sous les marqueurs (600).
+    if (!map.getPane("etiquettesRD")) {
+        map.createPane("etiquettesRD");
+        map.getPane("etiquettesRD").style.zIndex = 450;
+    }
+    if (!groupeEtiquettesRD) groupeEtiquettesRD = L.layerGroup().addTo(map);
+
+    function rafraichirEtiquettesRD() {
+        groupeEtiquettesRD.clearLayers();
+        var limites = map.getBounds();
+        var centre = map.getCenter();
+        var parRD = {}; // une seule étiquette par numéro RD (tronçon le plus proche du centre)
+        map.eachLayer(function (couche) {
+            if (!(couche instanceof L.Polyline)) return;
+            if (!couche.options || !couche.options.rdLabel) return;
+            if (couche.options.rdProximite && map.getZoom() <= 11.8) return;
+            var points = [];
+            (function aplatir(arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (Array.isArray(arr[i])) aplatir(arr[i]);
+                    else points.push(arr[i]);
+                }
+            })(couche.getLatLngs());
+            var visibles = points.filter(function (p) { return limites.contains(p); });
+            if (!visibles.length) return;
+            var longTotale = 0;
+            for (var j = 1; j < visibles.length; j++) {
+                longTotale += visibles[j - 1].distanceTo(visibles[j]);
+            }
+            var cible = longTotale / 2, parcouru = 0, meilleur = visibles[0];
+            for (var k = 1; k < visibles.length; k++) {
+                parcouru += visibles[k - 1].distanceTo(visibles[k]);
+                if (parcouru >= cible) { meilleur = visibles[k]; break; }
+            }
+            var dist = centre.distanceTo(meilleur);
+            var rd = couche.options.rdLabel;
+            if (!parRD[rd] || dist < parRD[rd].dist) {
+                parRD[rd] = { point: meilleur, dist: dist, color: couche.options.color || "#888" };
+            }
+        });
+        // Pose une seule étiquette par numéro RD
+        Object.keys(parRD).forEach(function(rd) {
+            var info = parRD[rd];
+            L.marker(info.point, {
+                icon: L.divIcon({
+                    className: "label-route-rd-wrap",
+                    html: "<span class=\"label-route-rd\" style=\"border-color:" + info.color + "\">" + rd + "</span>",
+                    iconSize: [0, 0]
+                }),
+                pane: "etiquettesRD",
+                interactive: false,
+                keyboard: false
+            }).addTo(groupeEtiquettesRD);
+        });
+    }
+
+    // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage. Debounce des rafales layeradd.
+    var timerEtiquettesRD = null;
+    function planifierEtiquettesRD() {
+        clearTimeout(timerEtiquettesRD);
+        timerEtiquettesRD = setTimeout(rafraichirEtiquettesRD, 80);
+    }
+    map.on("moveend zoomend", planifierEtiquettesRD);
+    map.on("layeradd layerremove", function (e) {
+        if (e.layer instanceof L.Polyline && e.layer.options && e.layer.options.rdLabel) {
+            planifierEtiquettesRD();
+        }
+    });
+    rafraichirEtiquettesRD();
+}
 
 function CarteLeaflet(conteneurId) {   
     
@@ -654,7 +746,16 @@ function CarteLeaflet(conteneurId) {
     });
     
     tabEltsMLSLeg.push(élémentsMLS);
-    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
+    élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
+    // //// modif nouvelle UI - étiquette RD permanente sur les vues ciblées (réf. vuesEtiquetteRD / nomVues) ////
+    if (vueCouranteEtiquetteRD) {
+        élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
+        var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
+        élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
+        //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+    } else {
+        élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+    }
 }
 
 		if (élément.properties.couleur && élément.properties.legende && élément.geometry.type == "MultiPolygon"){
@@ -709,6 +810,8 @@ function CarteLeaflet(conteneurId) {
 	        });
 	    }
 	    
+	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
+	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
@@ -2351,6 +2454,7 @@ function main() {
 	carteLeaflet.visuEtInfo();
 	carteLeaflet.visuBatiments3D();
 	carteLeaflet.spiderfyPoints();
+	gererEtiquettesRD(maCarte);
 }
 
 </script>
