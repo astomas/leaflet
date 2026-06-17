@@ -695,7 +695,7 @@
 
     <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter la ou les couches sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer carte, mesurer distance(s), calcul d'isochrones, recherche par coord. GPS. Voir détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
+    <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer carte, mesurer distance(s), calcul d'isochrones, recherche par coord. GPS. Détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
 
     <p><img src='/ressources/API_JS/images/Aide/surlignage.png' height='35'> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l'ouverture.
     Selon leurs nature, les lignes surlignées peuvent être disjointes ('multilignes').</p>
