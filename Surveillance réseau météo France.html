@@ -102,7 +102,7 @@
 	.meteo-vig-badge {
 		padding: 3px 10px;
 		border-radius: 12px;
-		font-size: 14px;
+		font-size: 17px;
 		font-weight: bold;
 		white-space: nowrap;
 		cursor: default;
@@ -2498,7 +2498,7 @@ function main() {
 			var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.niveau); }));
 			var col = COULEURS[niveauMax] || COULEURS[2];
 			var phenos = alertes.map(function(a) {
-				return '<span style="font-size:20px">' + (PHENOMENES[a.phenomene_lib] || '⚠') + '</span>\u00a0' + (a.phenomene_lib || '');
+				return '<span style="font-size:24px">' + (PHENOMENES[a.phenomene_lib] || '⚠') + '</span>\u00a0' + (a.phenomene_lib || '');
 			}).join(' · ');
 			return '<div class="meteo-vig-bloc">'
 				+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
