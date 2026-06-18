@@ -121,7 +121,7 @@
     <header class="modern-header">
       <div id="modernLogosDock" class="modern-logos-dock modern-header-logos" aria-label="Liens rapides"></div>
       <div class="modern-header-titles">
-        <h1>Surveillance réseau</h1>
+        <h1>Surveillance du réseau - source CD30 - Waze</h1>
       </div>
       <div id="meteoWidget" class="modern-meteo-widget"></div>
       <div class="modern-header-actions">
@@ -151,7 +151,7 @@
 </html>
  
 <script>
-	valeurTitre1 = "Surveillance réseau";
+	valeurTitre1 = "Surveillance du r&#233;seau - source CD30 - Waze";
 	nbreDeVues = 10;
 	nomVues = ["camerasurveillanceroutiere_4map","alerterecentewaze_4map","alerteanciennewaze_4map","stationmeteo_4map","stationhydro_4map","ralentissementwaze_4map","reseauroutier_sanslegende_4map","d30_3vitinerairetype_4map","limitegestionst_4map","limitegestionper_4map"];
 	strRechJson = "false";
@@ -176,7 +176,7 @@
 			nbreDeVues = nbreDeVues - 1;
 		}
 
-	if (valeurTitre1 == "Surveillance réseau"){
+	if (valeurTitre1 == "Surveillance du r&#233;seau - source CD30 - Waze"){
 		setTimeout(function() {window.location.reload()}, 600000);
 	}
 
@@ -2043,7 +2043,7 @@ this.importFichier = function () {
 	this.titre = function(){
 		valeurTitre2  =  " - 10/06/2026 " ;
 		valeurTitre3  =  " - 10/06/2026 06:49 " ;
-	    if (valeurTitre1 == "Surveillance réseau") {
+	    if (valeurTitre1 == "Surveillance du r&#233;seau - source CD30 - Waze") {
 	        valeurTitre = valeurTitre1 + valeurTitre3;
 	    } else {
 	        valeurTitre = valeurTitre1 + valeurTitre2;
@@ -2473,7 +2473,7 @@ function main() {
 
 	// //// modif nouvelle UI - widget vigilance Météo-France J+J+1 (opendatasoft, sans clé) ////
 	(function() {
-		if (!valeurTitre1 || !valeurTitre1.includes('Surveillance réseau')) return;
+		if (!valeurTitre1 || !valeurTitre1 == 'Surveillance du r&#233;seau - source CD30 - Waze') return;
 		var widget = document.getElementById('meteoWidget');
 		if (!widget) return;
 
