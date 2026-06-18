@@ -119,6 +119,7 @@
 	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
 	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon"];
 	var vueCouranteEtiquetteRD = false;
+	var vueCouranteTroncon = false;
 	strRechJson = "1|leafletsearch|PR par RD, PR+Abs ; 2|leafletsearch|linéaire par RD, PR+Abs, PER, niveau";
 	clicZoomActif = true;	
 	
@@ -747,6 +748,9 @@ function CarteLeaflet(conteneurId) {
 		if (élément.geometry.type === "MultiPolygon" || élément.geometry.type === "Polygon") {
 			var tooltipCourt = tableauContenuTooltip.slice(0, 2).join("<br />");
 			couche.bindTooltip(tooltipCourt, { sticky: true, opacity: 0.9, className: 'tooltip-polygone' });
+		} else if (élément.geometry.type === "LineString" || élément.geometry.type === "MultiLineString") {
+			// //// modif nouvelle UI - tooltip ligne seulement sur les vues 'troncon' ////
+			if (vueCouranteTroncon) { couche.bindTooltip(texteTooltip, optionsTooltip); }
 		} else {
 			couche.bindTooltip(texteTooltip, optionsTooltip);
 		}
@@ -809,9 +813,9 @@ function CarteLeaflet(conteneurId) {
         élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
         var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
-        // Tooltip survol désactivé (étiquette permanente à la place) ; décommenter pour le réactiver :
-        //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
-    } else {
+    }
+    // //// modif nouvelle UI - tooltip survol seulement sur les vues 'troncon' ////
+    if (vueCouranteTroncon) {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
 }
@@ -874,6 +878,8 @@ function CarteLeaflet(conteneurId) {
 	    
 	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
 	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
+	    // //// modif nouvelle UI - vue 'troncon' (active le tooltip survol) ////
+	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
