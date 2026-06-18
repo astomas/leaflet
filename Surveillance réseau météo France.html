@@ -82,12 +82,12 @@
 	.modern-meteo-widget {
 		display: none;
 		align-items: center;
-		gap: 8px;
+		gap: 10px;
 		padding: 0 10px;
 		flex-shrink: 0;
 	}
 	.meteo-vig-label {
-		font-size: 11px;
+		font-size: 13px;
 		font-weight: bold;
 		color: rgba(255,255,255,0.55);
 		white-space: nowrap;
@@ -97,25 +97,19 @@
 	.meteo-vig-bloc {
 		display: flex;
 		align-items: center;
-		gap: 4px;
-	}
-	.meteo-vig-echeance {
-		font-size: 10px;
-		font-weight: bold;
-		color: rgba(255,255,255,0.5);
-		white-space: nowrap;
+		gap: 6px;
 	}
 	.meteo-vig-badge {
-		padding: 2px 7px;
-		border-radius: 10px;
-		font-size: 11px;
+		padding: 3px 10px;
+		border-radius: 12px;
+		font-size: 14px;
 		font-weight: bold;
 		white-space: nowrap;
 		cursor: default;
 	}
 	.meteo-vig-ok {
 		color: rgba(255,255,255,0.45);
-		font-size: 11px;
+		font-size: 13px;
 		white-space: nowrap;
 	}
 	</style>
@@ -2483,6 +2477,11 @@ function main() {
 		var widget = document.getElementById('meteoWidget');
 		if (!widget) return;
 
+		// //// TEST - simuler des alertes (mettre null pour utiliser les données réelles) ////
+		var TEST_J  = [{ niveau: 3, phenomene_lib: 'Canicule' }]; // null = données réelles
+		var TEST_J1 = null;                                        // null = données réelles
+		// exemples : { niveau: 2, phenomene_lib: 'Orages' }  { niveau: 4, phenomene_lib: 'Pluie-inondation' }
+
 		var COULEURS = {
 			2: { bg: '#f1c40f', txt: '#333', lbl: 'Jaune' },
 			3: { bg: '#e67e22', txt: '#fff', lbl: 'Orange' },
@@ -2494,19 +2493,38 @@ function main() {
 			'Grand froid':'🥶', 'Avalanches':'🏔', 'Vagues-submersion':'🌊'
 		};
 
-		function construireBadges(alertes) {
-			if (!alertes.length) return '<span class="meteo-vig-ok">✓ RAS</span>';
+		function construireBadge(echeance, alertes) {
+			if (!alertes || !alertes.length) return '';
 			var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.niveau); }));
 			var col = COULEURS[niveauMax] || COULEURS[2];
 			var phenos = alertes.map(function(a) {
-				return (PHENOMENES[a.phenomene_lib] || '⚠') + ' ' + (a.phenomene_lib || '');
+				return (PHENOMENES[a.phenomene_lib] || '⚠') + '\u00a0' + (a.phenomene_lib || '');
 			}).join(' · ');
-			return '<span class="meteo-vig-badge" style="background:' + col.bg
-				+ ';color:' + col.txt + '" title="' + phenos + '">'
-				+ col.lbl + ' — ' + phenos + '</span>';
+			return '<div class="meteo-vig-bloc">'
+				+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
+				+ echeance + '\u00a0·\u00a0' + col.lbl + '\u00a0—\u00a0' + phenos
+				+ '</span></div>';
+		}
+
+		function afficher(alertesJ, alertesJ1) {
+			var badgeJ  = construireBadge('J',   alertesJ);
+			var badgeJ1 = construireBadge('J+1', alertesJ1);
+			var contenu = '<span class="meteo-vig-label">Vigilance Gard</span>';
+			if (!badgeJ && !badgeJ1) {
+				contenu += '<span class="meteo-vig-ok">✓ Pas d'alerte</span>';
+			} else {
+				contenu += badgeJ + badgeJ1;
+			}
+			widget.innerHTML = contenu;
+			widget.style.display = 'flex';
 		}
 
 		function chargerVigilance() {
+			// Mode test : bypasse le fetch si TEST_J ou TEST_J1 sont définis
+			if (TEST_J !== null || TEST_J1 !== null) {
+				afficher(TEST_J || [], TEST_J1 || []);
+				return;
+			}
 			var url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
 				+ 'vigilance-meteorologique/records?where=dep_code%3D%2230%22&limit=30';
 			fetch(url)
@@ -2530,25 +2548,15 @@ function main() {
 
 				var alertesJ  = filtrer(jj);
 				var alertesJ1 = filtrer(j1);
-				// fallback si la structure date/echeance ne matche pas : prendre tous >= 2
-				var fallback = (!alertesJ.length && !alertesJ1.length)
-					? recs.filter(function(r) { return r.niveau && parseInt(r.niveau) >= 2; })
-					: null;
-
-				widget.innerHTML =
-					'<span class="meteo-vig-label">Vigilance Gard</span>' +
-					'<div class="meteo-vig-bloc">' +
-						'<span class="meteo-vig-echeance">J</span>' +
-						construireBadges(fallback || alertesJ) +
-					'</div>' +
-					(fallback ? '' :
-						'<div class="meteo-vig-bloc">' +
-						'<span class="meteo-vig-echeance">J+1</span>' +
-						construireBadges(alertesJ1) +
-						'</div>');
-				widget.style.display = 'flex';
+				// fallback : si aucun match date/echeance, prendre tous >= 2 en J
+				if (!alertesJ.length && !alertesJ1.length) {
+					alertesFb = recs.filter(function(r) { return r.niveau && parseInt(r.niveau) >= 2; });
+					afficher(alertesFb, []);
+				} else {
+					afficher(alertesJ, alertesJ1);
+				}
 			}).catch(function() {
-				widget.innerHTML = '<span class="meteo-vig-ok" style="color:rgba(255,255,255,0.4)">Vigilance indisponible</span>';
+				widget.innerHTML = '<span class="meteo-vig-ok" style="color:rgba(255,255,255,0.35)">Vigilance indisponible</span>';
 				widget.style.display = 'flex';
 			});
 		}
