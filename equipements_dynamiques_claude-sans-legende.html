@@ -382,7 +382,7 @@ function gererEtiquettesRD(map) {
             var dist = centre.distanceTo(meilleur);
             var rd = couche.options.rdLabel;
             if (!parRD[rd] || dist < parRD[rd].dist) {
-                parRD[rd] = { point: meilleur, dist: dist, color: couche.options.color || "#888" };
+                parRD[rd] = { point: meilleur, dist: dist, color: couche.options.rdColor || "#888" };
             }
         });
         // Pose une seule étiquette par numéro RD
@@ -518,6 +518,7 @@ function CarteLeaflet(conteneurId) {
 			couche.options.rdLabel = propTrim(élément.properties, "RD");
 			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
 			couche.options.rdProximite = /proximit/i.test(niveauRDet);
+			couche.options.rdColor = propTrim(élément.properties, "couleur") || couche.options.color || "#888";
 		}
 		
 		function nettoyerValNulles() {
@@ -766,6 +767,7 @@ function CarteLeaflet(conteneurId) {
         élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
         var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
+        élémentsMLS.options.rdColor = couleurOrigine || "#888";
     }
     // //// modif nouvelle UI - pas de tooltip survol sur les vues RD sans 'troncon' ////
     if (!vueCouranteEtiquetteRD || vueCouranteTroncon) {
