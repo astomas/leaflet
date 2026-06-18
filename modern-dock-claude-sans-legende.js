@@ -690,10 +690,10 @@
 
     <p><img src='/ressources/API_JS/images/Aide/rechGoogle.gif' width='27' height='27'><b> Rechercher localisation:</b> commune, adresse, bâtiment, route, lieu, etc. Géocodage Google Maps, Gard priorisé.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b>Import couches:</b> afficher des fichiers de couches au format Shape, GeoJSON, csv, GPX, Kml sur la carte. Projection en WGS84, possibilité de faire un glisser/déposer,
-    de zipper (1 couche/fichier .zip), clic droit pour effacer la couche, import csv de points uniquement.</p>
+    <p><img src='/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b>Import couches:</b> afficher des fichiers de couches WGS84 au format Shape, GeoJSON, csv, GPX, Kml sur la carte. 
+    Possibilité de faire un glisser/déposer, de zipper (1 couche/fichier .zip), clic droit pour effacer une couche, import csv de points uniquement.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter la ou les couches sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+    <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
 
     <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer carte, mesurer distance(s), calcul d'isochrones, recherche par coord. GPS. Détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
 
