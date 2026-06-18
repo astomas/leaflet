@@ -78,53 +78,44 @@
 	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
 	
 	<style>
-	/* //// modif nouvelle UI - widget météo en-tête //// */
+	/* //// modif nouvelle UI - widget vigilance Météo-France (opendatasoft) //// */
 	.modern-meteo-widget {
 		display: none;
 		align-items: center;
-		gap: 6px;
+		gap: 8px;
 		padding: 0 10px;
 		flex-shrink: 0;
 	}
-	.meteo-current {
+	.meteo-vig-label {
+		font-size: 11px;
+		font-weight: bold;
+		color: rgba(255,255,255,0.55);
+		white-space: nowrap;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	.meteo-vig-bloc {
 		display: flex;
-		margin-right:22px;
 		align-items: center;
 		gap: 4px;
-		cursor: default;
 	}
-	.meteo-icone-emoji {
-		font-size: 48px;
-		line-height: 1;
-	}
-	.meteo-temp {
-		font-size: 23px;
-		margin-right:8px;
+	.meteo-vig-echeance {
+		font-size: 10px;
 		font-weight: bold;
-		color: #fff;
+		color: rgba(255,255,255,0.5);
 		white-space: nowrap;
 	}
-	.meteo-vent {
-		font-size: 18px;
-		color: rgba(255,255,255,0.75);
-		white-space: nowrap;
-	}
-	.meteo-ville {
-		font-size: 18px;
-		font-weight:bold;
-		color: rgba(255,255,255,0.65);
-		white-space: nowrap;
-	}
-	.meteo-alerte {
-		display: flex;
-		align-items: center;
-	}
-	.meteo-alerte-badge {
+	.meteo-vig-badge {
 		padding: 2px 7px;
 		border-radius: 10px;
 		font-size: 11px;
 		font-weight: bold;
-		cursor: pointer;
+		white-space: nowrap;
+		cursor: default;
+	}
+	.meteo-vig-ok {
+		color: rgba(255,255,255,0.45);
+		font-size: 11px;
 		white-space: nowrap;
 	}
 	</style>
@@ -138,7 +129,7 @@
       <div class="modern-header-titles">
         <h1>Surveillance réseau météo France</h1>
       </div>
-      <div id="meteoWidget" class="modern-meteo-widget"><div class="meteo-current"></div></div>
+      <div id="meteoWidget" class="modern-meteo-widget"></div>
       <div class="modern-header-actions">
         <div id="modernHeaderInfoDock" class="modern-header-help" title="Informations"></div>
         <div id="modernHeaderHelpDock" class="modern-header-help" title="Aide"></div>
@@ -2486,78 +2477,84 @@ function main() {
 	carteLeaflet.spiderfyPoints();
 	gererEtiquettesRD(maCarte);
 
-	// //// modif nouvelle UI - widget météo Météo-France API ////
+	// //// modif nouvelle UI - widget vigilance Météo-France J+J+1 (opendatasoft, sans clé) ////
 	(function() {
-		if (!valeurTitre1 || !valeurTitre1.toLowerCase().includes('surveillance')) return;
+		if (!valeurTitre1 || !valeurTitre1.toLowerCase().includes('météo france')) return;
 		var widget = document.getElementById('meteoWidget');
 		if (!widget) return;
 
-		// TODO : renseigner la clé API obtenue sur portail-api.meteofrance.fr
-		var MF_API_KEY = "";
-		if (!MF_API_KEY) {
-			widget.querySelector('.meteo-current').innerHTML =
-				'<span class="meteo-ville" style="color:#e67e22">⚠ Clé API Météo-France manquante</span>';
-			widget.style.display = 'flex';
-			return;
+		var COULEURS = {
+			2: { bg: '#f1c40f', txt: '#333', lbl: 'Jaune' },
+			3: { bg: '#e67e22', txt: '#fff', lbl: 'Orange' },
+			4: { bg: '#c0392b', txt: '#fff', lbl: 'Rouge' }
+		};
+		var PHENOMENES = {
+			'Vent violent':'💨', 'Pluie-inondation':'🌧', 'Orages':'⛈',
+			'Inondation':'🌊', 'Neige-verglas':'❄', 'Canicule':'🌡',
+			'Grand froid':'🥶', 'Avalanches':'🏔', 'Vagues-submersion':'🌊'
+		};
+
+		function construireBadges(alertes) {
+			if (!alertes.length) return '<span class="meteo-vig-ok">✓ RAS</span>';
+			var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.niveau); }));
+			var col = COULEURS[niveauMax] || COULEURS[2];
+			var phenos = alertes.map(function(a) {
+				return (PHENOMENES[a.phenomene_lib] || '⚠') + ' ' + (a.phenomene_lib || '');
+			}).join(' · ');
+			return '<span class="meteo-vig-badge" style="background:' + col.bg
+				+ ';color:' + col.txt + '" title="' + phenos + '">'
+				+ col.lbl + ' — ' + phenos + '</span>';
 		}
 
-		// Station Nîmes-Courbessac (id 30178001) — à ajuster si besoin
-		var ID_STATION = "30178001";
-		var MF_HEADERS = { "apikey": MF_API_KEY, "Accept": "application/json" };
-
-		function isoNow() {
-			var d = new Date();
-			d.setSeconds(0, 0);
-			return d.toISOString().replace(/\.\d{3}Z$/, 'Z');
-		}
-
-		function chargerMeteo() {
-			// ── Observations courantes (DPObs) ──────────────────────────────────────
-			var urlObs = 'https://portail-api.meteofrance.fr/public/DPObs/v1/station/infrahoraire-6m'
-				+ '?id_station=' + ID_STATION + '&date=' + encodeURIComponent(isoNow());
-			fetch(urlObs, { headers: MF_HEADERS })
+		function chargerVigilance() {
+			var url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
+				+ 'vigilance-meteorologique/records?where=dep_code%3D%2230%22&limit=30';
+			fetch(url)
 			.then(function(r) { return r.json(); })
 			.then(function(data) {
-				var obs = data && data[0];
-				if (!obs) return;
-				var temp = obs.t !== undefined ? Math.round(obs.t - 273.15) + '°C' : '--';
-				var vent = obs.ff !== undefined ? Math.round(obs.ff * 3.6) + ' km/h' : '--';
-				widget.querySelector('.meteo-current').innerHTML =
-					'<span class="meteo-icone-emoji">🌡️</span>' +
-					'<span class="meteo-temp">' + temp + '</span>' +
-					'<span class="meteo-vent">' + vent + '</span>' +
-					'<span class="meteo-ville">Nîmes (MF)</span>';
+				var recs = (data && data.results) || [];
+				var now = new Date();
+				var demain = new Date(now); demain.setDate(demain.getDate() + 1);
+				var jj = now.toISOString().slice(0, 10);
+				var j1 = demain.toISOString().slice(0, 10);
+
+				function filtrer(jourISO) {
+					return recs.filter(function(r) {
+						var debut = (r.debut_validite || '').slice(0, 10);
+						var ech   = (r.echeance || '').toString().toUpperCase().trim();
+						var matchDate = debut === jourISO;
+						var matchEch  = jourISO === jj ? ech === 'J' : ech === 'J+1';
+						return (matchDate || matchEch) && r.niveau && parseInt(r.niveau) >= 2;
+					});
+				}
+
+				var alertesJ  = filtrer(jj);
+				var alertesJ1 = filtrer(j1);
+				// fallback si la structure date/echeance ne matche pas : prendre tous >= 2
+				var fallback = (!alertesJ.length && !alertesJ1.length)
+					? recs.filter(function(r) { return r.niveau && parseInt(r.niveau) >= 2; })
+					: null;
+
+				widget.innerHTML =
+					'<span class="meteo-vig-label">Vigilance Gard</span>' +
+					'<div class="meteo-vig-bloc">' +
+						'<span class="meteo-vig-echeance">J</span>' +
+						construireBadges(fallback || alertesJ) +
+					'</div>' +
+					(fallback ? '' :
+						'<div class="meteo-vig-bloc">' +
+						'<span class="meteo-vig-echeance">J+1</span>' +
+						construireBadges(alertesJ1) +
+						'</div>');
 				widget.style.display = 'flex';
-			}).catch(function() {});
-
-			// ── Vigilance officielle (DPVigilance) ──────────────────────────────────
-			var urlVig = 'https://portail-api.meteofrance.fr/public/DPVigilance/v1/carteVigilance/encours';
-			fetch(urlVig, { headers: MF_HEADERS })
-			.then(function(r) { return r.json(); })
-			.then(function(data) {
-				var old = widget.querySelector('.meteo-alerte');
-				if (old) old.remove();
-				// Filtrer département 30, niveaux >= 2 (jaune)
-				var massifs = (data && data.product && data.product.periods && data.product.periods[0]
-					&& data.product.periods[0].timelaps && data.product.periods[0].timelaps[0]
-					&& data.product.periods[0].timelaps[0].massifs) || [];
-				var dep30 = massifs.filter(function(m) {
-					return m.dep && m.dep.toString() === '30' && m.echeance === 'J' && m.niveau >= 2;
-				});
-				if (!dep30.length) return;
-				var niveauMax = Math.max.apply(null, dep30.map(function(m) { return m.niveau; }));
-				var couleur = niveauMax >= 4 ? '#c0392b' : niveauMax >= 3 ? '#e67e22' : '#f1c40f';
-				var textCouleur = niveauMax >= 3 ? '#fff' : '#333';
-				var badge = document.createElement('div');
-				badge.className = 'meteo-alerte';
-				badge.innerHTML = '<span class="meteo-alerte-badge" style="background:' + couleur
-					+ ';color:' + textCouleur + '">⚠ Vigilance niv.' + niveauMax + ' (Gard)</span>';
-				widget.appendChild(badge);
-			}).catch(function() {});
+			}).catch(function() {
+				widget.innerHTML = '<span class="meteo-vig-ok" style="color:rgba(255,255,255,0.4)">Vigilance indisponible</span>';
+				widget.style.display = 'flex';
+			});
 		}
 
-		chargerMeteo();
-		setInterval(chargerMeteo, 10*60*1000);
+		chargerVigilance();
+		setInterval(chargerVigilance, 10*60*1000);
 	})();
 }
 
