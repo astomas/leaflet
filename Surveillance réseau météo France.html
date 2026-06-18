@@ -2495,17 +2495,10 @@ function main() {
 			3: { bg: '#e67e22', txt: '#fff', lbl: 'Alerte Orange' },
 			4: { bg: '#c0392b', txt: '#fff', lbl: 'Alerte Rouge' }
 		};
-		var ICO = 'https://cdn.meteocons.com/latest/svg/fill/';
 		var PHENOMENES = {
-			'Vent violent':      '<img src="' + ICO + 'wind.svg"                    height="30" style="vertical-align:middle">',
-			'Pluie-inondation':  '<img src="' + ICO + 'thunderstorms-rain.svg"      height="30" style="vertical-align:middle">',
-			'Orages':            '<img src="' + ICO + 'thunderstorms.svg"           height="30" style="vertical-align:middle">',
-			'Inondation':        '<img src="' + ICO + 'rain.svg"                    height="30" style="vertical-align:middle">',
-			'Neige-verglas':     '<img src="' + ICO + 'snow.svg"                    height="30" style="vertical-align:middle">',
-			'Canicule':          '<img src="' + ICO + 'thermometer-warmer.svg"      height="30" style="vertical-align:middle">',
-			'Grand froid':       '<img src="' + ICO + 'thermometer-colder.svg"      height="30" style="vertical-align:middle">',
-			'Avalanches':        '<img src="' + ICO + 'alert-avalanche-danger.svg"  height="30" style="vertical-align:middle">',
-			'Vagues-submersion': '<img src="' + ICO + 'tide-high.svg"               height="30" style="vertical-align:middle">'
+			'Vent violent':'💨', 'Pluie-inondation':'🌧️', 'Orages':'⛈️',
+			'Inondation':'🌊', 'Neige-verglas':'❄️', 'Canicule':'🌡️',
+			'Grand froid':'🥶', 'Avalanches':'🏔️', 'Vagues-submersion':'🌊'
 		};
 
 		function construireBadge(echeance, alertes) {
@@ -2513,8 +2506,7 @@ function main() {
 			var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.niveau); }));
 			var col = COULEURS[niveauMax] || COULEURS[2];
 			var phenos = alertes.map(function(a) {
-				var ico = PHENOMENES[a.phenomene_lib] || '<span style="font-size:24px">⚠</span>';
-				return ico + ' ' + (a.phenomene_lib || '');
+				return '<span style="font-size:22px">' + (PHENOMENES[a.phenomene_lib] || '⚠️') + '</span> ' + (a.phenomene_lib || '');
 			}).join(' · ');
 			return '<div class="meteo-vig-bloc">'
 				+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
