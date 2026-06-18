@@ -731,8 +731,8 @@
     <p><img src='/ressources/API_JS/images/Aide/rech_GPS.png' width='27' height='26'> <b> Recherche par coordonnées GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : '43.83494, 4.35965')
     pour afficher sur la carte icones et fenêtres correspondants. Géocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>
 
-    <p class='text-warning'>Les rendus liés à l'utilisation des fonctions importer, mesurer, calcul isochrone seront perdus à la réouverture de la carte.<br>
-    Pour conserver une trace, effectuer une impression papier ou pdf via l'outil 'Imprimer' ou bien faire une capture écran.</p>
+    <p class='text-warning'>Les rendus liés à l'utilisation des fonctions importer, mesurer, isochrone seront perdus à la réouverture de la carte.<br>
+    Pour en conserver une trace, effectuer une impression papier ou pdf via l'outil 'Imprimer' ou bien faire une capture écran.</p>
     </div>`;
 
     var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
