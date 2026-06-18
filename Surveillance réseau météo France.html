@@ -2473,7 +2473,7 @@ function main() {
 
 	// //// modif nouvelle UI - widget vigilance Météo-France J+J+1 (opendatasoft, sans clé) ////
 	(function() {
-		if (!valeurTitre1 || valeurTitre1 !== 'Surveillance réseau') return;
+		if (!valeurTitre1 || !valeurTitre1.includes('Surveillance réseau')) return;
 		var widget = document.getElementById('meteoWidget');
 		if (!widget) return;
 
