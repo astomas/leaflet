@@ -2121,7 +2121,7 @@ this.ajouterSwitch = function() {
         options: { position: 'bottomleft' },
         onAdd: function (map) {
             var container = L.DomUtil.create('div', 'switch-control-container-discret');            
-			if (valeurTitre1.toLowerCase().includes('fauchage') || valeurTitre1.toLowerCase().includes('curage')) { 
+			if (valeurTitre1.toLowerCase().includes('fauchage') || valeurTitre1.toLowerCase().includes('curage') || valeurTitre1.toLowerCase().includes('r&#233;f&#233;rentiel routier')) { 
 				flagHoverSurlignage = true;
 		    }
             var switchBtn = L.DomUtil.create('div', 'leaflet-control-switch-discret', container);   
