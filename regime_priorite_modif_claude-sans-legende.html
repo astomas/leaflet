@@ -704,8 +704,8 @@ function CarteLeaflet(conteneurId) {
 			var tooltipCourt = tableauContenuTooltip.slice(0, 2).join("<br />");
 			couche.bindTooltip(tooltipCourt, { sticky: true, opacity: 0.9, className: 'tooltip-polygone' });
 		} else if (élément.geometry.type === "LineString" || élément.geometry.type === "MultiLineString") {
-			// //// modif nouvelle UI - tooltip ligne seulement sur les vues 'troncon' ////
-			if (vueCouranteTroncon) { couche.bindTooltip(texteTooltip, optionsTooltip); }
+			// //// modif nouvelle UI - pas de tooltip ligne sur les vues RD sans 'troncon' ////
+			if (!vueCouranteEtiquetteRD || vueCouranteTroncon) { couche.bindTooltip(texteTooltip, optionsTooltip); }
 		} else {
 			couche.bindTooltip(texteTooltip, optionsTooltip);
 		}
@@ -769,8 +769,8 @@ function CarteLeaflet(conteneurId) {
         var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
     }
-    // //// modif nouvelle UI - tooltip survol seulement sur les vues 'troncon' ////
-    if (vueCouranteTroncon) {
+    // //// modif nouvelle UI - pas de tooltip survol sur les vues RD sans 'troncon' ////
+    if (!vueCouranteEtiquetteRD || vueCouranteTroncon) {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
 }
