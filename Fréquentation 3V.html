@@ -115,8 +115,17 @@
 <script>
 	valeurTitre1 = "Fr&#233;quentation Itin&#233;raires cyclables Euro-v&#233;lo, VV Nationale, VV D&#233;partementale";
 	nbreDeVues = 2;
+	nomVues = ["stations_vv_historique_4map","d30_3vitinerairetype_filtre_4map"];
 	strRechJson = "1|Nom |station par nom ; 2|leafletsearch|itinéraire par n°, nom officiel, départ, arrivée";
 	clicZoomActif = true;	
+	nomVues = nomVues.map(vue => {
+	    vue = vue.replace(/_4map$/i, "").replace(/_/g, " ");
+	    return vue.charAt(0).toUpperCase() + vue.slice(1);
+	});
+	
+	console.log("nomVues : ", nomVues);
+	
+	L.Icon.Default.imagePath = '/Ressources/API_JS/images/';
 
 	var tabNettoyé = [];
 
