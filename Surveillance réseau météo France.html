@@ -2473,7 +2473,7 @@ function main() {
 
 	// //// modif nouvelle UI - widget vigilance Météo-France J+J+1 (opendatasoft, sans clé) ////
 	(function() {
-		if (!valeurTitre1 || !valeurTitre1 == 'Surveillance du r&#233;seau - source CD30 - Waze') return;
+		if (!valeurTitre1) return;
 		var widget = document.getElementById('meteoWidget');
 		if (!widget) return;
 
