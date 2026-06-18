@@ -91,12 +91,13 @@
 		border-radius: 10px;
 	}
 	.meteo-vig-label {
-		font-size: 11px;
+		font-size: 14px;
 		font-weight: bold;
-		color: rgba(255,255,255,0.65);
+		color: #ffd700;
 		white-space: nowrap;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
+		text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 	}
 	.meteo-vig-bloc {
 		display: flex;
@@ -2490,9 +2491,9 @@ function main() {
 		// exemples : { niveau: 2, phenomene_lib: 'Orages' }  { niveau: 4, phenomene_lib: 'Pluie-inondation' }
 
 		var COULEURS = {
-			2: { bg: '#f1c40f', txt: '#333', lbl: 'Jaune' },
-			3: { bg: '#e67e22', txt: '#fff', lbl: 'Orange' },
-			4: { bg: '#c0392b', txt: '#fff', lbl: 'Rouge' }
+			2: { bg: '#f1c40f', txt: '#333', lbl: 'Alerte Jaune' },
+			3: { bg: '#e67e22', txt: '#fff', lbl: 'Alerte Orange' },
+			4: { bg: '#c0392b', txt: '#fff', lbl: 'Alerte Rouge' }
 		};
 		var PHENOMENES = {
 			'Vent violent':'💨', 'Pluie-inondation':'🌧', 'Orages':'⛈',
