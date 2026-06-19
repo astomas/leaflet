@@ -2609,14 +2609,14 @@ function main() {
 
 		function chargerVigicrues() {
 			// //// TEST - simuler une crue (mettre null pour données réelles) ////
-			var TEST_CRUES = 1; // null = données réelles  |  1=Vert(rien)  2=Jaune  3=Orange  4=Rouge
+			var TEST_CRUES = 3; // null = données réelles  |  1=Vert(rien)  2=Jaune  3=Orange  4=Rouge
 
 			if (TEST_CRUES !== null) {
 				if (TEST_CRUES < 2) { renduCrues = ''; rendreWidget(); return; }
 				var col = COULEURS[TEST_CRUES] || COULEURS[2];
 				renduCrues = '<div class="meteo-vig-bloc">'
 					+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
-					+ '<span style="font-size:27px">🏞️</span> Crues Gard · ' + col.lbl
+					+ '<span style="font-size:27px">🏞️</span> Crues Gard : ' + col.lbl
 					+ '</span></div>';
 				rendreWidget();
 				return;
