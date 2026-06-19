@@ -2520,8 +2520,8 @@ function main() {
 		if (!widget) return;
 
 		// //// TEST - simuler des alertes (mettre null pour utiliser les données réelles) ////
-		var TEST_J  = []; // null = données réelles
-		var TEST_J1 = null;                                        // null = données réelles
+		var TEST_J  = [{ niveau: 2, phenomene_lib: 'Vent violent' }]; // null = données réelles
+		var TEST_J1 = [{ niveau: 3, phenomene_lib: 'Orages' }];          // null = données réelles
 		// exemples : { niveau: 2, phenomene_lib: 'Orages' }  { niveau: 4, phenomene_lib: 'Pluie-inondation' }
 
 		var COULEURS = {
