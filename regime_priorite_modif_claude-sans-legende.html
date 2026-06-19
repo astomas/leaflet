@@ -29,7 +29,11 @@
 	<script src="/leaflet/Ressources 26/Leaflet.GoogleMutant.js"></script>
 	<!-- Rech. lieux Google -->
 	<script src="/leaflet/Ressources 26/GPlaceAutocomplete.js"></script>
-  	<link rel="stylesheet" href="/leaflet/Ressources 26/GPlaceAutocomplete.css" />	  
+  	<link rel="stylesheet" href="/leaflet/Ressources 26/GPlaceAutocomplete.css" />
+
+	<!-- Widget vigilance météo -->
+	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/widget-meteo.css">
+	<script src="/leaflet/Ressources 26/librairies_cd30/widget-meteo.js"></script>	  
 
 	<!-- Impression carte -->
 	<script src="/leaflet/Ressources 26/leaflet.browser.print.js"></script>
@@ -85,6 +89,10 @@
       <div id="modernLogosDock" class="modern-logos-dock modern-header-logos" aria-label="Liens rapides"></div>
       <div class="modern-header-titles">
 		<h1>valeurTitre1</h1>
+      </div>
+      <div class="meteo-zone">
+        <div id="meteoWidget" class="modern-meteo-widget"></div>
+        <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ accès site vigilance météo et crues Gard</a>
       </div>
       <div class="modern-header-actions">
         <div id="modernHeaderInfoDock" class="modern-header-help" title="Informations"></div>
@@ -1480,6 +1488,14 @@ this.rechercherLieu = function() {
 	
 }
 
+
+this.widgetMeteo = function() {
+	initWidgetMeteo({
+		TEST_J:  null, // null = données réelles
+		TEST_J1: null  // null = données réelles
+	});
+};
+
 this.importFichier = function () {	
     let indexSpatialImport = {};
     let couchesImportées = [];
@@ -2640,6 +2656,7 @@ function main() {
 	carteLeaflet.visuEtInfo(); 
 	carteLeaflet.visuBatiments3D();	
 	carteLeaflet.spiderfyPoints();
+	carteLeaflet.widgetMeteo();
 	gererEtiquettesRD(maCarte);
 }
 		
