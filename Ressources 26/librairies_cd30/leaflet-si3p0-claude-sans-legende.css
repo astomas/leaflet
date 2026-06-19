@@ -354,8 +354,8 @@ img.leaflet-marker-icon[src*="geosearch"] {
 .leaflet-control-switch-discret {
     background: #bbb;
     border-radius: 15px;
-    width: 50px;
-    height: 25px;
+    width: 48px;
+    height: 23px;
     position: relative;
     cursor: pointer;
     transition: background 0.3s;
