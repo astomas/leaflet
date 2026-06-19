@@ -13,7 +13,7 @@ function initWidgetMeteo(cfg) {
 	};
 	var PHENOMENES = {
 		'Vent violent':'💨', 'Pluie-inondation':'🌧️', 'Orages':'⛈️',
-		'Inondation':'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 27" width="27" height="27" style="vertical-align:middle"><polygon points="12,1 23,10 1,10" fill="currentColor"/><rect x="3" y="10" width="18" height="9" fill="currentColor"/><path d="M0,21 Q3,19 6,21 Q9,23 12,21 Q15,19 18,21 Q21,23 24,21" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M0,25 Q3,23 6,25 Q9,27 12,25 Q15,23 18,25 Q21,27 24,25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
+		'Inondation':'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 27" width="27" height="27" style="vertical-align:middle"><polygon points="12,1 23,10 1,10" fill="currentColor"/><rect x="3" y="10" width="18" height="9" fill="currentColor"/><path d="M0,21 Q3,19 6,21 Q9,23 12,21 Q15,19 18,21 Q21,23 24,21" stroke="#1a8fd1" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M0,25 Q3,23 6,25 Q9,27 12,25 Q15,23 18,25 Q21,27 24,25" stroke="#1a8fd1" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
 		'Neige-verglas':'❄️', 'Canicule':'🌡️',
 		'Grand froid':'🥶', 'Avalanches':'🏔️', 'Vagues-submersion':'🌊'
 	};
