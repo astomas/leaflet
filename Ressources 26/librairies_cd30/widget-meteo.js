@@ -1,11 +1,10 @@
-/* //// widget vigilance Météo-France + Vigicrues - Gard (dept 30) - opendatasoft, sans clé //// */
+/* //// widget vigilance Météo-France - Gard (dept 30) - opendatasoft, sans clé //// */
 function initWidgetMeteo(cfg) {
 	var widget = document.getElementById('meteoWidget');
 	if (!widget) return;
 
-	var TEST_J     = cfg.TEST_J;
-	var TEST_J1    = cfg.TEST_J1;
-	var TEST_CRUES = cfg.TEST_CRUES;
+	var TEST_J  = cfg.TEST_J;
+	var TEST_J1 = cfg.TEST_J1;
 
 	var COULEURS = {
 		2: { bg: '#f1c40f', txt: '#333', lbl: 'Alerte Jaune' },
@@ -31,24 +30,13 @@ function initWidgetMeteo(cfg) {
 			+ '</span></div>';
 	}
 
-	var renduMeteo = null;
-	var renduCrues = null;
-
-	function rendreWidget() {
-		if (renduMeteo === null && renduCrues === null) return;
-		var contenu = (renduMeteo || '') + (renduCrues || '');
+	function afficher(alertesJ, alertesJ1) {
+		var contenu = construireBadge('Aujourd'hui', alertesJ) + construireBadge('Demain', alertesJ1);
 		var zone = widget.parentElement;
 		if (!contenu) { widget.style.display = 'none'; if (zone) zone.style.display = 'none'; return; }
 		widget.innerHTML = contenu;
 		widget.style.display = 'flex';
 		if (zone) zone.style.display = 'flex';
-	}
-
-	function afficher(alertesJ, alertesJ1) {
-		var badgeJ  = construireBadge('Aujourd’hui', alertesJ);
-		var badgeJ1 = construireBadge('Demain', alertesJ1);
-		renduMeteo = badgeJ + badgeJ1;
-		rendreWidget();
 	}
 
 	function chargerVigilance() {
@@ -82,36 +70,8 @@ function initWidgetMeteo(cfg) {
 			} else {
 				afficher(alertesJ, alertesJ1);
 			}
-		}).catch(function() { renduMeteo = ''; rendreWidget(); });
-	}
-
-	function chargerVigicrues() {
-		if (TEST_CRUES !== null) {
-			if (TEST_CRUES < 2) { renduCrues = ''; rendreWidget(); return; }
-			var col = COULEURS[TEST_CRUES] || COULEURS[2];
-			renduCrues = '<div class="meteo-vig-bloc">'
-				+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
-				+ '<span style="font-size:27px">🏞️</span> Crues Gard : ' + col.lbl
-				+ '</span></div>';
-			rendreWidget();
-			return;
-		}
-		var url = 'https://www.vigicrues.gouv.fr/services/v1.1/TronconEntVigiCru.json?TypEntVigiCru=8&CdEntVigiCru=030';
-		fetch(url)
-		.then(function(r) { return r.json(); })
-		.then(function(data) {
-			var troncons = (data && (data.TronconEntVigiCru || data.TronconVigilanceCru)) || [];
-			var niveauMax = Math.max.apply(null, [1].concat(troncons.map(function(t) { return parseInt(t.NivSituVigiCru) || 1; })));
-			if (niveauMax < 2) { renduCrues = ''; rendreWidget(); return; }
-			var col = COULEURS[niveauMax] || COULEURS[2];
-			renduCrues = '<div class="meteo-vig-bloc">'
-				+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
-				+ '<span style="font-size:27px">🏞️</span> Crues Gard : ' + col.lbl
-				+ '</span></div>';
-			rendreWidget();
-		}).catch(function() { renduCrues = ''; rendreWidget(); });
+		}).catch(function() { afficher([], []); });
 	}
 
 	chargerVigilance();
-	chargerVigicrues();
 }
