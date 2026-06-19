@@ -2568,6 +2568,45 @@ function main() {
 			rendreWidget();
 		}
 
+		function chargerVigilance() {
+			// Mode test : bypasse le fetch si TEST_J ou TEST_J1 sont définis
+			if (TEST_J !== null || TEST_J1 !== null) {
+				afficher(TEST_J || [], TEST_J1 || []);
+				return;
+			}
+			var url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
+				+ 'vigilance-meteorologique/records?where=dep_code%3D%2230%22&limit=30';
+			fetch(url)
+			.then(function(r) { return r.json(); })
+			.then(function(data) {
+				var recs = (data && data.results) || [];
+				var now = new Date();
+				var demain = new Date(now); demain.setDate(demain.getDate() + 1);
+				var jj = now.toISOString().slice(0, 10);
+				var j1 = demain.toISOString().slice(0, 10);
+				function filtrer(jourISO) {
+					return recs.filter(function(r) {
+						var debut = (r.debut_validite || '').slice(0, 10);
+						var ech   = (r.echeance || '').toString().toUpperCase().trim();
+						var matchDate = debut === jourISO;
+						var matchEch  = jourISO === jj ? ech === 'J' : ech === 'J+1';
+						return (matchDate || matchEch) && r.niveau && parseInt(r.niveau) >= 2;
+					});
+				}
+				var alertesJ  = filtrer(jj);
+				var alertesJ1 = filtrer(j1);
+				if (!alertesJ.length && !alertesJ1.length) {
+					var alertesFb = recs.filter(function(r) { return r.niveau && parseInt(r.niveau) >= 2; });
+					afficher(alertesFb, []);
+				} else {
+					afficher(alertesJ, alertesJ1);
+				}
+			}).catch(function() {
+				renduMeteo = '';
+				rendreWidget();
+			});
+		}
+
 		function chargerVigicrues() {
 			// //// TEST - simuler une crue (mettre null pour données réelles) ////
 			var TEST_CRUES = 3; // null = données réelles  |  2=Jaune  3=Orange  4=Rouge
