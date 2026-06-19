@@ -2556,9 +2556,11 @@ function main() {
 		function rendreWidget() {
 			if (renduMeteo === null && renduCrues === null) return;
 			var contenu = (renduMeteo || '') + (renduCrues || '');
-			if (!contenu) { widget.style.display = 'none'; return; }
+			var zone = widget.parentElement;
+			if (!contenu) { widget.style.display = 'none'; if (zone) zone.style.display = 'none'; return; }
 			widget.innerHTML = contenu;
 			widget.style.display = 'flex';
+			if (zone) zone.style.display = 'flex';
 		}
 
 		function afficher(alertesJ, alertesJ1) {
