@@ -76,84 +76,9 @@
 
 	<!-- spiderfy points superposés -->
 	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
+	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/widget-meteo.css">
 	<script src="/leaflet/Ressources 26/librairies_cd30/widget-meteo.js"></script>
 	
-	<style>
-	/* //// modif nouvelle UI - widget vigilance Météo-France (opendatasoft) //// */
-	.modern-meteo-widget {
-		display: none;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
-		gap: 2px;
-		padding: 3px 0;
-		flex-shrink: 0;
-	}
-	.meteo-vig-label {
-		font-size: 14px;
-		font-weight: bold;
-		color: #ffd700;
-		white-space: nowrap;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		text-shadow: 0 1px 4px rgba(0,0,0,0.6);
-	}
-	.meteo-vig-bloc {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-	}
-	.meteo-vig-badge {
-		display: flex;
-		align-items: center;
-		padding: 5px 15px;
-		border-radius: 13px;
-		font-size: 21px;
-		font-weight: bold;
-		white-space: nowrap;
-		cursor: default;
-		box-shadow: 0 2px 6px rgba(0,0,0,0.45);
-	}
-	.meteo-vig-ok {
-		color: rgba(255,255,255,0.55);
-		font-size: 13px;
-		white-space: nowrap;
-	}
-	.meteo-zone {
-		display: none;
-		flex-direction: column;
-		align-items: stretch;
-		gap: 3px;
-		flex-shrink: 0;
-	}
-	.meteo-vig-lien {
-		display: inline-flex;
-		align-self: center;
-		align-items: center;
-		justify-content: center;
-		gap: 5px;
-		padding: 2px 10px;
-		border-radius: 6px;
-		background: #b04f3e;
-		color: #fff;
-		font-size: 17px;
-		font-weight: bold;
-		text-decoration: none;
-		white-space: nowrap;
-		box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-		transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-	}
-	.meteo-vig-lien:hover {
-		background: #c76050;
-		transform: translateY(-1px);
-		box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-	}
-	.meteo-vig-lien:active {
-		transform: translateY(0);
-		box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-	}
-	</style>
-
 	</head>
 	
   <body onload="main()">
@@ -2486,6 +2411,14 @@ this.rechercherJson = function(){
 			});
 		}
 	}
+
+	this.widgetMeteo = function() {
+		initWidgetMeteo({
+			TEST_J:     [],   // null = données réelles  | ex: [{ niveau: 2, phenomene_lib: 'Vent violent' }]
+			TEST_J1:    null, // null = données réelles  | ex: [{ niveau: 3, phenomene_lib: 'Orages' }]
+			TEST_CRUES: 1     // null = données réelles  | 1=Vert(rien) 2=Jaune 3=Orange 4=Rouge
+		});
+	};
 	
 }
 
@@ -2514,12 +2447,7 @@ function main() {
 	carteLeaflet.spiderfyPoints();
 	gererEtiquettesRD(maCarte);
 
-	// //// modif nouvelle UI - widget vigilance Météo-France J+J+1 + Vigicrues Gard ////
-	initWidgetMeteo({
-		TEST_J:     [],   // null = données réelles  | ex: [{ niveau: 2, phenomene_lib: 'Vent violent' }]
-		TEST_J1:    null, // null = données réelles  | ex: [{ niveau: 3, phenomene_lib: 'Orages' }]
-		TEST_CRUES: 1     // null = données réelles  | 1=Vert(rien) 2=Jaune 3=Orange 4=Rouge
-	});
+	carteLeaflet.widgetMeteo();
 }
 
 </script>
