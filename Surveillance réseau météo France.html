@@ -82,7 +82,7 @@
 	.modern-meteo-widget {
 		display: none;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 		gap: 3px;
 		padding: 5px 12px;
@@ -120,6 +120,30 @@
 		font-size: 13px;
 		white-space: nowrap;
 	}
+	.meteo-zone {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		flex-shrink: 0;
+	}
+	.meteo-vig-lien {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 7px 14px;
+		border-radius: 8px;
+		background: #0a4f9c;
+		color: #fff;
+		font-size: 13px;
+		font-weight: bold;
+		text-decoration: none;
+		white-space: nowrap;
+		box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+		transition: background 0.15s;
+	}
+	.meteo-vig-lien:hover {
+		background: #0c63c4;
+	}
 	</style>
 
 	</head>
@@ -131,7 +155,10 @@
       <div class="modern-header-titles">
         <h1>Surveillance du réseau - source CD30 - Waze</h1>
       </div>
-      <div id="meteoWidget" class="modern-meteo-widget"></div>
+      <div class="meteo-zone">
+        <div id="meteoWidget" class="modern-meteo-widget"></div>
+        <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ Site alertes Météo-France</a>
+      </div>
       <div class="modern-header-actions">
         <div id="modernHeaderInfoDock" class="modern-header-help" title="Informations"></div>
         <div id="modernHeaderHelpDock" class="modern-header-help" title="Aide"></div>
