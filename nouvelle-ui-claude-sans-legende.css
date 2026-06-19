@@ -1144,3 +1144,28 @@ body.leaflet--printing .titre {
   width: 30px !important;
   height: 30px !important;
 }
+
+/* ---- Agrandissement +20% contrôles haut-gauche (zoom, recentrer, rechercher lieu) ---- */
+.leaflet-bar a,
+.leaflet-bar button,
+.leaflet-touch .leaflet-bar a,
+.leaflet-touch .leaflet-bar button {
+  width: 31px !important;
+  height: 31px !important;
+  line-height: 31px !important;
+}
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  font-size: 22px !important;
+}
+.easy-button-button .fa {
+  font-size: 1.5em !important;
+}
+.leaflet-gac-search-btn {
+  width: 31px !important;
+  height: 31px !important;
+}
+.leaflet-gac-wrapper,
+.leaflet-gac-wrapper gmp-place-autocomplete {
+  height: 31px !important;
+}
