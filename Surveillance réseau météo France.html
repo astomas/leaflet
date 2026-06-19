@@ -2569,6 +2569,18 @@ function main() {
 		}
 
 		function chargerVigicrues() {
+			// //// TEST - simuler une crue (mettre null pour données réelles) ////
+			var TEST_CRUES = 3; // null = données réelles  |  2=Jaune  3=Orange  4=Rouge
+
+			if (TEST_CRUES !== null) {
+				var col = COULEURS[TEST_CRUES] || COULEURS[2];
+				renduCrues = '<div class="meteo-vig-bloc">'
+					+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
+					+ '<span style="font-size:27px">🏞️</span> Crues Gard · ' + col.lbl
+					+ '</span></div>';
+				rendreWidget();
+				return;
+			}
 			var url = 'https://www.vigicrues.gouv.fr/services/v1.1/TronconEntVigiCru.json?TypEntVigiCru=8&CdEntVigiCru=030';
 			fetch(url)
 			.then(function(r) { return r.json(); })
