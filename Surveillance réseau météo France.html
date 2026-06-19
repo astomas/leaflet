@@ -2522,7 +2522,7 @@ function main() {
 		if (!widget) return;
 
 		// //// TEST - simuler des alertes (mettre null pour utiliser les données réelles) ////
-		var TEST_J  = [{ niveau: 3, phenomene_lib: 'Canicule' }]; // null = données réelles
+		var TEST_J  = []; // null = données réelles
 		var TEST_J1 = null;                                        // null = données réelles
 		// exemples : { niveau: 2, phenomene_lib: 'Orages' }  { niveau: 4, phenomene_lib: 'Pluie-inondation' }
 
@@ -2556,7 +2556,7 @@ function main() {
 		function rendreWidget() {
 			if (renduMeteo === null && renduCrues === null) return;
 			var contenu = (renduMeteo || '') + (renduCrues || '');
-			if (!contenu) contenu = '<span class="meteo-vig-ok">✓ Pas dalerte</span>';
+			if (!contenu) { widget.style.display = 'none'; return; }
 			widget.innerHTML = contenu;
 			widget.style.display = 'flex';
 		}
@@ -2609,9 +2609,10 @@ function main() {
 
 		function chargerVigicrues() {
 			// //// TEST - simuler une crue (mettre null pour données réelles) ////
-			var TEST_CRUES = 3; // null = données réelles  |  2=Jaune  3=Orange  4=Rouge
+			var TEST_CRUES = 1; // null = données réelles  |  1=Vert(rien)  2=Jaune  3=Orange  4=Rouge
 
 			if (TEST_CRUES !== null) {
+				if (TEST_CRUES < 2) { renduCrues = ''; rendreWidget(); return; }
 				var col = COULEURS[TEST_CRUES] || COULEURS[2];
 				renduCrues = '<div class="meteo-vig-bloc">'
 					+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
