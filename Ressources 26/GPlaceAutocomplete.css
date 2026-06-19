@@ -4,14 +4,14 @@
 }
 
 .leaflet-gac-wrapper {
-    height: 26px;
+    height: 31px;
 }
 
 /* Style pour le nouveau PlaceAutocompleteElement */
 .leaflet-gac-wrapper gmp-place-autocomplete {
     display: block;
-    width: 360px;
-    height: 26px;
+    width: 432px;
+    height: 31px;
     z-index: 1001 !important;
     --gmp-autocomplete-input-border-radius: 5px;
     --gmp-autocomplete-input-border: 1px solid #d0d0d0;

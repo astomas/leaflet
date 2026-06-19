@@ -1170,6 +1170,3 @@ body.leaflet--printing .titre {
   height: 0 !important;
   opacity: 0 !important;
 }
-.leaflet-gac-wrapper gmp-place-autocomplete {
-  width: 432px !important;
-}
