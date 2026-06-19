@@ -23,7 +23,8 @@ function initWidgetMeteo(cfg) {
 		var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.niveau); }));
 		var col = COULEURS[niveauMax] || COULEURS[2];
 		var phenos = alertes.map(function(a) {
-			return '<span style="font-size:27px">' + (PHENOMENES[a.phenomene_lib] || '⚠️') + '</span> ' + (a.phenomene_lib || '');
+			var icone = (PHENOMENES[a.phenomene_lib] || '⚠️').replace(/currentColor/g, col.txt);
+			return '<span style="font-size:27px">' + icone + '</span> ' + (a.phenomene_lib || '');
 		}).join(' · ');
 		return '<div class="meteo-vig-bloc">'
 			+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
