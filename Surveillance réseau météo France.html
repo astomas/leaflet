@@ -107,9 +107,9 @@
 	.meteo-vig-badge {
 		display: flex;
 		align-items: center;
-		padding: 4px 12px;
-		border-radius: 12px;
-		font-size: 17px;
+		padding: 5px 15px;
+		border-radius: 13px;
+		font-size: 21px;
 		font-weight: bold;
 		white-space: nowrap;
 		cursor: default;
@@ -131,20 +131,26 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 6px;
-		padding: 2px 12px;
-		border-radius: 7px;
+		gap: 5px;
+		padding: 2px 10px;
+		border-radius: 6px;
 		background: #0a4f9c;
 		color: #fff;
-		font-size: 12px;
+		font-size: 10.5px;
 		font-weight: bold;
 		text-decoration: none;
 		white-space: nowrap;
 		box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-		transition: background 0.15s;
+		transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
 	}
 	.meteo-vig-lien:hover {
-		background: #0c63c4;
+		background: #1574e0;
+		transform: translateY(-1px);
+		box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+	}
+	.meteo-vig-lien:active {
+		transform: translateY(0);
+		box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	}
 	</style>
 
@@ -159,7 +165,7 @@
       </div>
       <div class="meteo-zone">
         <div id="meteoWidget" class="modern-meteo-widget"></div>
-        <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ Site alertes Météo-France</a>
+        <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ alertes météo Gard</a>
       </div>
       <div class="modern-header-actions">
         <div id="modernHeaderInfoDock" class="modern-header-help" title="Informations"></div>
@@ -2535,7 +2541,7 @@ function main() {
 			var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.niveau); }));
 			var col = COULEURS[niveauMax] || COULEURS[2];
 			var phenos = alertes.map(function(a) {
-				return '<span style="font-size:22px">' + (PHENOMENES[a.phenomene_lib] || '⚠️') + '</span> ' + (a.phenomene_lib || '');
+				return '<span style="font-size:27px">' + (PHENOMENES[a.phenomene_lib] || '⚠️') + '</span> ' + (a.phenomene_lib || '');
 			}).join(' · ');
 			return '<div class="meteo-vig-bloc">'
 				+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
@@ -2546,7 +2552,7 @@ function main() {
 		function afficher(alertesJ, alertesJ1) {
 			var badgeJ  = construireBadge('Aujourd’hui', alertesJ);
 			var badgeJ1 = construireBadge('Demain', alertesJ1);
-			var contenu = '<span class="meteo-vig-label">Vigilance Gard</span>';
+			var contenu = '';
 			if (!badgeJ && !badgeJ1) {
 				contenu += '<span class="meteo-vig-ok">✓ Pas dalerte</span>';
 			} else {
