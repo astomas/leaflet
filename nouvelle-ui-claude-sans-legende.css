@@ -1165,3 +1165,8 @@ body.leaflet--printing .titre {
   width: 31px !important;
   height: 31px !important;
 }
+.leaflet-gac-search-btn.leaflet-gac-hidden {
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+}
