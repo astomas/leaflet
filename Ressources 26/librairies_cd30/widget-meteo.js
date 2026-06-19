@@ -13,7 +13,7 @@ function initWidgetMeteo(cfg) {
 	};
 	var PHENOMENES = {
 		'Vent violent':'💨', 'Pluie-inondation':'🌧️', 'Orages':'⛈️',
-		'Inondation':'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 27" width="27" height="27" style="vertical-align:middle"><path d="M0,3 Q3,0 6,3 Q9,6 12,3 Q15,0 18,3 Q21,6 24,3" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,10 Q3,7 6,10 Q9,13 12,10 Q15,7 18,10 Q21,13 24,10" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,17 Q3,14 6,17 Q9,20 12,17 Q15,14 18,17 Q21,20 24,17" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,24 Q3,21 6,24 Q9,27 12,24 Q15,21 18,24 Q21,27 24,24" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>',
+		'Inondation':'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 27" width="27" height="27" style="vertical-align:middle;margin:0 4px"><path d="M0,3 Q3,0 6,3 Q9,6 12,3 Q15,0 18,3 Q21,6 24,3" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,10 Q3,7 6,10 Q9,13 12,10 Q15,7 18,10 Q21,13 24,10" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,17 Q3,14 6,17 Q9,20 12,17 Q15,14 18,17 Q21,20 24,17" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,24 Q3,21 6,24 Q9,27 12,24 Q15,21 18,24 Q21,27 24,24" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>',
 		'Neige-verglas':'❄️', 'Canicule':'🌡️',
 		'Grand froid':'🥶', 'Avalanches':'🏔️', 'Vagues-submersion':'🌊'
 	};
