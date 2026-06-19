@@ -1165,7 +1165,3 @@ body.leaflet--printing .titre {
   width: 31px !important;
   height: 31px !important;
 }
-.leaflet-gac-wrapper,
-.leaflet-gac-wrapper gmp-place-autocomplete {
-  height: 31px !important;
-}
