@@ -31,7 +31,7 @@ function initWidgetMeteo(cfg) {
 	}
 
 	function afficher(alertesJ, alertesJ1) {
-		var contenu = construireBadge('Aujourd'hui', alertesJ) + construireBadge('Demain', alertesJ1);
+		var contenu = construireBadge("Aujourd'hui", alertesJ) + construireBadge('Demain', alertesJ1);
 		var zone = widget.parentElement;
 		if (!contenu) { widget.style.display = 'none'; if (zone) zone.style.display = 'none'; return; }
 		widget.innerHTML = contenu;
