@@ -11,20 +11,52 @@ function initWidgetMeteo(cfg) {
 		3: { bg: '#e67e22', txt: '#fff', lbl: 'Alerte Orange' },
 		4: { bg: '#c0392b', txt: '#fff', lbl: 'Alerte Rouge' }
 	};
-	var PHENOMENES = {
-		'Vent violent':'💨', 'Pluie-inondation':'🌧️', 'Orages':'⛈️',
-		'Inondation':'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 27" width="27" height="27" style="vertical-align:middle;margin:0 4px"><path d="M0,3 Q3,0 6,3 Q9,6 12,3 Q15,0 18,3 Q21,6 24,3" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,10 Q3,7 6,10 Q9,13 12,10 Q15,7 18,10 Q21,13 24,10" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,17 Q3,14 6,17 Q9,20 12,17 Q15,14 18,17 Q21,20 24,17" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,24 Q3,21 6,24 Q9,27 12,24 Q15,21 18,24 Q21,27 24,24" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>',
-		'Neige-verglas':'❄️', 'Canicule':'🌡️',
-		'Grand froid':'🥶', 'Avalanches':'🏔️', 'Vagues-submersion':'🌊'
+
+	var SVG_VAGUES = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 27" width="27" height="27" style="vertical-align:middle;margin:0 4px"><path d="M0,3 Q3,0 6,3 Q9,6 12,3 Q15,0 18,3 Q21,6 24,3" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,10 Q3,7 6,10 Q9,13 12,10 Q15,7 18,10 Q21,13 24,10" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,17 Q3,14 6,17 Q9,20 12,17 Q15,14 18,17 Q21,20 24,17" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M0,24 Q3,21 6,24 Q9,27 12,24 Q15,21 18,24 Q21,27 24,24" stroke="#1a8fd1" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>';
+
+	var ICONES = {
+		'vent':              '💨',
+		'pluie':             '🌧️',
+		'pluie-inondation':  '🌧️',
+		'orages':            '⛈️',
+		'orage':             '⛈️',
+		'inondation':        SVG_VAGUES,
+		'neige-verglas':     '❄️',
+		'neige':             '❄️',
+		'canicule':          '🌡️',
+		'grand-froid':       '🥶',
+		'froid':             '🥶',
+		'avalanche':         '🏔️',
+		'avalanches':        '🏔️',
+		'vagues-submersion': '🌊'
+	};
+
+	var LABELS = {
+		'vent':              'Vent violent',
+		'pluie':             'Pluie-inondation',
+		'pluie-inondation':  'Pluie-inondation',
+		'orages':            'Orages',
+		'orage':             'Orages',
+		'inondation':        'Inondation',
+		'neige-verglas':     'Neige-verglas',
+		'neige':             'Neige-verglas',
+		'canicule':          'Canicule',
+		'grand-froid':       'Grand froid',
+		'froid':             'Grand froid',
+		'avalanche':         'Avalanches',
+		'avalanches':        'Avalanches',
+		'vagues-submersion': 'Vagues-submersion'
 	};
 
 	function construireBadge(echeance, alertes) {
 		if (!alertes || !alertes.length) return '';
-		var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.niveau); }));
+		var niveauMax = Math.max.apply(null, alertes.map(function(a) { return parseInt(a.color_id); }));
 		var col = COULEURS[niveauMax] || COULEURS[2];
 		var phenos = alertes.map(function(a) {
-			var icone = (PHENOMENES[a.phenomene_lib] || '⚠️').replace(/currentColor/g, col.txt);
-			return '<span style="font-size:17px">' + icone + '</span> ' + (a.phenomene_lib || '');
+			var key = (a.phenomenon || '').toLowerCase();
+			var icone = (ICONES[key] || '⚠️').replace(/currentColor/g, col.txt);
+			var label = LABELS[key] || a.phenomenon || '';
+			return '<span style="font-size:27px">' + icone + '</span> ' + label;
 		}).join(' · ');
 		return '<div class="meteo-vig-bloc">'
 			+ '<span class="meteo-vig-badge" style="background:' + col.bg + ';color:' + col.txt + '">'
@@ -47,31 +79,18 @@ function initWidgetMeteo(cfg) {
 			return;
 		}
 		var url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
-			+ 'vigilance-meteorologique/records?where=dep_code%3D%2230%22&limit=30';
+			+ 'weatherref-france-vigilance-meteo-departement/records'
+			+ '?where=domain_id%3D%2230%22%20AND%20color_id%20%3E%201&limit=30';
 		fetch(url)
 		.then(function(r) { return r.json(); })
 		.then(function(data) {
 			var recs = (data && data.results) || [];
-			var now = new Date();
-			var demain = new Date(now); demain.setDate(demain.getDate() + 1);
-			var jj = now.toISOString().slice(0, 10);
-			var j1 = demain.toISOString().slice(0, 10);
-			function filtrer(jourISO) {
+			function filtrer(ech) {
 				return recs.filter(function(r) {
-					var debut = (r.debut_validite || '').slice(0, 10);
-					var ech   = (r.echeance || '').toString().toUpperCase().trim();
-					return ((debut === jourISO) || (jourISO === jj ? ech === 'J' : ech === 'J+1'))
-						&& r.niveau && parseInt(r.niveau) >= 2;
+					return (r.echeance || '').trim() === ech && parseInt(r.color_id) >= 2;
 				});
 			}
-			var alertesJ  = filtrer(jj);
-			var alertesJ1 = filtrer(j1);
-			if (!alertesJ.length && !alertesJ1.length) {
-				var fb = recs.filter(function(r) { return r.niveau && parseInt(r.niveau) >= 2; });
-				afficher(fb, []);
-			} else {
-				afficher(alertesJ, alertesJ1);
-			}
+			afficher(filtrer('J'), filtrer('J+1'));
 		}).catch(function() { afficher([], []); });
 	}
 
