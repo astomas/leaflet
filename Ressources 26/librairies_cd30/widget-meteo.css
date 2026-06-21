@@ -44,6 +44,7 @@
 	align-items: stretch;
 	gap: 3px;
 	flex-shrink: 0;
+	margin-right: 28px; /* décale le bloc widget vers la gauche dans la barre titre */
 }
 .meteo-vig-lien {
 	display: inline-flex;
