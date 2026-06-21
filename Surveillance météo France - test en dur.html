@@ -2446,7 +2446,7 @@ function main() {
 	carteLeaflet.spiderfyPoints();
 	gererEtiquettesRD(maCarte);
 
-	carteLeaflet.widgetMeteo();
+	if (valeurTitre1.indexOf("Surveillance du r") !== -1) carteLeaflet.widgetMeteo(); // widget météo : carte Surveillance réseau uniquement
 }
 
 </script>
