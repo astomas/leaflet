@@ -583,7 +583,7 @@ body.is-resizing * {
 }
 .modern-tools-dock .leaflet-control .easy-button-button:hover,
 .modern-tools-dock .leaflet-bar a:hover {
-  background: transparent !important;
+  background: #eef4fb !important;
 }
 
 .modern-tool-icon-slot {
