@@ -95,8 +95,8 @@
         <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ accès site vigilance météo et crues Gard</a>
       </div>
       <div class="modern-header-actions">
-        <div id="modernHeaderInfoDock" class="modern-header-help" title="Informations"></div>
-        <div id="modernHeaderHelpDock" class="modern-header-help" title="Aide"></div>
+        <div id="modernHeaderInfoDock" class="modern-header-help modern-header-info" title="Informations"></div>
+        <div id="modernHeaderHelpDock" class="modern-header-help modern-header-aide" title="Aide"></div>
       </div>
     </header>
     <div class="modern-main-content">
@@ -1349,6 +1349,7 @@ function CarteLeaflet(conteneurId) {
 		ctrlRecentrer.button.style.width = "26px";
 		ctrlRecentrer.button.style.height = "26px";
         ctrlRecentrer.addTo(maCarte);
+	ctrlRecentrer.button.classList.add('btn-recentrer');
     }
 	
 this.rechercherLieu = function() {		

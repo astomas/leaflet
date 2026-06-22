@@ -132,6 +132,11 @@ body {
   background: rgba(255, 255, 255, .22);
 }
 
+/* Classes individuelles pour cibler chaque bouton séparément */
+.modern-header-info  { /* styles spécifiques au bouton Info  */ }
+.modern-header-aide  { /* styles spécifiques au bouton Aide  */ }
+.btn-recentrer       { /* styles spécifiques au bouton Recentrer */ }
+
 .modern-main-content {
   height: 100%;
   min-height: 0;
