@@ -582,8 +582,11 @@ body.is-resizing * {
   box-shadow: 0 5px 14px rgba(15, 23, 42, .28);
 }
 .modern-tools-dock .leaflet-control .easy-button-button:hover,
-.modern-tools-dock .leaflet-bar a:hover {
+.modern-tools-dock .leaflet-bar a:hover,
+.modern-tools-dock .leaflet-control-geosearch a:hover,
+.modern-tools-dock .leaflet-control-geosearch .leaflet-bar-part:hover {
   background: transparent !important;
+  color: inherit !important;
 }
 
 .modern-tool-icon-slot {
