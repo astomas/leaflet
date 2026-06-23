@@ -1260,7 +1260,7 @@ body.leaflet--printing .titre {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   font-size: 13.5px;
   line-height: 1.75;
-  padding: 8px 22px 10px !important;
+  padding: 6px 22px 10px !important;
 }
 
 /* Liens dans le contenu info — bleu standard souligné */
