@@ -1332,7 +1332,7 @@ body.leaflet--printing .titre {
   font-weight: 700;
   font-size: 15px;
   color: #fff;
-  background: #c2410c;
+  background: #fab529;
   border: 2px solid #fab529;
   border-radius: 50%;
   box-sizing: border-box;
@@ -1360,7 +1360,7 @@ body.leaflet--printing .titre {
   color: #1e3a5f;
   font-size: 12px;
   line-height: 1.6;
-  padding: 14px 8px 16px !important;
+  padding: 14px 4px 16px !important;
 }
 
 /* Encadré d'introduction */
@@ -1380,13 +1380,13 @@ body.leaflet--printing .titre {
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
-/* Chaque entrée outil = carte avec survol */
+/* Chaque entrée outil = texte simple, sans fond */
 .dialog-aide .leaflet-control-dialog-contents p {
-  background: #f8fafc;
-  border: 1px solid #eef2f7;
-  border-radius: 8px;
-  padding: 9px 10px;
-  margin: 0 0 8px;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 3px 2px;
+  margin: 0 0 6px;
   line-height: 1.55;
   text-align: left;
 }
