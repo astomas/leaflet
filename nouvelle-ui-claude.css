@@ -1218,7 +1218,7 @@ body.leaflet--printing .titre {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 38px;
-  padding: 2px 36px 0 50px;
+  padding: 1px 36px 0 50px;
   box-sizing: border-box;
   pointer-events: none;
 }
