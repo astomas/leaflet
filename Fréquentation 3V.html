@@ -1884,6 +1884,7 @@ this.importFichier = function () {
 			var div = document.createElement('div');
 			div.innerHTML = contenuInfo;
 			fenêtreInfo.setContent(div).addTo(carteA);
+				fenêtreInfo._container.classList.add('dialog-info');
 			
 			boutonInfo.button.classList.add('bouton-info-actif');				
             carteA.on('dialog:closed', function(e) {

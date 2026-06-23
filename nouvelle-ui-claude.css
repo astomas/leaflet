@@ -1186,3 +1186,76 @@ body.leaflet--printing .titre {
   height: 0 !important;
   opacity: 0 !important;
 }
+
+/* ============================================================
+   Panel Info — thème sombre élégant (.dialog-info)
+   Classe assignée via fenêtreInfo._container.classList.add(…)
+   ============================================================ */
+.dialog-info {
+  background: #1e293b !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(96, 165, 250, 0.25) !important;
+  box-shadow: 0 10px 36px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3) !important;
+  overflow: hidden;
+}
+
+/* Barre titre simulée : "ℹ  Informations" */
+.dialog-info .leaflet-control-dialog-inner {
+  padding-top: 40px !important;
+}
+.dialog-info .leaflet-control-dialog-inner::before {
+  content: "ℹ  Informations";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 38px;
+  background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 55%, #3b82f6 100%);
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 38px;
+  padding: 0 36px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Grabber + bouton fermer — visibles sur fond bleu */
+.dialog-info .leaflet-control-dialog-grabber,
+.dialog-info .leaflet-control-dialog-close {
+  color: rgba(255, 255, 255, 0.85) !important;
+  z-index: 1;
+}
+.dialog-info .leaflet-control-dialog-close:hover {
+  color: #fff !important;
+}
+
+/* Zone de texte */
+.dialog-info .leaflet-control-dialog-contents {
+  color: #cbd5e1;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.75;
+  padding: 14px 22px 10px !important;
+}
+
+/* Liens dans le contenu info */
+.dialog-info .leaflet-control-dialog-contents a {
+  color: #93c5fd;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(147, 197, 253, 0.35);
+  transition: color .15s, border-color .15s;
+}
+.dialog-info .leaflet-control-dialog-contents a:hover {
+  color: #bfdbfe;
+  border-bottom-color: rgba(191, 219, 254, 0.6);
+}
+
+/* Poignée de redimensionnement */
+.dialog-info .leaflet-control-dialog-resizer {
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+.dialog-info .leaflet-control-dialog-resizer:hover {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
