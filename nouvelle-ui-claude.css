@@ -1218,7 +1218,7 @@ body.leaflet--printing .titre {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 34px;
-  padding: 5px 36px 0 54px;
+  padding: 9px 36px 0 54px;
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -1226,7 +1226,7 @@ body.leaflet--printing .titre {
 .dialog-info .leaflet-control-dialog-inner::after {
   content: "i";
   position: absolute;
-  top: 7px; left: 18px;
+  top: 8px; left: 18px;
   width: 22px;
   height: 22px;
   line-height: 20px;
