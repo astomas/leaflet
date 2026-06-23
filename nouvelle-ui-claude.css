@@ -1283,3 +1283,177 @@ body.leaflet--printing .titre {
 .dialog-info .leaflet-control-dialog-resizer:hover {
   color: rgba(234, 88, 12, 0.55) !important;
 }
+
+/* ============================================================
+   Panel Aide — présentation modernisée (.dialog-aide)
+   Barre titre cohérente avec le panel Info (ambre + badge),
+   entrées outils en cartes, intro et avertissement stylés.
+   ============================================================ */
+.dialog-aide {
+  background: #ffffff !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(250, 181, 41, 0.30) !important;
+  box-shadow: 0 12px 36px rgba(120, 72, 0, 0.18), 0 2px 8px rgba(0,0,0,0.10) !important;
+  overflow: hidden;
+}
+
+/* Barre titre simulée : "?  Aide" */
+.dialog-aide .leaflet-control-dialog-inner {
+  padding-top: 44px !important;
+}
+.dialog-aide .leaflet-control-dialog-inner::before {
+  content: "Aide";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 38px;
+  background: #fcd689;
+  border-bottom: 1px solid rgba(250, 181, 41, 0.4);
+  color: #5b3a00;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 38px;
+  padding: 1px 36px 0 50px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+/* Badge "?" blanc dans un disque bleu cerclé (cohérent avec le "i" Info) */
+.dialog-aide .leaflet-control-dialog-inner::after {
+  content: "?";
+  position: absolute;
+  top: 8px; left: 18px;
+  width: 22px;
+  height: 22px;
+  line-height: 20px;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: #2563eb;
+  border: 2px solid #1d4ed8;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+.dialog-aide .leaflet-control-dialog-grabber,
+.dialog-aide .leaflet-control-dialog-close {
+  color: rgba(91, 58, 0, 0.75) !important;
+  z-index: 1;
+}
+.dialog-aide .leaflet-control-dialog-close:hover {
+  color: #5b3a00 !important;
+}
+.dialog-aide .leaflet-control-dialog-resizer {
+  color: rgba(250, 181, 41, 0.45) !important;
+}
+.dialog-aide .leaflet-control-dialog-resizer:hover {
+  color: rgba(250, 181, 41, 0.7) !important;
+}
+
+/* Zone de contenu */
+.dialog-aide .leaflet-control-dialog-contents {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #374151;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 14px 18px 16px !important;
+}
+
+/* Encadré d'introduction */
+.dialog-aide .encadré-aide {
+  text-align: center;
+  font-weight: 600;
+  border: none;
+  border-left: 4px solid #f9b062;
+  border-radius: 8px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffe8cc 100%);
+  color: #9a3412;
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 14px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Chaque entrée outil = carte avec survol */
+.dialog-aide .leaflet-control-dialog-contents p {
+  background: #f8fafc;
+  border: 1px solid #eef2f7;
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin: 0 0 8px;
+  line-height: 1.55;
+  text-align: left;
+  transition: box-shadow .15s, border-color .15s, transform .15s;
+}
+.dialog-aide .leaflet-control-dialog-contents p:hover {
+  border-color: #fcd689;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+.dialog-aide .leaflet-control-dialog-contents p img {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.dialog-aide .leaflet-control-dialog-contents p b {
+  color: #1e3a5f;
+  font-weight: 700;
+}
+.dialog-aide .text-highlighted {
+  color: #ea580c;
+  font-weight: 700;
+}
+
+/* Toggle "voir plus / moins" — façon pilule, sans carte */
+.dialog-aide .leaflet-control-dialog-contents p:has(#lienExtensible) {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 4px 0;
+  text-align: center;
+  transform: none;
+}
+.dialog-aide #lienExtensible {
+  display: inline-block;
+  color: #1d4ed8;
+  text-decoration: none;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 6px 16px;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.dialog-aide #lienExtensible:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+.dialog-aide #contenuExtensible {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 8px;
+}
+
+/* Avertissement — carte ambre */
+.dialog-aide .leaflet-control-dialog-contents p.text-warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  color: #92400e;
+  text-align: center;
+  font-weight: 600;
+  padding: 12px 14px;
+  box-shadow: none;
+}
+.dialog-aide .leaflet-control-dialog-contents p.text-warning:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #fde68a;
+}
