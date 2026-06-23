@@ -1319,7 +1319,7 @@ body.leaflet--printing .titre {
   box-sizing: border-box;
   pointer-events: none;
 }
-/* Badge "?" blanc dans un disque bleu cerclé (cohérent avec le "i" Info) */
+/* Badge "?" blanc cerclé orange #fab529 */
 .dialog-aide .leaflet-control-dialog-inner::after {
   content: "?";
   position: absolute;
@@ -1332,8 +1332,8 @@ body.leaflet--printing .titre {
   font-weight: 700;
   font-size: 15px;
   color: #fff;
-  background: #2563eb;
-  border: 2px solid #1d4ed8;
+  background: transparent;
+  border: 2px solid #fab529;
   border-radius: 50%;
   box-sizing: border-box;
   box-shadow: 0 1px 2px rgba(0,0,0,0.25);
@@ -1357,16 +1357,16 @@ body.leaflet--printing .titre {
 /* Zone de contenu */
 .dialog-aide .leaflet-control-dialog-contents {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: #374151;
+  color: #1e3a5f;
   font-size: 13px;
   line-height: 1.6;
-  padding: 14px 18px 16px !important;
+  padding: 14px 8px 16px !important;
 }
 
 /* Encadré d'introduction */
 .dialog-aide .encadré-aide {
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
   border-left: 4px solid #f9b062;
   border-radius: 8px;
@@ -1374,7 +1374,7 @@ body.leaflet--printing .titre {
   background: linear-gradient(135deg, #fff7ed 0%, #ffe8cc 100%);
   color: #9a3412;
   display: block;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.5;
   margin: 0 0 14px !important;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
@@ -1385,7 +1385,7 @@ body.leaflet--printing .titre {
   background: #f8fafc;
   border: 1px solid #eef2f7;
   border-radius: 8px;
-  padding: 9px 12px;
+  padding: 9px 10px;
   margin: 0 0 8px;
   line-height: 1.55;
   text-align: left;
@@ -1448,7 +1448,8 @@ body.leaflet--printing .titre {
   border-radius: 8px;
   color: #92400e;
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 14px;
   padding: 12px 14px;
   box-shadow: none;
 }
