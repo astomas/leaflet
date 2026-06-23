@@ -1371,7 +1371,7 @@ body.leaflet--printing .titre {
   border-left: 4px solid #f9b062;
   border-radius: 8px;
   padding: 12px 16px;
-  background: linear-gradient(135deg, #fff7ed 0%, #ffe8cc 100%);
+  background: #cee6f3;
   color: #9a3412;
   display: block;
   font-size: 15px;
@@ -1436,7 +1436,7 @@ body.leaflet--printing .titre {
 
 /* Avertissement — carte ambre */
 .dialog-aide .leaflet-control-dialog-contents p.text-warning {
-  background: #fffbeb;
+  background: #cee6f3;
   border: 1px solid #fde68a;
   border-left: 4px solid #f59e0b;
   border-radius: 8px;
