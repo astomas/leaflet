@@ -379,7 +379,7 @@ function gererEtiquettesRD(map) {
             L.marker(meilleur, {
                 icon: L.divIcon({
                     className: "label-route-rd-wrap",
-                    html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
+                    html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.rdLabelColor || couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
                     iconSize: [0, 0]
                 }),
                 pane: "etiquettesRD",
@@ -738,6 +738,7 @@ function CarteLeaflet(conteneurId) {
     // Réseau routier : mémorise la valeur RD + le niveau pour l'étiquette permanente (gererEtiquettesRD)
     if (élément.properties.nomcouche === "Réseau routier") {
         élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+        élémentsMLS.options.rdLabelColor = couleurOrigine;
         var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place).
