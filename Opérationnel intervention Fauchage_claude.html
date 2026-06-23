@@ -1748,8 +1748,16 @@ this.importFichier = function () {
 		}		
 		
 		maCarte.on("browser-print-start", function(e){
-			if (presenceLegende) {			
-				blocLegende.addTo(e.printMap);						
+			if (presenceLegende) {
+				blocLegende.addTo(e.printMap);
+				// [sans-legende] applique la mise en 2 colonnes sur la légende d'impression
+				if (blocLegende.options.column === 2) {
+					var contenuLegPrint = blocLegende.getContainer().querySelector('.leaflet-legend-contents');
+					if (contenuLegPrint) contenuLegPrint.classList.add('deux-colonnes');
+					requestAnimationFrame(function() {
+						ajusterLargeurColonnesLegende(e.printMap.getContainer());
+					});
+				}
 			// ajout logo avant print
 			setTimeout(function() {
 				const conteneurCartePrint = e.printMap.getContainer();

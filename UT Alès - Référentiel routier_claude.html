@@ -1368,6 +1368,13 @@ function CarteLeaflet(conteneurId) {
 	}
 		
 	this.limiteAdmin = function(limite) {
+
+		// priorité affichage basse - création du pane une seule fois
+		if (!maCarte.getPane('limitePane')) {
+			maCarte.createPane('limitePane');
+			maCarte.getPane('limitePane').style.zIndex = 200;
+		}
+
 		var styleLimiteStandard = {
 			color: "#757171",
 			weight: 3,
@@ -1380,7 +1387,7 @@ function CarteLeaflet(conteneurId) {
 			interactive: false,
 			fill: false
 		};
-		
+
 		function verifBaseLayer() {
 			if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
 				coucheLimiteAdmin.setStyle(styleLimiteOrtho);
@@ -1390,7 +1397,10 @@ function CarteLeaflet(conteneurId) {
 				maCarte.getContainer().style.background = "";
 			}
 		}
-		var coucheLimiteAdmin = L.geoJson(limite, {style: styleLimiteStandard});
+		var coucheLimiteAdmin = L.geoJson(limite, {
+			style: styleLimiteStandard,
+			pane: 'limitePane'
+		});
 		verifBaseLayer();
 		maCarte.on("baselayerchange", function(e) {
 			verifBaseLayer(); // simplifié : évite la duplication
@@ -1784,24 +1794,108 @@ this.importFichier = function () {
 			],
 		});
 		L.Control.BrowserPrint.Utils.registerLayer(L.GridLayer.GoogleMutant,"L.GridLayer.GoogleMutant", function(layer) {
-			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});	
+			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});
 			}
-		);		
+		);
+
+		let sauvegardeStyleLegende = null;
+
+		function sauvegarderStyleLegende(el) {
+		    sauvegardeStyleLegende = {
+		        el: el,
+		        style: el.getAttribute("style") || "",
+		        enfants: Array.from(el.querySelectorAll("*")).map(child => ({
+		            el: child,
+		            style: child.getAttribute("style") || ""
+		        }))
+		    };
+		}
+
+		function restaurerStyleLegende() {
+		    if (!sauvegardeStyleLegende) return;
+
+		    sauvegardeStyleLegende.el.setAttribute("style", sauvegardeStyleLegende.style);
+
+		    sauvegardeStyleLegende.enfants.forEach(item => {
+		        item.el.setAttribute("style", item.style);
+		    });
+
+		    sauvegardeStyleLegende = null;
+		}
+
 		maCarte.on("browser-print-start", function(e){
-			if (presenceLegende) {			
+			if (presenceLegende) {
 				blocLegende.addTo(e.printMap);
+				// [sans-legende] applique la mise en 2 colonnes sur la légende d'impression
+				if (blocLegende.options.column === 2) {
+					var contenuLegPrint = blocLegende.getContainer().querySelector('.leaflet-legend-contents');
+					if (contenuLegPrint) contenuLegPrint.classList.add('deux-colonnes');
+					requestAnimationFrame(function() {
+						ajusterLargeurColonnesLegende(e.printMap.getContainer());
+					});
+				}
+			// ajout logo avant print
+			setTimeout(function() {
+				const conteneurCartePrint = e.printMap.getContainer();
+
+				const logoPrint = document.createElement("img");
+				logoPrint.src = "/Ressources/c3po_gr.png";
+				logoPrint.style.position = "absolute";
+				logoPrint.style.left = "10px";
+				logoPrint.style.width = "56px";
+				logoPrint.style.height = "50px";
+				logoPrint.style.zIndex = "10000";
+				logoPrint.style.pointerEvents = "none";
+
+				const titrePrint = conteneurCartePrint.querySelector(".infotitre, .titre");
+				const hauteurTitre = titrePrint.offsetHeight;
+				logoPrint.style.bottom = (hauteurTitre + 15) + "px";
+
+				conteneurCartePrint.appendChild(logoPrint);
+			}, 300);
+
+			// ajuster fontes legende et centrage avant print selon hauteur legende
+			setTimeout(function() {
+				const conteneurLegende = blocLegende.getContainer();
+				const hauteurLegende = conteneurLegende.offsetHeight;
+
+				// si hauteur < 250px, on garde le bloc original
+					if (hauteurLegende < 250) {
+						return;
+					}
+					else {
+						// sauvegarde état original avant modification
+						sauvegarderStyleLegende(conteneurLegende);
+						//diminution font size
+						const fontSize = 9;
+
+						conteneurLegende.style.fontSize = fontSize + "px";
+						conteneurLegende.style.lineHeight = "1.1";
+
+						conteneurLegende.querySelectorAll("*").forEach(function(elementLegende) {
+							elementLegende.style.fontSize = fontSize + "px";
+							elementLegende.style.lineHeight = "1.1";
+						});
+						// decalage carte a gauche
+						e.printMap.panBy([100, 0], { animate: false });
+					}
+				}, 100);
 			}
 		});
-		maCarte.on("browser-print-end", function(){		
+
+		maCarte.on("browser-print-end", function(){
 			if (presenceLegende) {
+        		// remet la légende comme avant impression
+        		restaurerStyleLegende();
 			 	var blocLegendeElement = blocLegende.getContainer();
 				blocLegendeElement.style.marginTop = '12px';
-				blocLegende.remove();				
+				blocLegendeElement.style.paddingBottom = '0';
+				blocLegende.remove();
 				// [sans-legende] blocLegende non re-ajouté à la carte
 				conteneurVisuInfo.remove();
-				conteneurVisuInfo.addTo(maCarte);	
-			}	
-		});	
+				conteneurVisuInfo.addTo(maCarte);
+			}
+		});
 		
 		// bouton geosearch
 		const btnGeosearch = new GeoSearch.GeoSearchControl({
