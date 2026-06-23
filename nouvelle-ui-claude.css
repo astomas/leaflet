@@ -1199,12 +1199,13 @@ body.leaflet--printing .titre {
   overflow: hidden;
 }
 
-/* Barre titre simulée : "ℹ  Informations" */
+/* Barre titre simulée : "ⓘ  Informations" */
 .dialog-info .leaflet-control-dialog-inner {
   padding-top: 40px !important;
 }
+/* Fond de barre + libellé "Informations" (place réservée à gauche pour l'icône) */
 .dialog-info .leaflet-control-dialog-inner::before {
-  content: "ℹ  Informations";
+  content: "Informations";
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 38px;
@@ -1216,8 +1217,20 @@ body.leaflet--printing .titre {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 38px;
-  padding: 0 36px;
+  padding: 0 36px 0 54px;
   box-sizing: border-box;
+  pointer-events: none;
+}
+/* Icône info — plus grande, espacée du texte, bleu clair contrastant */
+.dialog-info .leaflet-control-dialog-inner::after {
+  content: "ⓘ";
+  position: absolute;
+  top: 0; left: 20px;
+  height: 38px;
+  line-height: 38px;
+  font-size: 22px;
+  color: #bae6fd;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
   pointer-events: none;
 }
 
