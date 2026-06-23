@@ -768,7 +768,7 @@
 
     var boutonAide = L.easyButton("fa-question fa-4x", function(btn, map) {
       aide(map);
-    }, "Aide", {position: "topright"});
+    }, "", {position: "topright"});
     boutonAide.button.classList.add('bouton-aide');
     boutonAide.addTo(maCarte);
 

@@ -95,8 +95,8 @@
         <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ accès site vigilance météo et crues Gard</a>
       </div>
       <div class="modern-header-actions">
-        <div id="modernHeaderInfoDock" class="modern-header-help modern-header-info" title="Informations"></div>
-        <div id="modernHeaderHelpDock" class="modern-header-help modern-header-aide" title="Aide"></div>
+        <div id="modernHeaderInfoDock" class="modern-header-help modern-header-info"></div>
+        <div id="modernHeaderHelpDock" class="modern-header-help modern-header-aide"></div>
       </div>
     </header>
     <div class="modern-main-content">
@@ -2015,7 +2015,7 @@ this.importFichier = function () {
     
     var boutonInfo = L.easyButton("fa-info-circle fa-3x", function (btn, maCarte) {
         info(maCarte);
-    }, "Informations", {position: "bottomright"});
+    }, "", {position: "bottomright"});
     boutonInfo.button.classList.add('bouton-info');
     boutonInfo.addTo(maCarte);	
 
