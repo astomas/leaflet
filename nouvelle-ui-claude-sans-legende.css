@@ -516,11 +516,11 @@ body.is-resizing * {
   margin-left: 4px;
 }
 
-/* Agrandissement +15% des icônes des couches points (symbole image) uniquement.
+/* Agrandissement +25% des icônes des couches points (symbole image) uniquement.
    transform:scale n'altère pas la mise en page (le <i> garde sa taille) et ne
    touche pas aux blocs couleur canvas des couches lignes/polygones. */
 .detail-couches-sidebar .leaflet-legend-item i img {
-  transform: scale(1.15);
+  transform: scale(1.25);
   transform-origin: center;
 }
 
