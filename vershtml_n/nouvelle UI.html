@@ -28,12 +28,13 @@ partieDébut character varying :=
 <html>    
   <head>
   
-	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/widget-meteo.css">
-	<script src="/leaflet/Ressources 26/librairies_cd30/widget-meteo.js"></script>
 	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet.css" />
-	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet-si3p0.css" />
+	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet-si3p0-claude.css" />
 	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/pc-portable.css" />	
 	<script src="/Ressources/API_JS/librairies_cd30/leaflet.js"></script>
+
+	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=2" />
+	<script src="./modern-dock-claude.js"></script>
 	
 	<title id="ti">Carte Leaflet</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -101,15 +102,44 @@ partieDébut character varying :=
 	<!-- spiderfy points superposés -->
 	<script src="/Ressources/API_JS/overlap-marker.js"></script>
 	
+	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/widget-meteo.css">
+	<script src="/Ressources/API_JS/librairies_cd30/widget-meteo.js"></script>
 	</head>	
 	
-    <body onload="main()">
-				<div class="meteo-zone">
-				<div id="meteoWidget" class="modern-meteo-widget"></div>
-				<a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ accès site vigilance météo et crues Gard</a>
-			</div>
-        <div id="carteId" />
-    </body>	
+  <body onload="main()">
+  <div class="modern-carte-shell">
+    <header class="modern-header">
+      <div id="modernLogosDock" class="modern-logos-dock modern-header-logos" aria-label="Liens rapides"></div>
+      <div class="modern-header-titles">
+        <h1></h1>
+      </div>
+      <div class="meteo-zone">
+        <div id="meteoWidget" class="modern-meteo-widget"></div>
+        <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ accès site vigilance météo et crues Gard</a>
+      </div>
+      <div class="modern-header-actions">
+        <div id="modernHeaderInfoDock" class="modern-header-help modern-header-info"></div>
+        <div id="modernHeaderHelpDock" class="modern-header-help modern-header-aide"></div>
+      </div>
+    </header>
+    <div class="modern-main-content">
+      <aside class="modern-sidebar" aria-label="Panneau de pilotage cartographique">
+        <section class="modern-family modern-family-fonds-plan" data-expanded="true">
+          <div class="modern-family-title"><span>Fonds de plan</span><em>couches</em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+        </section>
+        <section class="modern-family modern-family-metier" data-expanded="true">
+          <div class="modern-family-title"><span>Données métier</span><em></em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+        </section>
+        <section class="modern-family modern-family-tools" id="modernToolsSection" data-expanded="true">
+          <div class="modern-family-title"><span>Outils carte</span><em id="modernToolsCount">plugins</em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+          <div id="modernToolsDock" class="modern-tools-dock" aria-label="Outils de la carte"></div>
+        </section>
+      </aside>
+      <div class="modern-sidebar-resizer" tabindex="0" role="separator" aria-label="Redimensionner le panneau"></div>
+      <main class="modern-map-area"><div id="carteId"></div></main>
+    </div>
+  </div>
+</body>
 
 </html>
  
@@ -1333,15 +1363,8 @@ function CarteLeaflet(conteneurId) {
 		ctrlRecentrer.button.style.width = "26px";
 		ctrlRecentrer.button.style.height = "26px";
         ctrlRecentrer.addTo(maCarte);
-	ctrlRecentrer.button.classList.add('btn-recentrer');
+	ctrlRecentrer.button.classList.add(''btn-recentrer'');
     }
-
-	this.widgetMeteo = function() {
-		initWidgetMeteo({
-			TEST_J:  null, // null = données réelles  | ex: [{ niveau: 2, phenomene_lib: 'Vent violent' }]
-			TEST_J1: null  // null = données réelles  | ex: [{ niveau: 3, phenomene_lib: 'Orages' }]
-		});
-	};
 	
 this.rechercherLieu = function() {		
 		var limiteGeo = {
@@ -1606,14 +1629,11 @@ this.importFichier = function () {
     btnImporter.addTo(maCarte);	
 }
 	
-	this.iconeClé = function() {  
-	
-		var iconesVisible = false;
-		var sousBoutonsCréés = false;	
-		
+	this.afficherOutils = function() {
+
 		var btnMesurer = new L.control.ruler({position: "topleft"});
 		var btnIsochrone = new L.geoportalControl.Isocurve({});
-		
+
 		// bouton imprimer
 		var btnImprimer = new L.control.browserPrint({
 			title: "Imprimer",
@@ -1621,14 +1641,14 @@ this.importFichier = function () {
 			printModes: [
 				L.control.browserPrint.mode.landscape("Vue courante"),
 				L.control.browserPrint.mode.auto("Auto Gard"),
-				L.control.browserPrint.mode.custom("Sélec. zone", "A4")					
+				L.control.browserPrint.mode.custom("Sélec. zone", "A4")
 				//L.control.browserPrint.mode.portrait("Portrait"),
 			],
 		});
 		L.Control.BrowserPrint.Utils.registerLayer(L.GridLayer.GoogleMutant,"L.GridLayer.GoogleMutant", function(layer) {
-			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});	
+			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});
 			}
-		);		
+		);
 
 		let sauvegardeStyleLegende = null;
 
@@ -1642,22 +1662,28 @@ this.importFichier = function () {
 		        }))
 		    };
 		}
-		
+
 		function restaurerStyleLegende() {
 		    if (!sauvegardeStyleLegende) return;
-		
+
 		    sauvegardeStyleLegende.el.setAttribute("style", sauvegardeStyleLegende.style);
-		
+
 		    sauvegardeStyleLegende.enfants.forEach(item => {
 		        item.el.setAttribute("style", item.style);
 		    });
-		
+
 		    sauvegardeStyleLegende = null;
-		}		
-		
+		}
+
 		maCarte.on("browser-print-start", function(e){
-			if (presenceLegende) {			
-				blocLegende.addTo(e.printMap);						
+			if (presenceLegende) {
+				blocLegende.addTo(e.printMap);
+				if (blocLegende.options.column === 2) {
+					var containerPrint = e.printMap.getContainer().querySelector(''.leaflet-legend-contents'');
+					if (containerPrint) containerPrint.classList.add(''deux-colonnes'');
+					requestAnimationFrame(function() { ajusterLargeurColonnesLegende(e.printMap.getContainer()); });
+				}
+			}
 			// ajout logo avant print
 			setTimeout(function() {
 				const conteneurCartePrint = e.printMap.getContainer();
@@ -1670,7 +1696,7 @@ this.importFichier = function () {
 				logoPrint.style.height = "50px";
 				logoPrint.style.zIndex = "10000";
 				logoPrint.style.pointerEvents = "none";
-				
+
 				const titrePrint = conteneurCartePrint.querySelector(".infotitre, .titre");
 				const hauteurTitre = titrePrint.offsetHeight;
 				logoPrint.style.bottom = (hauteurTitre + 15) + "px";
@@ -1678,50 +1704,45 @@ this.importFichier = function () {
 				conteneurCartePrint.appendChild(logoPrint);
 			}, 300);
 
-			// ajuster fontes legende et centrage avant print selon hauteur legende	
+			// ajuster fontes legende et centrage avant print selon hauteur legende
 			setTimeout(function() {
+				if (!presenceLegende) return;
 				const conteneurLegende = blocLegende.getContainer();
 				const hauteurLegende = conteneurLegende.offsetHeight;
 
-				// si hauteur < 250px, on garde le bloc original
-					if (hauteurLegende < 250) {
-						return;
-					}
-					else {
-						// sauvegarde état original avant modification
-						sauvegarderStyleLegende(conteneurLegende);
-						//diminution font size
-						const fontSize = 9;
+				if (hauteurLegende < 250) {
+					return;
+				}
+				else {
+					sauvegarderStyleLegende(conteneurLegende);
+					const fontSize = 9;
 
-						conteneurLegende.style.fontSize = fontSize + "px";
-						conteneurLegende.style.lineHeight = "1.1";
+					conteneurLegende.style.fontSize = fontSize + "px";
+					conteneurLegende.style.lineHeight = "1.1";
 
-						conteneurLegende.querySelectorAll("*").forEach(function(elementLegende) {
-							elementLegende.style.fontSize = fontSize + "px";
-							elementLegende.style.lineHeight = "1.1";
-						});
-						// decalage carte a gauche
-						e.printMap.panBy([100, 0], { animate: false });
-					}
-				}, 100);
-			}	
-		});		
-	
-		maCarte.on("browser-print-end", function(){		
-			if (presenceLegende) {			
-        		// remet la légende comme avant impression
-        		restaurerStyleLegende();
-			 	var blocLegendeElement = blocLegende.getContainer();
+					conteneurLegende.querySelectorAll("*").forEach(function(elementLegende) {
+						elementLegende.style.fontSize = fontSize + "px";
+						elementLegende.style.lineHeight = "1.1";
+					});
+					e.printMap.panBy([100, 0], { animate: false });
+				}
+			}, 100);
+		});
+
+		maCarte.on("browser-print-end", function(){
+			if (presenceLegende) {
+				restaurerStyleLegende();
+				var blocLegendeElement = blocLegende.getContainer();
 				blocLegendeElement.style.marginTop = ''12px'';
 				blocLegendeElement.style.paddingBottom = ''0'';
-				blocLegende.remove();				
-				blocLegende.addTo(maCarte);	
+				blocLegende.remove();
+				// [sans-legende] blocLegende non re-ajouté à la carte
 				conteneurVisuInfo.remove();
-				conteneurVisuInfo.addTo(maCarte);	
-			}	
-		});	
-		
-		
+				conteneurVisuInfo.addTo(maCarte);
+			}
+		});
+
+
 		// bouton geosearch
 		const btnGeosearch = new GeoSearch.GeoSearchControl({
 		  provider: new GeoSearch.OpenStreetMapProvider(),
@@ -1736,14 +1757,14 @@ this.importFichier = function () {
 
 		  carte.on(''geosearch/showlocation'', function(result) {
 			let label = result.location.label;
-			label = label.split('','').slice(0, 3).join('','').trim();		
+			label = label.split('','').slice(0, 3).join('','').trim();
 			const lat = result.location.y.toFixed(5);
 			const lon = result.location.x.toFixed(5);
 
 			const popupText = `<b>Coordonnées :</b> ${lat}, ${lon}<br>📍 ${label}`;
 
 		const iconeGeosearch = L.icon({
-			  iconUrl: ''/Ressources/API_JS/images/geosearch.png'',
+			  iconUrl: ''/leaflet/Ressources 26/images/geosearch.png'',
 			  iconSize: [40, 41],
 			  iconAnchor: [12, 41],
 			  popupAnchor: [9, -36]
@@ -1756,11 +1777,11 @@ this.importFichier = function () {
 
 			marqueursGeoSearch.push(marker);
 		  });
-		
+
 		  carte.on(''click'', function () {
-			carte.closePopup(); 
-		  });		
-		  
+			carte.closePopup();
+		  });
+
 		  document.querySelectorAll(''.leaflet-control-geosearch a.leaflet-bar-part'').forEach(btn => {
 			btn.addEventListener(''click'', () => {
 			  marqueursGeoSearch.forEach(m => carte.removeLayer(m));
@@ -1768,144 +1789,22 @@ this.importFichier = function () {
 			});
 		  });
 		}
-		
-		// bouton clé
-		var boutonClé = L.easyButton("fa-key fa-lg", function() { 
-			deployerIcones(); 
-		}, "Autres fonctions").addTo(maCarte);
-		
-		ajouterHoverEtClic(boutonClé.button, {
-		    isVisible: () => iconesVisible,
-		    afficher: deployerIcones,
-		    masquer: deployerIcones
-		});
-		
-		boutonClé.button.classList.add(''bouton-cle'');
-		var container = boutonClé.button.parentNode;
-		container.style.backgroundColor = "lightgrey";		
-		boutonClé.button.style.backgroundColor = "lightgrey"; 
-			
-	function deployerIcones() {
-			iconesVisible = !iconesVisible;
-			if (!sousBoutonsCréés) {
-				btnImprimer.addTo(maCarte);
-				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
-				btnGeosearch.addTo(maCarte);
-				activerPopupRaccourci(maCarte);					
-				sousBoutonsCréés = true;
-			}			
-			if (iconesVisible) {
-				boutonClé.button.style.backgroundColor = "#ffff5b"; 
-				btnImprimer.addTo(maCarte);
-				btnMesurer.addTo(maCarte);
-				btnIsochrone.addTo(maCarte);					
-				btnGeosearch.addTo(maCarte);
-				activerPopupRaccourci(maCarte);
-						
-			} else {
-				btnImprimer.remove();
-				btnMesurer.remove();
-				btnIsochrone.remove();				
-				btnGeosearch.remove();
-				container.style.backgroundColor = "lightgrey";
-				boutonClé.button.style.backgroundColor = "lightgrey"; 					
-			}	
-		}
+
+		setTimeout(function() {
+			btnImprimer.addTo(maCarte);
+			window.modernDockSpecificControl(btnImprimer, "Imprimer");
+			btnMesurer.addTo(maCarte);
+			window.modernDockSpecificControl(btnMesurer, "Mesurer");
+			btnIsochrone.addTo(maCarte);
+			btnGeosearch.addTo(maCarte);
+			setTimeout(function() {
+				window.modernDockSpecificControl(btnIsochrone, ''Isochrone'');
+				window.modernDockSpecificControl(btnGeosearch, ''Coord GPS'');
+			}, 80);
+			activerPopupRaccourci(maCarte);
+		}, 0);
 	}
-	
-	this.aide = function () {
-		var contenuAideInitial =
-		`<div class=''encadré-aide''>Afficher la carte depuis le Système d''Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
-		<p><img src=''/ressources/API_JS/images/Aide/recentrer.png'' width=''27'' height=''27''><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l''UT selon carte).</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/rechGoogle.gif'' width=''27'' height=''27''><b> Rechercher localisation:</b> commune, adresse, bâtiment, route, lieu, etc. Géocodage Google Maps, Gard priorisé.</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/dossier.gif'' width=''27'' height=''27''><b>Import couches:</b> afficher des fichiers de couches au format Shape, GeoJSON, csv, GPX, Kml sur la carte. Projection en WGS84, possibilité de faire un glisser/déposer,
-		de zipper (1 couche par .zip), clic droit pour effacer couche importée, import csv de points uniquement.</p>	
-		
-		<p><img src=''/ressources/API_JS/images/Aide/export.png'' width=''27'' height=''27''><b>Export couches:</b> exporter après confirmation, la ou les couches cochées en haut a droite aux formats GeoJSON, Shape ou GPX.</p>	
-		
-		<p><img src=''/ressources/API_JS/images/Aide/clé.png'' width=''27'' height=''27''> <b>Autres fonctions:</b> déploiement de 4 fonctions: imprimer carte, mesure distance, calcul isochrone, recherche par coord. GPS. Détails <span class=''text-highlighted''>(*)</span>.</p>
-
-		<p><img src=''/ressources/API_JS/images/Aide/surlignage.png'' height=''35''> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l''ouverture.
-		Selon leurs nature, les lignes surlignées peuvent être disjointes (''multilignes'').</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/recherche.gif'' width=''27'' height=''27''><b> Rechercher élément de couche:</b> disponible selon les cartes, saisir les caractères pour afficher les correspondances et zoomer dessus. La nature de l''entité à rechercher est indiquée dans l''invite de saisie.	Touche ''Espace'' pour afficher la liste entière. Bouton d''export GeoJSON.</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/legende.gif'' height=''35''> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en bas à droite en cliquant dessus. Le bloc des cases à cocher en h. à dr. affiche/masque une couche entière tandis que le bloc légende 
-		permet en + d''afficher/masquer les éléments d''une même couche.</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/streetview.gif'' height=''30''> <b>Accès Street View </b>+ Panoramax, Google Maps, Waze:
-		après clic, positionner Pegman (personnage orange) sur la carte et cliquer sur l''un des services de visualisation. Pour désactiver, appuyer sur une touche clavier ou recliquer le bouton.</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/info.png'' height=''30''> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l''icone ''i'' (ou via croix).</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/coordGPS.png'' width=''90'' height=''35''> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d''un point sous la forme ''latitude, longitude''. 
-		Le menu d''origine est toujours accessible par clic droit sur les blocs fonds de carte ou légende.</p>
-		
-		<p><a href=''#'' id=''lienExtensible''><b>(*) Voir plus de détails sur les autres fonctionnalités</b></a></p>
-		<div id=''contenuExtensible'' style=''display:none;''</div>`;
-		
-		var contenuAideExtensible = 
-		`<p><img src=''/ressources/API_JS/images/Aide/imprimer.gif'' width=''27'' height=''27''> <b> Imprimer carte:</b> ''Vue courante'': imprimer au format paysage la portion de carte représentée à l''écran. ''Auto Gard'': imprimer l''ensemble du département (mise à l''échelle auto). ''Sélec. zone'' : 
-		imprimer une portion de la carte selon un rectangle tracé à la souris.</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/distance.gif'' width=''27''><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d''un segment (dernière valeur = longeur totale du segment)
-		, appuyer sur la touche ''Echap'' ou double-cliquer. Il est ainsi possible de mesurer plusieurs tronçons. ré-appuyer sur le bouton ''Régle'' ou la touche ''Echap'' pour tout effacer.</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/isochrone.gif'' width=''27'' height=''27''> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton) 
-		affichant l''isochrone ou l''isodistance autour ou depuis le point (valeurs Départ/Arrivée). 
-		Les calculs prennent en compte le réseau routier.</p>
-		
-		<p><img src=''/ressources/API_JS/images/Aide/rech_GPS.png'' width=''27'' height=''26''> <b> Recherche par coordonnées GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : ''43.83494, 4.35965'')
-		pour afficher sur la carte icones et fenêtres correspondants. Géocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>		
-
-    	<p class=''text-warning''>Les rendus liés à l''utilisation des fonctions importer, mesurer, calcul isochrone seront perdus à la réouverture de la carte.<br>
-		Pour conserver une trace, effectuer une impression au format papier ou pdf via f° ''Imprimer'' ou faire une capture écran.</p>
-		</div>`;
-
-		var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
-
-		if (!L.Browser.mobile){
-			var fenêtreAide = new L.control.dialog({size: [812,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
-		} else {
-			var fenêtreAide = new L.control.dialog({size: [290,300], anchor: [0,50], position:"topleft", initOpen: true, minSize: [260,250], maxSize: [600,400]});
-		}
-				
-		var estOuverte = false;
-		function aide(maCarte) {
-			estOuverte = !estOuverte; 
-			if (estOuverte) {
-				fenêtreAide.setContent(contenuAideComplet).addTo(maCarte);
-				fenêtreAide._container.classList.add(''dialog-aide'');
-				var lien = document.getElementById(''lienExtensible'');
-				var contenu = document.getElementById(''contenuExtensible'');
-				lien.addEventListener(''click'', function(e) {
-					e.preventDefault();
-					if (contenu.style.display === ''none'') {
-						contenu.style.display = ''block'';
-						lien.textContent = ''Voir moins de détails'';
-					} else {
-						contenu.style.display = ''none'';
-						lien.textContent = ''(*) Voir plus de détails sur les autres fonctions'';
-					}
-				});
-			} else {
-				maCarte.removeControl(fenêtreAide);
-			}
-		}
-
-		var boutonAide = L.easyButton("fa-question fa-4x", function(btn, map) {
-			aide(map);
-		}, "Aide", {position: "topright"});
-		boutonAide.button.classList.add(''bouton-aide'');
-		boutonAide.addTo(maCarte);	
-		
-		var containerAide = boutonAide.button.parentNode;
-		containerAide.style.backgroundColor = "#f9b062";
-		containerAide.style.border = "2px #f9b062";			
-	}
+	this.aide = function () { window.aideCarto(maCarte); } // //// modif nouvelle UI - aide externalisée dans modern-dock-claude.js ////
 
 	this.visuEtInfo = function () {		
     // bouton visu
@@ -2056,7 +1955,9 @@ this.importFichier = function () {
 				return new L.CtrlTitre(options);
 			}
 
-			L.ctrlTitre({position: "bottomleft"}).addTo(maCarte);
+			document.getElementById("ti").innerHTML = valeurTitre;
+			var titreHeader = document.querySelector(''.modern-header h1'');
+			if (titreHeader) titreHeader.innerHTML = valeurTitre;
 			 
 			(maCarte).on("browser-print-start", function(e){
 				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
@@ -2064,69 +1965,41 @@ this.importFichier = function () {
 	}
 		
 this.ajouterLogo = function() {
-    var self = this;
-    var logoControl = null;
-    var container = null;
-
-    var LogoControlClass = L.Control.extend({
-        options: { position: "bottomleft" },
-        onAdd: function(map) {
-            // On crée le conteneur vide
-            container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-logos-container");
-            return container;
-        }
-    });
-
-    // ajout à la carte (vide au départ)
-    logoControl = new LogoControlClass();
-    logoControl.addTo(maCarte);
+    var container = document.getElementById("modernLogosDock");
 
     function updateLogos() {
         if (!container) return;
-
-        // On vide le contenu actuel sans supprimer le contrôle
         container.innerHTML = "";
 
-        var icones = [];        
-        if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
-            icones = [
-                {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        } else {
-            icones = [
-                {imgSource: "/Ressources/c3po_gr.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
-                {imgSource: "/Ressources/backward.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
-            ];
-        }
-        
+        var icones = [
+            {imgSource: "/leaflet/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+            {imgSource: "/leaflet/Ressources/backward-blanc.png", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+        ];
+
         if (valeurTitre1.endsWith("Waze")){
             icones.push({
-                imgSource: "/Ressources/waze.png", 
-                largeur: "68px", 
-                marginLeft: "10px", 
-                imgTooltip: "Waze", 
-                lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu", 
+                imgSource: "/leaflet/Ressources/waze.png",
+                largeur: "68px",
+                imgTooltip: "Waze",
+                lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu",
                 typeLien: "_blank"
             });
         }
 
-        // On injecte les nouvelles images dans le conteneur existant
         icones.forEach(function(icone) {
             var img = L.DomUtil.create("img", "leaflet-control-logos-img", container);
             img.src = icone.imgSource;
             img.style.width = icone.largeur;
             img.style.height = icone.hauteur;
-            if (icone.marginLeft) img.style.marginLeft = icone.marginLeft;
+            img.style.marginLeft = "0";
             img.title = icone.imgTooltip;
-            
             img.onclick = function(e) {
                 e.preventDefault();
                 window.open(icone.lienSite, icone.typeLien);
             };
         });
     }
-    
+
     updateLogos();
     maCarte.on("baselayerchange", updateLogos);
 }
@@ -2138,7 +2011,7 @@ this.ajouterSwitch = function() {
         options: { position: ''bottomleft'' },
         onAdd: function (map) {
             var container = L.DomUtil.create(''div'', ''switch-control-container-discret'');            
-			if (valeurTitre1.toLowerCase().includes(''fauchage'') || valeurTitre1.toLowerCase().includes(''curage'')) { 
+			if (valeurTitre1.toLowerCase().includes(''fauchage'') || valeurTitre1.toLowerCase().includes(''curage'') || valeurTitre1.toLowerCase().includes(''r&#233;f&#233;rentiel routier'')) { 
 				flagHoverSurlignage = true;
 		    }
             var switchBtn = L.DomUtil.create(''div'', ''leaflet-control-switch-discret'', container);   
@@ -2337,103 +2210,7 @@ this.rechercherJson = function(){
 		}
 	}
 
-	this.visuBatiments3D = function() {
-		// 3D
-		if (valeurTitre1.endsWith("3D")) {	
-			function couleurToitSelonHauteur(hauteur){
-			  if (hauteur<=5) return "#c4e1ea";
-			  else if (hauteur<=10) return "#55add0";
-			  else if (hauteur<=20) return "#5f85c4";
-			  else  return "#a33a3c";
-			}
-			function couleurMurSelonHauteur(hauteur){
-			  if (hauteur<=5) return "#9bc2cf";
-			  else if (hauteur<=10) return "#366f86";
-			  else if (hauteur<=20) return "#425d89";
-			  else return "#72282a";
-			}
-			
-			const dernierElement = tabCoucheMetier.at(-1);
-			const geoJSON3D = dernierElement[0];	
-			const Geojson3DConverti = { type:''FeatureCollection'', features: [] };
-			geoJSON3D.features.forEach(function(objets, i) {
-				const objetGeojson = JSON.parse(JSON.stringify(objets));
-				const propriété = objetGeojson.properties;
-				objetGeojson.id = propriété.cleabs;
-				let hauteurReelle = 8;
-				if (''height'' in propriété && propriété.height != null && propriété.height !== '''') {
-				  hauteurReelle = propriété.height;
-				}
-				const couleurHT = couleurToitSelonHauteur(hauteurReelle);
-				const couleurHM = couleurMurSelonHauteur(hauteurReelle);
-				propriété.wallColor = couleurHM;
-				propriété.roofColor = couleurHT;
-				const echelle = 0.9;
-				propriété.height = hauteurReelle * echelle;
-				propriété.hauteurReelleInfo = hauteurReelle;
-				// push wallColor et roofColor ds geojson
-				Geojson3DConverti.features.push(objetGeojson);
-			});
-
-			const couche3D = new OSMBuildings();
-			couche3D.addTo(maCarte);
-			couche3D.date(new Date(2024,4,15,10));
-			couche3D.set(Geojson3DConverti);	
-
-			const infoBulle = L.tooltip({
-				permanent: true,
-				direction: ''top'',
-				className: ''mon-tooltip-style'',
-				offset: [0, -10]
-			});		
-			let estSurUnBatiment = false;
-			let dernierIdSurvole = null;		
-			couche3D.click(function(e) {
-				estSurUnBatiment = true;
-				if (e.feature === dernierIdSurvole) {
-					infoBulle.setLatLng([e.lat, e.lon]);
-					return;
-				}		    
-				dernierIdSurvole = e.feature;		
-				const batimentTrouve = Geojson3DConverti.features.find(f => f.id === e.feature);
-				
-				if (batimentTrouve) {
-					const hauteur = batimentTrouve.properties.hauteurReelleInfo || batimentTrouve.properties.height;
-					
-					infoBulle.setContent(`<b>Hauteur :</b> ${hauteur}m`);
-					infoBulle.setLatLng([e.lat, e.lon]);
-					
-					if (!maCarte.hasLayer(infoBulle)) {
-						infoBulle.addTo(maCarte);
-					}
-				}
-			});
-			
-			maCarte.on(''mousemove'', function(e) {
-				estSurUnBatiment = false;
-			
-				couche3D.onClick(e);
-			
-				if (!estSurUnBatiment) {
-					if (maCarte.hasLayer(infoBulle)) {
-						maCarte.removeLayer(infoBulle);
-					}
-					dernierIdSurvole = null;
-				}
-			});
-			
-			libelleCouche.Batiments3D = couche3D;	
-			const legendeDiv = document.createElement(''div'');
-			legendeDiv.className = ''legende3D'';
-			legendeDiv.innerHTML = `
-				<div class="item"><div class="color" style="background:#c4e1ea"></div> ≤ 5 m</div>
-				<div class="item"><div class="color" style="background:#55add0"></div> 5-10 m</div>
-				<div class="item"><div class="color" style="background:#5f85c4"></div> 10–20 m</div>
-				<div class="item"><div class="color" style="background:#a33a3c"></div> > 20 m</div>
-			`;
-			document.body.appendChild(legendeDiv);
-		}
-	}
+	this.visuBatiments3D = function() { if (valeurTitre1.endsWith("3D")) { window.visuBati3D(maCarte, tabCoucheMetier, libelleCouche); } } // //// modif nouvelle UI - visu bâtiments 3D externalisée dans Ressources 26/visuBati3D.js (test titre conservé ici car libelleCouche est local à dessinerCarte) ////
 	
 	this.spiderfyPoints = function() {
 	
@@ -2562,6 +2339,14 @@ this.rechercherJson = function(){
 		}
 	}
 	
+
+	this.widgetMeteo = function() {
+		initWidgetMeteo({
+			TEST_J:  null, // null = données réelles  | ex: [{ niveau: 2, phenomene_lib: ''Vent violent'' }]
+			TEST_J1: null  // null = données réelles  | ex: [{ niveau: 3, phenomene_lib: ''Orages'' }]
+		});
+	};
+
 }
 
 function main() {
@@ -2575,7 +2360,7 @@ function main() {
 	carteLeaflet.rechercherLieu();
 	carteLeaflet.importFichier();
 	carteLeaflet.exportCouches();
-	carteLeaflet.iconeClé();	
+	carteLeaflet.afficherOutils();	
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();	
 	carteLeaflet.ajouterSwitch();	
@@ -2584,7 +2369,7 @@ function main() {
 	carteLeaflet.visuEtInfo(); 
 	carteLeaflet.visuBatiments3D();	
 	carteLeaflet.spiderfyPoints();
-	if (valeurTitre1.indexOf("Surveillance du r") !== -1) carteLeaflet.widgetMeteo(); // widget météo : carte Surveillance réseau uniquement
+	if (valeurTitre1.indexOf("Surveillance du r") !== -1) carteLeaflet.widgetMeteo(); // widget météo
 }
 		
 </script> 
