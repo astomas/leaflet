@@ -1,0 +1,1463 @@
+COMPARAISON DES 2 CARTES — différences ligne par ligne
+Source A : Surveillance du réseau.html          (2552 lignes)
+Source B : Surveillance réseau météo.html       (2460 lignes)
+
+Légende :
+  - (du_réseau Lx)  ligne présente SEULEMENT dans "du réseau" (ou ancienne valeur)
+  + (météo Ly)      ligne présente SEULEMENT dans "météo"    (ou nouvelle valeur)
+  # commentaire     commentaire HTML trouvé dans les lignes précédentes
+
+120 blocs de différences
+══════════════════════════════════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L6–10 → météo L6–12
+
+  - (du_réseau L6) 	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet.css" />
+  - (du_réseau L7) 	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet-si3p0.css" />
+  - (du_réseau L8) 	<link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/pc-portable.css" />	
+  - (du_réseau L9) 	<script src="/Ressources/API_JS/librairies_cd30/leaflet.js"></script>
+  - (du_réseau L10) 	
+  + (météo L6)     	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet.css" />
+  + (météo L7)     	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet-si3p0-claude.css" />
+  + (météo L8)     	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
+  + (météo L9)     
+  + (météo L10)     	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=2" />
+  + (météo L11)     	<script src="./modern-dock-claude.js"></script>
+  + (météo L12)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L16–16 → météo L18–18
+  # <!-- limite geojson du Gard -->
+
+  - (du_réseau L16) 	<script src="/Ressources/API_JS/librairies_cd30/gard.js"></script>
+  + (météo L18)     	<script src="/leaflet/Ressources 26/librairies_cd30/gard.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L19–21 → météo L21–23
+  # <!-- limite geojson du Gard -->
+  # <!-- création boutons - lib. fontawesome d'icones pr boutons -->
+
+  - (du_réseau L19) 	<script type="text/javascript" src="/Ressources/API_JS/easy-button.js"></script>
+  - (du_réseau L20) 	<link rel="stylesheet" href = "/Ressources/API_JS/easy-button.css" />	 
+  - (du_réseau L21) 	<link rel="stylesheet" href="/Ressources/API_JS/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
+  + (météo L21)     	<script type="text/javascript" src="/leaflet/Ressources 26/easy-button.js"></script>
+  + (météo L22)     	<link rel="stylesheet" href = "/leaflet/Ressources 26/easy-button.css" />
+  + (météo L23)     	<link rel="stylesheet" href="/leaflet/Ressources 26/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L26–26 → météo L28–28
+  # <!-- clé API google - limite appels/mois -->
+  # <!-- Fonds carte Google -->
+
+  - (du_réseau L26) 	<script src="/Ressources/API_JS/Leaflet.GoogleMutant.js"></script>
+  + (météo L28)     	<script src="/leaflet/Ressources 26/Leaflet.GoogleMutant.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L28–29 → météo L30–31
+  # <!-- clé API google - limite appels/mois -->
+  # <!-- Fonds carte Google -->
+  # <!-- Rech. lieux Google -->
+
+  - (du_réseau L28) 	<script src="/Ressources/API_JS/GPlaceAutocomplete.js"></script>
+  - (du_réseau L29)   	<link rel="stylesheet" href="/Ressources/API_JS/GPlaceAutocomplete.css" />	  
+  + (météo L30)     	<script src="/leaflet/Ressources 26/GPlaceAutocomplete.js"></script>
+  + (météo L31)       	<link rel="stylesheet" href="/leaflet/Ressources 26/GPlaceAutocomplete.css" />
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L32–32 → météo L34–34
+  # <!-- Rech. lieux Google -->
+  # <!-- Impression carte -->
+
+  - (du_réseau L32) 	<script src="/Ressources/API_JS/leaflet.browser.print.js"></script>
+  + (météo L34)     	<script src="/leaflet/Ressources 26/leaflet.browser.print.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L35–36 → météo L37–38
+  # <!-- Impression carte -->
+  # <!-- Panneau texte Aide et Info -->
+
+  - (du_réseau L35) 	<script src="/Ressources/API_JS/Leaflet.Dialog.js"></script>
+  - (du_réseau L36)   	<link rel="stylesheet" href="/Ressources/API_JS/Leaflet.Dialog.css" /> 
+  + (météo L37)     	<script src="/leaflet/Ressources 26/Leaflet.Dialog.js"></script>
+  + (météo L38)       	<link rel="stylesheet" href="/leaflet/Ressources 26/Leaflet.Dialog.css" />
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L39–39 → météo L41–41
+  # <!-- Panneau texte Aide et Info -->
+  # <!-- Permalink pr centrage dyn graflex -->
+
+  - (du_réseau L39) 	<script src="/Ressources/API_JS/leaflet.permalink.js"></script>
+  + (météo L41)     	<script src="/leaflet/Ressources 26/leaflet.permalink.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L42–43 → météo L44–45
+  # <!-- Permalink pr centrage dyn graflex -->
+  # <!-- mesure distance -->
+
+  - (du_réseau L42) 	<link rel="stylesheet" type="text/css" href="/Ressources/API_JS/leaflet-ruler.css">
+  - (du_réseau L43) 	<script src="/Ressources/API_JS/leaflet-ruler.js"></script>
+  + (météo L44)     	<link rel="stylesheet" type="text/css" href="/leaflet/Ressources 26/leaflet-ruler.css">
+  + (météo L45)     	<script src="/leaflet/Ressources 26/leaflet-ruler.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L46–47 → météo L48–49
+  # <!-- mesure distance -->
+  # <!-- acces streetview, panoramax... -->
+
+  - (du_réseau L46) 	<script src="/Ressources/API_JS/streetview.js"></script>
+  - (du_réseau L47) 	
+  + (météo L48)     	<script src="/leaflet/Ressources 26/streetview.js"></script>
+  + (météo L49)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L49–50 → météo L51–52
+  # <!-- acces streetview, panoramax... -->
+  # <!-- bloc legende dyn -->
+
+  - (du_réseau L49) 	<script type="text/javascript" src="/Ressources/API_JS/leaflet.legend.js"></script>	
+  - (du_réseau L50) 	<link rel="stylesheet" href="/Ressources/API_JS/leaflet.legend.css" />
+  + (météo L51)     	<script type="text/javascript" src="/leaflet/Ressources 26/leaflet.legend.js"></script>
+  + (météo L52)     	<link rel="stylesheet" href="/leaflet/Ressources 26/leaflet.legend.css" />
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L53–54 → météo L55–56
+  # <!-- bloc legende dyn -->
+  # <!-- rech Json -->
+
+  - (du_réseau L53) 	<link rel="stylesheet" href="/Ressources/API_JS/leaflet-search.css"/>
+  - (du_réseau L54) 	<script src="/Ressources/API_JS/leaflet-search.js"></script>
+  + (météo L55)     	<link rel="stylesheet" href="/leaflet/Ressources 26/leaflet-search.css"/>
+  + (météo L56)     	<script src="/leaflet/Ressources 26/leaflet-search.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L57–57 → météo L59–59
+  # <!-- rech Json -->
+  # <!-- clic droit coord GPS -->
+
+  - (du_réseau L57) 	<script src="/Ressources/API_JS/leaflet.contextmenu.js"></script> 
+  + (météo L59)     	<script src="/leaflet/Ressources 26/leaflet.contextmenu.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L60–61 → météo L62–63
+  # <!-- clic droit coord GPS -->
+  # <!-- IGN calcul isochrones -->
+
+  - (du_réseau L60) 	<script src="/Ressources/API_JS/GpPluginLeaflet.js"></script> 
+  - (du_réseau L61) 	<link rel="stylesheet" href="/Ressources/API_JS/GpPluginLeaflet.css"/>	
+  + (météo L62)     	<script src="/leaflet/Ressources 26/GpPluginLeaflet.js"></script>
+  + (météo L63)     	<link rel="stylesheet" href="/leaflet/Ressources 26/GpPluginLeaflet.css"/>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L64–65 → météo L66–67
+  # <!-- IGN calcul isochrones -->
+  # <!-- Import fichiers Geo -->
+
+  - (du_réseau L64) 	<script src="/Ressources/API_JS/betterFileLayer.js"></script> 
+  - (du_réseau L65) 	<link rel="stylesheet" href="/Ressources/API_JS/betterFileLayer.css"/>	
+  + (météo L66)     	<script src="/leaflet/Ressources 26/betterFileLayer.js"></script>
+  + (météo L67)     	<link rel="stylesheet" href="/leaflet/Ressources 26/betterFileLayer.css"/>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L68–69 → météo L70–71
+  # <!-- Import fichiers Geo -->
+  # <!-- Rech par coord -->
+
+  - (du_réseau L68) 	<link rel="stylesheet" href="/Ressources/API_JS/geosearch.css"/>
+  - (du_réseau L69) 	<script src="/Ressources/API_JS/geosearch.js"></script>
+  + (météo L70)     	<link rel="stylesheet" href="/leaflet/Ressources 26/geosearch.css"/>
+  + (météo L71)     	<script src="/leaflet/Ressources 26/geosearch.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L72–72 → météo L74–80
+  # <!-- Rech par coord -->
+  # <!-- Effet 3D sur batis -->
+
+  - (du_réseau L72) 	<script type="text/javascript" src="/Ressources/API_JS/OSMBuildings-leaflet.js"></script>	
+  + (météo L74)     	<script type="text/javascript" src="/leaflet/Ressources 26/OSMBuildings-leaflet.js"></script>
+  + (météo L75)     	<script src="/leaflet/Ressources 26/visuBati3D.js"></script> <!-- //// modif nouvelle UI - visu bâtiments 3D externalisée //// -->
+  + (météo L76)     
+  + (météo L77)     	<!-- spiderfy points superposés -->
+  + (météo L78)     	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
+  + (météo L79)     	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/widget-meteo.css">
+  + (météo L80)     	<script src="/leaflet/Ressources 26/librairies_cd30/widget-meteo.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L74–75 → météo L82–82
+  # <!-- Effet 3D sur batis -->
+  # <!-- spiderfy points superposés -->
+
+  - (du_réseau L74) 	<!-- spiderfy points superposés -->
+  - (du_réseau L75) 	<script src="/Ressources/API_JS/overlap-marker.js"></script>
+  + (météo L82)     	</head>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L77–81 → météo L84–117
+  # <!-- spiderfy points superposés -->
+
+  - (du_réseau L77) 	</head>	
+  - (du_réseau L78) 	
+  - (du_réseau L79)     <body onload="main()">
+  - (du_réseau L80)         <div id="carteId" />
+  - (du_réseau L81)     </body>	
+  + (météo L84)       <body onload="main()">
+  + (météo L85)       <div class="modern-carte-shell">
+  + (météo L86)         <header class="modern-header">
+  + (météo L87)           <div id="modernLogosDock" class="modern-logos-dock modern-header-logos" aria-label="Liens rapides"></div>
+  + (météo L88)           <div class="modern-header-titles">
+  + (météo L89)             <h1>Surveillance du réseau - source CD30 - Waze</h1>
+  + (météo L90)           </div>
+  + (météo L91)           <div class="meteo-zone">
+  + (météo L92)             <div id="meteoWidget" class="modern-meteo-widget"></div>
+  + (météo L93)             <a class="meteo-vig-lien" href="https://vigilance.meteofrance.fr/fr/gard" target="_blank" rel="noopener">⚠ accès site vigilance météo et crues Gard</a>
+  + (météo L94)           </div>
+  + (météo L95)           <div class="modern-header-actions">
+  + (météo L96)             <div id="modernHeaderInfoDock" class="modern-header-help modern-header-info"></div>
+  + (météo L97)             <div id="modernHeaderHelpDock" class="modern-header-help modern-header-aide"></div>
+  + (météo L98)           </div>
+  + (météo L99)         </header>
+  + (météo L100)         <div class="modern-main-content">
+  + (météo L101)           <aside class="modern-sidebar" aria-label="Panneau de pilotage cartographique">
+  + (météo L102)             <section class="modern-family modern-family-fonds-plan" data-expanded="true">
+  + (météo L103)               <div class="modern-family-title"><span>Fonds de plan</span><em>couches</em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+  + (météo L104)             </section>
+  + (météo L105)             <section class="modern-family modern-family-metier" data-expanded="true">
+  + (météo L106)               <div class="modern-family-title"><span>Données métier</span><em></em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+  + (météo L107)             </section>
+  + (météo L108)             <section class="modern-family modern-family-tools" id="modernToolsSection" data-expanded="true">
+  + (météo L109)               <div class="modern-family-title"><span>Outils carte</span><em id="modernToolsCount">plugins</em><span class="modern-family-chevron"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+  + (météo L110)               <div id="modernToolsDock" class="modern-tools-dock" aria-label="Outils de la carte"></div>
+  + (météo L111)             </section>
+  + (météo L112)           </aside>
+  + (météo L113)           <div class="modern-sidebar-resizer" tabindex="0" role="separator" aria-label="Redimensionner le panneau"></div>
+  + (météo L114)           <main class="modern-map-area"><div id="carteId"></div></main>
+  + (météo L115)         </div>
+  + (météo L116)       </div>
+  + (météo L117)     </body>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L134–137
+
+  + (météo L134)     	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
+  + (météo L135)     	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon"];
+  + (météo L136)     	var vueCouranteEtiquetteRD = false;
+  + (météo L137)     	var vueCouranteTroncon = false;
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L99–99 → météo L139–139
+
+  - (du_réseau L99) 	L.Icon.Default.imagePath = '/Ressources/API_JS/images/';
+  + (météo L139)     	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L241–241 → météo L281–281
+
+  - (du_réseau L241)             if (!toutesColonnes.includes(k) && !k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|afficherlegouverture|leafletsearch|dash)$/)) {
+  + (météo L281)                 if (!toutesColonnes.includes(k) && !k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|afficherlegouverture|leafletsearch)$/)) {
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L309–397
+
+  + (météo L309)     
+  + (météo L310)     // //// modif nouvelle UI - lecture d'une propriété quel que soit le nombre d'espaces du libellé ("RD ", "RD     "...) ////
+  + (météo L311)     function propTrim(props, nom) {
+  + (météo L312)         for (var cle in props) {
+  + (météo L313)             if (cle.trim() === nom) return (props[cle] || "").toString().trim();
+  + (météo L314)         }
+  + (météo L315)         return "";
+  + (météo L316)     }
+  + (météo L317)     // //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
+  + (météo L318)     function normaliserNomVue(s) {
+  + (météo L319)         return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+  + (météo L320)     }
+  + (météo L321)     // //// modif nouvelle UI - étiquettes RD permanentes sur les vues ciblées (vuesEtiquetteRD) ////
+  + (météo L322)     // Une seule étiquette par tronçon, repositionnée dynamiquement au point le plus proche du centre
+  + (météo L323)     // du viewport. Toujours visible, jamais en surnombre, affichée/masquée selon l'activation de la
+  + (météo L324)     // couche. Générique : agit sur toute polyligne portant l'option rdLabel.
+  + (météo L325)     var groupeEtiquettesRD = null;
+  + (météo L326)     function gererEtiquettesRD(map) {
+  + (météo L327)         if (!map) return;
+  + (météo L328)         // Pane dédié (z-index 450) : au-dessus des lignes (overlayPane 400), sous les marqueurs (600).
+  + (météo L329)         if (!map.getPane("etiquettesRD")) {
+  + (météo L330)             map.createPane("etiquettesRD");
+  + (météo L331)             map.getPane("etiquettesRD").style.zIndex = 450;
+  + (météo L332)         }
+  + (météo L333)         if (!groupeEtiquettesRD) groupeEtiquettesRD = L.layerGroup().addTo(map);
+  + (météo L334)     
+  + (météo L335)         function rafraichirEtiquettesRD() {
+  + (météo L336)             groupeEtiquettesRD.clearLayers();
+  + (météo L337)             var limites = map.getBounds();
+  + (météo L338)             var centre = map.getCenter();
+  + (météo L339)             var parRD = {}; // une seule étiquette par numéro RD (tronçon le plus proche du centre)
+  + (météo L340)             map.eachLayer(function (couche) {
+  + (météo L341)                 if (!(couche instanceof L.Polyline)) return;
+  + (météo L342)                 if (!couche.options || !couche.options.rdLabel) return;
+  + (météo L343)                 if (couche.options.rdProximite && map.getZoom() <= 11.8) return;
+  + (météo L344)                 var points = [];
+  + (météo L345)                 (function aplatir(arr) {
+  + (météo L346)                     for (var i = 0; i < arr.length; i++) {
+  + (météo L347)                         if (Array.isArray(arr[i])) aplatir(arr[i]);
+  + (météo L348)                         else points.push(arr[i]);
+  + (météo L349)                     }
+  + (météo L350)                 })(couche.getLatLngs());
+  + (météo L351)                 var visibles = points.filter(function (p) { return limites.contains(p); });
+  + (météo L352)                 if (!visibles.length) return;
+  + (météo L353)                 var longTotale = 0;
+  + (météo L354)                 for (var j = 1; j < visibles.length; j++) {
+  + (météo L355)                     longTotale += visibles[j - 1].distanceTo(visibles[j]);
+  + (météo L356)                 }
+  + (météo L357)                 var cible = longTotale / 2, parcouru = 0, meilleur = visibles[0];
+  + (météo L358)                 for (var k = 1; k < visibles.length; k++) {
+  + (météo L359)                     parcouru += visibles[k - 1].distanceTo(visibles[k]);
+  + (météo L360)                     if (parcouru >= cible) { meilleur = visibles[k]; break; }
+  + (météo L361)                 }
+  + (météo L362)                 var dist = centre.distanceTo(meilleur);
+  + (météo L363)                 var rd = couche.options.rdLabel;
+  + (météo L364)                 if (!parRD[rd] || dist < parRD[rd].dist) {
+  + (météo L365)                     parRD[rd] = { point: meilleur, dist: dist, color: couche.options.rdColor || "#888" };
+  + (météo L366)                 }
+  + (météo L367)             });
+  + (météo L368)             // Pose une seule étiquette par numéro RD
+  + (météo L369)             Object.keys(parRD).forEach(function(rd) {
+  + (météo L370)                 var info = parRD[rd];
+  + (météo L371)                 L.marker(info.point, {
+  + (météo L372)                     icon: L.divIcon({
+  + (météo L373)                         className: "label-route-rd-wrap",
+  + (météo L374)                         html: "<span class=\"label-route-rd\" style=\"border-color:" + info.color + "\">" + rd + "</span>",
+  + (météo L375)                         iconSize: [0, 0]
+  + (météo L376)                     }),
+  + (météo L377)                     pane: "etiquettesRD",
+  + (météo L378)                     interactive: false,
+  + (météo L379)                     keyboard: false
+  + (météo L380)                 }).addTo(groupeEtiquettesRD);
+  + (météo L381)             });
+  + (météo L382)         }
+  + (météo L383)     
+  + (météo L384)         // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage. Debounce des rafales layeradd.
+  + (météo L385)         var timerEtiquettesRD = null;
+  + (météo L386)         function planifierEtiquettesRD() {
+  + (météo L387)             clearTimeout(timerEtiquettesRD);
+  + (météo L388)             timerEtiquettesRD = setTimeout(rafraichirEtiquettesRD, 80);
+  + (météo L389)         }
+  + (météo L390)         map.on("moveend zoomend", planifierEtiquettesRD);
+  + (météo L391)         map.on("layeradd layerremove", function (e) {
+  + (météo L392)             if (e.layer instanceof L.Polyline && e.layer.options && e.layer.options.rdLabel) {
+  + (météo L393)                 planifierEtiquettesRD();
+  + (météo L394)             }
+  + (météo L395)         });
+  + (météo L396)         rafraichirEtiquettesRD();
+  + (météo L397)     }
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L448–469
+
+  + (météo L448)     
+  + (météo L449)     	// //// modif nouvelle UI - fonctions helper popup (CSS classes partagées) ////
+  + (météo L450)     	function construireEntetePopup(pps, nomForce) {
+  + (météo L451)     		var nom = nomForce || (pps && (pps.nomcouche || pps.legende)) || "";
+  + (météo L452)     		if (!nom) return "";
+  + (météo L453)     		var visuel = "";
+  + (météo L454)     		if (pps && pps.icone) {
+  + (météo L455)     			visuel = "<img class='popup-entete-icone' src='" + pps.icone + "' alt='' />";
+  + (météo L456)     		} else if (pps && pps.couleur && pps.couleur !== "Non défini") {
+  + (météo L457)     			visuel = "<span class='popup-entete-pastille' style='background:" + pps.couleur + "'></span>";
+  + (météo L458)     		}
+  + (météo L459)     		return "<div class='popup-entete'>" + visuel + "<span class='popup-entete-titre'>" + nom + "</span></div>";
+  + (météo L460)     	}
+  + (météo L461)     	function formaterChampPopup(label, valeurHtml) {
+  + (météo L462)     		var vide = (valeurHtml === "" || valeurHtml == null);
+  + (météo L463)     		if (!vide && /^https?:\/\//i.test(String(valeurHtml))) {
+  + (météo L464)     			valeurHtml = "<a href='" + valeurHtml + "' target='_blank' rel='noopener'>Accéder au lien</a>";
+  + (météo L465)     		}
+  + (météo L466)     		var cle = "<span class='popup-cle'>" + label + (vide ? "" : ":") + "</span>";
+  + (météo L467)     		return vide ? cle : cle + " <span class='popup-val'>" + valeurHtml + "</span>";
+  + (météo L468)     	}
+  + (météo L469)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L357–357 → météo L508–508
+
+  - (du_réseau L357) 			/*if (valeurTitre1.includes("fauchage") && élément.properties["Traitement       "] == 'Ponctuel') {
+  + (météo L508)     			if (valeurTitre1.includes("fauchage") && élément.properties["Traitement       "] == 'Ponctuel') {
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L359–362 → météo L510–510
+
+  - (du_réseau L359) 			}	*/
+  - (du_réseau L360) 			if (élément.properties.dash === true) {
+  - (du_réseau L361) 				styleCoucheMLS.dashArray = '5,10';
+  - (du_réseau L362) 			}
+  + (météo L510)     			}	
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L517–524
+
+  + (météo L517)     		
+  + (météo L518)     		// //// modif nouvelle UI - étiquette RD permanente : marquage de la polyligne affichée de la vue ciblée (réf. vuesEtiquetteRD), sans test de nom de couche ni de champ ////
+  + (météo L519)     		if (vueCouranteEtiquetteRD && couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
+  + (météo L520)     			couche.options.rdLabel = propTrim(élément.properties, "RD");
+  + (météo L521)     			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
+  + (météo L522)     			couche.options.rdProximite = /proximit/i.test(niveauRDet);
+  + (météo L523)     			couche.options.rdColor = propTrim(élément.properties, "couleur") || couche.options.color || "#888";
+  + (météo L524)     		}
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L492–492 → météo L648–648
+
+  - (du_réseau L492)             p.push("<div style='border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px; font-weight:bold; font-size:12px; color:#333;'>" + nom + "</div>");
+  + (météo L648)                 p.push(construireEntetePopup(pps, nom));
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L496–497 → météo L652–653
+
+  - (du_réseau L496)                 if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch|dash)$/)) {
+  - (du_réseau L497)                     var ligne = "<b>"+ nomPpté + ":</b> " + pps[nomPpté];
+  + (météo L652)                     if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
+  + (météo L653)                         var ligne = formaterChampPopup(nomPpté, pps[nomPpté]);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L522–522 → météo L678–678
+
+  - (du_réseau L522)             tableauContenuPopup.unshift("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+  + (météo L678)                 tableauContenuPopup.unshift(formaterChampPopup(nomPpté, pps[nomPpté]));
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L524–525 → météo L680–681
+
+  - (du_réseau L524)             if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch|dash)$/)) {
+  - (du_réseau L525)                 tableauContenuPopup.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+  + (météo L680)                 if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
+  + (météo L681)                     tableauContenuPopup.push(formaterChampPopup(nomPpté, pps[nomPpté]));
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L527–528 → météo L683–684
+
+  - (du_réseau L527)             if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch|dash)/)) {
+  - (du_réseau L528)                 tableauContenuTooltip.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
+  + (météo L683)                 if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)/)) {
+  + (météo L684)                     tableauContenuTooltip.push(formaterChampPopup(nomPpté, pps[nomPpté]));
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L532–532 → météo L688–688
+
+  - (du_réseau L532)     contenuFinalPopup = tableauContenuPopup.join("<br />");
+  + (météo L688)         contenuFinalPopup = construireEntetePopup(pps) + tableauContenuPopup.join("<br />");
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L708–710
+
+  + (météo L708)     		} else if (élément.geometry.type === "LineString" || élément.geometry.type === "MultiLineString") {
+  + (météo L709)     			// //// modif nouvelle UI - pas de tooltip ligne sur les vues RD sans 'troncon' ////
+  + (météo L710)     			if (!vueCouranteEtiquetteRD || vueCouranteTroncon) { couche.bindTooltip(texteTooltip, optionsTooltip); }
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L577–577 → météo L736–736
+
+  - (du_réseau L577)     /*if (valeurTitre1.includes("fauchage") && élément.properties["Traitement       "] == 'Ponctuel') {
+  + (météo L736)         if (valeurTitre1.includes("fauchage") && élément.properties["Traitement       "] == 'Ponctuel') {
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L579–582 → météo L738–738
+
+  - (du_réseau L579)     }*/
+  - (du_réseau L580) 	if (élément.properties.dash === true) {
+  - (du_réseau L581) 		styleMLS.dashArray = '5,10';
+  - (du_réseau L582) 	}
+  + (météo L738)         }
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L611–611 → météo L767–778
+
+  - (du_réseau L611)     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
+  + (météo L767)         élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
+  + (météo L768)         // //// modif nouvelle UI - étiquette RD permanente sur les vues ciblées (réf. vuesEtiquetteRD / nomVues) ////
+  + (météo L769)         if (vueCouranteEtiquetteRD) {
+  + (météo L770)             élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
+  + (météo L771)             var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
+  + (météo L772)             élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
+  + (météo L773)             élémentsMLS.options.rdColor = couleurOrigine || "#888";
+  + (météo L774)         }
+  + (météo L775)         // //// modif nouvelle UI - pas de tooltip survol sur les vues RD sans 'troncon' ////
+  + (météo L776)         if (!vueCouranteEtiquetteRD || vueCouranteTroncon) {
+  + (météo L777)             élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+  + (météo L778)         }
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L643–643 → météo L810–810
+
+  - (du_réseau L643) 			var customIcone = new L.Icon({iconUrl: "/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
+  + (météo L810)     			var customIcone = new L.Icon({iconUrl: "/leaflet/Ressources 26/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L833–836
+
+  + (météo L833)     	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
+  + (météo L834)     	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
+  + (météo L835)     	    // //// modif nouvelle UI - vue 'troncon' (active le tooltip survol) ////
+  + (météo L836)     	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L694–695 → météo L865–866
+
+  - (du_réseau L694) 		this.coordCarte = [43.96, 4.1];			
+  - (du_réseau L695) 		this.zoomInitial = 9.8;
+  + (météo L865)     		this.coordCarte = [43.96, 4.05];			
+  + (météo L866)     		this.zoomInitial = 9.6;
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L954–955 → météo L1125–1127
+
+  - (du_réseau L954) 			function ajusterLargeurColonnesLegende() {
+  - (du_réseau L955) 			    var container = maCarte.getContainer().querySelector('.leaflet-legend-contents.deux-colonnes');
+  + (météo L1125)     			function ajusterLargeurColonnesLegende(racineLegende) {
+  + (météo L1126)     			    var base = racineLegende || maCarte.getContainer();
+  + (météo L1127)     			    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L957–958 → météo L1129–1129
+
+  - (du_réseau L957) 			
+  - (du_réseau L958) 			    // Largeur réelle du libellé le plus long
+  + (météo L1129)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L964–965 → météo L1135–1135
+
+  - (du_réseau L964) 			
+  - (du_réseau L965) 			    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
+  + (météo L1135)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+SUPPRIMÉ dans météo — du_réseau L968–968
+
+  - (du_réseau L968) 			
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1141–1149
+
+  + (météo L1141)     			}
+  + (météo L1142)     
+  + (météo L1143)     			window.modernLegendeParCouche = {};
+  + (météo L1144)     			for (i = 0; i < tabCtrlLegendeObj.length; i++) {
+  + (météo L1145)     				var nomC = tabCtrlLegendeObj[i].nomCouche;
+  + (météo L1146)     				if (!window.modernLegendeParCouche[nomC]) {
+  + (météo L1147)     					window.modernLegendeParCouche[nomC] = [];
+  + (météo L1148)     				}
+  + (météo L1149)     				window.modernLegendeParCouche[nomC].push(tabCtrlLegendeObj[i]);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L978–983 → météo L1156–1156
+
+  - (du_réseau L978) 			blocLegende.addTo(maCarte);
+  - (du_réseau L979) 			if (nbrColonnes === 2) {
+  - (du_réseau L980) 				var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
+  - (du_réseau L981) 				if (container) container.classList.add('deux-colonnes');
+  - (du_réseau L982) 				requestAnimationFrame(ajusterLargeurColonnesLegende);
+  - (du_réseau L983) 			}
+  + (météo L1156)     			// [sans-legende] blocLegende non ajouté à la carte
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1012–1012 → météo L1185–1185
+
+  - (du_réseau L1012) 			"Google Satellite": googleSat,	
+  + (météo L1185)     			//"Google Satellite": googleSat,
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1018–1021 → météo L1191–1194
+
+  - (du_réseau L1018) 		for (i=0; i < nbreDeVues; i++) {	
+  - (du_réseau L1019) 			tabCtrlboxNom.push({nom: tabNettoyé[i][1], couche: tabCoucheMG[i]});	
+  - (du_réseau L1020) 		}	
+  - (du_réseau L1021) 		// alim box couches
+  + (météo L1191)     		for (i=0; i < nbreDeVues; i++) {
+  + (météo L1192)     			var nbEltsCouche = tabCoucheMG[i].getLayers().length;
+  + (météo L1193)     			tabCtrlboxNom.push({nom: tabNettoyé[i][1] + " (" + nbEltsCouche + ")", couche: tabCoucheMG[i]});
+  + (météo L1194)     		}
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1023–1072 → météo L1196–1197
+
+  - (du_réseau L1023) 		//console.log("libelleCouche : " , libelleCouche);
+  - (du_réseau L1024) 	
+  - (du_réseau L1025) 		// Repli box couches si legende trop grande en hauteur ecran	
+  - (du_réseau L1026) 		if (presenceLegende) {
+  - (du_réseau L1027) 			
+  - (du_réseau L1028) 			const nbrEltsLegende = tabCtrlLegendeObj.length;	
+  - (du_réseau L1029) 			const largeurEcran = screen.width;
+  - (du_réseau L1030) 			// Set filtre les doublons, size compte le nbr sous-titres uniques
+  - (du_réseau L1031) 			const nbrSousTitresLeg = new Set(tabCtrlLegendeObj.map(o => o.nomCouche)).size;
+  - (du_réseau L1032) 
+  - (du_réseau L1033) 			// Repli ecrans HD et moins selon nbr elts legende, nbr couches (vues) et nbr col. legende
+  - (du_réseau L1034) 			if (largeurEcran <= 1920) {
+  - (du_réseau L1035) 				var trigger1Repli = (nbrColonnes === 1 && nbrEltsLegende > 25);
+  - (du_réseau L1036) 				var trigger2Repli = (nbrColonnes === 2 && nbrEltsLegende > 45);
+  - (du_réseau L1037) 				var trigger3Repli = (nbrColonnes === 1 && nbrEltsLegende + nbreDeVues > 25);
+  - (du_réseau L1038) 				var trigger4Repli = (nbrColonnes === 2 && nbrEltsLegende + nbreDeVues > 40);
+  - (du_réseau L1039) 				// trigger5 inactif (false) si carto "surveillance" (car définie sans sous-titre ds legende.js)
+  - (du_réseau L1040) 				var trigger5Repli = valeurTitre1.indexOf("Surveillance") === -1 && nbrColonnes === 1 && (nbreDeVues + nbrEltsLegende + nbrSousTitresLeg > 26);
+  - (du_réseau L1041) 				
+  - (du_réseau L1042) 				if (trigger1Repli || trigger2Repli || trigger3Repli || trigger4Repli || trigger5Repli || L.Browser.mobile) {
+  - (du_réseau L1043) 					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: true});
+  - (du_réseau L1044) 					ctrlBoxCouches.addTo(maCarte);
+  - (du_réseau L1045) 					// repli bloc legende si tablettes/mobiles				
+  - (du_réseau L1046) 					if ((nbrEltsLegende >= 23 && largeurEcran < 1900) || (L.Browser.mobile && nbrEltsLegende >= 8)) {
+  - (du_réseau L1047) 						blocLegende.remove();
+  - (du_réseau L1048) 						blocLegende = L.control.Legend({title: null, collapsed: true, position: "bottomright", opacity: 0.8, legends: tabCtrlLegendeObj});
+  - (du_réseau L1049) 						blocLegende.addTo(maCarte);
+  - (du_réseau L1050) 						if (nbrColonnes === 2) {
+  - (du_réseau L1051) 							var container = maCarte.getContainer().querySelector('.leaflet-legend-contents');
+  - (du_réseau L1052) 							if (container) container.classList.add('deux-colonnes');
+  - (du_réseau L1053) 							requestAnimationFrame(ajusterLargeurColonnesLegende);
+  - (du_réseau L1054) 						}
+  - (du_réseau L1055) 					}
+  - (du_réseau L1056) 				}				
+  - (du_réseau L1057) 				else {
+  - (du_réseau L1058) 					ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
+  - (du_réseau L1059) 					ctrlBoxCouches.addTo(maCarte);
+  - (du_réseau L1060) 				}
+  - (du_réseau L1061) 			}
+  - (du_réseau L1062) 			// ecrans au dela de HD pas de repli
+  - (du_réseau L1063) 			else {
+  - (du_réseau L1064) 				ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
+  - (du_réseau L1065) 				ctrlBoxCouches.addTo(maCarte);			
+  - (du_réseau L1066) 			}
+  - (du_réseau L1067) 		}
+  - (du_réseau L1068) 		// Pas de légende pas de repli
+  - (du_réseau L1069) 		else {
+  - (du_réseau L1070) 	    	ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
+  - (du_réseau L1071) 	    	ctrlBoxCouches.addTo(maCarte);
+  - (du_réseau L1072) 		}	
+  + (météo L1196)     		ctrlBoxCouches = L.control.layers(fondsCarte, libelleCouche, {collapsed: false});
+  + (météo L1197)     		ctrlBoxCouches.addTo(maCarte);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1338–1338
+
+  + (météo L1338)     				maCarte.getContainer().style.background = "#3a4a3a"; // //// modif nouvelle UI - fond sombre pour masquer coutures tuiles ortho ////
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1341–1341
+
+  + (météo L1341)     				maCarte.getContainer().style.background = "";
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1225–1230 → météo L1352–1352
+
+  - (du_réseau L1225) 			if (e.layer === orthoIGN || e.layer === googleSat) {
+  - (du_réseau L1226) 				coucheLimiteAdmin.setStyle(styleLimiteOrtho);
+  - (du_réseau L1227) 			} 
+  - (du_réseau L1228) 			else {
+  - (du_réseau L1229) 				coucheLimiteAdmin.setStyle(styleLimiteStandard);
+  - (du_réseau L1230) 			}
+  + (météo L1352)     			verifBaseLayer(); // simplifié : évite la duplication
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1424–1424
+
+  + (météo L1424)     	ctrlRecentrer.button.classList.add('btn-recentrer');
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1581–1582
+
+  + (météo L1581)             // //// modif nouvelle UI - nom du fichier sans extension pour titre popup ////
+  + (météo L1582)             let nomFichierSansExt = fichierImporté.replace(/\.[^.]+$/, '');
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1501–1501 → météo L1626–1626
+
+  - (du_réseau L1501)                     details.push("<div style='border-bottom:1px solid #ccc; background:#f4f4f4; padding:3px 8px; font-weight:bold; font-size:12px; color:#333;'>" + label + "</div>");
+  + (météo L1626)                         details.push(construireEntetePopup(pps, label));
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1508–1508 → météo L1633–1633
+
+  - (du_réseau L1508)                     if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|leafletsearch|stroke|fill|color|dash|X en WGS84|Y en WGS84)$/i)) {
+  + (météo L1633)                         if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|leafletsearch|stroke|fill|color|X en WGS84|Y en WGS84)$/i)) {
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1511–1511 → météo L1636–1636
+
+  - (du_réseau L1511) 						let ligne = "<b>" + nomPpté + (val !== "" ? ":</b> " + (String(val).startsWith('http') ? `<a href="${val}" target="_blank">Lien</a>` : val) : "</b>");
+  + (météo L1636)     						let ligne = formaterChampPopup(nomPpté, val);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1531–1531 → météo L1656–1656
+
+  - (du_réseau L1531)                 contenuPopup = `<div class='popup-scroll grille-active' style='max-height:300px; overflow-y:auto;'>${htmlParts.join("<hr class='sep-grille' />")}</div>${boutonExport}`;
+  + (météo L1656)                     contenuPopup = construireEntetePopup({}, nomFichierSansExt) + `<div class='popup-scroll grille-active' style='max-height:300px; overflow-y:auto;'>${htmlParts.join("<hr class='sep-grille' />")}</div>${boutonExport}`;
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1535–1535 → météo L1660–1660
+
+  - (du_réseau L1535)                 contenuPopup = htmlParts[0];
+  + (météo L1660)                     contenuPopup = construireEntetePopup(propsGroupes[0], nomFichierSansExt) + htmlParts[0];
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1564–1564 → météo L1689–1690
+
+  - (du_réseau L1564)     btnImporter.addTo(maCarte);	
+  + (météo L1689)         btnImporter.addTo(maCarte);
+  + (météo L1690)     	window.modernDockSpecificControl(btnImporter, "Importer");
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1566–1571 → météo L1692–1694
+
+  - (du_réseau L1566) 	
+  - (du_réseau L1567) 	this.iconeClé = function() {  
+  - (du_réseau L1568) 	
+  - (du_réseau L1569) 		var iconesVisible = false;
+  - (du_réseau L1570) 		var sousBoutonsCréés = false;	
+  - (du_réseau L1571) 		
+  + (météo L1692)     
+  + (météo L1693)     	this.afficherOutils = function() {
+  + (météo L1694)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1574–1574 → météo L1697–1697
+
+  - (du_réseau L1574) 		
+  + (météo L1697)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1582–1582 → météo L1705–1705
+
+  - (du_réseau L1582) 				L.control.browserPrint.mode.custom("Sélec. zone", "A4")					
+  + (météo L1705)     				L.control.browserPrint.mode.custom("Sélec. zone", "A4")
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1587–1587 → météo L1710–1710
+
+  - (du_réseau L1587) 			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});	
+  + (météo L1710)     			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1589–1589 → météo L1712–1712
+
+  - (du_réseau L1589) 		);		
+  + (météo L1712)     		);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1603–1603 → météo L1726–1726
+
+  - (du_réseau L1603) 		
+  + (météo L1726)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1606–1606 → météo L1729–1729
+
+  - (du_réseau L1606) 		
+  + (météo L1729)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1608–1608 → météo L1731–1731
+
+  - (du_réseau L1608) 		
+  + (météo L1731)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1612–1612 → météo L1735–1735
+
+  - (du_réseau L1612) 		
+  + (météo L1735)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1614–1615 → météo L1737–1738
+
+  - (du_réseau L1614) 		}		
+  - (du_réseau L1615) 		
+  + (météo L1737)     		}
+  + (météo L1738)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1617–1618 → météo L1740–1747
+
+  - (du_réseau L1617) 			if (presenceLegende) {			
+  - (du_réseau L1618) 				blocLegende.addTo(e.printMap);						
+  + (météo L1740)     			if (presenceLegende) {
+  + (météo L1741)     				blocLegende.addTo(e.printMap);
+  + (météo L1742)     				if (blocLegende.options.column === 2) {
+  + (météo L1743)     					var containerPrint = e.printMap.getContainer().querySelector('.leaflet-legend-contents');
+  + (météo L1744)     					if (containerPrint) containerPrint.classList.add('deux-colonnes');
+  + (météo L1745)     					requestAnimationFrame(function() { ajusterLargeurColonnesLegende(e.printMap.getContainer()); });
+  + (météo L1746)     				}
+  + (météo L1747)     			}
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1631–1631 → météo L1760–1760
+
+  - (du_réseau L1631) 				
+  + (météo L1760)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1639–1639 → météo L1768–1768
+
+  - (du_réseau L1639) 			// ajuster fontes legende et centrage avant print selon hauteur legende	
+  + (météo L1768)     			// ajuster fontes legende et centrage avant print selon hauteur legende
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1770–1770
+
+  + (météo L1770)     				if (!presenceLegende) return;
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1644–1652 → météo L1774–1779
+
+  - (du_réseau L1644) 				// si hauteur < 250px, on garde le bloc original
+  - (du_réseau L1645) 					if (hauteurLegende < 250) {
+  - (du_réseau L1646) 						return;
+  - (du_réseau L1647) 					}
+  - (du_réseau L1648) 					else {
+  - (du_réseau L1649) 						// sauvegarde état original avant modification
+  - (du_réseau L1650) 						sauvegarderStyleLegende(conteneurLegende);
+  - (du_réseau L1651) 						//diminution font size
+  - (du_réseau L1652) 						const fontSize = 9;
+  + (météo L1774)     				if (hauteurLegende < 250) {
+  + (météo L1775)     					return;
+  + (météo L1776)     				}
+  + (météo L1777)     				else {
+  + (météo L1778)     					sauvegarderStyleLegende(conteneurLegende);
+  + (météo L1779)     					const fontSize = 9;
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1654–1655 → météo L1781–1782
+
+  - (du_réseau L1654) 						conteneurLegende.style.fontSize = fontSize + "px";
+  - (du_réseau L1655) 						conteneurLegende.style.lineHeight = "1.1";
+  + (météo L1781)     					conteneurLegende.style.fontSize = fontSize + "px";
+  + (météo L1782)     					conteneurLegende.style.lineHeight = "1.1";
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1657–1672 → météo L1784–1796
+
+  - (du_réseau L1657) 						conteneurLegende.querySelectorAll("*").forEach(function(elementLegende) {
+  - (du_réseau L1658) 							elementLegende.style.fontSize = fontSize + "px";
+  - (du_réseau L1659) 							elementLegende.style.lineHeight = "1.1";
+  - (du_réseau L1660) 						});
+  - (du_réseau L1661) 						// decalage carte a gauche
+  - (du_réseau L1662) 						e.printMap.panBy([100, 0], { animate: false });
+  - (du_réseau L1663) 					}
+  - (du_réseau L1664) 				}, 100);
+  - (du_réseau L1665) 			}	
+  - (du_réseau L1666) 		});		
+  - (du_réseau L1667) 	
+  - (du_réseau L1668) 		maCarte.on("browser-print-end", function(){		
+  - (du_réseau L1669) 			if (presenceLegende) {			
+  - (du_réseau L1670)         		// remet la légende comme avant impression
+  - (du_réseau L1671)         		restaurerStyleLegende();
+  - (du_réseau L1672) 			 	var blocLegendeElement = blocLegende.getContainer();
+  + (météo L1784)     					conteneurLegende.querySelectorAll("*").forEach(function(elementLegende) {
+  + (météo L1785)     						elementLegende.style.fontSize = fontSize + "px";
+  + (météo L1786)     						elementLegende.style.lineHeight = "1.1";
+  + (météo L1787)     					});
+  + (météo L1788)     					e.printMap.panBy([100, 0], { animate: false });
+  + (météo L1789)     				}
+  + (météo L1790)     			}, 100);
+  + (météo L1791)     		});
+  + (météo L1792)     
+  + (météo L1793)     		maCarte.on("browser-print-end", function(){
+  + (météo L1794)     			if (presenceLegende) {
+  + (météo L1795)     				restaurerStyleLegende();
+  + (météo L1796)     				var blocLegendeElement = blocLegende.getContainer();
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1675–1676 → météo L1799–1800
+
+  - (du_réseau L1675) 				blocLegende.remove();				
+  - (du_réseau L1676) 				blocLegende.addTo(maCarte);	
+  + (météo L1799)     				blocLegende.remove();
+  + (météo L1800)     				// [sans-legende] blocLegende non re-ajouté à la carte
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1678–1682 → météo L1802–1806
+
+  - (du_réseau L1678) 				conteneurVisuInfo.addTo(maCarte);	
+  - (du_réseau L1679) 			}	
+  - (du_réseau L1680) 		});	
+  - (du_réseau L1681) 		
+  - (du_réseau L1682) 		
+  + (météo L1802)     				conteneurVisuInfo.addTo(maCarte);
+  + (météo L1803)     			}
+  + (météo L1804)     		});
+  + (météo L1805)     
+  + (météo L1806)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1697–1697 → météo L1821–1821
+
+  - (du_réseau L1697) 			label = label.split(',').slice(0, 3).join(',').trim();		
+  + (météo L1821)     			label = label.split(',').slice(0, 3).join(',').trim();
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1704–1704 → météo L1828–1828
+
+  - (du_réseau L1704) 			  iconUrl: '/Ressources/API_JS/images/geosearch.png',
+  + (météo L1828)     			  iconUrl: '/leaflet/Ressources 26/images/geosearch.png',
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1717–1717 → météo L1841–1841
+
+  - (du_réseau L1717) 		
+  + (météo L1841)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1719–1721 → météo L1843–1845
+
+  - (du_réseau L1719) 			carte.closePopup(); 
+  - (du_réseau L1720) 		  });		
+  - (du_réseau L1721) 		  
+  + (météo L1843)     			carte.closePopup();
+  + (météo L1844)     		  });
+  + (météo L1845)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1729–1772 → météo L1853–1866
+
+  - (du_réseau L1729) 		
+  - (du_réseau L1730) 		// bouton clé
+  - (du_réseau L1731) 		var boutonClé = L.easyButton("fa-key fa-lg", function() { 
+  - (du_réseau L1732) 			deployerIcones(); 
+  - (du_réseau L1733) 		}, "Autres fonctions").addTo(maCarte);
+  - (du_réseau L1734) 		
+  - (du_réseau L1735) 		ajouterHoverEtClic(boutonClé.button, {
+  - (du_réseau L1736) 		    isVisible: () => iconesVisible,
+  - (du_réseau L1737) 		    afficher: deployerIcones,
+  - (du_réseau L1738) 		    masquer: deployerIcones
+  - (du_réseau L1739) 		});
+  - (du_réseau L1740) 		
+  - (du_réseau L1741) 		boutonClé.button.classList.add('bouton-cle');
+  - (du_réseau L1742) 		var container = boutonClé.button.parentNode;
+  - (du_réseau L1743) 		container.style.backgroundColor = "lightgrey";		
+  - (du_réseau L1744) 		boutonClé.button.style.backgroundColor = "lightgrey"; 
+  - (du_réseau L1745) 			
+  - (du_réseau L1746) 	function deployerIcones() {
+  - (du_réseau L1747) 			iconesVisible = !iconesVisible;
+  - (du_réseau L1748) 			if (!sousBoutonsCréés) {
+  - (du_réseau L1749) 				btnImprimer.addTo(maCarte);
+  - (du_réseau L1750) 				btnMesurer.addTo(maCarte);
+  - (du_réseau L1751) 				btnIsochrone.addTo(maCarte);					
+  - (du_réseau L1752) 				btnGeosearch.addTo(maCarte);
+  - (du_réseau L1753) 				activerPopupRaccourci(maCarte);					
+  - (du_réseau L1754) 				sousBoutonsCréés = true;
+  - (du_réseau L1755) 			}			
+  - (du_réseau L1756) 			if (iconesVisible) {
+  - (du_réseau L1757) 				boutonClé.button.style.backgroundColor = "#ffff5b"; 
+  - (du_réseau L1758) 				btnImprimer.addTo(maCarte);
+  - (du_réseau L1759) 				btnMesurer.addTo(maCarte);
+  - (du_réseau L1760) 				btnIsochrone.addTo(maCarte);					
+  - (du_réseau L1761) 				btnGeosearch.addTo(maCarte);
+  - (du_réseau L1762) 				activerPopupRaccourci(maCarte);
+  - (du_réseau L1763) 						
+  - (du_réseau L1764) 			} else {
+  - (du_réseau L1765) 				btnImprimer.remove();
+  - (du_réseau L1766) 				btnMesurer.remove();
+  - (du_réseau L1767) 				btnIsochrone.remove();				
+  - (du_réseau L1768) 				btnGeosearch.remove();
+  - (du_réseau L1769) 				container.style.backgroundColor = "lightgrey";
+  - (du_réseau L1770) 				boutonClé.button.style.backgroundColor = "lightgrey"; 					
+  - (du_réseau L1771) 			}	
+  - (du_réseau L1772) 		}
+  + (météo L1853)     
+  + (météo L1854)     		setTimeout(function() {
+  + (météo L1855)     			btnImprimer.addTo(maCarte);
+  + (météo L1856)     			window.modernDockSpecificControl(btnImprimer, "Imprimer");
+  + (météo L1857)     			btnMesurer.addTo(maCarte);
+  + (météo L1858)     			window.modernDockSpecificControl(btnMesurer, "Mesurer");
+  + (météo L1859)     			btnIsochrone.addTo(maCarte);
+  + (météo L1860)     			btnGeosearch.addTo(maCarte);
+  + (météo L1861)     			setTimeout(function() {
+  + (météo L1862)     				window.modernDockSpecificControl(btnIsochrone, 'Isochrone');
+  + (météo L1863)     				window.modernDockSpecificControl(btnGeosearch, 'Coord GPS');
+  + (météo L1864)     			}, 80);
+  + (météo L1865)     			activerPopupRaccourci(maCarte);
+  + (météo L1866)     		}, 0);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1774–1866 → météo L1868–1868
+
+  - (du_réseau L1774) 	
+  - (du_réseau L1775) 	this.aide = function () {
+  - (du_réseau L1776) 		var contenuAideInitial =
+  - (du_réseau L1777) 		`<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
+  - (du_réseau L1778) 		<p><img src='/ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).</p>
+  - (du_réseau L1779) 		
+  - (du_réseau L1780) 		<p><img src='/ressources/API_JS/images/Aide/rechGoogle.gif' width='27' height='27'><b> Rechercher localisation:</b> commune, adresse, bâtiment, route, lieu, etc. Géocodage Google Maps, Gard priorisé.</p>
+  - (du_réseau L1781) 		
+  - (du_réseau L1782) 		<p><img src='/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b>Import couches:</b> afficher des fichiers de couches au format Shape, GeoJSON, csv, GPX, Kml sur la carte. Projection en WGS84, possibilité de faire un glisser/déposer,
+  - (du_réseau L1783) 		de zipper (1 couche par .zip), clic droit pour effacer couche importée, import csv de points uniquement.</p>	
+  - (du_réseau L1784) 		
+  - (du_réseau L1785) 		<p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter après confirmation, la ou les couches cochées en haut a droite aux formats GeoJSON, Shape ou GPX.</p>	
+  - (du_réseau L1786) 		
+  - (du_réseau L1787) 		<p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres fonctions:</b> déploiement de 4 fonctions: imprimer carte, mesure distance, calcul isochrone, recherche par coord. GPS. Détails <span class='text-highlighted'>(*)</span>.</p>
+  - (du_réseau L1788) 
+  - (du_réseau L1789) 		<p><img src='/ressources/API_JS/images/Aide/surlignage.png' height='35'> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l'ouverture.
+  - (du_réseau L1790) 		Selon leurs nature, les lignes surlignées peuvent être disjointes ('multilignes').</p>
+  - (du_réseau L1791) 		
+  - (du_réseau L1792) 		<p><img src='/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher élément de couche:</b> disponible selon les cartes, saisir les caractères pour afficher les correspondances et zoomer dessus. La nature de l'entité à rechercher est indiquée dans l'invite de saisie.	Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON.</p>
+  - (du_réseau L1793) 		
+  - (du_réseau L1794) 		<p><img src='/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en bas à droite en cliquant dessus. Le bloc des cases à cocher en h. à dr. affiche/masque une couche entière tandis que le bloc légende 
+  - (du_réseau L1795) 		permet en + d'afficher/masquer les éléments d'une même couche.</p>
+  - (du_réseau L1796) 		
+  - (du_réseau L1797) 		<p><img src='/ressources/API_JS/images/Aide/streetview.gif' height='30'> <b>Accès Street View </b>+ Panoramax, Google Maps, Waze:
+  - (du_réseau L1798) 		après clic, positionner Pegman (personnage orange) sur la carte et cliquer sur l'un des services de visualisation. Pour désactiver, appuyer sur une touche clavier ou recliquer le bouton.</p>
+  - (du_réseau L1799) 		
+  - (du_réseau L1800) 		<p><img src='/ressources/API_JS/images/Aide/info.png' height='30'> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l'icone 'i' (ou via croix).</p>
+  - (du_réseau L1801) 		
+  - (du_réseau L1802) 		<p><img src='/ressources/API_JS/images/Aide/coordGPS.png' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'. 
+  - (du_réseau L1803) 		Le menu d'origine est toujours accessible par clic droit sur les blocs fonds de carte ou légende.</p>
+  - (du_réseau L1804) 		
+  - (du_réseau L1805) 		<p><a href='#' id='lienExtensible'><b>(*) Voir plus de détails sur les autres fonctionnalités</b></a></p>
+  - (du_réseau L1806) 		<div id='contenuExtensible' style='display:none;'</div>`;
+  - (du_réseau L1807) 		
+  - (du_réseau L1808) 		var contenuAideExtensible = 
+  - (du_réseau L1809) 		`<p><img src='/ressources/API_JS/images/Aide/imprimer.gif' width='27' height='27'> <b> Imprimer carte:</b> 'Vue courante': imprimer au format paysage la portion de carte représentée à l'écran. 'Auto Gard': imprimer l'ensemble du département (mise à l'échelle auto). 'Sélec. zone' : 
+  - (du_réseau L1810) 		imprimer une portion de la carte selon un rectangle tracé à la souris.</p>
+  - (du_réseau L1811) 		
+  - (du_réseau L1812) 		<p><img src='/ressources/API_JS/images/Aide/distance.gif' width='27'><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment)
+  - (du_réseau L1813) 		, appuyer sur la touche 'Echap' ou double-cliquer. Il est ainsi possible de mesurer plusieurs tronçons. ré-appuyer sur le bouton 'Régle' ou la touche 'Echap' pour tout effacer.</p>
+  - (du_réseau L1814) 		
+  - (du_réseau L1815) 		<p><img src='/ressources/API_JS/images/Aide/isochrone.gif' width='27' height='27'> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton) 
+  - (du_réseau L1816) 		affichant l'isochrone ou l'isodistance autour ou depuis le point (valeurs Départ/Arrivée). 
+  - (du_réseau L1817) 		Les calculs prennent en compte le réseau routier.</p>
+  - (du_réseau L1818) 		
+  - (du_réseau L1819) 		<p><img src='/ressources/API_JS/images/Aide/rech_GPS.png' width='27' height='26'> <b> Recherche par coordonnées GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : '43.83494, 4.35965')
+  - (du_réseau L1820) 		pour afficher sur la carte icones et fenêtres correspondants. Géocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>		
+  - (du_réseau L1821) 
+  - (du_réseau L1822)     	<p class='text-warning'>Les rendus liés à l'utilisation des fonctions importer, mesurer, calcul isochrone seront perdus à la réouverture de la carte.<br>
+  - (du_réseau L1823) 		Pour conserver une trace, effectuer une impression au format papier ou pdf via f° 'Imprimer' ou faire une capture écran.</p>
+  - (du_réseau L1824) 		</div>`;
+  - (du_réseau L1825) 
+  - (du_réseau L1826) 		var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
+  - (du_réseau L1827) 
+  - (du_réseau L1828) 		if (!L.Browser.mobile){
+  - (du_réseau L1829) 			var fenêtreAide = new L.control.dialog({size: [812,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
+  - (du_réseau L1830) 		} else {
+  - (du_réseau L1831) 			var fenêtreAide = new L.control.dialog({size: [290,300], anchor: [0,50], position:"topleft", initOpen: true, minSize: [260,250], maxSize: [600,400]});
+  - (du_réseau L1832) 		}
+  - (du_réseau L1833) 				
+  - (du_réseau L1834) 		var estOuverte = false;
+  - (du_réseau L1835) 		function aide(maCarte) {
+  - (du_réseau L1836) 			estOuverte = !estOuverte; 
+  - (du_réseau L1837) 			if (estOuverte) {
+  - (du_réseau L1838) 				fenêtreAide.setContent(contenuAideComplet).addTo(maCarte);
+  - (du_réseau L1839) 				fenêtreAide._container.classList.add('dialog-aide');
+  - (du_réseau L1840) 				var lien = document.getElementById('lienExtensible');
+  - (du_réseau L1841) 				var contenu = document.getElementById('contenuExtensible');
+  - (du_réseau L1842) 				lien.addEventListener('click', function(e) {
+  - (du_réseau L1843) 					e.preventDefault();
+  - (du_réseau L1844) 					if (contenu.style.display === 'none') {
+  - (du_réseau L1845) 						contenu.style.display = 'block';
+  - (du_réseau L1846) 						lien.textContent = 'Voir moins de détails';
+  - (du_réseau L1847) 					} else {
+  - (du_réseau L1848) 						contenu.style.display = 'none';
+  - (du_réseau L1849) 						lien.textContent = '(*) Voir plus de détails sur les autres fonctions';
+  - (du_réseau L1850) 					}
+  - (du_réseau L1851) 				});
+  - (du_réseau L1852) 			} else {
+  - (du_réseau L1853) 				maCarte.removeControl(fenêtreAide);
+  - (du_réseau L1854) 			}
+  - (du_réseau L1855) 		}
+  - (du_réseau L1856) 
+  - (du_réseau L1857) 		var boutonAide = L.easyButton("fa-question fa-4x", function(btn, map) {
+  - (du_réseau L1858) 			aide(map);
+  - (du_réseau L1859) 		}, "Aide", {position: "topright"});
+  - (du_réseau L1860) 		boutonAide.button.classList.add('bouton-aide');
+  - (du_réseau L1861) 		boutonAide.addTo(maCarte);	
+  - (du_réseau L1862) 		
+  - (du_réseau L1863) 		var containerAide = boutonAide.button.parentNode;
+  - (du_réseau L1864) 		containerAide.style.backgroundColor = "#f9b062";
+  - (du_réseau L1865) 		containerAide.style.border = "2px #f9b062";			
+  - (du_réseau L1866) 	}
+  + (météo L1868)     	this.aide = function () { window.aideCarto(maCarte); } // //// modif nouvelle UI - aide externalisée dans modern-dock-claude.js ////
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1899–1899 → météo L1901–1901
+
+  - (du_réseau L1899)             icon:'<img src="/Ressources/API_JS/images/icones visu/pegman.png">'
+  + (météo L1901)                 icon:'<img src="/leaflet/Ressources 26/images/icones visu/pegman.png">'
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1905–1905 → météo L1907–1907
+
+  - (du_réseau L1905)     pegmanIcon = new L.Icon({iconUrl: "/Ressources/API_JS/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
+  + (météo L1907)         pegmanIcon = new L.Icon({iconUrl: "/leaflet/Ressources 26/images/streetview2.png", iconSize: [20,36], iconAnchor: [8,33]});
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1963–1963
+
+  + (météo L1963)     				fenêtreInfo._container.classList.add('dialog-info');
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1976–1976 → météo L1979–1979
+
+  - (du_réseau L1976)     }, "Informations", {position: "bottomright"});
+  + (météo L1979)         }, "", {position: "bottomright"});
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1978–1978 → météo L1981–1981
+
+  - (du_réseau L1978)     boutonInfo.addTo(maCarte);	
+  + (météo L1981)         boutonInfo.addTo(maCarte);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1981–1981 → météo L1984–1984
+
+  - (du_réseau L1981)         options: {position: 'bottomright'}, 
+  + (météo L1984)             options: {position: 'bottomright'},
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1983–1983 → météo L1986–1986
+
+  - (du_réseau L1983)             var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
+  + (météo L1986)                 var boutonConteneur = L.DomUtil.create('div', 'boutons-conteneur');
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1985–1985 → météo L1988–1988
+
+  - (du_réseau L1985)             boutonConteneur.appendChild(boutonInfo.button);
+  + (météo L1988)                 // boutonInfo vit dans l'en-tête (modernHeaderInfoDock) : ne pas le rapatrier ici
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L1995–2010
+
+  + (météo L1995)     
+  + (météo L1996)         var headerInfoDock = document.getElementById('modernHeaderInfoDock');
+  + (météo L1997)         if (headerInfoDock) {
+  + (météo L1998)             headerInfoDock.innerHTML = '';
+  + (météo L1999)             boutonInfo.button.dataset.modernDocked = 'true';
+  + (météo L2000)             boutonInfo.button.classList.add('modern-header-info-control');
+  + (météo L2001)             headerInfoDock.appendChild(boutonInfo.button);
+  + (météo L2002)             var headerInfoLabel = document.createElement('span');
+  + (météo L2003)             headerInfoLabel.className = 'modern-header-help-label';
+  + (météo L2004)             headerInfoLabel.textContent = 'Info';
+  + (météo L2005)             headerInfoDock.appendChild(headerInfoLabel);
+  + (météo L2006)             headerInfoDock.addEventListener('click', function(e) {
+  + (météo L2007)                 if (e.target.closest('.easy-button-button')) return;
+  + (météo L2008)                 boutonInfo.button.click();
+  + (météo L2009)             });
+  + (météo L2010)         }
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L1995–1999 → météo L2014–2016
+
+  - (du_réseau L1995) 		var ctrlTitre = L.control({position: "bottomleft"});		
+  - (du_réseau L1996) 		
+  - (du_réseau L1997) 		valeurTitre2  =  " - 24/06/2026 " ;
+  - (du_réseau L1998) 		valeurTitre3  =  " - 24/06/2026 03:55 " ;    
+  - (du_réseau L1999) 	    if (valeurTitre1 == "Surveillance du r&#233;seau - source CD30 - Waze") {	
+  + (météo L2014)     		valeurTitre2  =  " - 10/06/2026 " ;
+  + (météo L2015)     		valeurTitre3  =  " - 10/06/2026 06:49 " ;
+  + (météo L2016)     	    if (valeurTitre1 == "Surveillance du r&#233;seau - source CD30 - Waze") {
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2005–2006 → météo L2022–2023
+
+  - (du_réseau L2005) 			onAdd : function () {				
+  - (du_réseau L2006) 				var divTitre = L.DomUtil.create("div", "titre infotitre"); 
+  + (météo L2022)     			onAdd : function () {
+  + (météo L2023)     				var divTitre = L.DomUtil.create("div", "titre infotitre");
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2008–2008 → météo L2025–2025
+
+  - (du_réseau L2008) 				document.getElementById("ti").innerHTML = valeurTitre;		
+  + (météo L2025)     				document.getElementById("ti").innerHTML = valeurTitre;
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2011–2012 → météo L2028–2029
+
+  - (du_réseau L2011) 		});		
+  - (du_réseau L2012) 			L.ctrlTitre = function(options) {			  	
+  + (météo L2028)     		});
+  + (météo L2029)     			L.ctrlTitre = function(options) {
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2016–2017 → météo L2033–2036
+
+  - (du_réseau L2016) 			L.ctrlTitre({position: "bottomleft"}).addTo(maCarte);
+  - (du_réseau L2017) 			 
+  + (météo L2033)     			document.getElementById("ti").innerHTML = valeurTitre;
+  + (météo L2034)     			var titreHeader = document.querySelector('.modern-header h1');
+  + (météo L2035)     			if (titreHeader) titreHeader.innerHTML = valeurTitre;
+  + (météo L2036)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2024–2039 → météo L2043–2043
+
+  - (du_réseau L2024)     var self = this;
+  - (du_réseau L2025)     var logoControl = null;
+  - (du_réseau L2026)     var container = null;
+  - (du_réseau L2027) 
+  - (du_réseau L2028)     var LogoControlClass = L.Control.extend({
+  - (du_réseau L2029)         options: { position: "bottomleft" },
+  - (du_réseau L2030)         onAdd: function(map) {
+  - (du_réseau L2031)             // On crée le conteneur vide
+  - (du_réseau L2032)             container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-logos-container");
+  - (du_réseau L2033)             return container;
+  - (du_réseau L2034)         }
+  - (du_réseau L2035)     });
+  - (du_réseau L2036) 
+  - (du_réseau L2037)     // ajout à la carte (vide au départ)
+  - (du_réseau L2038)     logoControl = new LogoControlClass();
+  - (du_réseau L2039)     logoControl.addTo(maCarte);
+  + (météo L2043)         var container = document.getElementById("modernLogosDock");
+
+──────────────────────────────────────────────────────────────────────────────────────────
+SUPPRIMÉ dans météo — du_réseau L2043–2044
+
+  - (du_réseau L2043) 
+  - (du_réseau L2044)         // On vide le contenu actuel sans supprimer le contrôle
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2047–2059 → météo L2049–2053
+
+  - (du_réseau L2047)         var icones = [];        
+  - (du_réseau L2048)         if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
+  - (du_réseau L2049)             icones = [
+  - (du_réseau L2050)                 {imgSource: "/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+  - (du_réseau L2051)                 {imgSource: "/Ressources/backward-blanc.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+  - (du_réseau L2052)             ];
+  - (du_réseau L2053)         } else {
+  - (du_réseau L2054)             icones = [
+  - (du_réseau L2055)                 {imgSource: "/Ressources/c3po_gr.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+  - (du_réseau L2056)                 {imgSource: "/Ressources/backward.png", marginLeft: "10px", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+  - (du_réseau L2057)             ];
+  - (du_réseau L2058)         }
+  - (du_réseau L2059)         
+  + (météo L2049)             var icones = [
+  + (météo L2050)                 {imgSource: "/leaflet/Ressources/c3po-blanc.png", largeur: "66px", hauteur: "60px", imgTooltip: "Accueil si3p0", lienSite: "/", typeLien: "_self"},
+  + (météo L2051)                 {imgSource: "/leaflet/Ressources/backward-blanc.png", largeur: "42px", imgTooltip: "Page précedente", lienSite: "javascript:history.back()", typeLien: "_self"}
+  + (météo L2052)             ];
+  + (météo L2053)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2062–2066 → météo L2056–2059
+
+  - (du_réseau L2062)                 imgSource: "/Ressources/waze.png", 
+  - (du_réseau L2063)                 largeur: "68px", 
+  - (du_réseau L2064)                 marginLeft: "10px", 
+  - (du_réseau L2065)                 imgTooltip: "Waze", 
+  - (du_réseau L2066)                 lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu", 
+  + (météo L2056)                     imgSource: "/leaflet/Ressources/waze.png",
+  + (météo L2057)                     largeur: "68px",
+  + (météo L2058)                     imgTooltip: "Waze",
+  + (météo L2059)                     lienSite: "https://www.waze.com/fr/live-map?utm_source=waze_website&utm_campaign=waze_website&utm_medium=website_menu",
+
+──────────────────────────────────────────────────────────────────────────────────────────
+SUPPRIMÉ dans météo — du_réseau L2071–2071
+
+  - (du_réseau L2071)         // On injecte les nouvelles images dans le conteneur existant
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2077–2077 → météo L2069–2069
+
+  - (du_réseau L2077)             if (icone.marginLeft) img.style.marginLeft = icone.marginLeft;
+  + (météo L2069)                 img.style.marginLeft = "0";
+
+──────────────────────────────────────────────────────────────────────────────────────────
+SUPPRIMÉ dans météo — du_réseau L2079–2079
+
+  - (du_réseau L2079)             
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2086–2086 → météo L2077–2077
+
+  - (du_réseau L2086)     
+  + (météo L2077)     
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2098–2098 → météo L2089–2089
+
+  - (du_réseau L2098) 			if (valeurTitre1.toLowerCase().includes('fauchage') || valeurTitre1.toLowerCase().includes('curage')) { 
+  + (météo L2089)     			if (valeurTitre1.toLowerCase().includes('fauchage') || valeurTitre1.toLowerCase().includes('curage') || valeurTitre1.toLowerCase().includes('r&#233;f&#233;rentiel routier')) { 
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2297–2393 → météo L2288–2288
+
+  - (du_réseau L2297) 	this.visuBatiments3D = function() {
+  - (du_réseau L2298) 		// 3D
+  - (du_réseau L2299) 		if (valeurTitre1.endsWith("3D")) {	
+  - (du_réseau L2300) 			function couleurToitSelonHauteur(hauteur){
+  - (du_réseau L2301) 			  if (hauteur<=5) return "#c4e1ea";
+  - (du_réseau L2302) 			  else if (hauteur<=10) return "#55add0";
+  - (du_réseau L2303) 			  else if (hauteur<=20) return "#5f85c4";
+  - (du_réseau L2304) 			  else  return "#a33a3c";
+  - (du_réseau L2305) 			}
+  - (du_réseau L2306) 			function couleurMurSelonHauteur(hauteur){
+  - (du_réseau L2307) 			  if (hauteur<=5) return "#9bc2cf";
+  - (du_réseau L2308) 			  else if (hauteur<=10) return "#366f86";
+  - (du_réseau L2309) 			  else if (hauteur<=20) return "#425d89";
+  - (du_réseau L2310) 			  else return "#72282a";
+  - (du_réseau L2311) 			}
+  - (du_réseau L2312) 			
+  - (du_réseau L2313) 			const dernierElement = tabCoucheMetier.at(-1);
+  - (du_réseau L2314) 			const geoJSON3D = dernierElement[0];	
+  - (du_réseau L2315) 			const Geojson3DConverti = { type:'FeatureCollection', features: [] };
+  - (du_réseau L2316) 			geoJSON3D.features.forEach(function(objets, i) {
+  - (du_réseau L2317) 				const objetGeojson = JSON.parse(JSON.stringify(objets));
+  - (du_réseau L2318) 				const propriété = objetGeojson.properties;
+  - (du_réseau L2319) 				objetGeojson.id = propriété.cleabs;
+  - (du_réseau L2320) 				let hauteurReelle = 8;
+  - (du_réseau L2321) 				if ('height' in propriété && propriété.height != null && propriété.height !== '') {
+  - (du_réseau L2322) 				  hauteurReelle = propriété.height;
+  - (du_réseau L2323) 				}
+  - (du_réseau L2324) 				const couleurHT = couleurToitSelonHauteur(hauteurReelle);
+  - (du_réseau L2325) 				const couleurHM = couleurMurSelonHauteur(hauteurReelle);
+  - (du_réseau L2326) 				propriété.wallColor = couleurHM;
+  - (du_réseau L2327) 				propriété.roofColor = couleurHT;
+  - (du_réseau L2328) 				const echelle = 0.9;
+  - (du_réseau L2329) 				propriété.height = hauteurReelle * echelle;
+  - (du_réseau L2330) 				propriété.hauteurReelleInfo = hauteurReelle;
+  - (du_réseau L2331) 				// push wallColor et roofColor ds geojson
+  - (du_réseau L2332) 				Geojson3DConverti.features.push(objetGeojson);
+  - (du_réseau L2333) 			});
+  - (du_réseau L2334) 
+  - (du_réseau L2335) 			const couche3D = new OSMBuildings();
+  - (du_réseau L2336) 			couche3D.addTo(maCarte);
+  - (du_réseau L2337) 			couche3D.date(new Date(2024,4,15,10));
+  - (du_réseau L2338) 			couche3D.set(Geojson3DConverti);	
+  - (du_réseau L2339) 
+  - (du_réseau L2340) 			const infoBulle = L.tooltip({
+  - (du_réseau L2341) 				permanent: true,
+  - (du_réseau L2342) 				direction: 'top',
+  - (du_réseau L2343) 				className: 'mon-tooltip-style',
+  - (du_réseau L2344) 				offset: [0, -10]
+  - (du_réseau L2345) 			});		
+  - (du_réseau L2346) 			let estSurUnBatiment = false;
+  - (du_réseau L2347) 			let dernierIdSurvole = null;		
+  - (du_réseau L2348) 			couche3D.click(function(e) {
+  - (du_réseau L2349) 				estSurUnBatiment = true;
+  - (du_réseau L2350) 				if (e.feature === dernierIdSurvole) {
+  - (du_réseau L2351) 					infoBulle.setLatLng([e.lat, e.lon]);
+  - (du_réseau L2352) 					return;
+  - (du_réseau L2353) 				}		    
+  - (du_réseau L2354) 				dernierIdSurvole = e.feature;		
+  - (du_réseau L2355) 				const batimentTrouve = Geojson3DConverti.features.find(f => f.id === e.feature);
+  - (du_réseau L2356) 				
+  - (du_réseau L2357) 				if (batimentTrouve) {
+  - (du_réseau L2358) 					const hauteur = batimentTrouve.properties.hauteurReelleInfo || batimentTrouve.properties.height;
+  - (du_réseau L2359) 					
+  - (du_réseau L2360) 					infoBulle.setContent(`<b>Hauteur :</b> ${hauteur}m`);
+  - (du_réseau L2361) 					infoBulle.setLatLng([e.lat, e.lon]);
+  - (du_réseau L2362) 					
+  - (du_réseau L2363) 					if (!maCarte.hasLayer(infoBulle)) {
+  - (du_réseau L2364) 						infoBulle.addTo(maCarte);
+  - (du_réseau L2365) 					}
+  - (du_réseau L2366) 				}
+  - (du_réseau L2367) 			});
+  - (du_réseau L2368) 			
+  - (du_réseau L2369) 			maCarte.on('mousemove', function(e) {
+  - (du_réseau L2370) 				estSurUnBatiment = false;
+  - (du_réseau L2371) 			
+  - (du_réseau L2372) 				couche3D.onClick(e);
+  - (du_réseau L2373) 			
+  - (du_réseau L2374) 				if (!estSurUnBatiment) {
+  - (du_réseau L2375) 					if (maCarte.hasLayer(infoBulle)) {
+  - (du_réseau L2376) 						maCarte.removeLayer(infoBulle);
+  - (du_réseau L2377) 					}
+  - (du_réseau L2378) 					dernierIdSurvole = null;
+  - (du_réseau L2379) 				}
+  - (du_réseau L2380) 			});
+  - (du_réseau L2381) 			
+  - (du_réseau L2382) 			libelleCouche.Batiments3D = couche3D;	
+  - (du_réseau L2383) 			const legendeDiv = document.createElement('div');
+  - (du_réseau L2384) 			legendeDiv.className = 'legende3D';
+  - (du_réseau L2385) 			legendeDiv.innerHTML = `
+  - (du_réseau L2386) 				<div class="item"><div class="color" style="background:#c4e1ea"></div> ≤ 5 m</div>
+  - (du_réseau L2387) 				<div class="item"><div class="color" style="background:#55add0"></div> 5-10 m</div>
+  - (du_réseau L2388) 				<div class="item"><div class="color" style="background:#5f85c4"></div> 10–20 m</div>
+  - (du_réseau L2389) 				<div class="item"><div class="color" style="background:#a33a3c"></div> > 20 m</div>
+  - (du_réseau L2390) 			`;
+  - (du_réseau L2391) 			document.body.appendChild(legendeDiv);
+  - (du_réseau L2392) 		}
+  - (du_réseau L2393) 	}
+  + (météo L2288)     	this.visuBatiments3D = function() { if (valeurTitre1.endsWith("3D")) { window.visuBati3D(maCarte, tabCoucheMetier, libelleCouche); } } // //// modif nouvelle UI - visu bâtiments 3D externalisée dans Ressources 26/visuBati3D.js (test titre conservé ici car libelleCouche est local à dessinerCarte) ////
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L2416–2422
+
+  + (météo L2416)     
+  + (météo L2417)     	this.widgetMeteo = function() {
+  + (météo L2418)     		initWidgetMeteo({
+  + (météo L2419)     			TEST_J:  null, // null = données réelles  | ex: [{ niveau: 2, phenomene_lib: 'Vent violent' }]
+  + (météo L2420)     			TEST_J1: null  // null = données réelles  | ex: [{ niveau: 3, phenomene_lib: 'Orages' }]
+  + (météo L2421)     		});
+  + (météo L2422)     	};
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2525–2526 → météo L2427–2428
+
+  - (du_réseau L2525)     carteLeaflet = new CarteLeaflet(carteId);	
+  - (du_réseau L2526) 	carteLeaflet.ajoutCoucheGeojson();	
+  + (météo L2427)         carteLeaflet = new CarteLeaflet(carteId);
+  + (météo L2428)     	carteLeaflet.ajoutCoucheGeojson();
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2528–2528 → météo L2430–2430
+
+  - (du_réseau L2528)     carteLeaflet.limiteAdmin(Gard);		
+  + (météo L2430)         carteLeaflet.limiteAdmin(Gard);
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2530–2530 → météo L2432–2432
+
+  - (du_réseau L2530) 	carteLeaflet.zoomObjet(); 	
+  + (météo L2432)     	carteLeaflet.zoomObjet();
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2535–2535 → météo L2437–2440
+
+  - (du_réseau L2535) 	carteLeaflet.iconeClé();	
+  + (météo L2437)     	window.modernDockExporter();
+  + (météo L2438)     	window.modernDockFondsDePlan();
+  + (météo L2439)     	window.modernDockDonneesMetier();
+  + (météo L2440)     	carteLeaflet.afficherOutils();
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2537–2539 → météo L2442–2444
+
+  - (du_réseau L2537) 	carteLeaflet.ajouterLogo();	
+  - (du_réseau L2538) 	carteLeaflet.ajouterSwitch();	
+  - (du_réseau L2539) 	carteLeaflet.aide();		
+  + (météo L2442)     	carteLeaflet.ajouterLogo();
+  + (météo L2443)     	carteLeaflet.ajouterSwitch();
+  + (météo L2444)     	carteLeaflet.aide();
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2541–2542 → météo L2446–2447
+
+  - (du_réseau L2541) 	carteLeaflet.visuEtInfo(); 
+  - (du_réseau L2542) 	carteLeaflet.visuBatiments3D();	
+  + (météo L2446)     	carteLeaflet.visuEtInfo();
+  + (météo L2447)     	carteLeaflet.visuBatiments3D();
+
+──────────────────────────────────────────────────────────────────────────────────────────
+AJOUTÉ dans météo   — météo L2449–2451
+
+  + (météo L2449)     	gererEtiquettesRD(maCarte);
+  + (météo L2450)     
+  + (météo L2451)     	if (valeurTitre1.indexOf("Surveillance du r") !== -1) carteLeaflet.widgetMeteo(); // widget météo : carte Surveillance réseau uniquement
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2545–2546 → météo L2453–2454
+
+  - (du_réseau L2545) 		
+  - (du_réseau L2546) </script> 
+  + (météo L2453)     
+  + (météo L2454)     </script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2548–2548 → météo L2456–2456
+  # <!-- export couches - dev CD30 -->
+
+  - (du_réseau L2548) <script src="/Ressources/API_JS/librairies_cd30/export-couches.js"></script>
+  + (météo L2456)     <script src="/leaflet/Ressources 26/librairies_cd30/export-couches.js"></script>
+
+──────────────────────────────────────────────────────────────────────────────────────────
+MODIFIÉ  — du_réseau L2550–2551 → météo L2458–2459
+  # <!-- export couches - dev CD30 -->
+  # <!-- génération shapes zippés -->
+
+  - (du_réseau L2550) <script src="/Ressources/API_JS/librairies_cd30/shpwrite.js"></script>
+  - (du_réseau L2551) <script src="/Ressources/API_JS/librairies_cd30/jszip.min.js"></script> 
+  + (météo L2458)     <script src="/leaflet/Ressources 26/librairies_cd30/shpwrite.js"></script>
+  + (météo L2459)     <script src="/leaflet/Ressources 26/librairies_cd30/jszip.min.js"></script>
