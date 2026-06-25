@@ -77,7 +77,8 @@ a[href^="https://maps.google.com/maps"] {
     border: 2px solid orange;
     padding: 2px;
     background-color: #fac56f;
-    color: #007079;
+    /*color: #007079;*/
+    color:white;
     display: block;
     font-size: 1.4em;
     margin-block-start: 0em;
