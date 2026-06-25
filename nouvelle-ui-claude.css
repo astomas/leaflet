@@ -1299,7 +1299,7 @@ body.leaflet--printing .titre {
 
 /* Barre titre simulée : "?  Aide" */
 .dialog-aide .leaflet-control-dialog-inner {
-  padding-top: 44px !important;
+  padding-top: 36px !important;
 }
 .dialog-aide .leaflet-control-dialog-inner::before {
   content: "Aide";
