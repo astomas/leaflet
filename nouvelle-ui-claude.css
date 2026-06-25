@@ -744,7 +744,7 @@ body.is-resizing * {
 
 /* Champs de popup : libellé (gras sombre) + valeur (atténuée) */
 .popup-cle { font-weight: 700; color: #16222e; }
-.popup-val { color: #7a8896; font-weight: 400; }
+.popup-val { color: #7a8896; font-weight: 500; }
 
 /* Conteneur scrollable des popups multi-entités (lignes superposées + import) */
 .popup-scroll {
