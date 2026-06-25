@@ -1323,7 +1323,8 @@ body.leaflet--printing .titre {
 .dialog-aide .leaflet-control-dialog-inner::after {
   content: "?";
   position: absolute;
-  top: 8px; left: 18px;
+  top: 8px; 
+  left: 24px;
   width: 22px;
   height: 22px;
   line-height: 20px;
