@@ -1152,8 +1152,13 @@ function CarteLeaflet(conteneurId) {
 			// legende sur 2 col si nbr elts legende > 27 
 			var nbrColonnes = (tabCtrlLegendeObj.length > 27) ? 2 : 1;
 			//var nbrColonnes = (tabCtrlLegendeObj.length || (nbreDeVues + tabCtrlLegendeObj.length) > 27) ? 2 : 1;
-			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, legends: tabCtrlLegendeObj});
-			// [sans-legende] blocLegende non ajouté à la carte
+			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, legends: tabCtrlLegendeObj});	// [cd30] légende remise en bas à droite
+			blocLegende.addTo(maCarte);	// [cd30] légende remise dans son bloc initial en bas à droite
+			if (nbrColonnes === 2) {
+				var containerLeg = maCarte.getContainer().querySelector('.leaflet-legend-contents');
+				if (containerLeg) containerLeg.classList.add('deux-colonnes');
+				requestAnimationFrame(function(){ ajusterLargeurColonnesLegende(); });
+			}
 		
 		}						
 	
@@ -1797,7 +1802,7 @@ this.importFichier = function () {
 				blocLegendeElement.style.marginTop = '12px';
 				blocLegendeElement.style.paddingBottom = '0';
 				blocLegende.remove();
-				// [sans-legende] blocLegende non re-ajouté à la carte
+				blocLegende.addTo(maCarte);	// [cd30] re-ajout : la légende vit sur la carte
 				conteneurVisuInfo.remove();
 				conteneurVisuInfo.addTo(maCarte);
 			}

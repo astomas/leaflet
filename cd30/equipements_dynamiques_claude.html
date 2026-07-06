@@ -1117,12 +1117,17 @@ function CarteLeaflet(conteneurId) {
 			    });
 			}
 				
-			// [sans-legende] La légende vit dans la sidebar : le contrôle plugin n'est PAS ajouté
-			// à la carte. Il est créé ici puis ajouté uniquement à l'impression (browser-print-start).
+			// [cd30] La légende revient dans le bloc initial en bas à droite (comme ancienne UI).
 			// legende sur 2 col si nbr elts legende > 27
 			var nbrColonnes = (tabCtrlLegendeObj.length > 27) ? 2 : 1;
 			//var nbrColonnes = (tabCtrlLegendeObj.length || (nbreDeVues + tabCtrlLegendeObj.length) > 27) ? 2 : 1;
 			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, legends: tabCtrlLegendeObj});
+			blocLegende.addTo(maCarte);	// [cd30] légende remise dans son bloc initial en bas à droite
+			if (nbrColonnes === 2) {
+				var containerLeg = maCarte.getContainer().querySelector('.leaflet-legend-contents');
+				if (containerLeg) containerLeg.classList.add('deux-colonnes');
+				requestAnimationFrame(function(){ ajusterLargeurColonnesLegende(); });
+			}
 
 		}
 	
@@ -1794,7 +1799,7 @@ this.importFichier = function () {
 				blocLegendeElement.style.marginTop = '12px';
 				blocLegendeElement.style.paddingBottom = '0';
 				blocLegende.remove();
-				// [sans-legende] pas de re-ajout sur la carte : la légende reste dans la sidebar
+				blocLegende.addTo(maCarte);	// [cd30] re-ajout : la légende vit sur la carte
 				conteneurStreetView.remove();
 				conteneurStreetView.addTo(maCarte);
 			}	

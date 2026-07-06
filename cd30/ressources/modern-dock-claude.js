@@ -396,8 +396,10 @@
       control.style.display = "none";
     }
 
-    // Injection des items légende sous chaque label de couche
-    injecterLegende(overlays);
+    // [cd30] Injection des items légende dans la sidebar DÉSACTIVÉE :
+    // la légende vit dans son bloc initial en bas à droite de la carte.
+    // Les cases natives de la sidebar basculent les couches entières (comportement Leaflet d'origine).
+    // injecterLegende(overlays);
 
     return true;
   };
