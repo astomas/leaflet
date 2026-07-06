@@ -495,6 +495,17 @@ function CarteLeaflet(conteneurId) {
 
 	function traiterEltsCouche (élément, couche) {
 		
+		// [cd30] étiquette RD : marque aussi les polylignes des couches "cases à cocher"
+		// (copies des couches légende) pour que cocher "Réseau routier" affiche les
+		// étiquettes, comme dans la carte Surveillance.
+		if (élément.properties && élément.properties.nomcouche === "Réseau routier"
+			&& couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
+			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+			couche.options.rdLabelColor = élément.properties.couleur || couche.options.color || "#888";
+			var niveauRDet = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+			couche.options.rdProximite = /proximit/i.test(niveauRDet);
+		}
+		
 		function nettoyerValNulles() {
 			for (var nomPpté in élément.properties) {	
 				if (élément.properties[nomPpté] == null) {
