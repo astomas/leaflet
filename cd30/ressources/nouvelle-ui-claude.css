@@ -371,8 +371,7 @@ body.is-resizing * {
 }
 
 /* Couches métier (cases à cocher Leaflet) déplacées dans la sidebar.
-   La case native est masquée et remplacée par une icône œil à droite du
-   libellé : œil ouvert vert = couche visible, œil barré gris = couche masquée. */
+   [cd30] La case à cocher native reste visible (comme l'UI Leaflet d'origine). */
 .modern-donnees-metier {
   padding: 4px 8px 10px;
 }
@@ -401,15 +400,14 @@ body.is-resizing * {
   background: #ffd975;
 }
 
-/* Case native masquée mais conservée dans le DOM : le clic sur le label
-   continue de la basculer (donc d'afficher/masquer la couche) */
+/* [cd30] Case native visible, à gauche du libellé */
 .modern-donnees-metier input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-  pointer-events: none;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin: 0 2px 0 0;
+  accent-color: var(--modern-primary);
+  cursor: pointer;
 }
 
 /* Libellé : occupe toute la largeur pour pousser l'œil à droite.
@@ -540,26 +538,7 @@ body.is-resizing * {
   color: #9ca3af !important;
 }
 
-/* Icône œil — état par défaut "masqué" : œil barré gris */
-.modern-donnees-metier input + span::after {
-  content: "";
-  margin-left: auto;
-  flex: 0 0 auto;
-  width: 19px;
-  height: 19px;
-  background-color: #94a3b8;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: background-color .15s;
-}
-
-/* État "visible" (couche cochée ou .modern-couche-active) : œil ouvert vert */
-.modern-donnees-metier input:checked + span::after,
-.modern-donnees-metier label.modern-couche-active input + span::after {
-  background-color: #16a34a;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
-}
+/* [cd30] icône œil supprimée : la case à cocher native est visible */
 
 .modern-tools-dock {
   display: grid;
