@@ -1989,8 +1989,8 @@ this.importFichier = function () {
         options: {position: 'bottomright'},
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'boutons-conteneur');
+            boutonConteneur.appendChild(boutonInfo.button);	// [cd30] bouton Info à gauche du bouton streetview
             boutonConteneur.appendChild(boutonServiceVisu.button);
-            // boutonInfo vit dans l'en-tête (modernHeaderInfoDock) : ne pas le rapatrier ici
             return boutonConteneur;
         }
     });
@@ -1998,21 +1998,9 @@ this.importFichier = function () {
     conteneurVisuInfo = new conteneur();
     maCarte.addControl(conteneurVisuInfo);
 
+    // [cd30] Bouton Info revenu sur la carte (bas droite) : le dock d'en-tête est masqué.
     var headerInfoDock = document.getElementById('modernHeaderInfoDock');
-    if (headerInfoDock) {
-        headerInfoDock.innerHTML = '';
-        boutonInfo.button.dataset.modernDocked = 'true';
-        boutonInfo.button.classList.add('modern-header-info-control');
-        headerInfoDock.appendChild(boutonInfo.button);
-        var headerInfoLabel = document.createElement('span');
-        headerInfoLabel.className = 'modern-header-help-label';
-        headerInfoLabel.textContent = 'Info';
-        headerInfoDock.appendChild(headerInfoLabel);
-        headerInfoDock.addEventListener('click', function(e) {
-            if (e.target.closest('.easy-button-button')) return;
-            boutonInfo.button.click();
-        });
-    }
+    if (headerInfoDock) headerInfoDock.style.display = 'none';
 }
 	
 	this.titre = function(){
