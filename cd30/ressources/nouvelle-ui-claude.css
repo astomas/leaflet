@@ -317,6 +317,27 @@ body.is-resizing * {
 /* Fonds de carte déplacés dans la sidebar : présentés en pastilles.
    Le radio natif est masqué ; chaque fond devient une pastille cliquable et
    la pastille active (fond sélectionné) est remplie de la couleur du bloc. */
+/* [cd30] Liste déroulante des fonds de plan (remplace les pastilles) */
+.modern-family-fonds-plan .modern-fonds-select {
+  display: block;
+  width: calc(100% - 16px);
+  margin: 4px 8px 12px;
+  padding: 8px 10px;
+  border: 1px solid #b8d8f0;
+  border-radius: 8px;
+  background: #f0f7fc;
+  font-size: .84rem;
+  font-weight: 600;
+  color: #24557a;
+  cursor: pointer;
+}
+.modern-family-fonds-plan .modern-fonds-select:hover {
+  background: #c2e0f5;
+  border-color: #2e7eb8;
+}
+/* [cd30] Fond blanc : conteneur carte en blanc quand aucun fond tuile */
+.leaflet-container.fond-blanc { background: #fff; }
+
 .modern-fonds-plan {
   padding: 4px 8px 10px;
   display: grid;
