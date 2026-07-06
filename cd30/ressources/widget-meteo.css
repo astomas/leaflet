@@ -1,0 +1,47 @@
+/* /// widget vigilance Météo-France - Gard - [cd30] version simplifiée /// */
+.modern-meteo-widget {
+	display: none;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	gap: 2px;
+	padding: 3px 0;
+	flex-shrink: 0;
+}
+.meteo-zone {
+	display: none;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 3px;
+	flex-shrink: 0;
+	margin-right: 28px; /* décale le bloc widget vers la gauche dans la barre titre */
+}
+
+/* [cd30] Badge unique "Alerte météo" : fond blanc, cliquable vers le site vigilance Gard */
+.meteo-alerte-simple {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 5px 15px;
+	border-radius: 13px;
+	background: #fff;
+	color: #b3261e;
+	font-size: 17px;
+	font-weight: bold;
+	white-space: nowrap;
+	text-decoration: none;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+	transition: transform 0.1s, box-shadow 0.15s;
+}
+.meteo-alerte-simple:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+.meteo-alerte-simple:active {
+	transform: translateY(0);
+	box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* [cd30] Lien vigilance d'origine masqué : le badge "Alerte météo" reprend son rôle */
+.meteo-vig-lien { display: none; }
