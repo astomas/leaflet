@@ -43,19 +43,12 @@ body {
   position: relative;
   overflow: hidden;
   color: #fff;
-  /* Dégradé bleu-vert du bandeau haut */
-  background: linear-gradient(135deg, #007e8d 0%, #005f6b 100%) !important;
+  /* [cd30] Fond uniforme du bandeau haut (dégradé et halo décoratif supprimés) */
+  background: #007e8d !important;
 }
 
 .modern-header::before {
-  content: "";
-  position: absolute;
-  top: -60%;
-  right: -8%;
-  width: 360px;
-  height: 220px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .08);
+  content: none; /* [cd30] halo clair décoratif supprimé : fond uniforme */
 }
 
 .modern-header-logos,
