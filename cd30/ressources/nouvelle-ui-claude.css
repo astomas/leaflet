@@ -246,10 +246,10 @@ body.is-resizing * {
 }
 
 .modern-family-fonds-plan {--family-accent: #2e7eb8; background: #eef5fb;}
-.modern-family-fonds-plan .modern-family-title:hover {background: #ddedf9; transition: background .18s ease;}
+/* [cd30] hover titre neutralisé : sections fixes */
 .modern-family-metier { --family-accent: var(--modern-warning); background: #fdf4e7; }
 .modern-family-tools { --family-accent: var(--modern-tools); }
-.modern-family-tools .modern-family-title:hover {background: #e8f6f2; transition: background .18s ease;}
+/* [cd30] hover titre neutralisé : sections fixes */
 
 .modern-family-title {
   padding: 11px 12px;
@@ -262,7 +262,7 @@ body.is-resizing * {
   font-size: .75rem;
   font-weight: 800;
   letter-spacing: .35px;
-  cursor: pointer;
+  cursor: default; /* [cd30] titre non cliquable : sections fixes */
   user-select: none;
 }
 
@@ -271,7 +271,7 @@ body.is-resizing * {
 }
 
 .modern-family-chevron {
-  display: inline-flex;
+  display: none; /* [cd30] chevron supprimé : sections fixes */
   align-items: center;
   justify-content: center;
   width: 18px;

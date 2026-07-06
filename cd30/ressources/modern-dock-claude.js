@@ -274,14 +274,9 @@
   // ce qui permet au CSS de masquer/afficher le corps via un simple sélecteur
   // d'attribut sans JS supplémentaire.
   function setupAccordion() {
+    // [cd30] Sections fixes : toujours ouvertes, pas de repli au clic sur le titre.
     document.querySelectorAll(".modern-family").forEach(function (section) {
-      var title = section.querySelector(".modern-family-title");
-      if (!title) return;
-      // État initial : ouvert si l'attribut est absent
-      if (!section.hasAttribute("data-expanded")) section.dataset.expanded = "true";
-      title.addEventListener("click", function () {
-        section.dataset.expanded = section.dataset.expanded === "false" ? "true" : "false";
-      });
+      section.dataset.expanded = "true";
     });
   }
 
