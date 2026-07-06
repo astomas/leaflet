@@ -1444,3 +1444,25 @@ body.leaflet--printing .titre {
   padding: 12px 14px;
   box-shadow: none;
 }
+
+/* [cd30] Bouton Aide : texte seul, sans pastille ni rond orange, sur le fond
+   de la barre de titre. Le clic sur le texte ouvre toujours l'aide (le bouton
+   easy-button masqué reste le déclencheur, cliqué par le handler du dock). */
+.modern-header-help {
+  background: transparent;
+  border: none;
+  padding: 6px 8px;
+}
+.modern-header-help:hover {
+  background: transparent;
+  text-decoration: underline;
+}
+.modern-header-aide .leaflet-control,
+.modern-header-aide .leaflet-bar,
+.modern-header-aide .easy-button-container {
+  display: none !important;
+}
+@media (max-width: 900px) {
+  /* le label était masqué en écran étroit : on le garde puisque c'est le seul visuel */
+  .modern-header-aide .modern-header-help-label { display: inline !important; }
+}
