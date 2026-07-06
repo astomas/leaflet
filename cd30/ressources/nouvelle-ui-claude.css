@@ -1448,7 +1448,15 @@ body.leaflet--printing .titre {
 }
 .modern-header-help:hover {
   background: transparent;
-  text-decoration: underline;
+}
+/* [cd30] icône ? FontAwesome : taille 20, orange, éclaircie au survol */
+.modern-header-aide .modern-header-help-label {
+  font-size: 20px;
+  font-weight: 900;
+  color: #f9b062;
+}
+.modern-header-aide:hover .modern-header-help-label {
+  color: #ffc98f;
 }
 .modern-header-aide .leaflet-control,
 .modern-header-aide .leaflet-bar,

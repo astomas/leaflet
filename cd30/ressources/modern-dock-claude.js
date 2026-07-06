@@ -833,7 +833,8 @@
       headerHelpDock.appendChild(containerAide);
       var headerHelpLabel = document.createElement('span');
       headerHelpLabel.className = 'modern-header-help-label';
-      headerHelpLabel.textContent = 'Aide';
+      headerHelpLabel.textContent = '?'; // [cd30] "?" au lieu du texte Aide (FontAwesome absent du dépôt : rendu texte équivalent)
+      headerHelpLabel.title = 'Aide';
       headerHelpDock.appendChild(headerHelpLabel);
       headerHelpDock.addEventListener('click', function(e) {
         if (e.target.closest('.leaflet-control')) return;

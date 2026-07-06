@@ -8,8 +8,8 @@
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/pc-portable.css" />	
 	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
 
-	<link rel="stylesheet" href="ressources/nouvelle-ui-claude.css?v=cd30-6" />
-	<script src="./ressources/modern-dock-claude.js?v=cd30-4"></script>
+	<link rel="stylesheet" href="ressources/nouvelle-ui-claude.css?v=cd30-7" />
+	<script src="./ressources/modern-dock-claude.js?v=cd30-7"></script>
 
 	<title id="ti">Carte Leaflet</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -1984,7 +1984,8 @@ this.importFichier = function () {
 			headerHelpDock.appendChild(containerAide);
 			var headerHelpLabel = document.createElement('span');
 			headerHelpLabel.className = 'modern-header-help-label';
-			headerHelpLabel.textContent = 'Aide';
+			headerHelpLabel.textContent = '?'; // [cd30] "?" au lieu du texte Aide (FontAwesome absent du dépôt : rendu texte équivalent)
+			headerHelpLabel.title = 'Aide';
 			headerHelpDock.appendChild(headerHelpLabel);
 			headerHelpDock.addEventListener('click', function(e) {
 				if (e.target.closest('.leaflet-control')) return;
