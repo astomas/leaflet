@@ -328,8 +328,8 @@ body.is-resizing * {
   background: #c2e0f5;
   border-color: #2e7eb8;
 }
-/* [cd30] Fond blanc : conteneur carte en blanc quand aucun fond tuile */
-.leaflet-container.fond-blanc { background: #fff; }
+/* [cd30] Fond blanc : blanc cassé (évite l'éblouissement) quand aucun fond tuile */
+.leaflet-container.fond-blanc { background: #f3f1ec; }
 
 .modern-fonds-plan {
   padding: 4px 8px 10px;
