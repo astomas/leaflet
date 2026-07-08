@@ -853,7 +853,7 @@
     setupTitre();
     setupAccordion();
     setupBadgeMetier();
-    setupVigilanceNimes();
+    // setupVigilanceNimes(); // [cd30] bandeau vigilance retiré de la carte priorités
   });
 
 })();
