@@ -1494,3 +1494,17 @@ body.leaflet--printing .titre {
   /* le label était masqué en écran étroit : on le garde puisque c'est le seul visuel */
   .modern-header-aide .modern-header-help-label { display: inline !important; }
 }
+
+/* [cd30] Recherche IGN (SearchEngine) : espace la loupe, le champ et la liste
+   d'autocomplétion pour supprimer les chevauchements (le plugin colle le champ
+   sur la loupe avec left:-3px et décale la liste de 27px). */
+form[id^="GPsearchInput-"] {
+  left: 5px !important;             /* petit espace après la loupe */
+}
+form[id^="GPsearchInput-"] input {
+  border-radius: 5px !important;    /* champ détaché : coins arrondis des 2 côtés */
+}
+div[id^="GPautoCompleteList"] {
+  margin-left: 32px !important;     /* aligné sous le champ (27px loupe + 5px espace) */
+  top: 33px !important;
+}
