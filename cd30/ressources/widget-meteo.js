@@ -11,6 +11,30 @@ function initWidgetMeteo(cfg) {
 
 	var URL_VIGILANCE_GARD = 'https://vigilance.meteofrance.fr/fr/gard';
 
+	/* clé = phenomenon_id Météo-France (entiers stables, cf. métadonnées dataset) */
+	var PHENOMENES = {
+		1: 'vent violent',
+		2: 'pluie-inondation',
+		3: 'orages',
+		4: 'crues',
+		5: 'neige-verglas',
+		6: 'canicule',
+		7: 'grand froid',
+		8: 'avalanches',
+		9: 'vagues-submersion'
+	};
+
+	// Libellés des phénomènes en cours (J + J+1), dédoublonnés, en minuscules
+	function libellesPhenomenes(alertes) {
+		var libs = [];
+		(alertes || []).forEach(function (a) {
+			var lib = PHENOMENES[parseInt(a.phenomenon_id)] || a.phenomenon || a.phenomene_lib || '';
+			lib = ('' + lib).toLowerCase().trim();
+			if (lib && libs.indexOf(lib) === -1) libs.push(lib);
+		});
+		return libs;
+	}
+
 	function afficher(alertesJ, alertesJ1) {
 		var zone = widget.parentElement;
 		var aAlerte = (alertesJ && alertesJ.length) || (alertesJ1 && alertesJ1.length);
@@ -19,8 +43,10 @@ function initWidgetMeteo(cfg) {
 			if (zone) zone.style.display = 'none';
 			return;
 		}
+		var libs = libellesPhenomenes([].concat(alertesJ || [], alertesJ1 || []));
+		var texte = 'Alerte météo' + (libs.length ? ' ' + libs.join(' / ') : '');
 		widget.innerHTML = '<a class="meteo-alerte-simple" href="' + URL_VIGILANCE_GARD
-			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard">Alerte météo</a>';
+			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard">' + texte + '</a>';
 		widget.style.display = 'flex';
 		if (zone) zone.style.display = 'flex';
 	}
