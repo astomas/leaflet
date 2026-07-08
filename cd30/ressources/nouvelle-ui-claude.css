@@ -1476,7 +1476,7 @@ body.leaflet--printing .titre {
 }
 /* [cd30] icône ? FontAwesome : taille 20, orange, éclaircie au survol */
 .modern-header-aide .modern-header-help-label {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   color: #f9b062;
 }
