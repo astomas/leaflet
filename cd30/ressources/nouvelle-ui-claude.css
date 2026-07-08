@@ -1502,11 +1502,11 @@ body.leaflet--printing .titre {
    décalé de 2px à droite et 6px vers le bas par rapport à la loupe. */
 form[id^="GPsearchInput-"] {
   left: 2px !important;
-  top: 6px !important;
+  top: 3px !important;
 }
 /* Les 2 listes (suggestions + résultats) suivent le champ : collées dessous */
 div[id^="GPautoCompleteList"],
 div[id^="GPgeocodeResultsList"] {
   margin-left: 29px !important;     /* alignées sur le bord gauche du champ */
-  top: 36px !important;             /* juste sous le champ déplacé */
+  top: 33px !important;             /* juste sous le champ déplacé */
 }
