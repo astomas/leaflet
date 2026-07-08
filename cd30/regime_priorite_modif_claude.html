@@ -334,8 +334,7 @@ function formaterChampPopup(label, valeurHtml) {
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
-    // Pane dédié (z-index 450) : au-dessus des lignes de route (overlayPane 400),
-    // en-dessous des marqueurs (markerPane 600) → les icônes de points passent devant.
+    // Pane dédié (z-index 450) : au-dessus des lignes (overlayPane 400), sous les marqueurs (600).
     if (!map.getPane("etiquettesRD")) {
         map.createPane("etiquettesRD");
         map.getPane("etiquettesRD").style.zIndex = 450;
@@ -345,12 +344,12 @@ function gererEtiquettesRD(map) {
     function rafraichirEtiquettesRD() {
         groupeEtiquettesRD.clearLayers();
         var limites = map.getBounds();
+        var centre = map.getCenter();
+        var parRD = {}; // une seule étiquette par numéro RD (tronçon le plus proche du centre)
         map.eachLayer(function (couche) {
             if (!(couche instanceof L.Polyline)) return;
             if (!couche.options || !couche.options.rdLabel) return;
-            // Réseau de proximité : étiquette seulement en zoom rapproché (> 11.8)
             if (couche.options.rdProximite && map.getZoom() <= 11.8) return;
-            // Aplatit les coordonnées (MultiLineString => tableaux imbriqués)
             var points = [];
             (function aplatir(arr) {
                 for (var i = 0; i < arr.length; i++) {
@@ -358,10 +357,8 @@ function gererEtiquettesRD(map) {
                     else points.push(arr[i]);
                 }
             })(couche.getLatLngs());
-            // Milieu (par longueur cumulée) de la portion visible : évite que
-            // l'étiquette se colle à une extrémité de la route.
             var visibles = points.filter(function (p) { return limites.contains(p); });
-            if (!visibles.length) return; // route hors écran : pas d'étiquette
+            if (!visibles.length) return;
             var longTotale = 0;
             for (var j = 1; j < visibles.length; j++) {
                 longTotale += visibles[j - 1].distanceTo(visibles[j]);
@@ -371,10 +368,19 @@ function gererEtiquettesRD(map) {
                 parcouru += visibles[k - 1].distanceTo(visibles[k]);
                 if (parcouru >= cible) { meilleur = visibles[k]; break; }
             }
-            L.marker(meilleur, {
+            var dist = centre.distanceTo(meilleur);
+            var rd = couche.options.rdLabel;
+            if (!parRD[rd] || dist < parRD[rd].dist) {
+                parRD[rd] = { point: meilleur, dist: dist, color: couche.options.rdColor || couche.options.rdLabelColor || couche.options.color || "#888" };
+            }
+        });
+        // Pose une seule étiquette par numéro RD
+        Object.keys(parRD).forEach(function(rd) {
+            var info = parRD[rd];
+            L.marker(info.point, {
                 icon: L.divIcon({
                     className: "label-route-rd-wrap",
-                    html: "<span class=\"label-route-rd\" style=\"border-color:" + (couche.options.rdLabelColor || couche.options.color || "#888") + "\">" + couche.options.rdLabel + "</span>",
+                    html: "<span class=\"label-route-rd\" style=\"border-color:" + info.color + "\">" + rd + "</span>",
                     iconSize: [0, 0]
                 }),
                 pane: "etiquettesRD",
@@ -384,11 +390,16 @@ function gererEtiquettesRD(map) {
         });
     }
 
-    // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage des couches routières.
-    map.on("moveend zoomend", rafraichirEtiquettesRD);
+    // Repositionne au pan/zoom ; (ré)affiche au (dé)cochage. Debounce des rafales layeradd.
+    var timerEtiquettesRD = null;
+    function planifierEtiquettesRD() {
+        clearTimeout(timerEtiquettesRD);
+        timerEtiquettesRD = setTimeout(rafraichirEtiquettesRD, 80);
+    }
+    map.on("moveend zoomend", planifierEtiquettesRD);
     map.on("layeradd layerremove", function (e) {
         if (e.layer instanceof L.Polyline && e.layer.options && e.layer.options.rdLabel) {
-            rafraichirEtiquettesRD();
+            planifierEtiquettesRD();
         }
     });
     rafraichirEtiquettesRD();
