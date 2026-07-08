@@ -328,8 +328,8 @@ body.is-resizing * {
   background: #c2e0f5;
   border-color: #2e7eb8;
 }
-/* [cd30] Fond blanc : blanc cassé (évite l'éblouissement) quand aucun fond tuile */
-.leaflet-container.fond-blanc { background: #f3f1ec; }
+/* [cd30] Fond blanc : blanc à opacité 0,8 (évite l'éblouissement) quand aucun fond tuile */
+.leaflet-container.fond-blanc { background: rgba(255, 255, 255, 0.8); }
 
 .modern-fonds-plan {
   padding: 4px 8px 10px;
