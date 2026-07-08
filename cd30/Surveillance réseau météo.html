@@ -2357,7 +2357,7 @@ this.rechercherJson = function(){
 			const zoomActuel = maCarte.getZoom();
 			// Tooltips polygones masqués si zoom fort
 			var containerCarte = maCarte.getContainer();
-			if (zoomActuel > 16) {
+			if (zoomActuel > 15) {
 				containerCarte.classList.add('masquer-tooltips-polygones');
 			} else {
 				containerCarte.classList.remove('masquer-tooltips-polygones');
