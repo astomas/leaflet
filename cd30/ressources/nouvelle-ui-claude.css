@@ -1515,14 +1515,21 @@ label[id^="GPshowSearchEnginePicto"] > span {
   width: 30px !important;
   height: 30px !important;
 }
-/* [cd30] Champ de recherche : décalé de 2px à droite et 2px vers le bas. */
+/* [cd30] Champ de recherche : aligné sur la loupe (même haut, même hauteur),
+   2px à sa droite, sans cadre. */
 form[id^="GPsearchInput-"] {
   left: 2px !important;
-  top: 2px !important;
+  top: 0 !important;
+  height: 33px !important;
+}
+form[id^="GPsearchInput-"] input {
+  border: none !important;          /* cadre retiré */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;  /* même ombre douce que les boutons */
+  border-radius: 5px !important;
 }
 /* Les 2 listes (suggestions + résultats) suivent le champ : collées dessous */
 div[id^="GPautoCompleteList"],
 div[id^="GPgeocodeResultsList"] {
   margin-left: 35px !important;     /* bord gauche du champ (loupe 33px + 2px) */
-  top: 35px !important;             /* juste sous le champ déplacé */
+  top: 33px !important;             /* juste sous le champ aligné (hauteur 33px) */
 }
