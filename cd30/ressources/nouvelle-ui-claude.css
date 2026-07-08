@@ -1503,5 +1503,5 @@ form[id^="GPsearchInput-"] {
 }
 div[id^="GPautoCompleteList"] {
   margin-left: 29px !important;     /* bord gauche du champ + 2px */
-  top: 34px !important;             /* sous le champ + 4px */
+  top: 36px !important;             /* sous le champ + 6px */
 }
