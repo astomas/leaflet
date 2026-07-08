@@ -1382,11 +1382,13 @@ body.leaflet--printing .titre {
   padding: 14px 7px 16px !important;
 }
 
-/* Encadré d'introduction */
+/* Encadré d'introduction — [cd30] fond bleu doux (remplace l'orange de si3p0) */
 .dialog-aide .encadré-aide {
   text-align: center;
   font-weight: 700;
   border: none;
+  background-color: #d6e9f8;
+  color: #1a4f72;
   border-radius: 8px;
   padding: 5px 3px;
   display: block;
