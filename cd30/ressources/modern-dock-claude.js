@@ -746,49 +746,49 @@
   window.aideCarto = function (maCarte) {
     var contenuAideInitial =
     `<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
-    <p><img src='/ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).</p>
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/rechGoogle.gif' width='27' height='27'><b> Rechercher localisation:</b> commune, adresse, bâtiment, route, lieu, etc. Géocodage Google Maps, Gard priorisé.</p>
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/rechGoogle.gif' width='27' height='27'><b> Rechercher localisation:</b> commune, adresse, bâtiment, route, lieu, etc. Géocodage Google Maps, Gard priorisé.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b>Import couches:</b> afficher des fichiers de couches WGS84 au format Shape, GeoJSON, csv, GPX, Kml sur la carte. 
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b>Import couches:</b> afficher des fichiers de couches WGS84 au format Shape, GeoJSON, csv, GPX, Kml sur la carte. 
     Possibilité de faire un glisser/déposer, de zipper (1 couche / fichier .zip), clic droit pour effacer une couche, import csv de couches points uniquement.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer, mesurer distance(s), isochrone et recherche par coord. GPS. Détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer, mesurer distance(s), isochrone et recherche par coord. GPS. Détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/surlignage.png' height='35'> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l'ouverture.
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/surlignage.png' height='35'> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l'ouverture.
     Selon leurs nature, les lignes surlignées peuvent être disjointes ('multilignes').</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher élément de couche:</b> saisir les caractères pour afficher les correspondances et zoomer dessus.
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher élément de couche:</b> saisir les caractères pour afficher les correspondances et zoomer dessus.
     La nature de l'entité à rechercher est indiquée dans l'invite de saisie. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON dans fenêtre.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en cliquant dessus. L'icône <b>œil</b> dans la barre latérale affiche/masque une couche entière, 
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en cliquant dessus. L'icône <b>œil</b> dans la barre latérale affiche/masque une couche entière, 
     la légende permet en plus de filtrer les éléments d'une même couche.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/streetview.gif' height='30'> <b>Accès Street View </b>+ Panoramax, Google Maps, Waze:
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/streetview.gif' height='30'> <b>Accès Street View </b>+ Panoramax, Google Maps, Waze:
     après clic, positionner Pegman (personnage orange) sur la carte et cliquer sur l'un des services de visualisation. Pour désactiver, appuyer sur une touche clavier ou recliquer le bouton.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/info.png' height='30'> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l'icone 'i' (ou via croix).</p>
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/info.png' height='30'> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l'icone 'i' (ou via croix).</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/coordGPS.png' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'.
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/coordGPS.png' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'.
     Le menu d'origine est toujours accessible par clic droit sur la barre latérale ou la barre titre.</p>
 
     <p><a href='#' id='lienExtensible'><b>(*) Voir plus de détails sur les autres outils</b></a></p>
     <div id='contenuExtensible' style='display:none;'</div>`;
 
     var contenuAideExtensible =
-    `<p><img src='/ressources/API_JS/images/Aide/imprimer.gif' width='27' height='27'> <b> Imprimer carte:</b> 'Vue courante': imprimer au format paysage la portion de carte représentée à l'écran. 'Auto Gard': imprimer l'ensemble du département (mise à l'échelle auto). 'Sélec. zone' :
+    `<p><img src='/leaflet/Ressources/API_JS/images/Aide/imprimer.gif' width='27' height='27'> <b> Imprimer carte:</b> 'Vue courante': imprimer au format paysage la portion de carte représentée à l'écran. 'Auto Gard': imprimer l'ensemble du département (mise à l'échelle auto). 'Sélec. zone' :
     imprimer une portion de la carte selon un rectangle tracé à la souris.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/distance.gif' width='27'><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment)
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/distance.gif' width='27'><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment)
     , appuyer sur la touche 'Echap' ou double-cliquer. Il est ainsi possible de mesurer plusieurs tronçons. ré-appuyer sur le bouton 'Régle' ou la touche 'Echap' pour tout effacer.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/isochrone.gif' width='27' height='27'> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton)
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/isochrone.gif' width='27' height='27'> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton)
     affichant l'isochrone ou l'isodistance autour ou depuis le point (valeurs Départ/Arrivée).
     Les calculs prennent en compte le réseau routier.</p>
 
-    <p><img src='/ressources/API_JS/images/Aide/rech_GPS.png' width='27' height='26'> <b> Recherche par coordonnées GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : '43.83494, 4.35965')
+    <p><img src='/leaflet/Ressources/API_JS/images/Aide/rech_GPS.png' width='27' height='26'> <b> Recherche par coordonnées GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : '43.83494, 4.35965')
     pour afficher sur la carte icones et fenêtres correspondants. Géocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>
 
     <p class='text-warning'>Les rendus liés à l'utilisation des fonctions importer, mesurer, isochrone seront perdus à la réouverture de la carte.<br>
