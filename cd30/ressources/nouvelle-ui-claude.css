@@ -1502,6 +1502,6 @@ form[id^="GPsearchInput-"] {
   left: 0 !important;               /* collé à la loupe, sans chevauchement */
 }
 div[id^="GPautoCompleteList"] {
-  margin-left: 27px !important;     /* collée au bord gauche du champ */
-  top: 30px !important;             /* collée sous le champ (hauteur 30px) */
+  margin-left: 29px !important;     /* bord gauche du champ + 2px */
+  top: 32px !important;             /* sous le champ + 2px */
 }
