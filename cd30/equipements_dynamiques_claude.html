@@ -21,10 +21,6 @@
 	<script type="text/javascript" src="/leaflet/Ressources 26/easy-button.js"></script>
 	<link rel="stylesheet" href = "/leaflet/Ressources 26/easy-button.css" />	 
 
-	<!-- clé API google - limite appels/mois -->
-	<!-- Fonds carte Google -->
-	<script src="/leaflet/Ressources 26/Leaflet.GoogleMutant.js"></script>
-	<!-- Rech. lieux Google -->
 
 	<!-- Widget vigilance météo -->
 	<link rel="stylesheet" href="ressources/widget-meteo.css?v=cd30-1">
@@ -1647,10 +1643,7 @@ this.importFichier = function () {
 				//L.control.browserPrint.mode.portrait("Portrait"),
 			],
 		});
-		L.Control.BrowserPrint.Utils.registerLayer(L.GridLayer.GoogleMutant,"L.GridLayer.GoogleMutant", function(layer) {
-			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});	
-			}
-		);		
+		// [cd30] registerLayer GoogleMutant retiré (fonds Google supprimés, GoogleMutant.js non chargé)		
 
 		let sauvegardeStyleLegende = null;
 
