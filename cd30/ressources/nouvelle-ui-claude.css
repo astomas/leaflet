@@ -1499,12 +1499,9 @@ body.leaflet--printing .titre {
    d'autocomplétion pour supprimer les chevauchements (le plugin colle le champ
    sur la loupe avec left:-3px et décale la liste de 27px). */
 form[id^="GPsearchInput-"] {
-  left: 5px !important;             /* petit espace après la loupe */
-}
-form[id^="GPsearchInput-"] input {
-  border-radius: 5px !important;    /* champ détaché : coins arrondis des 2 côtés */
+  left: 0 !important;               /* collé à la loupe, sans chevauchement */
 }
 div[id^="GPautoCompleteList"] {
-  margin-left: 32px !important;     /* aligné sous le champ (27px loupe + 5px espace) */
-  top: 33px !important;
+  margin-left: 27px !important;     /* collée au bord gauche du champ */
+  top: 30px !important;             /* collée sous le champ (hauteur 30px) */
 }
