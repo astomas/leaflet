@@ -871,6 +871,13 @@ body.is-resizing * {
 @media print {
   body { background: #fff !important; }
 
+  /* [cd30] Fond blanc : blanc pur à l'impression (au lieu du gris #ddd Leaflet) */
+  .leaflet-container.fond-blanc {
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   .modern-sidebar,
   .modern-sidebar-resizer,
   .modern-header-actions { display: none !important; }

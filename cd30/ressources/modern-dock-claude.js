@@ -379,6 +379,16 @@
     });
     section.appendChild(select);
 
+    // [cd30] Impression : recopie le fond blanc sur la carte d'impression
+    // (le plugin browser.print crée un conteneur neuf, sans la classe).
+    if (window.maCarte && window.maCarte.on) {
+      window.maCarte.on("browser-print-start", function (e) {
+        if (e.printMap && window.maCarte.getContainer().classList.contains("fond-blanc")) {
+          e.printMap.getContainer().classList.add("fond-blanc");
+        }
+      });
+    }
+
     // Si le fond change par ailleurs (code carte), resynchronise la liste
     if (window.maCarte && window.maCarte.on) {
       window.maCarte.on("baselayerchange", function () {
