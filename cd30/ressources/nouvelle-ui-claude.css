@@ -1498,15 +1498,15 @@ body.leaflet--printing .titre {
 /* [cd30] Recherche IGN (SearchEngine) : espace la loupe, le champ et la liste
    d'autocomplétion pour supprimer les chevauchements (le plugin colle le champ
    sur la loupe avec left:-3px et décale la liste de 27px). */
+/* [cd30] Champ de recherche (la box qui se déroule au clic sur la loupe) :
+   décalé de 2px à droite et 6px vers le bas par rapport à la loupe. */
 form[id^="GPsearchInput-"] {
-  left: 0 !important;               /* collé à la loupe, sans chevauchement */
+  left: 2px !important;
+  top: 6px !important;
 }
-div[id^="GPautoCompleteList"] {
-  margin-left: 29px !important;     /* bord gauche du champ + 2px */
-  top: 36px !important;             /* sous le champ + 6px */
-}
-/* [cd30] Liste des RÉSULTATS de recherche (2e boîte du plugin) : mêmes décalages */
+/* Les 2 listes (suggestions + résultats) suivent le champ : collées dessous */
+div[id^="GPautoCompleteList"],
 div[id^="GPgeocodeResultsList"] {
-  margin-left: 29px !important;     /* +2px à droite */
-  top: 44px !important;             /* 38px d'origine + 6px */
+  margin-left: 29px !important;     /* alignées sur le bord gauche du champ */
+  top: 36px !important;             /* juste sous le champ déplacé */
 }
