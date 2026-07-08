@@ -1505,3 +1505,8 @@ div[id^="GPautoCompleteList"] {
   margin-left: 29px !important;     /* bord gauche du champ + 2px */
   top: 36px !important;             /* sous le champ + 6px */
 }
+/* [cd30] Liste des RÉSULTATS de recherche (2e boîte du plugin) : mêmes décalages */
+div[id^="GPgeocodeResultsList"] {
+  margin-left: 29px !important;     /* +2px à droite */
+  top: 44px !important;             /* 38px d'origine + 6px */
+}
