@@ -1542,7 +1542,7 @@ div[id^="GPgeocodeResultsList"] {
   box-shadow: none !important;
   border: none !important;
   font-size: .7rem;
-  text-align: center;
+  text-align: right;          /* calé à droite de la sidebar */
   color: var(--modern-muted);
 }
 .modern-sidebar .modern-copyright-sidebar a {
