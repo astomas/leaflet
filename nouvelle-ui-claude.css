@@ -1453,7 +1453,7 @@ body.leaflet--printing .titre {
   box-shadow: none !important;
   border: none !important;
   font-size: .7rem;
-  text-align: right;          /* calé à droite de la sidebar */
+  text-align: left;           /* calé à gauche de la sidebar */
   color: var(--modern-muted);
 }
 .modern-sidebar .modern-copyright-sidebar a {
