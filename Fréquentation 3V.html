@@ -7,8 +7,8 @@
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet-si3p0-claude.css" /> <!-- //// modif nouvelle UI - CSS sans légende //// -->
 	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
 
-	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=2" /> <!-- //// modif nouvelle UI - CSS nouvelle UI //// -->
-	<script src="./modern-dock-claude.js"></script> <!-- //// modif nouvelle UI - dock sidebar //// -->
+	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=3" /> <!-- //// modif nouvelle UI - CSS nouvelle UI //// -->
+	<script src="./modern-dock-claude.js?v=3"></script> <!-- //// modif nouvelle UI - dock sidebar //// -->
 
 	<title id="ti">Carte Leaflet</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -933,7 +933,7 @@ function CarteLeaflet(conteneurId) {
 		copyright.setPrefix(false).addAttribution("<a href='https://intranet.gard.fr/fr/organigramme/organigramme-presidente-fr/organigramme-direction-generale-des-services-fr/organigramme-dgs-direction-fr/organigramme-dga-mobilites-et-logistique-fr/organigramme-dgaml-direction-d-appui-fr/organigramme-dgaml-dapp-pole-systemes-d-information-fr.html' target='_blank'>Pôle des Systèmes d'Information (DGaML - DAppui)</a>");
 		copyright.addTo(maCarte);
 
-		ctrlScale = L.control.scale({position: "bottomright", imperial: false});
+		ctrlScale = L.control.scale({position: "bottomleft", imperial: false});
 		ctrlScale.addTo(maCarte);	
 
 	// bloc legende

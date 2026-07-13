@@ -796,7 +796,21 @@
   // Initialisation au chargement du DOM
   // =========================================================================
 
+  // Déplace le copyright (attribution Leaflet) en bas de la sidebar.
+  function setupCopyrightSidebar(essaisRestants) {
+    var attribution = document.querySelector(".leaflet-control-attribution");
+    var sidebar = document.querySelector(".modern-sidebar");
+    if (!attribution || !sidebar) {
+      var n = (typeof essaisRestants === "number") ? essaisRestants : 15;
+      if (n > 0) setTimeout(function () { setupCopyrightSidebar(n - 1); }, 300);
+      return;
+    }
+    attribution.classList.add("modern-copyright-sidebar");
+    sidebar.appendChild(attribution);
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    setupCopyrightSidebar();
     setupSidebarScroll();
     setupSidebarResizer();
     setupTitre();

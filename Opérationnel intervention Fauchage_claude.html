@@ -7,8 +7,8 @@
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet-si3p0-claude.css" />
 	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
 
-	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=2" />
-	<script src="./modern-dock-claude.js"></script>
+	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=3" />
+	<script src="./modern-dock-claude.js?v=3"></script>
 	
 	<title id="ti">Carte Leaflet</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -992,7 +992,7 @@ function CarteLeaflet(conteneurId) {
 		copyright.addTo(maCarte);
 		
 		// Echelle 
-		ctrlScale = L.control.scale({position: "bottomright", imperial: false});
+		ctrlScale = L.control.scale({position: "bottomleft", imperial: false});
 		ctrlScale.addTo(maCarte);
 
 		// Bloc legende

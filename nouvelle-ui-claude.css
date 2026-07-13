@@ -1444,3 +1444,39 @@ body.leaflet--printing .titre {
   padding: 12px 14px;
   box-shadow: none;
 }
+
+/* Copyright (attribution Leaflet) déplacé en bas de la sidebar */
+.modern-sidebar .modern-copyright-sidebar {
+  margin-top: auto;           /* poussé tout en bas de la sidebar */
+  padding: 6px 8px 4px;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  font-size: .7rem;
+  text-align: center;
+  color: var(--modern-muted);
+}
+.modern-sidebar .modern-copyright-sidebar a {
+  color: #0000EE;            /* bleu hyperlien standard */
+  text-decoration: underline;
+}
+.modern-sidebar .modern-copyright-sidebar a:visited {
+  color: #551A8B;            /* violet lien visité standard */
+}
+
+/* Échelle (ctrlScale) à côté du switch Surligner, en bas à gauche.
+   Le coin Leaflet empile verticalement (float+clear) : on le passe en flex,
+   switch d'abord, échelle à sa droite. Scopé à #carteId (pas la carte print). */
+#carteId .leaflet-bottom.leaflet-left {
+  display: flex;
+  align-items: flex-end;
+}
+#carteId .leaflet-bottom.leaflet-left .leaflet-control {
+  float: none;
+  clear: none;
+}
+#carteId .leaflet-bottom.leaflet-left .leaflet-control-scale {
+  order: 2;                 /* après le switch Surligner */
+  margin-left: 12px;
+  margin-bottom: 14px;      /* calé sur le bas du switch */
+}
