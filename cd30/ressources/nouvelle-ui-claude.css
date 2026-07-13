@@ -1533,3 +1533,18 @@ div[id^="GPgeocodeResultsList"] {
   margin-left: 35px !important;     /* bord gauche du champ (loupe 33px + 2px) */
   top: 33px !important;             /* juste sous le champ aligné (hauteur 33px) */
 }
+
+/* [cd30] Copyright (attribution Leaflet) déplacé en bas de la sidebar */
+.modern-sidebar .modern-copyright-sidebar {
+  margin-top: auto;           /* poussé tout en bas de la sidebar */
+  padding: 6px 8px 4px;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  font-size: .7rem;
+  text-align: center;
+  color: var(--modern-muted);
+}
+.modern-sidebar .modern-copyright-sidebar a {
+  color: var(--modern-muted);
+}
