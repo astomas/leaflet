@@ -1546,5 +1546,9 @@ div[id^="GPgeocodeResultsList"] {
   color: var(--modern-muted);
 }
 .modern-sidebar .modern-copyright-sidebar a {
-  color: var(--modern-muted);
+  color: #0000EE;            /* bleu hyperlien standard */
+  text-decoration: underline;
+}
+.modern-sidebar .modern-copyright-sidebar a:visited {
+  color: #551A8B;            /* violet lien visité standard */
 }
