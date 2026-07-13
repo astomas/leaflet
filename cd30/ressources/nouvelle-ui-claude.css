@@ -1552,3 +1552,20 @@ div[id^="GPgeocodeResultsList"] {
 .modern-sidebar .modern-copyright-sidebar a:visited {
   color: #551A8B;            /* violet lien visité standard */
 }
+
+/* [cd30] Échelle (ctrlScale) à côté du switch Surligner, en bas à gauche.
+   Le coin Leaflet empile verticalement (float+clear) : on le passe en flex,
+   switch d'abord, échelle à sa droite. Scopé à #carteId (pas la carte print). */
+#carteId .leaflet-bottom.leaflet-left {
+  display: flex;
+  align-items: flex-end;
+}
+#carteId .leaflet-bottom.leaflet-left .leaflet-control {
+  float: none;
+  clear: none;
+}
+#carteId .leaflet-bottom.leaflet-left .leaflet-control-scale {
+  order: 2;                 /* après le switch Surligner */
+  margin-left: 12px;
+  margin-bottom: 14px;      /* calé sur le bas du switch */
+}

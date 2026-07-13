@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet-si3p0-claude.css" />
 	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
 
-	<link rel="stylesheet" href="ressources/nouvelle-ui-claude.css?v=cd30-29" />
+	<link rel="stylesheet" href="ressources/nouvelle-ui-claude.css?v=cd30-30" />
 	<script src="./ressources/modern-dock-claude.js?v=cd30-28"></script>
 
 	<title id="ti">Carte Leaflet</title>
@@ -969,7 +969,7 @@ function CarteLeaflet(conteneurId) {
 		copyright.addTo(maCarte);
 		
 		// Echelle 
-		ctrlScale = L.control.scale({position: "bottomright", imperial: false});
+		ctrlScale = L.control.scale({position: "bottomleft", imperial: false});	// [cd30] échelle à côté du switch Surligner
 		ctrlScale.addTo(maCarte);
 
 		// Bloc legende
