@@ -1567,5 +1567,5 @@ div[id^="GPgeocodeResultsList"] {
 #carteId .leaflet-bottom.leaflet-left .leaflet-control-scale {
   order: 2;                 /* après le switch Surligner */
   margin-left: 12px;
-  margin-bottom: 10px;      /* calé sur le bas du switch */
+  margin-bottom: 6px;      /* calé sur le bas du switch */
 }
