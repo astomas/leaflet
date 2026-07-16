@@ -744,7 +744,6 @@ body.is-resizing * {
 .popup-entete-icone {
   width: 30px; 
   height: 30px;
-  margin-bottom: 4px;
   object-fit: contain;
   flex: 0 0 auto;
 }
