@@ -729,7 +729,7 @@ body.is-resizing * {
   margin-bottom: 9px;
   position: relative;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 16px;
   color: #1f2d3d;
 }
 .popup-entete::after {
