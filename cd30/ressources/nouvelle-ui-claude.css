@@ -740,7 +740,10 @@ body.is-resizing * {
   border-radius: 2px;
   background: linear-gradient(90deg, #e8530e, #f9c489);
 }
-.popup-entete-titre { line-height: 1.2; }
+.popup-entete-titre { 
+  line-height: 1.2;
+  margin-bottom: -5px;
+}
 .popup-entete-icone {
   width: 30px; 
   height: 30px;
