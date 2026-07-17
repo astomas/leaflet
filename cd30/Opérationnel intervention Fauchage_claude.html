@@ -2191,6 +2191,7 @@ this.rechercherJson = function(){
             
             var container = ctrlRechJson.getContainer();
             var searchButton = container.querySelector('.search-button');
+            if (searchButton) searchButton.title = "";	// [cd30] pas de tooltip sur le bouton recherche JSON
             var isOpen = false;
             
             ajouterHoverEtClic(searchButton, {
