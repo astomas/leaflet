@@ -1652,3 +1652,20 @@ div[id^="GPgeocodeResultsList"] {
 .leaflet-bottom.leaflet-right .leaflet-legend .leaflet-legend-contents {
   min-height: 0 !important;
 }
+
+/* [cd30] Écran < 1000px : barre de titre (header vert) réduite de moitié,
+   idem pour ses deux icônes (logos) et la taille des caractères du titre. */
+@media (max-width: 999px) {
+  .modern-header {
+    min-height: 37px;
+    padding: 7px;
+    gap: 9px;
+  }
+  .modern-header-logos img,
+  .modern-header-logos .leaflet-control-logos-img {
+    height: 26px !important;   /* 53px / 2 (la règle de base est !important) */
+  }
+  .modern-header h1 {
+    font-size: 0.82rem;        /* 1.65rem / 2 */
+  }
+}
