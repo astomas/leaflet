@@ -1645,3 +1645,10 @@ div[id^="GPgeocodeResultsList"] {
 .leaflet-legend.legende-repliee .legende-libelle {
   display: inline;
 }
+
+/* [cd30] Hauteur dynamique du bloc légende : neutralise le min-height inline
+   que le plugin fige à l'ouverture (leaflet.legend.js onAdd). Le bloc rétrécit
+   ainsi quand on replie une couche via son en-tête. */
+.leaflet-bottom.leaflet-right .leaflet-legend .leaflet-legend-contents {
+  min-height: 0 !important;
+}
