@@ -870,32 +870,7 @@
     sidebar.appendChild(attribution);
   }
 
-  // [cd30] Barre de fenêtre du bloc légende : boutons minimiser / maximiser,
-  // comme une fenêtre standard. Le bloc minimisé ne garde que sa barre de titre.
-  function setupLegendeFenetre(essaisRestants) {
-    var legende = document.querySelector(".leaflet-bottom.leaflet-right .leaflet-legend");
-    if (!legende) {
-      var n = (typeof essaisRestants === "number") ? essaisRestants : 40;
-      if (n > 0) setTimeout(function () { setupLegendeFenetre(n - 1); }, 400);
-      return;
-    }
-    if (legende.querySelector(".legende-barre-fenetre")) return;
-    var barre = document.createElement("div");
-    barre.className = "legende-barre-fenetre";
-    barre.innerHTML =
-      '<button type="button" class="legende-btn-min" title="Minimiser la légende">–</button>' +
-      '<button type="button" class="legende-btn-max" title="Maximiser la légende">❐</button>';
-    legende.insertBefore(barre, legende.firstChild);
-    barre.querySelector(".legende-btn-min").addEventListener("click", function () {
-      legende.classList.add("legende-minimisee");
-    });
-    barre.querySelector(".legende-btn-max").addEventListener("click", function () {
-      legende.classList.remove("legende-minimisee");
-    });
-  }
-
   document.addEventListener("DOMContentLoaded", function () {
-    setupLegendeFenetre();
     setupCopyrightSidebar();
     setupSidebarScroll();
     setupSidebarResizer();
