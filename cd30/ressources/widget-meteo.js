@@ -59,7 +59,10 @@ function initWidgetMeteo(cfg) {
 		var toutes = [].concat(alertesJ || [], alertesJ1 || []);
 		var libs = libellesPhenomenes(toutes);
 		var niveau = NIVEAUX[niveauMax(toutes)] || '';
-		var texte = 'Alerte météo' + (niveau ? ' ' + niveau : '') + (libs.length ? ' ' + libs.join(' / ') : '');
+		// alerte uniquement sur l'échéance J+1 (rien aujourd'hui) : on le précise
+		var seulementDemain = !(alertesJ && alertesJ.length) && (alertesJ1 && alertesJ1.length);
+		var texte = 'Alerte météo' + (seulementDemain ? ' J+1' : '')
+			+ (niveau ? ' ' + niveau : '') + (libs.length ? ' ' + libs.join(' / ') : '');
 		widget.innerHTML = '<a class="meteo-alerte-simple" href="' + URL_VIGILANCE_GARD
 			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard">' + texte + '</a>';
 		widget.style.display = 'flex';
