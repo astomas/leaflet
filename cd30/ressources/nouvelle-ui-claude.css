@@ -875,6 +875,9 @@ body.is-resizing * {
 @media print {
   body { background: #fff !important; }
 
+  /* [cd30] barre de fenêtre de la légende : pas d'intérêt sur papier */
+  .legende-barre-fenetre { display: none !important; }
+
   /* [cd30] Fond blanc : blanc pur à l'impression (au lieu du gris #ddd Leaflet) */
   .leaflet-container.fond-blanc {
     background: #fff !important;
@@ -1591,4 +1594,41 @@ div[id^="GPgeocodeResultsList"] {
    (leaflet.legend.css : group-header:hover #bcc1d9) : fond normal conservé */
 .leaflet-legend .leaflet-legend-group-header:hover {
   background-color: #d0d4e8;
+}
+
+/* [cd30] Barre de fenêtre du bloc légende (minimiser / maximiser) */
+.legende-barre-fenetre {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  margin-bottom: 2px;
+  background: #d0d4e8;             /* même teinte que les en-têtes de couche */
+  border-radius: 4px 4px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2C3E50;
+  user-select: none;
+}
+.legende-barre-titre { flex: 1; }
+.legende-btn-min,
+.legende-btn-max {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #b9c2d8;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+.legende-btn-min:hover,
+.legende-btn-max:hover { background: #dbe6f5; }
+/* État minimisé : seul la barre de titre reste visible */
+.leaflet-legend.legende-minimisee > *:not(.legende-barre-fenetre) {
+  display: none !important;
 }
