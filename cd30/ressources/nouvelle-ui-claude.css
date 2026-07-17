@@ -1657,18 +1657,18 @@ div[id^="GPgeocodeResultsList"] {
    idem pour ses deux icônes (logos) et la taille des caractères du titre. */
 @media (max-width: 999px) {
   .modern-header {
-    min-height: 37px;
-    padding: 7px;
-    gap: 9px;
+    min-height: 44px;
+    padding: 8px;
+    gap: 11px;
   }
   .modern-header-logos img,
   .modern-header-logos .leaflet-control-logos-img {
-    height: 26px !important;   /* 53px / 2 (la règle de base est !important) */
+    height: 31px !important;   /* moitié de 53px, +20% */
   }
   .modern-header h1 {
-    font-size: 0.82rem;        /* 1.65rem / 2 */
+    font-size: 0.98rem;        /* moitié de 1.65rem, +20% */
   }
   .modern-header-aide .modern-header-help-label {
-    font-size: 18px;           /* "?" 36px / 2 */
+    font-size: 22px;           /* moitié de 36px, +20% */
   }
 }
