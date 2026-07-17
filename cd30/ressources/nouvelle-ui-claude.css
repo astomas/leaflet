@@ -1668,4 +1668,7 @@ div[id^="GPgeocodeResultsList"] {
   .modern-header h1 {
     font-size: 0.82rem;        /* 1.65rem / 2 */
   }
+  .modern-header-aide .modern-header-help-label {
+    font-size: 18px;           /* "?" 36px / 2 */
+  }
 }
