@@ -1670,25 +1670,6 @@ this.importFichier = function () {
 					requestAnimationFrame(function() { ajusterLargeurColonnesLegende(e.printMap.getContainer()); });
 				}
 			}
-			// ajout logo avant print
-			setTimeout(function() {
-				const conteneurCartePrint = e.printMap.getContainer();
-
-				const logoPrint = document.createElement("img");
-				logoPrint.src = "/leaflet/Ressources/c3po_gr.png";
-				logoPrint.style.position = "absolute";
-				logoPrint.style.left = "10px";
-				logoPrint.style.width = "56px";
-				logoPrint.style.height = "50px";
-				logoPrint.style.zIndex = "10000";
-				logoPrint.style.pointerEvents = "none";
-
-				const titrePrint = conteneurCartePrint.querySelector(".infotitre, .titre");
-				const hauteurTitre = titrePrint.offsetHeight;
-				logoPrint.style.bottom = (hauteurTitre + 15) + "px";
-
-				conteneurCartePrint.appendChild(logoPrint);
-			}, 300);
 
 			// ajuster fontes legende et centrage avant print selon hauteur legende
 			setTimeout(function() {
@@ -1948,7 +1929,7 @@ this.importFichier = function () {
 			if (titreHeader) titreHeader.innerHTML = valeurTitre;
 
 			(maCarte).on("browser-print-start", function(e){
-				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
+				L.ctrlTitre({position: "topleft"}).addTo(e.printMap);	// [cd30] titre en haut à gauche sur le papier
 			});
 	}
 		
