@@ -1620,18 +1620,28 @@ div[id^="GPgeocodeResultsList"] {
 .leaflet-legend.legende-repliee .leaflet-legend-contents {
   display: none !important;
 }
+/* [cd30] replié : pastille [Légende ▶], libellé gras cliquable */
 .leaflet-legend.legende-repliee {
-  min-width: 28px;
-  min-height: 28px;
-}
-/* [cd30] replié : chevron centré dans la pastille */
-.leaflet-legend.legende-repliee .legende-chevron {
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  padding: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 5px 9px;
+}
+.leaflet-legend.legende-repliee .legende-chevron {
+  position: static;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.legende-libelle {
+  display: none;                 /* visible uniquement quand la légende est repliée */
+  font-weight: 700;
+  font-size: 13px;
+  color: #2C3E50;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+}
+.leaflet-legend.legende-repliee .legende-libelle {
+  display: inline;
 }

@@ -880,6 +880,11 @@
       return;
     }
     if (legende.querySelector(".legende-chevron")) return;
+    var libelle = document.createElement("span");
+    libelle.className = "legende-libelle";
+    libelle.textContent = "Légende";
+    libelle.title = "Déplier la légende";
+    legende.appendChild(libelle);
     var chev = document.createElement("span");
     chev.className = "legende-chevron";
     chev.title = "Replier / déplier la légende";
@@ -889,6 +894,12 @@
       e.stopPropagation();
       var replie = legende.classList.toggle("legende-repliee");
       chev.textContent = replie ? "▶" : "▼";
+    });
+    // clic sur le libellé (visible uniquement replié) : maximise aussi
+    libelle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      legende.classList.remove("legende-repliee");
+      chev.textContent = "▼";
     });
   }
 
