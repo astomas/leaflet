@@ -1949,17 +1949,19 @@ this.importFichier = function () {
 
 			(maCarte).on("browser-print-start", function(e){
 				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
-				// [cd30] logo Gard devant le titre sur le papier
+				// [cd30] logo Gard en bloc séparé devant le titre (10px d'écart) ;
+				// titre raccourci de ~10% (retour à la ligne plus tôt : 560 -> 504px)
 				setTimeout(function() {
-					var titrePrint = e.printMap.getContainer().querySelector(".infotitre, .titre");
-					if (titrePrint && !titrePrint.querySelector(".logo-titre-print")) {
+					var contPrint = e.printMap.getContainer();
+					var titrePrint = contPrint.querySelector(".infotitre, .titre");
+					if (titrePrint && !contPrint.querySelector(".logo-titre-print")) {
 						var logoTitre = document.createElement("img");
 						logoTitre.className = "logo-titre-print";
 						logoTitre.src = "/leaflet/Ressources 26/images/legard.jpg";
-						logoTitre.style.height = "30px";
-						logoTitre.style.verticalAlign = "middle";
-						logoTitre.style.marginRight = "8px";
-						titrePrint.insertBefore(logoTitre, titrePrint.firstChild);
+						logoTitre.style.cssText = "position:absolute;left:10px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
+						contPrint.appendChild(logoTitre);
+						titrePrint.style.marginLeft = "70px";	// bloc logo (50px, à left:10) + 10px d'écart
+						titrePrint.style.setProperty("max-width", "558px", "important");	// -10% de 620px (la règle .titre 620px est !important)
 					}
 				}, 200);
 			});
