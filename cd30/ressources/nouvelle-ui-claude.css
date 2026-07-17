@@ -1576,6 +1576,12 @@ div[id^="GPgeocodeResultsList"] {
 
 /* [cd30] Légende carte : léger fond au survol des éléments de couche cliquables
    (pas l'en-tête de la couche) */
+.leaflet-legend .leaflet-legend-item-clickable {
+  display: flex;                /* pleine largeur de la colonne, icône et libellé alignés */
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
 .leaflet-legend .leaflet-legend-item-clickable:hover {
   background-color: rgba(46, 126, 184, 0.12);
   border-radius: 4px;
