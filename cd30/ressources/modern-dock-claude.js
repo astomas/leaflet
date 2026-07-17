@@ -883,7 +883,6 @@
     var barre = document.createElement("div");
     barre.className = "legende-barre-fenetre";
     barre.innerHTML =
-      '<span class="legende-barre-titre">Légende</span>' +
       '<button type="button" class="legende-btn-min" title="Minimiser la légende">–</button>' +
       '<button type="button" class="legende-btn-max" title="Maximiser la légende">❐</button>';
     legende.insertBefore(barre, legende.firstChild);

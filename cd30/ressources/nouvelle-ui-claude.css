@@ -1596,35 +1596,31 @@ div[id^="GPgeocodeResultsList"] {
   background-color: #d0d4e8;
 }
 
-/* [cd30] Barre de fenêtre du bloc légende (minimiser / maximiser) */
+/* [cd30] Barre discrète du bloc légende (minimiser / maximiser, à gauche) */
 .legende-barre-fenetre {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 6px;
-  margin-bottom: 2px;
-  background: #d0d4e8;             /* même teinte que les en-têtes de couche */
-  border-radius: 4px 4px 0 0;
-  font-size: 12px;
-  font-weight: 700;
-  color: #2C3E50;
+  justify-content: flex-start;
+  gap: 3px;
+  padding: 2px 4px;
+  margin-bottom: 1px;
   user-select: none;
 }
-.legende-barre-titre { flex: 1; }
 .legende-btn-min,
 .legende-btn-max {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 10px;                    /* hauteur réduite de ~50% */
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #b9c2d8;
-  border-radius: 4px;
+  border-radius: 3px;
   background: #fff;
-  font-size: 12px;
+  font-size: 9px;
   line-height: 1;
   cursor: pointer;
+  color: #2C3E50;
 }
 .legende-btn-min:hover,
 .legende-btn-max:hover { background: #dbe6f5; }
