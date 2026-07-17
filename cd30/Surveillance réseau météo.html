@@ -1942,7 +1942,7 @@ this.importFichier = function () {
 						logoTitre.style.cssText = "position:absolute;left:10px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
 						contPrint.appendChild(logoTitre);
 						titrePrint.style.marginLeft = "70px";	// bloc logo (50px, à left:10) + 10px d'écart
-						titrePrint.style.setProperty("max-width", "538px", "important");	// retour à la ligne anticipé (620px de base, -20px de plus)
+						titrePrint.style.setProperty("max-width", "500px", "important");	// retour à la ligne anticipé (500px max)
 						// centres verticaux alignés : cale le bas du logo selon la hauteur réelle du titre
 						requestAnimationFrame(function() {
 							var basCont = contPrint.getBoundingClientRect().bottom;
