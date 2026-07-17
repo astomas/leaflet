@@ -1852,7 +1852,7 @@ this.importFichier = function () {
     
     // bouton info
     var contenuInfo = "<br>" + "Cette carte pr&#233;sente des donn&#233;es dynamiques pouvant aider &#224; la surveillance du r&#233;seau, &#224; savoir :<br>- les cam&#233;ras g&#233;r&#233;es par le SERU,<br>- les stations m&#233;t&#233;os g&#233;r&#233;es par www.infoclimat.fr,<br>- les stations hydrom&#233;triques Vigicrues,<br>- les alertes Waze &#224; proximit&#233; du r&#233;seau routier d&#233;partemental d&#39;une fiabilit&#233; sup&#233;rieure &#224; 6,<br>- les ralentissements d&#233;tect&#233;s par Waze.<br><br>Les alertes Waze r&#233;centes (icones couleur) datent de moins de 6 heures.<br><br>Carte mise &#224; jour toutes les 10 minutes.";
-	var fenêtreInfo = new L.control.dialog({size: [380, 350], anchor: [300, 800], position:"topleft", initOpen: true, minSize: [100, 100], maxSize: [500, 600]});
+	var fenêtreInfo = new L.control.dialog({size: [380, 450], anchor: [100, 700], position:"topleft", initOpen: true, minSize: [100, 100], maxSize: [500, 600]});
     
     var estOuverte = false;
     function info(carteA) {
