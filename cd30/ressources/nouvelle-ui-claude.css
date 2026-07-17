@@ -1573,3 +1573,11 @@ div[id^="GPgeocodeResultsList"] {
   margin-left: 12px;
   margin-bottom: 6px;      /* calé sur le bas du switch */
 }
+
+/* [cd30] Légende carte : léger fond au survol des éléments de couche cliquables
+   (pas l'en-tête de la couche) */
+.leaflet-legend .leaflet-legend-item-clickable:hover {
+  background-color: rgba(46, 126, 184, 0.12);
+  border-radius: 4px;
+  transition: background-color .12s;
+}
