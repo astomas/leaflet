@@ -24,6 +24,19 @@ function initWidgetMeteo(cfg) {
 		9: 'vagues-submersion'
 	};
 
+	/* clé = color_id Météo-France (2 jaune, 3 orange, 4 rouge) */
+	var NIVEAUX = { 2: 'jaune', 3: 'orange', 4: 'rouge' };
+
+	// Niveau de vigilance max parmi les alertes (color_id du flux, ou niveau des données TEST)
+	function niveauMax(alertes) {
+		var max = 0;
+		(alertes || []).forEach(function (a) {
+			var n = parseInt(a.color_id !== undefined ? a.color_id : a.niveau);
+			if (n > max) max = n;
+		});
+		return max;
+	}
+
 	// Libellés des phénomènes en cours (J + J+1), dédoublonnés, en minuscules
 	function libellesPhenomenes(alertes) {
 		var libs = [];
@@ -43,8 +56,10 @@ function initWidgetMeteo(cfg) {
 			if (zone) zone.style.display = 'none';
 			return;
 		}
-		var libs = libellesPhenomenes([].concat(alertesJ || [], alertesJ1 || []));
-		var texte = 'Alerte météo' + (libs.length ? ' ' + libs.join(' / ') : '');
+		var toutes = [].concat(alertesJ || [], alertesJ1 || []);
+		var libs = libellesPhenomenes(toutes);
+		var niveau = NIVEAUX[niveauMax(toutes)] || '';
+		var texte = 'Alerte météo' + (niveau ? ' ' + niveau : '') + (libs.length ? ' ' + libs.join(' / ') : '');
 		widget.innerHTML = '<a class="meteo-alerte-simple" href="' + URL_VIGILANCE_GARD
 			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard">' + texte + '</a>';
 		widget.style.display = 'flex';
