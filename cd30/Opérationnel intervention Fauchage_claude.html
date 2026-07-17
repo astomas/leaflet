@@ -1962,6 +1962,14 @@ this.importFichier = function () {
 						contPrint.appendChild(logoTitre);
 						titrePrint.style.marginLeft = "70px";	// bloc logo (50px, à left:10) + 10px d'écart
 						titrePrint.style.setProperty("max-width", "558px", "important");	// -10% de 620px (la règle .titre 620px est !important)
+						// centres verticaux alignés : cale le bas du logo selon la hauteur réelle du titre
+						requestAnimationFrame(function() {
+							var basCont = contPrint.getBoundingClientRect().bottom;
+							var rTitre = titrePrint.getBoundingClientRect();
+							var hLogo = logoTitre.getBoundingClientRect().height;
+							var centreTitre = rTitre.top + rTitre.height / 2;
+							logoTitre.style.bottom = Math.round(basCont - centreTitre - hLogo / 2) + "px";
+						});
 					}
 				}, 200);
 			});
