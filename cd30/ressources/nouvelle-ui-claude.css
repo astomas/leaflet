@@ -1596,34 +1596,39 @@ div[id^="GPgeocodeResultsList"] {
   background-color: #d0d4e8;
 }
 
-/* [cd30] Barre discrète du bloc légende (minimiser / maximiser, à gauche) */
+/* [cd30] Barre discrète du bloc légende (minimiser / maximiser, à gauche) :
+   fond légèrement foncé sur toute la largeur, hauteur minimale, icônes grasses */
 .legende-barre-fenetre {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 3px;
-  padding: 2px 4px;
+  padding: 1px 4px;
   margin-bottom: 1px;
+  background: #c2c8e0;             /* plus foncé que les en-têtes (#d0d4e8) */
+  border-radius: 4px 4px 0 0;
   user-select: none;
 }
-.legende-btn-min,
-.legende-btn-max {
-  width: 18px;
-  height: 10px;                    /* hauteur réduite de ~50% */
+.leaflet-legend .legende-barre-fenetre button.legende-btn-min,
+.leaflet-legend .legende-barre-fenetre button.legende-btn-max {
+  width: 16px !important;          /* sélecteur renforcé : .leaflet-touch .leaflet-bar button (31px !important) prime sinon */
+  height: 8px !important;
+  line-height: 1 !important;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #b9c2d8;
-  border-radius: 3px;
+  border: 1px solid #9aa4c4;
+  border-radius: 2px;
   background: #fff;
-  font-size: 9px;
+  font-size: 10px;
+  font-weight: 900;                /* icônes en gras, plus visibles */
   line-height: 1;
   cursor: pointer;
-  color: #2C3E50;
+  color: #1f2937;
+  overflow: hidden;
 }
-.legende-btn-min:hover,
-.legende-btn-max:hover { background: #dbe6f5; }
+.leaflet-legend .legende-barre-fenetre button:hover { background: #dbe6f5 !important; }
 /* État minimisé : seul la barre de titre reste visible */
 .leaflet-legend.legende-minimisee > *:not(.legende-barre-fenetre) {
   display: none !important;
