@@ -1593,3 +1593,12 @@ div[id^="GPgeocodeResultsList"] {
   background-color: #d0d4e8;
 }
 
+/* [cd30] Vignette de la légende repliée : restaure l'icône du plugin
+   (la règle générique .leaflet-bar a { background:#fff !important } efface
+   background-image) et lui donne une taille de bouton confortable. */
+.leaflet-legend a.leaflet-legend-toggle {
+  background: #fff url("/leaflet/Ressources 26/images/legend.png") no-repeat 50% 50% !important;
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+}

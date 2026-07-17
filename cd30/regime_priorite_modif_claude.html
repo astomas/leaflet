@@ -1137,7 +1137,7 @@ function CarteLeaflet(conteneurId) {
 			// legende sur 2 col si nbr elts legende > 27
 			var nbrColonnes = (tabCtrlLegendeObj.length > 27) ? 2 : 1;
 			//var nbrColonnes = (tabCtrlLegendeObj.length || (nbreDeVues + tabCtrlLegendeObj.length) > 27) ? 2 : 1;
-			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, legends: tabCtrlLegendeObj});
+			blocLegende = L.control.Legend({title: null, position: "bottomright", opacity: 0.9, column: nbrColonnes, collapsed: true, legends: tabCtrlLegendeObj});	// [cd30] repli natif : vignette au chargement, s'ouvre au survol
 			blocLegende.addTo(maCarte);	// [cd30] légende remise dans son bloc initial en bas à droite
 			if (nbrColonnes === 2) {
 				var containerLeg = maCarte.getContainer().querySelector('.leaflet-legend-contents');
@@ -1674,6 +1674,7 @@ this.importFichier = function () {
 		maCarte.on("browser-print-start", function(e){
 			if (presenceLegende) {
 				blocLegende.addTo(e.printMap);
+				blocLegende.expand();	// [cd30] légende dépliée sur le papier (mode collapsed sinon)
 				// [sans-legende] applique la mise en 2 colonnes sur la légende d'impression
 				if (blocLegende.options.column === 2) {
 					var contenuLegPrint = blocLegende.getContainer().querySelector('.leaflet-legend-contents');
