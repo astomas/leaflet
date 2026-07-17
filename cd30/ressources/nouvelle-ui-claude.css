@@ -875,6 +875,10 @@ body.is-resizing * {
 @media print {
   body { background: #fff !important; }
 
+  /* [cd30] chevron légende : masqué sur papier, et légende toujours dépliée */
+  .legende-chevron { display: none !important; }
+  .leaflet-legend.legende-repliee .leaflet-legend-contents { display: block !important; }
+
   /* [cd30] Fond blanc : blanc pur à l'impression (au lieu du gris #ddd Leaflet) */
   .leaflet-container.fond-blanc {
     background: #fff !important;
@@ -1593,3 +1597,28 @@ div[id^="GPgeocodeResultsList"] {
   background-color: #d0d4e8;
 }
 
+/* [cd30] Chevron discret de repli du bloc légende (haut droite) */
+.leaflet-bottom.leaflet-right .leaflet-legend {
+  position: relative;
+}
+.legende-chevron {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  z-index: 2;
+  font-size: 10px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  user-select: none;
+  padding: 2px 3px;
+}
+.legende-chevron:hover { color: #1f2937; }
+/* replié : contenu masqué, ne reste qu'une petite pastille avec le chevron */
+.leaflet-legend.legende-repliee .leaflet-legend-contents {
+  display: none !important;
+}
+.leaflet-legend.legende-repliee {
+  min-width: 24px;
+  min-height: 20px;
+}

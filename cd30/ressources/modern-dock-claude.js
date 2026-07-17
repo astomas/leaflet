@@ -870,7 +870,30 @@
     sidebar.appendChild(attribution);
   }
 
+  // [cd30] Chevron discret en haut à droite du bloc légende : replie/déplie
+  // tout le bloc au clic (mêmes flèches que les en-têtes de couche).
+  function setupLegendeChevron(essaisRestants) {
+    var legende = document.querySelector(".leaflet-bottom.leaflet-right .leaflet-legend");
+    if (!legende) {
+      var n = (typeof essaisRestants === "number") ? essaisRestants : 40;
+      if (n > 0) setTimeout(function () { setupLegendeChevron(n - 1); }, 400);
+      return;
+    }
+    if (legende.querySelector(".legende-chevron")) return;
+    var chev = document.createElement("span");
+    chev.className = "legende-chevron";
+    chev.title = "Replier / déplier la légende";
+    chev.textContent = "▼";
+    legende.appendChild(chev);
+    chev.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var replie = legende.classList.toggle("legende-repliee");
+      chev.textContent = replie ? "▶" : "▼";
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    setupLegendeChevron();
     setupCopyrightSidebar();
     setupSidebarScroll();
     setupSidebarResizer();
