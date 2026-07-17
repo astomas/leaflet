@@ -901,6 +901,11 @@
       legende.classList.remove("legende-repliee");
       chev.textContent = "▼";
     });
+    // [cd30] petit écran (< 1000px de large) : légende repliée à l'ouverture
+    if (window.innerWidth < 1000) {
+      legende.classList.add("legende-repliee");
+      chev.textContent = "▶";
+    }
   }
 
   document.addEventListener("DOMContentLoaded", function () {
