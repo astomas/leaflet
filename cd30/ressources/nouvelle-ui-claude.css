@@ -1621,6 +1621,17 @@ div[id^="GPgeocodeResultsList"] {
   display: none !important;
 }
 .leaflet-legend.legende-repliee {
-  min-width: 24px;
-  min-height: 20px;
+  min-width: 28px;
+  min-height: 28px;
+}
+/* [cd30] replié : chevron centré dans la pastille */
+.leaflet-legend.legende-repliee .legende-chevron {
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
