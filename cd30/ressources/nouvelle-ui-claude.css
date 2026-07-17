@@ -1581,3 +1581,8 @@ div[id^="GPgeocodeResultsList"] {
   border-radius: 4px;
   transition: background-color .12s;
 }
+/* [cd30] Neutralise le hover NATIF du plugin sur l'en-tête (nom) de couche
+   (leaflet.legend.css : group-header:hover #bcc1d9) : fond normal conservé */
+.leaflet-legend .leaflet-legend-group-header:hover {
+  background-color: #d0d4e8;
+}
