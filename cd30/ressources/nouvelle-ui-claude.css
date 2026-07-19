@@ -742,7 +742,6 @@ body.is-resizing * {
 }
 .popup-entete-titre { 
   line-height: 1.2;
-  margin-bottom: -5px;
 }
 .popup-entete-icone {
   width: 30px; 
