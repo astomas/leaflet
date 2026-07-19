@@ -1609,7 +1609,7 @@ div[id^="GPgeocodeResultsList"] {
   cursor: pointer;
   user-select: none;
   padding: 2px 3px;
-  top: 3px;
+  top: 4px;
   right: 8px;
   font-size: 16px;
   color: #0a179b;
