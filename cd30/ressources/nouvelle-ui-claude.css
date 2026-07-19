@@ -1644,6 +1644,8 @@ div[id^="GPgeocodeResultsList"] {
 }
 .leaflet-legend.legende-repliee .legende-libelle {
   display: inline;
+  width: 80px;
+  padding-left: 15px;
 }
 
 /* [cd30] Hauteur dynamique du bloc légende : neutralise le min-height inline
