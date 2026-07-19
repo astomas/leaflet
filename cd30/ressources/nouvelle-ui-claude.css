@@ -1626,7 +1626,7 @@ div[id^="GPgeocodeResultsList"] {
   align-items: center;
   gap: 6px;
   padding: 5px 9px;
-  margin-right: 16px;
+  margin-right: 18px;
 }
 .leaflet-legend.legende-repliee .legende-chevron {
   position: static;
