@@ -748,6 +748,7 @@ body.is-resizing * {
   height: 30px;
   object-fit: contain;
   flex: 0 0 auto;
+  margin-bottom: 3px;
 }
 .popup-entete-pastille {
   width: 14px; height: 14px;
