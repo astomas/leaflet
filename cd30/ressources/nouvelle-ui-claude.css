@@ -1644,7 +1644,7 @@ div[id^="GPgeocodeResultsList"] {
 }
 .leaflet-legend.legende-repliee .legende-libelle {
   display: inline;
-  width: 80px;
+  width: 75px;
   padding-left: 15px;
 }
 
