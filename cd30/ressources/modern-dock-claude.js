@@ -754,15 +754,15 @@
       "<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>"
       + "<div class='aide-grille'>"
       + carteAide("recentrer.png", "Recentrer carte", "Recentre automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).")
-      + carteAide("rechGoogle.gif", "Rechercher localisation", "Commune, adresse, bâtiment, route, lieu, etc. Gard priorisé.")
+      + carteAide("rechGoogle.gif", "Rechercher localisation", "Commune, adresse, bâtiment, route, lieu")
       + carteAide("/leaflet/cd30/ressources/aide-surlignage.svg", "Surligner lignes", "Surlignage en rouge des lignes au survol de la souris (actif ou non à l'ouverture selon la carte). Les lignes surlignées peuvent être disjointes ('multilignes').")
-      + carteAide("recherche.gif", "Rechercher élément de couche", "Saisir des caractères pour afficher les correspondances et zoomer dessus. Touche 'Espace' pour la liste entière. Export GeoJSON dans la fenêtre.")
-      + carteAide("legende.gif", "Légende dynamique", "Afficher/masquer chaque élément de la légende en cliquant dessus. L'œil de la barre latérale bascule la couche entière ; la légende filtre les éléments d'une même couche.")
+      + carteAide("recherche.gif", "Rechercher élément de couche", "Saisir des caractères pour afficher les correspondances et zoomer dessus. Touche 'Espace' pour la liste entière. Bouton d'export GeoJSON de l'élément dans la fenêtre.")
+      + carteAide("legende.gif", "Légende dynamique", "Afficher/masquer chaque élément de la légende en cliquant dessus. L'œil de la barre latérale bascule la couche entière ; la légende filtre les éléments d'une même couche. Bloc légende repliable.")
       + carteAide("streetview.gif", "Street View, Panoramax, Maps, Waze", "Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.")
       + carteAide("info.png", "Informations", "Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).")
-      + carteAide("coordGPS.gif", "Coordonnées GPS", "Clic droit sur la carte (zoom ville et +) pour afficher/copier les coordonnées 'latitude, longitude'. Le menu d'origine reste accessible par clic droit sur la barre latérale ou la barre titre.")
+      + carteAide("coordGPS.gif", "Coordonnées GPS", "Clic droit sur la carte (zoom ville et +) pour afficher/copier les coordonnées 'lat, long'.")
       + "<div class='aide-sous-titre'>Outils de carte</div>"
-      + carteAide("dossier.gif", "Import couches", "Affiche des fichiers de couches WGS84 (Shape, GeoJSON, csv, GPX, Kml). Glisser/déposer possible, zip (1 couche par fichier), clic droit pour effacer, csv = points uniquement.")
+      + carteAide("dossier.gif", "Import couches", "Affiche des fichiers de couches WGS84 (Shape, GeoJSON, csv, GPX, Kml). Glisser/déposer possible, zip (1 couche par fichier), clic droit pour effacer.")
       + carteAide("/leaflet/cd30/ressources/aide-export.svg", "Export couches", "Exporte la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.")
       + carteAide("imprimer.gif", "Imprimer carte", "'Vue courante' : la portion affichée, en paysage. 'Auto Gard' : tout le département (échelle auto). 'Sélec. zone' : un rectangle tracé à la souris.")
       + carteAide("distance.gif", "Mesure de distance(s)", "Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment ; plusieurs tronçons possibles. Bouton 'Règle' ou 'Echap' pour tout effacer.")
