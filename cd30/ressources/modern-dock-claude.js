@@ -761,9 +761,9 @@
       + carteAide("streetview.gif", "Street View, Panoramax, Maps, Waze", "Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.")
       + carteAide("info.png", "Informations", "Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).")
       + carteAide("coordGPS.gif", "Coordonnées GPS", "Clic droit sur la carte (zoom ville et +) pour afficher/copier les coordonnées 'latitude, longitude'. Le menu d'origine reste accessible par clic droit sur la barre latérale ou la barre titre.")
+      + "<div class='aide-sous-titre'>Outils de carte</div>"
       + carteAide("dossier.gif", "Import couches", "Affiche des fichiers de couches WGS84 (Shape, GeoJSON, csv, GPX, Kml). Glisser/déposer possible, zip (1 couche par fichier), clic droit pour effacer, csv = points uniquement.")
       + carteAide("/leaflet/cd30/ressources/aide-export.svg", "Export couches", "Exporte la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.")
-      + "<div class='aide-sous-titre'>Outils de carte</div>"
       + carteAide("imprimer.gif", "Imprimer carte", "'Vue courante' : la portion affichée, en paysage. 'Auto Gard' : tout le département (échelle auto). 'Sélec. zone' : un rectangle tracé à la souris.")
       + carteAide("distance.gif", "Mesure de distance(s)", "Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment ; plusieurs tronçons possibles. Bouton 'Règle' ou 'Echap' pour tout effacer.")
       + carteAide("isochrone.gif", "Isochrone et isodistance", "Placer un point puis lancer le calcul (voiture ou piéton) : isochrone ou isodistance autour ou depuis le point. Le réseau routier est pris en compte.")
