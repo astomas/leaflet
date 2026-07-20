@@ -1763,3 +1763,11 @@ div[id^="GPgeocodeResultsList"] {
   padding: 0;
   border-radius: 0;
 }
+
+/* [cd30] Le panneau d'aide passe au-dessus du bouton de recherche JSON.
+   Chaque coin Leaflet étant un contexte d'empilement, on élève le coin
+   qui contient le dialog d'aide ouvert. */
+.leaflet-top.leaflet-left:has(.dialog-aide),
+.leaflet-bottom.leaflet-left:has(.dialog-aide) {
+  z-index: 1100 !important;
+}
