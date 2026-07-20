@@ -1616,7 +1616,7 @@ div[id^="GPgeocodeResultsList"] {
 }
 .legende-chevron:hover { color: #1f2937; }
 /* replié : contenu masqué, ne reste qu'une petite pastille avec le chevron */
-.leaflet-legend.legende-repliee .leaflet-legend-contents {
+.leaflet-legend.legende-repliee > *:not(.legende-bandeau) {
   display: none !important;
 }
 /* [cd30] replié : pastille [Légende ▶], libellé gras cliquable */
@@ -1737,4 +1737,28 @@ div[id^="GPgeocodeResultsList"] {
   font-weight: 800;
   letter-spacing: .4px;
   border-bottom: 2px solid rgba(0, 126, 141, .25);
+}
+
+/* [cd30] Bandeau en haut du bloc légende : porte le chevron de repli global.
+   Un clic dessus (ou sur un élément de légende) maintient le bloc ouvert. */
+.legende-bandeau {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;            /* hauteur ~ chevron + marge */
+  background: #b3bdd9;         /* plus foncé que le fond du bloc */
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  user-select: none;
+}
+.legende-bandeau .legende-chevron {
+  position: static !important; /* le chevron vit dans le bandeau (annule top/right absolus) */
+  margin-left: auto;
+  padding: 0;
+}
+/* replié : le bandeau devient le contenu de la pastille (fond porté par la pastille) */
+.leaflet-legend.legende-repliee .legende-bandeau {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
 }
