@@ -1688,6 +1688,7 @@ div[id^="GPgeocodeResultsList"] {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 8px;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 .dialog-aide .aide-carte {
   display: flex;
