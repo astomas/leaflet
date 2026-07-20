@@ -863,6 +863,27 @@
       legende.classList.remove("legende-repliee");
       chev.textContent = "▼";
     });
+    // [cd30] survol de la pastille repliée : dépliage temporaire, repli à la
+    // sortie ; un clic pendant le survol maintient le bloc déplié.
+    legende.addEventListener("mouseenter", function () {
+      if (legende.classList.contains("legende-repliee")) {
+        legende.dataset.deplieSurvol = "1";
+        legende.classList.remove("legende-repliee");
+        chev.textContent = "▼";
+      }
+    });
+    legende.addEventListener("mouseleave", function () {
+      if (legende.dataset.deplieSurvol === "1") {
+        delete legende.dataset.deplieSurvol;
+        legende.classList.add("legende-repliee");
+        chev.textContent = "▶";
+      }
+    });
+    legende.addEventListener("click", function () {
+      if (legende.dataset.deplieSurvol === "1") {
+        delete legende.dataset.deplieSurvol;   // maintien : le mouseleave ne repliera plus
+      }
+    });
     // [cd30] petit écran (< 1000px de large) : légende repliée à l'ouverture
     if (window.innerWidth < 1000) {
       legende.classList.add("legende-repliee");
