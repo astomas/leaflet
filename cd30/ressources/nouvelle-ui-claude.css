@@ -1628,10 +1628,11 @@ div[id^="GPgeocodeResultsList"] {
   margin-right: 18px;
   cursor: pointer;
   transition: background-color .15s;
+  background-color: #c2cade !important;  /* replié : fond plus foncé (inline du plugin écrasé) */
 }
 /* effet de survol sur la pastille repliée */
 .leaflet-legend.legende-repliee:hover {
-  background-color: #ccdcef !important;  /* !important : fond posé en inline par le plugin */
+  background-color: #a9b6d6 !important;
 }
 .leaflet-legend.legende-repliee .legende-chevron {
   position: static;
