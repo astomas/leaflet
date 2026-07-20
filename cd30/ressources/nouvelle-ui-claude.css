@@ -1725,3 +1725,16 @@ div[id^="GPgeocodeResultsList"] {
   color: #fff !important;
   border-bottom-color: rgba(255, 255, 255, .25) !important;
 }
+
+/* [cd30] Aide : sous-titre de section dans la grille (pleine largeur) */
+.dialog-aide .aide-sous-titre {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  padding: 4px 2px 0;
+  color: #007e8d;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  border-bottom: 2px solid rgba(0, 126, 141, .25);
+}
