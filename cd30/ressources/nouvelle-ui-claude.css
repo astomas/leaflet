@@ -1791,6 +1791,6 @@ div[id^="GPgeocodeResultsList"] {
   display: flex;                /* le glyphe devient un item flex... */
   align-items: center;          /* ...centré verticalement... */
   justify-content: center;      /* ...et horizontalement (indépendant des métriques de police) */
-  font-size: 1.9em !important;  /* diamètre du cercle -> remplit le bouton */
+  font-size: 2.2em !important;  /* diamètre du cercle -> remplit le bouton */
   line-height: 1 !important;
 }
