@@ -1826,6 +1826,7 @@ this.importFichier = function () {
     });
     
     flagBlocVisu = true;
+    var resetVerrouVisu = null;
     function afficherPluginStreetview() {					
         if (flagBlocVisu){
             ctrlStreetview.addTo(maCarte);
@@ -1845,6 +1846,7 @@ this.importFichier = function () {
         pegman.setOpacity(0);
         boutonServiceVisu.button.classList.remove('bouton-service-visu-actif');
         flagBlocVisu = true;
+        if (resetVerrouVisu) resetVerrouVisu();
     }
     
     maCarte.on("keydown", function(e) {
@@ -1856,7 +1858,8 @@ this.importFichier = function () {
     ajouterHoverEtClic(boutonServiceVisu.button, {
         isVisible: () => !flagBlocVisu,
         afficher: afficherPluginStreetview,
-        masquer: masquerPluginStreetview
+        masquer: masquerPluginStreetview,
+        onClose: function(cb) { resetVerrouVisu = cb; }
     });
     
     // bouton info
