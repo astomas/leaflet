@@ -1772,7 +1772,7 @@ div[id^="GPgeocodeResultsList"] {
   z-index: 1100 !important;
 }
 
-/* [cd30] Bouton Info : icône fa-info-circle centrée et occupant la largeur du bouton */
+/* [cd30] Bouton Info : icône fa-info-circle centrée (H+V) et occupant la largeur du bouton */
 .easy-button-button.bouton-info {
   display: flex;
   align-items: center;
@@ -1788,8 +1788,9 @@ div[id^="GPgeocodeResultsList"] {
   right: 0;                     /* annule le décalage 1px hérité d'easy-button.css */
 }
 .easy-button-button.bouton-info .fa {
-  font-size: 1.9em !important;  /* agrandit le cercle (actuel : 1.5em) -> remplit le bouton */
+  display: flex;                /* le glyphe devient un item flex... */
+  align-items: center;          /* ...centré verticalement... */
+  justify-content: center;      /* ...et horizontalement (indépendant des métriques de police) */
+  font-size: 1.9em !important;  /* diamètre du cercle -> remplit le bouton */
   line-height: 1 !important;
-  width: 100%;
-  text-align: center;
 }
