@@ -1771,3 +1771,25 @@ div[id^="GPgeocodeResultsList"] {
 .leaflet-bottom.leaflet-left:has(.dialog-aide) {
   z-index: 1100 !important;
 }
+
+/* [cd30] Bouton Info : icône fa-info-circle centrée et occupant la largeur du bouton */
+.easy-button-button.bouton-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.easy-button-button.bouton-info .button-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  right: 0;                     /* annule le décalage 1px hérité d'easy-button.css */
+}
+.easy-button-button.bouton-info .fa {
+  font-size: 1.9em !important;  /* agrandit le cercle (actuel : 1.5em) -> remplit le bouton */
+  line-height: 1 !important;
+  width: 100%;
+  text-align: center;
+}
