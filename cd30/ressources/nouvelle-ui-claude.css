@@ -673,6 +673,12 @@ body.is-resizing * {
   background-color: #eef4fb !important;
 }
 
+/* [cd30] Bouton Recentrer : survol gris (comme "rechercher lieu"), pas bleu */
+.leaflet-control .easy-button-button.btn-recentrer:hover {
+  background-color: #f4f4f4 !important;      /* gris IGN, comme "rechercher lieu" */
+  color: var(--modern-primary) !important;   /* icône reste sombre, pas l'accent bleu */
+}
+
 /* //// modif nouvelle UI - bouton pegman (Service Visualisation) : la règle
    globale .easy-button-button { background:#fff !important } écrasait l'état
    actif (jaune) et l'état inactif. On rétablit avec une spécificité supérieure :
