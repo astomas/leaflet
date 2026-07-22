@@ -1499,9 +1499,17 @@ body.leaflet--printing .titre {
 }
 /* [cd30] icône ? FontAwesome : taille 20, orange, éclaircie au survol */
 .modern-header-aide .modern-header-help-label {
-  font-size: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;        /* le rond */
+  background: #fff;          /* blanc */
+  font-size: 30px;
   font-weight: 900;
-  color: #f9b062;
+  color: #f9b062;            /* "?" reste orange */
+  box-sizing: border-box;
 }
 .modern-header-aide:hover .modern-header-help-label {
   color: #ffc98f;
