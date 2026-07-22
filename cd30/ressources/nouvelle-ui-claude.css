@@ -663,14 +663,14 @@ body.is-resizing * {
 .leaflet-bar a,
 .leaflet-control .easy-button-button {
   color: var(--modern-primary) !important;
-  background: #fff !important;
+  background-color: #fff !important;
   transition: background .18s, color .18s;
 }
 
 .leaflet-bar a:hover,
 .leaflet-control .easy-button-button:hover {
   color: var(--modern-accent) !important;
-  background: #eef4fb !important;
+  background-color: #eef4fb !important;
 }
 
 /* //// modif nouvelle UI - bouton pegman (Service Visualisation) : la règle
