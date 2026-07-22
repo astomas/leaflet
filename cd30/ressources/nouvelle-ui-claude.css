@@ -679,6 +679,13 @@ body.is-resizing * {
   color: var(--modern-primary) !important;   /* icône reste sombre, pas l'accent bleu */
 }
 
+/* [cd30] Boutons Zoom +/- : survol gris (comme recentrer / rechercher lieu), pas bleu */
+.leaflet-bar a.leaflet-control-zoom-in:hover,
+.leaflet-bar a.leaflet-control-zoom-out:hover {
+  background-color: #f4f4f4 !important;
+  color: var(--modern-primary) !important;
+}
+
 /* //// modif nouvelle UI - bouton pegman (Service Visualisation) : la règle
    globale .easy-button-button { background:#fff !important } écrasait l'état
    actif (jaune) et l'état inactif. On rétablit avec une spécificité supérieure :
