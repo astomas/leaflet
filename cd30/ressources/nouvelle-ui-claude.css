@@ -43,12 +43,19 @@ body {
   position: relative;
   overflow: hidden;
   color: #fff;
-  /* [cd30] Fond uniforme du bandeau haut (dégradé et halo décoratif supprimés) */
-  background: #007e8d !important;
+  /* [cd30] Bandeau haut : dégradé 2 teal + halo demi-cercle (restaurés) */
+  background: linear-gradient(135deg, #007e8d 0%, #005f6b 100%) !important;
 }
 
 .modern-header::before {
-  content: none; /* [cd30] halo clair décoratif supprimé : fond uniforme */
+  content: "";
+  position: absolute;
+  top: -60%;
+  right: -8%;
+  width: 360px;
+  height: 220px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
 }
 
 .modern-header-logos,
