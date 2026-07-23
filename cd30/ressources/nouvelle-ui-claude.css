@@ -1659,8 +1659,8 @@ div[id^="GPgeocodeResultsList"] {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 9px;
-  margin-right: 18px;
+  padding: 5px 12px;
+  margin-right: 10px;
   cursor: pointer;
   transition: background-color .15s;
   background-color: #c2cade !important;  /* replié : fond plus foncé (inline du plugin écrasé) */
