@@ -1632,7 +1632,7 @@ div[id^="GPgeocodeResultsList"] {
 
 /* [cd30] écarte le bloc visu/info de la légende en dessous (+5px) */
 .leaflet-bottom.leaflet-right .boutons-conteneur {
-  margin-bottom: 10px !important;   /* 5px Leaflet + 5px d'écart supplémentaire */
+  margin-bottom: 3px !important;   /* 5px Leaflet + 5px d'écart supplémentaire */
 }
 .legende-chevron {
   position: absolute;
