@@ -649,7 +649,7 @@ body.is-resizing * {
   max-height: 28px !important;
 }
 
-.leaflet-bar:not(.detail-couches-sidebar),
+.leaflet-bar:not(.detail-couches-sidebar):not(.barre-services-visu),
 .legend-container,
 .leaflet-legend:not(.detail-couches-sidebar),
 .infotitre {

@@ -8,7 +8,7 @@
 	],
 	
 	onAdd: function(map) {
-		this.containerHTML = L.DomUtil.create('div', 'leaflet-bar');
+		this.containerHTML = L.DomUtil.create('div', 'leaflet-bar barre-services-visu');
 		this.tableauBoutons = [];
 		for (i=0; i < this.tabServices.length; i++){		
 			this.ajouterBouton(this.tabServices[i]);
