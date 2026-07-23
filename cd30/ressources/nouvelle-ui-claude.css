@@ -1633,6 +1633,9 @@ div[id^="GPgeocodeResultsList"] {
 .leaflet-bottom.leaflet-right .boutons-conteneur {
   margin-bottom: 0px !important;   
 }
+/* [cd30] espace entre boutons visu et info : géré par gap (remplace le margin-right hérité de si3p0) */
+.boutons-conteneur { gap: 3px; }
+.boutons-conteneur .bouton-service-visu { margin-right: 0; }
 .legende-chevron {
   position: absolute;
   z-index: 2;
