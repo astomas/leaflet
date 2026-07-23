@@ -1924,8 +1924,8 @@ this.importFichier = function () {
         options: {position: 'bottomright'}, 
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
-            boutonConteneur.appendChild(boutonInfo.button);	// [cd30] bouton Info à gauche du bouton streetview
             boutonConteneur.appendChild(boutonServiceVisu.button);
+            boutonConteneur.appendChild(boutonInfo.button);
             return boutonConteneur;
         }
     });
