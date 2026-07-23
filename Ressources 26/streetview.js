@@ -48,7 +48,7 @@
 		button.style.borderRadius = '10px';
 		this.containerHTML.style.border = 'none';	
 		this.containerHTML.style.padding = 'none';	
-		this.containerHTML.style.marginBottom = '2px';	
+		this.containerHTML.style.marginBottom = '-2px';	
 		this.containerHTML.style.background = 'none';
 		 // Overriding some of the leaflet styles
 		button.style.display = 'inline-block';	
