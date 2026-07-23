@@ -297,19 +297,13 @@ body.is-resizing * {
 
 .modern-family-title em {
   padding: 3px 8px;
-  color: #64748b;
-  background: #eef2f6;
+  color: #475569;
+  background: #dbe3ec;
   border-radius: 999px;
   font-style: normal;
   font-size: .68rem;
   text-transform: none;
   letter-spacing: 0;
-}
-
-/* [cd30] badge "n fonds" : un peu plus foncé pour le distinguer */
-.modern-family-fonds-plan .modern-family-title em {
-  background: #dbe3ec;
-  color: #475569;
 }
 
 .modern-family p {
