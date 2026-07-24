@@ -30,8 +30,8 @@
 			border-radius: 5px;
 		}
 		.sidebar-liens {
-			min-width: 380px;
-			max-width: 550px;
+			flex: 1;
+			min-width: 0;
 			background-color: #e8e8e8;
 			border-radius: 8px;
 			padding: 15px 12px;
@@ -68,6 +68,7 @@
 			background-color: #fde8c8;
 			padding: 20px;
 			flex: 1; /* prend tout l'espace restant */
+			min-width: 0; /* autorise le rétrécissement à 50% (image = élément remplacé) */
 		}
 		.titre-centre {
 			text-align: center;
