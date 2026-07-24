@@ -781,6 +781,13 @@ body.is-resizing * {
 .popup-cle { font-weight: 700; color: #16222e; }
 .popup-val { color: #7a8896; font-weight: 500; }
 
+/* [cd30] pop-up doublons : nom de couche sur fond orange pâle, à chaque entrée */
+.grille-active .popup-entete-titre {
+  background: #fde8c8;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
 /* Conteneur scrollable des popups multi-entités (lignes superposées + import) */
 .popup-scroll {
   max-height: 300px;
