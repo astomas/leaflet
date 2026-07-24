@@ -252,16 +252,19 @@
                 /*var legendContainer = L.DomUtil.create("div", "leaflet-legend-column", this._contents);
                 for (var g = 0; g < groupesOrdonnes.length; g++) {*/
 
-				// Répartition des groupes sur N colonnes (1 ou 2)
-				// Si 2 colonnes : coupe simplement le premier groupe > seuilColonne items.
-				var colSize = Math.ceil(groupesOrdonnes.length / this.options.column);
+				// Répartition sur N colonnes par nombre d'ÉLÉMENTS cumulés (et non par
+				// nombre de groupes) : la colonne 1 vise cibleColonne items, le groupe
+				// qui franchit la cible est coupé et sa suite passe en colonne 2.
+				var totalItems = 0;
+				for (var t = 0; t < groupesOrdonnes.length; t++) totalItems += groupesMap[groupesOrdonnes[t]].length;
+				var cibleColonne = Math.ceil(totalItems / this.options.column);
 				var legendContainer;
-				var seuilColonne = 22;
 				var nbColonnesCreees = 0;
 				var splitGroupeDejaFait = false;
+				var cumulItems = 0;
 
 				for (var g = 0; g < groupesOrdonnes.length; g++) {
-					if (g % colSize === 0 && nbColonnesCreees < this.options.column) {
+					if (nbColonnesCreees === 0 || (nbColonnesCreees < this.options.column && cumulItems >= cibleColonne * nbColonnesCreees)) {
 						legendContainer = L.DomUtil.create("div", "leaflet-legend-column", this._contents);
 						nbColonnesCreees++;
 					}
@@ -280,10 +283,13 @@
                     // Conteneur des items, toujours déplié à l'ouverture (style Lizmap)
                     var groupeContenu = L.DomUtil.create("div", "leaflet-legend-group-content", legendContainer);
 
-					// Ajouter les items ou couper le groupe si trop long en 2 colonnes
-					if (this.options.column === 2 && itemsDuGroupe.length > seuilColonne && nbColonnesCreees < 2 && !splitGroupeDejaFait) {
+					// Ajouter les items, ou couper le groupe qui franchit la cible de la
+					// colonne 1 (coupe évitée si elle laisserait moins de 3 items d'un côté)
+					var placeRestante = cibleColonne * nbColonnesCreees - cumulItems;
+					if (this.options.column === 2 && nbColonnesCreees < 2 && !splitGroupeDejaFait
+						&& itemsDuGroupe.length > placeRestante && placeRestante >= 3 && itemsDuGroupe.length - placeRestante >= 3) {
 						// Début du groupe dans la colonne actuelle
-						for (var j = 0; j < seuilColonne; j++) {
+						for (var j = 0; j < placeRestante; j++) {
 							this._buildLegendItems(groupeContenu, itemsDuGroupe[j]);
 						}
 
@@ -299,7 +305,7 @@
 						titreGroupeSuite.innerText = nomGroupe + " - suite";
 						var groupeContenuSuite = L.DomUtil.create("div", "leaflet-legend-group-content", legendContainer);
 
-						for (var j = seuilColonne; j < itemsDuGroupe.length; j++) {
+						for (var j = placeRestante; j < itemsDuGroupe.length; j++) {
 							this._buildLegendItems(groupeContenuSuite, itemsDuGroupe[j]);
 						}
 
@@ -321,6 +327,8 @@
 							this._buildLegendItems(groupeContenu, itemsDuGroupe[j]);
 						}
 					}
+
+					cumulItems += itemsDuGroupe.length;
 
                     // Événement clic sur le header pour replier/déplier
                     // Closure nécessaire pour capturer les bonnes références dans la boucle
