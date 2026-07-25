@@ -34,6 +34,11 @@
 	box-shadow: 0 2px 6px rgba(0,0,0,0.45);
 	transition: transform 0.1s, box-shadow 0.15s;
 }
+/* [cd30] Fond du badge selon le niveau de vigilance (jaune / orange / rouge) */
+.meteo-alerte-simple.meteo-niveau-jaune  { background: #ffdf00; color: #1a1a1a; }
+.meteo-alerte-simple.meteo-niveau-orange { background: #ff8f00; color: #fff; }
+.meteo-alerte-simple.meteo-niveau-rouge  { background: #e2001a; color: #fff; }
+
 .meteo-alerte-simple:hover {
 	transform: translateY(-1px);
 	box-shadow: 0 4px 10px rgba(0,0,0,0.5);
