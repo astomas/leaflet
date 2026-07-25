@@ -1680,6 +1680,11 @@ this.importFichier = function () {
 		}		
 		
 		maCarte.on("browser-print-start", function(e){
+			// [cd30] Auto Gard : carte imprimée descendue de 5px. Différé car le plugin
+			// refait un fitBounds juste après cet événement (mode auto : InvalidateBounds).
+			if (maCarte.getContainer().classList.contains("leaflet-browser-print--auto")) {
+				setTimeout(function() { e.printMap.panBy([0, -5], { animate: false }); }, 150);
+			}
 			if (presenceLegende) {
 				blocLegende.addTo(e.printMap);
 				// [sans-legende] applique la mise en 2 colonnes sur la légende d'impression
