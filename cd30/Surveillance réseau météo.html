@@ -1106,26 +1106,8 @@ function CarteLeaflet(conteneurId) {
 				}
 			}
 		
-			// tri des libelles legende lignes
-			function estUneLigne(type) {
-				var typeMin = type.toLowerCase();
-				return typeMin === "polyline" || typeMin.includes("line");
-			}
-			
-			tabCtrlLegendeObj.sort(function(a, b) {
-				// Si A ET B sont des lignes, on applique le tri
-				if (estUneLigne(a.type) && estUneLigne(b.type)) {			
-					// Actifs en premier, Inactifs (grisés) en dessous
-					if (a.inactive !== b.inactive) {
-						return a.inactive ? 1 : -1; 
-					}	
-					// Tri alphanum A-Z, 1-10...
-					return a.label.localeCompare(b.label, 'fr', { numeric: true, sensitivity: 'base' });
-				}
-			
-				// Si ce ne sont pas des lignes, on ignore et on laisse ordre tel quel
-				return 0;
-			});
+			// [cd30] Le tri alphabetique des libelles de lignes a ete retire : la legende
+			// suit strictement l'ordre des couches du GeoJSON, lignes comprises.
 	
 			function ajusterLargeurColonnesLegende(racineLegende) {
 			    var base = racineLegende || maCarte.getContainer();
