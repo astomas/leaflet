@@ -1138,7 +1138,8 @@ function CarteLeaflet(conteneurId) {
 					});
 					positions.forEach(function(p, i) { tabCtrlLegendeObj[p] = entrees[i]; });
 				});
-			};
+			}
+			trierLignesDansChaqueCouche();   // [cd30] l'appel manquait : la fonction n'etait jamais executee
 	
 	
 			function ajusterLargeurColonnesLegende(racineLegende) {
