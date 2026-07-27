@@ -1029,7 +1029,7 @@ function CarteLeaflet(conteneurId) {
 						// A type égal, on conserve l'ordre d'apparition d'origine
 						return a.index - b.index;
 					})
-					.map(obj => obj.item);			
+					.map(obj => { obj.item[6] = obj.index; return obj.item; });			
 	
 			// regroupement elements legende uniques par type geom
 			ordreMarkerLeg = groupBy(tabEltsMarkerLeg, "options.cleUniqueLegende");	
@@ -1070,9 +1070,14 @@ function CarteLeaflet(conteneurId) {
 					inactive: tabNettoyé[i][4], 
 					nomCouche: tabNettoyé[i][5], 
 					layers: tabCouchesLGLeg[i],
-					originalIndex: i
+					originalIndex: tabNettoyé[i][6]
 				});
 			}
+
+			// [cd30] Retablit l'ordre des couches du GeoJSON dans la legende. Sans risque :
+			// l'appariement couche/legende (par index, aligne sur Object.assign) a deja eu
+			// lieu, chaque entree porte desormais sa propre reference layers.
+			tabCtrlLegendeObj.sort(function(a, b) { return a.originalIndex - b.originalIndex; });
 
 			// Expose les items légende groupés par couche pour injection dans la sidebar.
 			window.modernLegendeParCouche = {};
