@@ -270,7 +270,7 @@ window.exportTronconCSV = function(dataGroupEncoded, nomFichier) {
     var toutesColonnes = ['nomcouche'];
     dataArray.forEach(function(item) {
         Object.keys(item).forEach(function(k) {
-            if (!toutesColonnes.includes(k) && !k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|afficherlegouverture|leafletsearch)$/)) {
+            if (!toutesColonnes.includes(k) && !k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|ordre_legende|afficherlegouverture|leafletsearch)$/)) {
                 toutesColonnes.push(k);
             }
         });
@@ -620,7 +620,7 @@ function CarteLeaflet(conteneurId) {
 			if (élément.properties.legende){					
 				presenceLegende = true;
 				tabComposantLeg.push([élément.geometry.type, élément.properties.legende, élément.properties.couleur, élément.properties.icone, 
-				élément.properties.afficherlegouverture, élément.properties.nomcouche]);
+				élément.properties.afficherlegouverture, élément.properties.nomcouche, élément.properties.ordre_legende]);
 			}
 			tabGeomCouche.push([élément.geometry.type, élément.properties.nomcouche]);	
 		}
@@ -643,7 +643,7 @@ function CarteLeaflet(conteneurId) {
             p.push("<div style='padding:5px;'>");
             var details = [];
             for (var nomPpté in pps) {
-                if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
+                if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|ordre_legende|afficherlegouverture|leafletsearch)$/)) {
                     var ligne = formaterChampPopup(nomPpté, pps[nomPpté]);
                     nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/) ? details.unshift(ligne) : details.push(ligne);
                 }
@@ -671,10 +671,10 @@ function CarteLeaflet(conteneurId) {
         if (nomPpté.match(/^([Nn]uméro [Rr]oute|[Nn]umeroroute|[Rr][Dd])$/)) {
             tableauContenuPopup.unshift(formaterChampPopup(nomPpté, pps[nomPpté]));
         } else {
-            if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)$/)) {
+            if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|ordre_legende|afficherlegouverture|leafletsearch)$/)) {
                 tableauContenuPopup.push(formaterChampPopup(nomPpté, pps[nomPpté]));
             }
-            if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|afficherlegouverture|leafletsearch)/)) {
+            if (!nomPpté.match(/^([Cc]ouleur|[Ll]egende|[Ll]ien|[Ii]cone|to_timestamp|nomcouche|ordre_legende|afficherlegouverture|leafletsearch)/)) {
                 tableauContenuTooltip.push("<b>"+ nomPpté + ":</b> " + pps[nomPpté]);
             }
         }
@@ -1030,7 +1030,7 @@ function CarteLeaflet(conteneurId) {
 						// A type égal, on conserve l'ordre d'apparition d'origine
 						return a.index - b.index;
 					})
-					.map(obj => { obj.item[6] = obj.index; return obj.item; });			
+					.map(obj => { obj.item[7] = obj.index; return obj.item; });			
 	
 			// regroupement elements legende uniques par type geom
 			ordreMarkerLeg = groupBy(tabEltsMarkerLeg, "options.cleUniqueLegende");	
@@ -1071,7 +1071,8 @@ function CarteLeaflet(conteneurId) {
 					inactive: tabNettoyé[i][4],
 					nomCouche: tabNettoyé[i][5],
 					layers: tabCouchesLGLeg[i],
-					originalIndex: tabNettoyé[i][6]
+					ordreLegende: tabNettoyé[i][6],
+					originalIndex: tabNettoyé[i][7]
 				});
 			}
 
@@ -1125,8 +1126,19 @@ function CarteLeaflet(conteneurId) {
 					var positions = emplacements[nomC];
 					if (positions.length < 2) return;
 					var entrees = positions.map(function(p) { return tabCtrlLegendeObj[p]; });
+					// [cd30] ordre_legende (tri metier) prioritaire sur le tri alphanumerique.
+					// null et "" ne valent PAS 0 : Number(null) === 0, d'ou le controle explicite.
+					function ordreMetier(v) {
+						if (v === null || v === undefined || v === "") return null;
+						var n = Number(v);
+						return isNaN(n) ? null : n;
+					}
 					entrees.sort(function(a, b) {
 						if (a.inactive !== b.inactive) return a.inactive ? 1 : -1;
+						var oA = ordreMetier(a.ordreLegende), oB = ordreMetier(b.ordreLegende);
+						if (oA !== null && oB !== null) return oA !== oB ? oA - oB : a.originalIndex - b.originalIndex;
+						if (oA !== null) return -1;   // les libelles avec ordre_legende passent devant
+						if (oB !== null) return 1;
 						return a.label.localeCompare(b.label, 'fr', { numeric: true, sensitivity: 'base' });
 					});
 					positions.forEach(function(p, i) { tabCtrlLegendeObj[p] = entrees[i]; });
@@ -1587,7 +1599,7 @@ this.importFichier = function () {
                 let corps = [];
                 for (let nomPpté in pps) {
                     let k = nomPpté.trim();
-                    if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|leafletsearch|stroke|fill|color|X en WGS84|Y en WGS84)$/i)) {
+                    if (!k.match(/^([Cc]ouleur|[Ll]egende|[Ii]cone|to_timestamp|nomcouche|ordre_legende|leafletsearch|stroke|fill|color|X en WGS84|Y en WGS84)$/i)) {
                         let val = pps[nomPpté];
                         if (val !== null && val !== undefined) {
 						let ligne = formaterChampPopup(nomPpté, val);
