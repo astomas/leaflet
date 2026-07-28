@@ -964,6 +964,11 @@ function CarteLeaflet(conteneurId) {
 						}
 					}
 				}		
+				// [cd30] polygones de la legende repousses eux aussi : sans cela un
+				// polygone pourrait repasser au-dessus des lignes apres une activation
+				for (var k = 0; k < tabEltsMPLeg.length; k++) {
+					if (maCarte.hasLayer(tabEltsMPLeg[k])) tabEltsMPLeg[k].bringToBack();
+				}
 			}, 20); 
 		});
 
@@ -1202,24 +1207,24 @@ function CarteLeaflet(conteneurId) {
 			}	
 		}
 		
-		// On repousse au fond les éléments Lignes/Polygones liés à la légende
-		for (i=0; i < tabEltsMLSLeg.length; i++) {
-			tabEltsMLSLeg[i].bringToBack();		
-		}
-		for (i=0; i < tabEltsMPLeg.length; i++) {
-			tabEltsMPLeg[i].bringToBack();		
-		}
-
-		// [cd30] Les couches activees par la sidebar repassent SOUS les traces de la
-		// legende. Sans cela elles restent au-dessus : les boucles ci-dessus ne
-		// repoussent que les elements lies a la legende, jamais ceux de tabCoucheMG.
-		for (i=0; i < tabCoucheMG.length; i++) {
-			if (maCarte.hasLayer(tabCoucheMG[i])) {
-				tabCoucheMG[i].eachLayer(function(couche) {
-					if (couche.bringToBack) couche.bringToBack();
+		// [cd30] Empilement a l'init, du DESSUS vers le DESSOUS : lignes de la
+		// legende, lignes de la sidebar, polygones de la legende, polygones de la
+		// sidebar. Les polygones passent ainsi toujours sous les lignes.
+		// bringToBack place l'element tout au fond : l'ordre de traitement
+		// correspond donc a l'ordre d'affichage, du haut vers le bas.
+		function estPolygone(couche) { return couche instanceof L.Polygon; }
+		function repousserCouchesSidebar(filtre) {
+			for (var k = 0; k < tabCoucheMG.length; k++) {
+				if (!maCarte.hasLayer(tabCoucheMG[k])) continue;
+				tabCoucheMG[k].eachLayer(function(couche) {
+					if (couche.bringToBack && filtre(couche)) couche.bringToBack();
 				});
 			}
 		}
+		for (i=0; i < tabEltsMLSLeg.length; i++) { tabEltsMLSLeg[i].bringToBack(); }
+		repousserCouchesSidebar(function(couche) { return !estPolygone(couche); });
+		for (i=0; i < tabEltsMPLeg.length; i++) { tabEltsMPLeg[i].bringToBack(); }
+		repousserCouchesSidebar(estPolygone);
 		
 		var fondsCarte = {		
 			"CartoDB N&B": cartoDB, 		
