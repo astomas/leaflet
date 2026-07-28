@@ -1205,9 +1205,13 @@ function CarteLeaflet(conteneurId) {
 		function repousserCouchesSidebar(filtre) {
 			for (var k = 0; k < tabCoucheMG.length; k++) {
 				if (!maCarte.hasLayer(tabCoucheMG[k])) continue;
-				tabCoucheMG[k].eachLayer(function(couche) {
-					if (couche.bringToBack && filtre(couche)) couche.bringToBack();
-				});
+				// parcours a l'envers : bringToBack place au fond, donc traiter du
+				// dernier au premier laisse le DERNIER troncon du GeoJSON au-dessus,
+				// comme le fait l'ordre d'ajout naturel
+				var sousCouches = tabCoucheMG[k].getLayers();
+				for (var m = sousCouches.length - 1; m >= 0; m--) {
+					if (sousCouches[m].bringToBack && filtre(sousCouches[m])) sousCouches[m].bringToBack();
+				}
 			}
 		}
 		for (i=0; i < tabEltsMLSLeg.length; i++) { tabEltsMLSLeg[i].bringToBack(); }
