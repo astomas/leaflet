@@ -124,7 +124,7 @@
 	});
 	
 	console.log("nomVues : ", nomVues);
-	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon"];
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon","d30 troncon tf"];
 	var vueCouranteEtiquetteRD = false;
 	var vueCouranteTroncon = false;
 	
@@ -325,6 +325,10 @@ function formaterChampPopup(label, valeurHtml) {
 }
 
 // Étiquettes RD du Réseau routier 
+// //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
+function normaliserNomVue(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
@@ -498,7 +502,7 @@ function CarteLeaflet(conteneurId) {
 
 	function traiterEltsCouche (élément, couche) {		
 
-		if (élément.properties && (élément.properties.nomcouche === "Réseau routier" || élément.properties.nomcouche === "Linéaire")
+		if (vueCouranteEtiquetteRD
 			&& couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
 			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
 			couche.options.rdLabelColor = élément.properties.couleur || couche.options.color || "#888";
@@ -743,7 +747,7 @@ function CarteLeaflet(conteneurId) {
     tabEltsMLSLeg.push(élémentsMLS);
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // Réseau routier : mémorise la valeur RD + le niveau 
-    if (élément.properties.nomcouche === "Réseau routier" || élément.properties.nomcouche === "Linéaire") {
+    if (vueCouranteEtiquetteRD) {
         élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
         élémentsMLS.options.rdLabelColor = couleurOrigine;
         var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
@@ -806,6 +810,9 @@ function CarteLeaflet(conteneurId) {
 	        });
 	    }
 	    
+	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
+	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
+	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 

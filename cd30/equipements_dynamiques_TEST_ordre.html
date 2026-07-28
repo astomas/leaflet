@@ -117,9 +117,14 @@
 <script>
 	valeurTitre1 = "TEST ordre couches - Equipements dynamiques";
 	nbreDeVues = 8;
-	nomVues = ["camerasurveillanceroutiere_4map","stationcomptageroutierpermanente_4map","pointcomptageroutierpermanent_4map","points_mesure_webvia_4map","stations_vv_4map","reseauroutier_4map","voies_vertes_4map","limitegestionst_4map"];
+	nomVues = ["voies_vertes_4map","camerasurveillanceroutiere_4map","limitegestionst_4map","stationcomptageroutierpermanente_4map","reseauroutier_4map","pointcomptageroutierpermanent_4map","points_mesure_webvia_4map","stations_vv_4map"];
 	strRechJson = "2|leafletsearch|stations par Commune, RD, Etat";
 	clicZoomActif = true;	
+
+	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon","d30 troncon tf"];
+	var vueCouranteEtiquetteRD = false;
+	var vueCouranteTroncon = false;
 
 	nomVues = nomVues.map(vue => {
 	    vue = vue.replace(/_4map$/i, "").replace(/_/g, " ");
@@ -328,6 +333,10 @@ function formaterChampPopup(label, valeurHtml) {
 // dynamiquement au point de la route le plus proche du centre du viewport. Toujours
 // visible (quel que soit le zoom / la position de la souris), jamais en surnombre,
 // et affichée/masquée automatiquement selon l'activation de la couche.
+// //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
+function normaliserNomVue(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
@@ -509,7 +518,7 @@ function CarteLeaflet(conteneurId) {
 		// [cd30] étiquette RD : marque aussi les polylignes des couches "cases à cocher"
 		// (copies des couches légende) pour que cocher "Réseau routier" affiche les
 		// étiquettes, comme dans la carte Surveillance.
-		if (élément.properties && élément.properties.nomcouche === "Réseau routier"
+		if (vueCouranteEtiquetteRD
 			&& couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
 			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
 			couche.options.rdLabelColor = élément.properties.couleur || couche.options.color || "#888";
@@ -756,7 +765,7 @@ function CarteLeaflet(conteneurId) {
     tabEltsMLSLeg.push(élémentsMLS);
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // Réseau routier : mémorise la valeur RD + le niveau pour l'étiquette permanente (gererEtiquettesRD)
-    if (élément.properties.nomcouche === "Réseau routier") {
+    if (vueCouranteEtiquetteRD) {
         élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
         élémentsMLS.options.rdLabelColor = couleurOrigine;
         var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
@@ -821,6 +830,9 @@ function CarteLeaflet(conteneurId) {
 	        });
 	    }
 	    
+	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
+	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
+	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
