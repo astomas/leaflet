@@ -1207,6 +1207,17 @@ function CarteLeaflet(conteneurId) {
 		for (i=0; i < tabEltsMPLeg.length; i++) {
 			tabEltsMPLeg[i].bringToBack();		
 		}
+
+		// [cd30] Les couches activees par la sidebar repassent SOUS les traces de la
+		// legende. Sans cela elles restent au-dessus : les boucles ci-dessus ne
+		// repoussent que les elements lies a la legende, jamais ceux de tabCoucheMG.
+		for (i=0; i < tabCoucheMG.length; i++) {
+			if (maCarte.hasLayer(tabCoucheMG[i])) {
+				tabCoucheMG[i].eachLayer(function(couche) {
+					if (couche.bringToBack) couche.bringToBack();
+				});
+			}
+		}
 		
 		var fondsCarte = {		
 			"CartoDB N&B": cartoDB, 		
