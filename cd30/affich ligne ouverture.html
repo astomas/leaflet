@@ -325,6 +325,13 @@ function formaterChampPopup(label, valeurHtml) {
 }
 
 // Étiquettes RD du Réseau routier 
+// //// modif nouvelle UI - lecture d'une propriété en ignorant les espaces du nom (ex: "Niveau ") ////
+function propTrim(props, nom) {
+    for (var cle in props) {
+        if (cle.trim() === nom) return (props[cle] || "").toString().trim();
+    }
+    return "";
+}
 // //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
@@ -506,7 +513,7 @@ function CarteLeaflet(conteneurId) {
 			&& couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
 			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
 			couche.options.rdLabelColor = élément.properties.couleur || couche.options.color || "#888";
-			var niveauRDet = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
 			couche.options.rdProximite = /proximit/i.test(niveauRDet);
 		}
 		
@@ -750,7 +757,7 @@ function CarteLeaflet(conteneurId) {
     if (vueCouranteEtiquetteRD) {
         élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
         élémentsMLS.options.rdLabelColor = couleurOrigine;
-        var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+        var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place). Pour le réactiver, décommenter la ligne ci-dessous :
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
