@@ -1632,6 +1632,22 @@ div[id^="GPgeocodeResultsList"] {
   background-color: #d0d4e8;
 }
 
+/* [cd30] Libellés de légende : retour à la ligne au-delà de 250 px de large.
+   La règle sur la colonne est indispensable : sans elle, le width: min-content
+   du plugin réduit la colonne au mot le plus long et le libellé part sur de
+   nombreuses lignes. */
+.leaflet-legend-contents .leaflet-legend-item span {
+  display: inline-block;
+  white-space: normal;
+  overflow-wrap: break-word;
+  max-width: 250px;
+  flex: 0 0 auto;               /* largeur = contenu, jamais comprimée par la colonne */
+}
+.leaflet-legend-contents .leaflet-legend-column {
+  width: max-content;
+  max-width: 100%;
+}
+
 /* [cd30] Chevron discret de repli du bloc légende (haut droite) */
 .leaflet-bottom.leaflet-right .leaflet-legend {
   position: relative;
