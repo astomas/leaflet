@@ -325,6 +325,17 @@ function formaterChampPopup(label, valeurHtml) {
 }
 
 // Étiquettes RD du Réseau routier 
+// //// modif nouvelle UI - lecture d'une propriété en ignorant les espaces du nom (ex: "Niveau ") ////
+function propTrim(props, nom) {
+    for (var cle in props) {
+        if (cle.trim() === nom) return (props[cle] || "").toString().trim();
+    }
+    return "";
+}
+// //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
+function normaliserNomVue(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
@@ -502,7 +513,7 @@ function CarteLeaflet(conteneurId) {
 			if (vueCouranteEtiquetteRD && couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
 			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
 			couche.options.rdLabelColor = élément.properties.couleur || couche.options.color || "#888";
-			var niveauRDet = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
 			couche.options.rdProximite = /proximit/i.test(niveauRDet);
 		}
 		
@@ -743,10 +754,10 @@ function CarteLeaflet(conteneurId) {
     tabEltsMLSLeg.push(élémentsMLS);
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // Réseau routier : mémorise la valeur RD + le niveau 
-    if (élément.properties.nomcouche === "Réseau routier" || élément.properties.nomcouche === "Linéaire") {
+    if (vueCouranteEtiquetteRD) {
         élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
         élémentsMLS.options.rdLabelColor = couleurOrigine;
-        var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
+        var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place). Pour le réactiver, décommenter la ligne ci-dessous :
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
@@ -806,6 +817,9 @@ function CarteLeaflet(conteneurId) {
 	        });
 	    }
 	    
+	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
+	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
+	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
@@ -1049,7 +1063,7 @@ function CarteLeaflet(conteneurId) {
 					inactive: tabNettoyé[i][4],
 					nomCouche: tabNettoyé[i][5],
 					layers: tabCouchesLGLeg[i],
-					originalIndex: tabNettoyé[i][6],
+					ordreLegende: tabNettoyé[i][6],
 					originalIndex: tabNettoyé[i][7]
 				});
 			}
