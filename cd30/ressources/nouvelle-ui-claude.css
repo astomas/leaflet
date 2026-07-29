@@ -1647,6 +1647,13 @@ div[id^="GPgeocodeResultsList"] {
   width: max-content;
   max-width: 100%;
 }
+/* Même plafond pour les noms de couche (en-têtes) : sans lui, un nom long
+   n'est jamais coupé et élargit tout le bloc légende. */
+.leaflet-legend-contents .leaflet-legend-group-title {
+  overflow-wrap: break-word;
+  max-width: 250px;
+  flex: 0 0 auto;
+}
 
 /* [cd30] Chevron discret de repli du bloc légende (haut droite) */
 .leaflet-bottom.leaflet-right .leaflet-legend {
