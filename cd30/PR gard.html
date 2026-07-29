@@ -457,9 +457,20 @@ function CarteLeaflet(conteneurId) {
 	tabComposantLeg = [];
 	tabEltsMarkerLeg = [], tabEltsMLSLeg = [], tabEltsMPLeg = [];	
 	var presenceLegende = false, presenceIcone = false;
-	var markersOmsCouche = [];	
+	var markersOmsCouche = [];
 	var indexSpatial = {};
-	
+
+	// [cd30] Cache des icones : une seule instance L.Icon par couple url/taille au lieu
+	// d'une par marqueur (5000 points = 10000 instances inutiles).
+	var cacheIcones = {};
+	function iconePartagee(url, taille, ancre, ancrePopup) {
+		var cle = url + "|" + taille.join(",");
+		if (!cacheIcones[cle]) {
+			cacheIcones[cle] = L.icon({iconUrl: url, iconSize: taille, iconAnchor: ancre, popupAnchor: ancrePopup});
+		}
+		return cacheIcones[cle];
+	}
+
 	this.ajoutCoucheGeojson = function () {
 
 		// stockage des lignes de memes coord 
@@ -626,8 +637,15 @@ function CarteLeaflet(conteneurId) {
 		
 	function creerPopupEtLegende() {
     // aggregation popups doublons
-    var geoRef = JSON.stringify(élément.geometry.coordinates);
-	var propsGroupes = (indexSpatial[geoRef] || [élément]).map(function(f) { return f.properties; });
+    // [cd30] indexSpatial ne contient que des MultiLineString : inutile de serialiser
+    // les coordonnees des autres geometries (5000 points = 5000 stringify pour rien).
+    var propsGroupes = [élément.properties];
+    if (élément.geometry.type === "MultiLineString") {
+        var geoRef = JSON.stringify(élément.geometry.coordinates);
+        if (indexSpatial[geoRef]) {
+            propsGroupes = indexSpatial[geoRef].map(function(f) { return f.properties; });
+        }
+    }
 
     var estMulti = propsGroupes.length > 1;
     var contenuFinalPopup, texteTooltip;
@@ -703,7 +721,7 @@ function CarteLeaflet(conteneurId) {
 
 		// Application sur les Markers (Légende)
 		if (élément.properties.icone && élément.properties.legende && (élément.geometry.type == "Point" || élément.geometry.type == "MultiPoint")){
-			var iconeMarker = L.icon({iconUrl: élément.properties.icone, iconSize: [38,38], iconAnchor: [19,39], popupAnchor: [-1,-39]});
+			var iconeMarker = iconePartagee(élément.properties.icone, [38,38], [19,39], [-1,-39]);
 			var élémentsPoint = L.marker(élément.geometry.coordinates.slice().reverse(), {icon: iconeMarker, cleUniqueLegende: élément.properties.legende + "_" + élément.properties.icone});    
 			tabEltsMarkerLeg.push(élémentsPoint);
 			élémentsPoint.bindPopup(contenuFinalPopup, optionsPopup).bindTooltip(texteTooltip, optionsTooltip);
@@ -788,12 +806,12 @@ function CarteLeaflet(conteneurId) {
 	function creerIconeCusto (élément, latlng) {
 		if (élément.properties.icone) {	
 			presenceIcone = true;			
-			var geojsonIcone = L.icon({iconUrl: élément.properties.icone, iconSize: [38,38], iconAnchor: [19,39], popupAnchor: [-1,-39]});
+			var geojsonIcone = iconePartagee(élément.properties.icone, [38,38], [19,39], [-1,-39]);
 			return L.marker(élément.geometry.coordinates.slice().reverse(), {icon: geojsonIcone});
 		}
 		else {
 			presenceIcone = false;
-			var customIcone = new L.Icon({iconUrl: "/Ressources/API_JS/images/marker-icon.png", iconSize: [14,30], iconAnchor: [7,31], popupAnchor: [-1,-31]});
+			var customIcone = iconePartagee("/Ressources/API_JS/images/marker-icon.png", [14,30], [7,31], [-1,-31]);
 			return L.marker(latlng, {icon: customIcone});
 		}
 	}
@@ -909,6 +927,7 @@ function CarteLeaflet(conteneurId) {
 		// Points dessus
 		var zIndexDynamiquePoints = 200000;
 		var zIndexReactivation = 1000000;
+		var timerPolygonesDessous = null;
 		maCarte.on("layeradd", function(e) {
 			var coucheAjoutee = e.layer;
 			if (coucheAjoutee instanceof L.Marker) {
@@ -927,7 +946,10 @@ function CarteLeaflet(conteneurId) {
 				}
 			}
 			// Polygones dessous
-			setTimeout(function() {				
+			// [cd30] Un seul passage en attente : ajouter un groupe de 5000 marqueurs
+			// declenche 5000 "layeradd", donc autrefois 5000 timers identiques.
+			clearTimeout(timerPolygonesDessous);
+			timerPolygonesDessous = setTimeout(function() {
 				for (var i = 0; i < tabCoucheMG.length; i++) {
 					if (maCarte.hasLayer(tabCoucheMG[i])) {
 						var donnees = tabCoucheMetier[i][0];
