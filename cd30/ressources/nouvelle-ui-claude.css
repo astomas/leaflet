@@ -100,13 +100,6 @@ body {
   transition: opacity 0.15s;
 }
 
-.modern-subtitle {
-  margin-top: 5px;
-  font-size: .88rem;
-  opacity: .88;
-  font-weight: 500;
-}
-
 .modern-header-actions {
   display: flex;
   align-items: center;
@@ -114,22 +107,17 @@ body {
   white-space: nowrap;
 }
 
+/* padding / background / border sont redefinis plus bas (bouton Aide sans
+   pastille), inutile de les poser ici. */
 .modern-header-help {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 11px;
   color: #fff;
   font-size: .78rem;
   font-weight: 800;
   border-radius: 999px;
   cursor: pointer;
-  background: rgba(255, 255, 255, .14);
-  border: 1px solid rgba(255, 255, 255, .18);
-}
-
-.modern-header-help:hover {
-  background: rgba(255, 255, 255, .22);
 }
 
 /* Classes individuelles pour cibler chaque bouton séparément */
@@ -650,7 +638,6 @@ body.is-resizing * {
 }
 
 .leaflet-bar:not(.detail-couches-sidebar):not(.barre-services-visu),
-.legend-container,
 .leaflet-legend:not(.detail-couches-sidebar),
 .infotitre {
   border-radius: 5px !important;
@@ -834,17 +821,6 @@ body.is-resizing * {
   text-wrap: balance;
 }
 
-.legend-container {
-  color: #334155 !important;
-  background: rgba(255, 255, 255, .96) !important;
-  backdrop-filter: blur(8px);
-}
-
-.legend-container summary {
-  color: var(--modern-primary);
-  font-weight: 800;
-}
-
 .bouton-aide,
 .bouton-info,
 .bouton-service-visu,
@@ -892,7 +868,6 @@ body.is-resizing * {
   }
 
   .modern-header h1 { font-size: 1.25rem; }
-  .modern-subtitle { display: none; }
 
   .modern-main-content { grid-template-columns: 1fr; }
   .modern-sidebar,
