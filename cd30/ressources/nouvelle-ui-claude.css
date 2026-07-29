@@ -1651,7 +1651,7 @@ div[id^="GPgeocodeResultsList"] {
    n'est jamais coupé et élargit tout le bloc légende. */
 .leaflet-legend-contents .leaflet-legend-group-title {
   overflow-wrap: break-word;
-  max-width: 250px;
+  max-width: 280px;
   flex: 0 0 auto;
 }
 
