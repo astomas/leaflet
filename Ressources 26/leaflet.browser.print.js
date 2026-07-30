@@ -102,7 +102,643 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("/**\r\n\tMIT License http://www.opensource.org/licenses/mit-license.php\r\n\tAuthor Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.browser.print)\r\n**/\r\n\r\nL.Control.BrowserPrint = L.Control.extend({\r\n\toptions: {\r\n\t\ttitle: 'Print map',\r\n\t\tdocumentTitle: '',\r\n\t\tposition: 'topleft',\r\n        printLayer: null,\r\n\t\tprintModes: [\"Portrait\", \"Landscape\", \"Auto\", \"Custom\"],\r\n\t\tclosePopupsOnPrint: true,\r\n\t\tcontentSelector: \"[leaflet-browser-print-content]\",\r\n\t\tpagesSelector: \"[leaflet-browser-print-pages]\",\r\n\t\tmanualMode: false,\r\n\t\tcustomPrintStyle: { color: \"gray\", dashArray: '5, 10', pane: \"customPrintPane\" }\r\n\t},\r\n\r\n\tonAdd: function (map) {\r\n\r\n\t\tif (this.options.customPrintStyle.pane && !map.getPane(this.options.customPrintStyle.pane)) {\r\n\t\t\tmap.createPane(this.options.customPrintStyle.pane).style.zIndex = 9999;\r\n\t\t}\r\n\r\n\t\tvar container = L.DomUtil.create('div', 'leaflet-control-browser-print leaflet-bar leaflet-control');\r\n\t\tL.DomEvent.disableClickPropagation(container);\r\n\r\n\t\tthis._appendControlStyles(container);\r\n\r\n\t\tif (this.options.printModes.length > 1) {\r\n\t\t\tL.DomEvent.addListener(container, 'mouseover', this._displayPageSizeButtons, this);\r\n\t\t\tL.DomEvent.addListener(container, 'mouseout', this._hidePageSizeButtons, this);\r\n\t\t} else {\r\n\t\t\tcontainer.style.cursor = \"pointer\";\r\n\t\t}\r\n\r\n\t\tif (this.options.position.indexOf(\"left\") > 0) {\r\n\t\t\tthis._createIcon(container);\r\n\t\t\tthis._createMenu(container);\r\n\t\t} else {\r\n\t\t\tthis._createMenu(container);\r\n\t\t\tthis._createIcon(container);\r\n\t\t}\r\n\r\n\t\tmap.printControl = this; // Make control available from the map object itself;\r\n\t\treturn container;\r\n\t},\r\n\r\n\t_createIcon: function (container) {\r\n\t\tthis.__link__ = L.DomUtil.create('a', '', container);\r\n\t\tthis.__link__.className = \"leaflet-browser-print\";\r\n\t\tif (this.options.title) {\r\n\t\t\tthis.__link__.title = this.options.title;\r\n\t\t}\r\n\t\treturn this.__link__;\r\n\t},\r\n\r\n\t_createMenu: function (container) {\r\n\t\tvar domPrintModes = [];\r\n\r\n\t\tfor (var i = 0; i < this.options.printModes.length; i++) {\r\n\t\t\tvar mode = this.options.printModes[i];\r\n\r\n\t\t\t/*\r\n\t\t\t\tMode:\r\n\t\t\t\t\tMode: Portrait/Landscape/Auto/Custom\r\n\t\t\t\t\tTitle: 'Portrait'/'Landscape'/'Auto'/'Custom'\r\n\t\t\t\t\tPageSize: 'A3'/'A4'\r\n\t\t\t\t\tAction: '_printPortrait'/...\r\n\t\t\t\t\tInvalidateBounds: true/false\r\n\t\t\t*/\r\n\t\t\tif (mode.length) {\r\n\t\t\t\tvar key = mode[0].toUpperCase() + mode.substring(1).toLowerCase();\r\n\r\n\t\t\t\tmode = L.control.browserPrint.mode[mode.toLowerCase()](this._getDefaultTitle(key));\r\n\r\n\t\t\t} else if (mode instanceof L.Control.BrowserPrint.Mode) {\r\n\t\t\t\t// Looks like everythin is fine.\r\n\t\t\t} else {\r\n\t\t\t\tthrow \"Invalid Print Mode. Can't construct logic to print current map.\"\r\n\t\t\t}\r\n\r\n\t\t\tif (this.options.printModes.length == 1) {\r\n\t\t\t\tmode.Element = container;\r\n\t\t\t} else {\r\n\t\t\t\tmode.Element = L.DomUtil.create('li', 'browser-print-mode', L.DomUtil.create('ul', 'browser-print-holder', container));\r\n\t\t\t\tmode.Element.innerHTML = mode.Title;\r\n\t\t\t}\r\n\r\n\t\t\tL.DomEvent.addListener(mode.Element, 'click', mode.Action(this, mode), this);\r\n\r\n\t\t\tdomPrintModes.push(mode);\r\n\t\t}\r\n\r\n\t\tthis.options.printModes = domPrintModes;\r\n\t},\r\n\r\n\t_getDefaultTitle: function(key) {\r\n\t\treturn this.options.printModesNames && this.options.printModesNames[key] || key;\r\n\t},\r\n\r\n    _displayPageSizeButtons: function() {\r\n\t\tif (this.options.position.indexOf(\"left\") > 0) {\r\n\t        this.__link__.style.borderTopRightRadius = \"0px\";\r\n\t    \tthis.__link__.style.borderBottomRightRadius = \"0px\";\r\n\t\t} else {\r\n\t\t\tthis.__link__.style.borderTopLeftRadius = \"0px\";\r\n\t    \tthis.__link__.style.borderBottomLeftRadius = \"0px\";\r\n\t\t}\r\n\r\n\t\tthis.options.printModes.forEach(function(mode){\r\n\t\t\tmode.Element.style.display = \"inline-block\";\r\n\t\t});\r\n    },\r\n\r\n    _hidePageSizeButtons: function () {\r\n\t\tif (this.options.position.indexOf(\"left\") > 0) {\r\n\t    \tthis.__link__.style.borderTopRightRadius = \"\";\r\n\t    \tthis.__link__.style.borderBottomRightRadius = \"\";\r\n\t\t} else {\r\n\t    \tthis.__link__.style.borderTopLeftRadius = \"\";\r\n\t    \tthis.__link__.style.borderBottomLeftRadius = \"\";\r\n\t\t}\r\n\r\n\t\tthis.options.printModes.forEach(function(mode){\r\n\t\t\tmode.Element.style.display = \"\";\r\n\t\t});\r\n    },\r\n\r\n\t_getMode: function(expectedOrientation, mode) {\r\n\t\treturn new L.control.browserPrint.mode(expectedOrientation, mode.Title, mode.PageSize, mode.Action, mode.InvalidateBounds);\r\n\t},\r\n\r\n    _printLandscape: function (mode) {\r\n\t\tthis._addPrintClassToContainer(this._map, \"leaflet-browser-print--landscape\");\r\n        this._print(mode);\r\n    },\r\n\r\n    _printPortrait: function (mode) {\r\n\t\tthis._addPrintClassToContainer(this._map, \"leaflet-browser-print--portrait\");\r\n        this._print(mode);\r\n    },\r\n\r\n    _printAuto: function (mode) {\r\n\t\tthis._addPrintClassToContainer(this._map, \"leaflet-browser-print--auto\");\r\n\r\n\t\tvar autoBounds = this._getBoundsForAllVisualLayers();\r\n\t\tvar orientation = this._getPageSizeFromBounds(autoBounds);\r\n\r\n\t\tthis._print(this._getMode(orientation, mode), autoBounds);\r\n    },\r\n\r\n    _printCustom: function (mode) {\r\n\t\tthis._addPrintClassToContainer(this._map, \"leaflet-browser-print--custom\");\r\n\t\tthis.options.custom = { mode: mode};\r\n\t\tthis._map.on('mousedown', this._startAutoPoligon, this);\r\n    },\r\n\r\n\t_addPrintClassToContainer: function (map, printClassName) {\r\n\t\tvar container = map.getContainer();\r\n\r\n\t\tif (container.className.indexOf(printClassName) === -1) {\r\n\t\t\tcontainer.className += \" \" + printClassName;\r\n\t\t}\r\n\t},\r\n\r\n\t_removePrintClassFromContainer: function (map, printClassName) {\r\n\t\tvar container = map.getContainer();\r\n\r\n\t\tif (container.className && container.className.indexOf(printClassName) > -1) {\r\n\t\t\tcontainer.className = container.className.replace(\" \" + printClassName, \"\");\r\n\t\t}\r\n\t},\r\n\r\n\t_startAutoPoligon: function (e) {\r\n\t\te.originalEvent.preventDefault();\r\n\t\te.originalEvent.stopPropagation();\r\n\r\n\t\tthis._map.dragging.disable();\r\n\r\n\t\tthis.options.custom.start = e.latlng;\r\n\r\n\t\tthis._map.off('mousedown', this._startAutoPoligon, this);\r\n\t\tthis._map.on('mousemove', this._moveAutoPoligon, this);\r\n\t\tthis._map.on('mouseup', this._endAutoPoligon, this);\r\n\t},\r\n\r\n\t_moveAutoPoligon: function (e) {\r\n\t\tif (this.options.custom) {\r\n\t\t\te.originalEvent.preventDefault();\r\n\t\t\te.originalEvent.stopPropagation();\r\n\t\t\tif (this.options.custom.rectangle) {\r\n\t\t\t\tthis.options.custom.rectangle.setBounds(L.latLngBounds(this.options.custom.start, e.latlng));\r\n\t\t\t} else {\r\n\t\t\t\tthis.options.custom.rectangle = L.rectangle([this.options.custom.start, e.latlng], this.options.customPrintStyle);\r\n\t\t\t\tthis.options.custom.rectangle.addTo(this._map);\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\r\n\t_endAutoPoligon: function (e) {\r\n\r\n\t\te.originalEvent.preventDefault();\r\n\t\te.originalEvent.stopPropagation();\r\n\r\n\t\tthis._map.off('mousemove', this._moveAutoPoligon, this);\r\n\t\tthis._map.off('mouseup', this._endAutoPoligon, this);\r\n\r\n\t\tthis._map.dragging.enable();\r\n\r\n\t\tif (this.options.custom && this.options.custom.rectangle) {\r\n\t\t\tvar autoBounds = this.options.custom.rectangle.getBounds();\r\n\r\n\t\t\tthis._map.removeLayer(this.options.custom.rectangle);\r\n\r\n\t\t\tvar orientation = this._getPageSizeFromBounds(autoBounds);\r\n\t\t\tthis._print(this._getMode(orientation, this.options.custom.mode), autoBounds);\r\n\r\n\t\t\tdelete this.options.custom;\r\n\t\t} else {\r\n\t\t\tthis._clearPrint();\r\n\t\t}\r\n\t},\r\n\r\n\t_getPageSizeFromBounds: function(bounds) {\r\n\t\tvar height = Math.abs(bounds.getNorth() - bounds.getSouth());\r\n\t\tvar width = Math.abs(bounds.getEast() - bounds.getWest());\r\n\t\tif (height > width) {\r\n\t\t\treturn \"Portrait\";\r\n\t\t} else {\r\n\t\t\treturn \"Landscape\";\r\n\t\t}\r\n\t},\r\n\r\n\t_setupPrintPagesWidth: function(pagesContainer, size, pageOrientation) {\r\n\t\tpagesContainer.style.width = pageOrientation === \"Landscape\" ? size.Height : size.Width;\r\n\t},\r\n\r\n\t_setupPrintMapHeight: function(mapContainer, size, pageOrientation) {\r\n\t\tmapContainer.style.height = pageOrientation === \"Landscape\" ? size.Width : size.Height;\r\n\t},\r\n\r\n\t/* Intended to cancel next printing*/\r\n\tcancel: function(cancelNextPrinting){\r\n\t\tthis.cancelNextPrinting = cancelNextPrinting;\r\n\t},\r\n\r\n\tprint: function(pageMode) {\r\n\t\tpageMode.Action(this, pageMode)();\r\n\t},\r\n\r\n    _print: function (printMode, autoBounds) {\r\n\t\tthis._map.fire(L.Control.BrowserPrint.Event.PrintInit, { mode: printMode });\r\n\t\tL.Control.BrowserPrint.Utils.initialize();\r\n\r\n\t\tvar self = this;\r\n        var mapContainer = this._map.getContainer();\r\n\t\tvar pageOrientation = printMode.Mode;\r\n\r\n        var origins = {\r\n            bounds: autoBounds || this._map.getBounds(),\r\n            width: mapContainer.style.width,\r\n            height: mapContainer.style.height,\r\n\t\t\tdocumentTitle: document.title,\r\n\t\t\tprintLayer: L.Control.BrowserPrint.Utils.cloneLayer(this.options.printLayer),\r\n\t\t\tpanes: []\r\n        };\r\n\r\n\t\tvar mapPanes = this._map.getPanes();\r\n\t\tfor (var pane in mapPanes) {\r\n\t\t\torigins.panes.push({name: pane, container: undefined});\r\n\t\t}\r\n\r\n\t\torigins.printObjects = this._getPrintObjects(origins.printLayer);\r\n\r\n\t\tthis._map.fire(L.Control.BrowserPrint.Event.PrePrint, { printLayer: origins.printLayer, printObjects: origins.printObjects, pageOrientation: pageOrientation, printMode: printMode.Mode, pageBounds: origins.bounds});\r\n\r\n\t\tif (this.cancelNextPrinting) {\r\n\t\t\tdelete this.cancelNextPrinting;\r\n\t\t\treturn;\r\n\t\t}\r\n\r\n\t\tvar overlay = this._addPrintMapOverlay(printMode.PageSize, printMode.getPageMargin(\"mm\"), printMode.getSize(), pageOrientation, origins);\r\n\r\n\t\tif (this.options.documentTitle) {\r\n\t\t\tdocument.title = this.options.documentTitle;\r\n\t\t}\r\n\r\n\t\tthis._map.fire(L.Control.BrowserPrint.Event.PrintStart, { printLayer: origins.printLayer, printMap: overlay.map, printObjects: overlay.objects });\r\n\r\n\t\tif (printMode.InvalidateBounds) {\r\n\t\t\toverlay.map.fitBounds(origins.bounds);\r\n\t\t\toverlay.map.invalidateSize({reset: true, animate: false, pan: false});\r\n\t\t} else {\r\n\t\t\toverlay.map.setView(this._map.getCenter(), this._map.getZoom() - 0.3);\r\n\t\t}\r\n\r\n\t\tvar interval = setInterval(function(){\r\n\t\t\tif (!self._isTilesLoading(overlay.map)) {\r\n\t\t\t\tclearInterval(interval);\r\n\t\t\t\tif (self.options.manualMode) {\r\n\t\t\t\t\tself._setupManualPrintButton(overlay.map, origins, overlay.objects);\r\n\t\t\t\t} else {\r\n\t\t\t\t\tself._completePrinting(overlay.map, origins, overlay.objects);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}, 50);\r\n    },\r\n\r\n\t_completePrinting: function (overlayMap, origins, printObjects) {\r\n\t\tvar self = this;\r\n\t\tsetTimeout(function(){\r\n\t\t\tself._map.fire(L.Control.BrowserPrint.Event.Print, { printLayer: origins.printLayer, printMap: overlayMap, printObjects: printObjects });\r\n\t\t\tvar printPromise = window.print();\r\n\t\t\tif (printPromise) {\r\n\t\t\t\tPromise.all([printPromise]).then(function(){\r\n\t\t\t\t\tself._printEnd(origins);\r\n\t\t\t\t\tself._map.fire(L.Control.BrowserPrint.Event.PrintEnd, { printLayer: origins.printLayer, printMap: overlayMap, printObjects: printObjects });\r\n\t\t\t\t})\r\n\t\t\t} else {\r\n\t\t\t\tself._printEnd(origins);\r\n\t\t\t\tself._map.fire(L.Control.BrowserPrint.Event.PrintEnd, { printLayer: origins.printLayer, printMap: overlayMap, printObjects: printObjects });\r\n\t\t\t}\r\n\t\t}, 1000);\r\n\t},\r\n\r\n    _getBoundsForAllVisualLayers: function () {\r\n\t    var fitBounds = null;\r\n\r\n        // Getting all layers without URL -> not tiles.\r\n        for (var layerId in this._map._layers){\r\n            var layer = this._map._layers[layerId];\r\n            if (!layer._url && !layer._mutant) {\r\n                if (fitBounds) {\r\n                    if (layer.getBounds) {\r\n                        fitBounds.extend(layer.getBounds());\r\n                    } else if(layer.getLatLng){\r\n                        fitBounds.extend(layer.getLatLng());\r\n                    }\r\n                } else {\r\n                    if (layer.getBounds) {\r\n                        fitBounds = layer.getBounds();\r\n                    } else if(layer.getLatLng){\r\n                        fitBounds = L.latLngBounds(layer.getLatLng(), layer.getLatLng());\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n\t\tif (!fitBounds) {\r\n\t\t\tfitBounds = this._map.getBounds();\r\n\t\t}\r\n\r\n\t\treturn fitBounds;\r\n    },\r\n\r\n\t_clearPrint: function () {\r\n\t\tthis._removePrintClassFromContainer(this._map, \"leaflet-browser-print--landscape\");\r\n\t\tthis._removePrintClassFromContainer(this._map, \"leaflet-browser-print--portrait\");\r\n\t\tthis._removePrintClassFromContainer(this._map, \"leaflet-browser-print--auto\");\r\n\t\tthis._removePrintClassFromContainer(this._map, \"leaflet-browser-print--custom\");\r\n\t},\r\n\r\n    _printEnd: function (origins) {\r\n\t\tthis._clearPrint();\r\n\r\n\t\tdocument.body.removeChild(this.__overlay__);\r\n\t\tthis.__overlay__ = null;\r\n\r\n\t\tdocument.body.className = document.body.className.replace(\" leaflet--printing\", \"\");\r\n\t\tif (this.options.documentTitle) {\r\n\t\t\tdocument.title = origins.documentTitle;\r\n\t\t}\r\n\r\n\t\tthis._map.invalidateSize({reset: true, animate: false, pan: false});\r\n    },\r\n\r\n\t_getPrintObjects: function(printLayer) {\r\n\t\tvar printObjects = {};\r\n\t\tfor (var id in this._map._layers){\r\n\t\t\tvar layer = this._map._layers[id];\r\n\t\t\tif (!printLayer || !layer._url || layer instanceof L.TileLayer.WMS) {\r\n\t\t\t\tvar type = L.Control.BrowserPrint.Utils.getType(layer);\r\n\t\t\t\tif (type) {\r\n\t\t\t\t\tif (!printObjects[type]) {\r\n\t\t\t\t\t\tprintObjects[type] = [];\r\n\t\t\t\t\t}\r\n\t\t\t\t\tprintObjects[type].push(layer);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn printObjects;\r\n\t},\r\n\r\n    _addPrintCss: function (pageSize, pageMargin, pageOrientation) {\r\n\r\n        var printStyleSheet = document.createElement('style');\r\n\t\tprintStyleSheet.className = \"leaflet-browser-print-css\";\r\n        printStyleSheet.setAttribute('type', 'text/css');\r\n\t\tprintStyleSheet.innerHTML = ' @media print { .leaflet-popup-content-wrapper, .leaflet-popup-tip { box-shadow: none; }';\r\n\t\tprintStyleSheet.innerHTML += ' .leaflet-browser-print--manualMode-button { display: none; }';\r\n\t\tprintStyleSheet.innerHTML += ' * { -webkit-print-color-adjust: exact!important; printer-colors: exact!important; color-adjust: exact!important; }';\r\n\t\tif (pageMargin) {\r\n\t\t\tprintStyleSheet.innerHTML += ' @page { margin: ' + pageMargin + '; }';\r\n\t\t}\r\n\t\tprintStyleSheet.innerHTML += ' @page :first { page-break-after: always; }';\r\n\r\n        switch (pageOrientation) {\r\n            case \"Landscape\":\r\n                printStyleSheet.innerText += \" @page { size : \" + pageSize + \" landscape; }\";\r\n                break;\r\n            default:\r\n            case \"Portrait\":\r\n                printStyleSheet.innerText += \" @page { size : \" + pageSize + \" portrait; }\";\r\n                break;\r\n        }\r\n\r\n        return printStyleSheet;\r\n    },\r\n\r\n\t_appendControlStyles:  function (container) {\r\n\t\tvar printControlStyleSheet = document.createElement('style');\r\n\t\tprintControlStyleSheet.setAttribute('type', 'text/css');\r\n\r\n\t\tprintControlStyleSheet.innerHTML += \" .leaflet-control-browser-print { display: flex; } .leaflet-control-browser-print a { background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gcCCi8Vjp+aNAAAAGhJREFUOMvFksENgDAMA68RC7BBN+Cf/ZU33QAmYAT6BolAGxB+RrrIsg1BpfNBVXcPMLMDI/ytpKozMHWwK7BJJ7yYWQbGdBea9wTIkRDzKy0MT7r2NiJACRgotCzxykFI34QY2Ea7KmtxGJ+uX4wfAAAAAElFTkSuQmCC') no-repeat 5px; background-size: 18px 18px; display: block; border-radius: 0px;}\";\r\n\r\n\t\tprintControlStyleSheet.innerHTML += \" .leaflet-control-browser-print a.leaflet-browser-print { background-position-x: center; width:26px; heigth: 26px;}\";\r\n\t\tprintControlStyleSheet.innerHTML += \" .browser-print-holder { margin: 0px; padding: 0px; list-style: none; white-space: nowrap; } .browser-print-holder-left li:last-child { border-top-right-radius: 0px; border-bottom-right-radius: 0px; } .browser-print-holder-right li:first-child { border-top-left-radius: 0px; border-bottom-left-radius: 0px; }\";\r\n\t\tprintControlStyleSheet.innerHTML += \" .browser-print-mode { display: none; background-color: #919187; color: #FFF; font: 11px/19px 'Helvetica Neue', Arial, Helvetica, sans-serif; text-decoration: none; padding: 4px 10px; text-align: center; } .browser-print-mode { padding: 6px 10px; } .browser-print-mode:hover { background-color: #757570; cursor: pointer; }\";\r\n\t\tprintControlStyleSheet.innerHTML += \" .leaflet-browser-print--custom, .leaflet-browser-print--custom path { cursor: crosshair!important; }\";\r\n\t\tprintControlStyleSheet.innerHTML += \" .leaflet-print-overlay { width: 100%; height:auto; min-height: 100%; position: absolute; top: 0; background-color: white!important; left: 0; z-index: 1001; display: block!important; } \";\r\n\t\tprintControlStyleSheet.innerHTML += \" .leaflet--printing { height:auto; min-height: 100%; margin: 0px!important; padding: 0px!important; } body.leaflet--printing > * { display: none; box-sizing: border-box; }\";\r\n\t\tprintControlStyleSheet.innerHTML += \" .grid-print-container { grid-template: 1fr / 1fr; box-sizing: border-box; } .grid-map-print { grid-row: 1; grid-column: 1; } body.leaflet--printing .grid-print-container [leaflet-browser-print-content]:not(style) { display: unset!important; }\";\r\n\t\tprintControlStyleSheet.innerHTML += \" .pages-print-container { box-sizing: border-box; }\";\r\n\r\n        container.appendChild(printControlStyleSheet);\r\n\t},\r\n\r\n\t_setupManualPrintButton: function(map, origins, objects) {\r\n\t\tvar manualPrintButton = document.createElement('button');\r\n\t\tmanualPrintButton.className = \"leaflet-browser-print--manualMode-button\";\r\n\t\tmanualPrintButton.innerHTML = \"Print\";\r\n\t\tmanualPrintButton.style.position = \"absolute\";\r\n\t\tmanualPrintButton.style.top = \"20px\";\r\n\t\tmanualPrintButton.style.right = \"20px\";\r\n\t\tthis.__overlay__.appendChild(manualPrintButton);\r\n\r\n\t\tvar self = this;\r\n\t\tL.DomEvent.addListener(manualPrintButton, 'click', function () {\r\n\t\t\tself._completePrinting(map, origins, objects);\r\n\t\t});\r\n\t},\r\n\r\n\t_addPrintMapOverlay: function (pageSize, pageMargin, printSize, pageOrientation, origins) {\r\n\t\tthis.__overlay__ = document.createElement(\"div\");\r\n\t\tthis.__overlay__.className = this._map.getContainer().className + \" leaflet-print-overlay\";\r\n\t\tdocument.body.appendChild(this.__overlay__);\r\n\r\n\t\tthis.__overlay__.appendChild(this._addPrintCss(pageSize, pageMargin, pageOrientation));\r\n\r\n\t\tvar gridContainer = document.createElement(\"div\");\r\n\t\tgridContainer.className = \"grid-print-container\";\r\n\t\tgridContainer.style.width = \"100%\";\r\n\t\tgridContainer.style.display = \"grid\";\r\n\t\tthis._setupPrintMapHeight(gridContainer, printSize, pageOrientation);\r\n\r\n\t\tif (this.options.contentSelector) {\r\n\t\t\tvar content = document.querySelectorAll(this.options.contentSelector);\r\n\t\t\tif (content && content.length) {\r\n\t\t\t\tfor (var i = 0; i < content.length; i++) {\r\n\t\t\t\t\tvar printContentItem = content[i].cloneNode(true);\r\n\t\t\t\t\tgridContainer.appendChild(printContentItem);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tvar isMultipage = this.options.pagesSelector && document.querySelectorAll(this.options.pagesSelector).length;\r\n\t\tif (isMultipage) {\r\n\t\t\tvar pagesContainer = document.createElement(\"div\");\r\n\t\t\tpagesContainer.className = \"pages-print-container\";\r\n\t\t\tpagesContainer.style.margin = \"0!important\";\r\n\t\t\tthis._setupPrintPagesWidth(pagesContainer, printSize, pageOrientation);\r\n\r\n\t\t\tthis.__overlay__.appendChild(pagesContainer);\r\n\t\t\tpagesContainer.appendChild(gridContainer);\r\n\r\n\t\t\tvar pages = document.querySelectorAll(this.options.pagesSelector);\r\n\t\t\tif (pages && pages.length) {\r\n\t\t\t\tfor (var i = 0; i < pages.length; i++) {\r\n\t\t\t\t\tvar printPageItem = pages[i].cloneNode(true);\r\n\t\t\t\t\tpagesContainer.appendChild(printPageItem);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tthis._setupPrintPagesWidth(gridContainer, printSize, pageOrientation);\r\n\t\t\tthis.__overlay__.appendChild(gridContainer);\r\n\t\t}\r\n\r\n\t\tvar overlayMapDom = document.createElement(\"div\");\r\n\t\toverlayMapDom.id = this._map.getContainer().id + \"-print\";\r\n\t\toverlayMapDom.className = \"grid-map-print\";\r\n\t\toverlayMapDom.style.width = \"100%\";\r\n\t\toverlayMapDom.style.height = \"100%\";\r\n\t\tgridContainer.appendChild(overlayMapDom);\r\n\r\n\t\tdocument.body.className += \" leaflet--printing\";\r\n\r\n\t\tvar newMapOptions = L.Control.BrowserPrint.Utils.cloneBasicOptionsWithoutLayers(this._map.options);\r\n\t\tnewMapOptions.maxZoom = this._map.getMaxZoom();\r\n\t\treturn this._setupPrintMap(overlayMapDom.id, newMapOptions, origins.printLayer, origins.printObjects, origins.panes);\r\n\t},\r\n\r\n\t_setupPrintMap: function (id, options, printLayer, printObjects, panes) {\r\n\t\toptions.zoomControl = false;\r\n\t\toptions.dragging = false;\r\n\t\toptions.zoomAnimation = false;\r\n\t\toptions.fadeAnimation = false;\r\n\t\toptions.markerZoomAnimation = false;\r\n\t\toptions.keyboard = false;\r\n\t\toptions.scrollWheelZoom = false;\r\n\t\toptions.tap = false;\r\n\t\toptions.touchZoom = false;\r\n\t\tvar overlayMap = L.map(id, options);\r\n\r\n\t\tif (printLayer) {\r\n\t\t\tprintLayer.addTo(overlayMap);\r\n\t\t}\r\n\r\n\t\tpanes.forEach(function(p) { overlayMap.createPane(p.name, p.container); });\r\n\t\tvar clones = {};\r\n\t\tfor (var type in printObjects){\r\n\t\t\tvar closePopupsOnPrint = this.options.closePopupsOnPrint;\r\n\t\t\tvar popupsToOpen = [];\r\n\t\t\tprintObjects[type] = printObjects[type].map(function(pLayer){\r\n\t\t\t\tvar clone = L.Control.BrowserPrint.Utils.cloneLayer(pLayer);\r\n\r\n\t\t\t\tif (clone) {\r\n\t\t\t\t\t/* Workaround for apropriate handling of popups. */\r\n\t\t\t\t\tif (pLayer instanceof L.Popup){\r\n\t\t\t\t\t\tif(!pLayer.isOpen) {\r\n\t\t\t\t\t\t\tpLayer.isOpen = function () { return this._isOpen; };\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t\tif (pLayer.isOpen() && !closePopupsOnPrint) {\r\n\t\t\t\t\t\t\tpopupsToOpen.push({source: pLayer._source, popup: clone});\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t} else {\r\n\t\t\t\t\t\tclone.addTo(overlayMap);\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t\tclones[pLayer._leaflet_id] = clone;\r\n\r\n\t\t\t\t\tif (pLayer instanceof L.Layer) {\r\n\t\t\t\t\t\tvar tooltip = pLayer.getTooltip();\r\n\t\t\t\t\t\tif (tooltip) {\r\n\t\t\t\t\t\t\tclone.bindTooltip(tooltip.getContent(), tooltip.options);\r\n\t\t\t\t\t\t\tif (pLayer.isTooltipOpen()) {\r\n\t\t\t\t\t\t\t\tclone.openTooltip(tooltip.getLatLng());\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t\treturn clone;\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t}\r\n\r\n\t\tfor (var p = 0; p < popupsToOpen.length; p++) {\r\n\t\t\tvar popupModel = popupsToOpen[p];\r\n\t\t\tif (popupModel.source) {\r\n\t\t\t\tvar element = clones[popupModel.source._leaflet_id];\r\n\t\t\t\tif (element && element.bindPopup && element.openPopup) {\r\n\t\t\t\t\tclones[popupModel.source._leaflet_id].bindPopup(popupModel.popup).openPopup(popupModel.popup.getLatLng());\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn {map: overlayMap, objects: printObjects};\r\n\t},\r\n\r\n\t// Get all layers that is tile layers and is still loading;\r\n\t_isTilesLoading: function(overlayMap){\r\n\t\tvar isLoading = false;\r\n\t\tvar mapMajorVersion = parseFloat(L.version);\r\n\t\tif (mapMajorVersion > 1) {\r\n\t\t\tisLoading = this._getLoadingLayers(overlayMap);\r\n\t\t} else {\r\n\t\t\tisLoading = overlayMap._tilesToLoad || overlayMap._tileLayersToLoad;\r\n\t\t}\r\n\r\n\t\treturn isLoading;\r\n\t},\r\n\r\n\t_getLoadingLayers: function(map) {\r\n\t\tfor (var l in map._layers) {\r\n\t\t\tvar layer = map._layers[l];\r\n\t\t\tif ((layer._url || layer._mutant) && layer._loading) {\r\n\t\t\t\treturn true;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn false;\r\n\t}\r\n});\r\n\r\nL.Control.BrowserPrint.Event =  {\r\n\tPrintInit: 'browser-print-init',\r\n\tPrePrint: 'browser-pre-print',\r\n\tPrintStart: 'browser-print-start',\r\n\tPrint: 'browser-print',\r\n\tPrintEnd: 'browser-print-end'\r\n},\r\n\r\nL.control.browserPrint = function(options) {\r\n\tif (!options || !options.printModes) {\r\n\t\toptions = options || {};\r\n\t\toptions.printModes = [\r\n\t\t\tL.control.browserPrint.mode.portrait(),\r\n\t\t\tL.control.browserPrint.mode.landscape(),\r\n\t\t\tL.control.browserPrint.mode.auto(),\r\n\t\t\tL.control.browserPrint.mode.custom()\r\n\t\t]\r\n\t}\r\n\r\n\tif (options && options.printModes && (!options.printModes.filter || !options.printModes.length)) {\r\n\t\tthrow \"Please specify valid print modes for Print action. Example: printModes: [L.control.browserPrint.mode.portrait(), L.control.browserPrint.mode.auto('Automatico'), 'Custom']\";\r\n\t}\r\n\r\n\tif (options.printModesNames) {\r\n\t\tconsole.warn(\"'printModesNames' option is obsolete. Please use 'L.control.browserPrint.mode.*(/*Title*/)' shortcut instead. Please check latest release and documentation.\");\r\n\t}\r\n\r\n\treturn new L.Control.BrowserPrint(options);\r\n};\r\n\n\n//# sourceURL=webpack:///./src/leaflet.browser.print.js?");
+/**
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.browser.print)
+**/
+
+L.Control.BrowserPrint = L.Control.extend({
+	options: {
+		title: 'Print map',
+		documentTitle: '',
+		position: 'topleft',
+        printLayer: null,
+		printModes: ["Portrait", "Landscape", "Auto", "Custom"],
+		closePopupsOnPrint: true,
+		contentSelector: "[leaflet-browser-print-content]",
+		pagesSelector: "[leaflet-browser-print-pages]",
+		manualMode: false,
+		customPrintStyle: { color: "gray", dashArray: '5, 10', pane: "customPrintPane" }
+	},
+
+	onAdd: function (map) {
+
+		if (this.options.customPrintStyle.pane && !map.getPane(this.options.customPrintStyle.pane)) {
+			map.createPane(this.options.customPrintStyle.pane).style.zIndex = 9999;
+		}
+
+		var container = L.DomUtil.create('div', 'leaflet-control-browser-print leaflet-bar leaflet-control');
+		L.DomEvent.disableClickPropagation(container);
+
+		this._appendControlStyles(container);
+
+		if (this.options.printModes.length > 1) {
+			L.DomEvent.addListener(container, 'mouseover', this._displayPageSizeButtons, this);
+			L.DomEvent.addListener(container, 'mouseout', this._hidePageSizeButtons, this);
+		} else {
+			container.style.cursor = "pointer";
+		}
+
+		if (this.options.position.indexOf("left") > 0) {
+			this._createIcon(container);
+			this._createMenu(container);
+		} else {
+			this._createMenu(container);
+			this._createIcon(container);
+		}
+
+		map.printControl = this; // Make control available from the map object itself;
+		return container;
+	},
+
+	_createIcon: function (container) {
+		this.__link__ = L.DomUtil.create('a', '', container);
+		this.__link__.className = "leaflet-browser-print";
+		if (this.options.title) {
+			this.__link__.title = this.options.title;
+		}
+		return this.__link__;
+	},
+
+	_createMenu: function (container) {
+		var domPrintModes = [];
+
+		for (var i = 0; i < this.options.printModes.length; i++) {
+			var mode = this.options.printModes[i];
+
+			/*
+				Mode:
+					Mode: Portrait/Landscape/Auto/Custom
+					Title: 'Portrait'/'Landscape'/'Auto'/'Custom'
+					PageSize: 'A3'/'A4'
+					Action: '_printPortrait'/...
+					InvalidateBounds: true/false
+			*/
+			if (mode.length) {
+				var key = mode[0].toUpperCase() + mode.substring(1).toLowerCase();
+
+				mode = L.control.browserPrint.mode[mode.toLowerCase()](this._getDefaultTitle(key));
+
+			} else if (mode instanceof L.Control.BrowserPrint.Mode) {
+				// Looks like everythin is fine.
+			} else {
+				throw "Invalid Print Mode. Can't construct logic to print current map."
+			}
+
+			if (this.options.printModes.length == 1) {
+				mode.Element = container;
+			} else {
+				mode.Element = L.DomUtil.create('li', 'browser-print-mode', L.DomUtil.create('ul', 'browser-print-holder', container));
+				mode.Element.innerHTML = mode.Title;
+			}
+
+			L.DomEvent.addListener(mode.Element, 'click', mode.Action(this, mode), this);
+
+			domPrintModes.push(mode);
+		}
+
+		this.options.printModes = domPrintModes;
+	},
+
+	_getDefaultTitle: function(key) {
+		return this.options.printModesNames && this.options.printModesNames[key] || key;
+	},
+
+    _displayPageSizeButtons: function() {
+		if (this.options.position.indexOf("left") > 0) {
+	        this.__link__.style.borderTopRightRadius = "0px";
+	    	this.__link__.style.borderBottomRightRadius = "0px";
+		} else {
+			this.__link__.style.borderTopLeftRadius = "0px";
+	    	this.__link__.style.borderBottomLeftRadius = "0px";
+		}
+
+		this.options.printModes.forEach(function(mode){
+			mode.Element.style.display = "inline-block";
+		});
+    },
+
+    _hidePageSizeButtons: function () {
+		if (this.options.position.indexOf("left") > 0) {
+	    	this.__link__.style.borderTopRightRadius = "";
+	    	this.__link__.style.borderBottomRightRadius = "";
+		} else {
+	    	this.__link__.style.borderTopLeftRadius = "";
+	    	this.__link__.style.borderBottomLeftRadius = "";
+		}
+
+		this.options.printModes.forEach(function(mode){
+			mode.Element.style.display = "";
+		});
+    },
+
+	_getMode: function(expectedOrientation, mode) {
+		return new L.control.browserPrint.mode(expectedOrientation, mode.Title, mode.PageSize, mode.Action, mode.InvalidateBounds);
+	},
+
+    _printLandscape: function (mode) {
+		this._addPrintClassToContainer(this._map, "leaflet-browser-print--landscape");
+        this._print(mode);
+    },
+
+    _printPortrait: function (mode) {
+		this._addPrintClassToContainer(this._map, "leaflet-browser-print--portrait");
+        this._print(mode);
+    },
+
+    _printAuto: function (mode) {
+		this._addPrintClassToContainer(this._map, "leaflet-browser-print--auto");
+
+		var autoBounds = this._getBoundsForAllVisualLayers();
+		var orientation = this._getPageSizeFromBounds(autoBounds);
+
+		this._print(this._getMode(orientation, mode), autoBounds);
+    },
+
+    _printCustom: function (mode) {
+		this._addPrintClassToContainer(this._map, "leaflet-browser-print--custom");
+		this.options.custom = { mode: mode};
+		this._map.on('mousedown', this._startAutoPoligon, this);
+    },
+
+	_addPrintClassToContainer: function (map, printClassName) {
+		var container = map.getContainer();
+
+		if (container.className.indexOf(printClassName) === -1) {
+			container.className += " " + printClassName;
+		}
+	},
+
+	_removePrintClassFromContainer: function (map, printClassName) {
+		var container = map.getContainer();
+
+		if (container.className && container.className.indexOf(printClassName) > -1) {
+			container.className = container.className.replace(" " + printClassName, "");
+		}
+	},
+
+	_startAutoPoligon: function (e) {
+		e.originalEvent.preventDefault();
+		e.originalEvent.stopPropagation();
+
+		this._map.dragging.disable();
+
+		this.options.custom.start = e.latlng;
+
+		this._map.off('mousedown', this._startAutoPoligon, this);
+		this._map.on('mousemove', this._moveAutoPoligon, this);
+		this._map.on('mouseup', this._endAutoPoligon, this);
+	},
+
+	_moveAutoPoligon: function (e) {
+		if (this.options.custom) {
+			e.originalEvent.preventDefault();
+			e.originalEvent.stopPropagation();
+			if (this.options.custom.rectangle) {
+				this.options.custom.rectangle.setBounds(L.latLngBounds(this.options.custom.start, e.latlng));
+			} else {
+				this.options.custom.rectangle = L.rectangle([this.options.custom.start, e.latlng], this.options.customPrintStyle);
+				this.options.custom.rectangle.addTo(this._map);
+			}
+		}
+	},
+
+	_endAutoPoligon: function (e) {
+
+		e.originalEvent.preventDefault();
+		e.originalEvent.stopPropagation();
+
+		this._map.off('mousemove', this._moveAutoPoligon, this);
+		this._map.off('mouseup', this._endAutoPoligon, this);
+
+		this._map.dragging.enable();
+
+		if (this.options.custom && this.options.custom.rectangle) {
+			var autoBounds = this.options.custom.rectangle.getBounds();
+
+			this._map.removeLayer(this.options.custom.rectangle);
+
+			var orientation = this._getPageSizeFromBounds(autoBounds);
+			this._print(this._getMode(orientation, this.options.custom.mode), autoBounds);
+
+			delete this.options.custom;
+		} else {
+			this._clearPrint();
+		}
+	},
+
+	_getPageSizeFromBounds: function(bounds) {
+		var height = Math.abs(bounds.getNorth() - bounds.getSouth());
+		var width = Math.abs(bounds.getEast() - bounds.getWest());
+		if (height > width) {
+			return "Portrait";
+		} else {
+			return "Landscape";
+		}
+	},
+
+	_setupPrintPagesWidth: function(pagesContainer, size, pageOrientation) {
+		pagesContainer.style.width = pageOrientation === "Landscape" ? size.Height : size.Width;
+	},
+
+	_setupPrintMapHeight: function(mapContainer, size, pageOrientation) {
+		mapContainer.style.height = pageOrientation === "Landscape" ? size.Width : size.Height;
+	},
+
+	/* Intended to cancel next printing*/
+	cancel: function(cancelNextPrinting){
+		this.cancelNextPrinting = cancelNextPrinting;
+	},
+
+	print: function(pageMode) {
+		pageMode.Action(this, pageMode)();
+	},
+
+    _print: function (printMode, autoBounds) {
+		this._map.fire(L.Control.BrowserPrint.Event.PrintInit, { mode: printMode });
+		L.Control.BrowserPrint.Utils.initialize();
+
+		var self = this;
+        var mapContainer = this._map.getContainer();
+		var pageOrientation = printMode.Mode;
+
+        var origins = {
+            bounds: autoBounds || this._map.getBounds(),
+            width: mapContainer.style.width,
+            height: mapContainer.style.height,
+			documentTitle: document.title,
+			printLayer: L.Control.BrowserPrint.Utils.cloneLayer(this.options.printLayer),
+			panes: []
+        };
+
+		var mapPanes = this._map.getPanes();
+		for (var pane in mapPanes) {
+			origins.panes.push({name: pane, container: undefined});
+		}
+
+		origins.printObjects = this._getPrintObjects(origins.printLayer);
+
+		this._map.fire(L.Control.BrowserPrint.Event.PrePrint, { printLayer: origins.printLayer, printObjects: origins.printObjects, pageOrientation: pageOrientation, printMode: printMode.Mode, pageBounds: origins.bounds});
+
+		if (this.cancelNextPrinting) {
+			delete this.cancelNextPrinting;
+			return;
+		}
+
+		var overlay = this._addPrintMapOverlay(printMode.PageSize, printMode.getPageMargin("mm"), printMode.getSize(), pageOrientation, origins);
+
+		if (this.options.documentTitle) {
+			document.title = this.options.documentTitle;
+		}
+
+		this._map.fire(L.Control.BrowserPrint.Event.PrintStart, { printLayer: origins.printLayer, printMap: overlay.map, printObjects: overlay.objects });
+
+		if (printMode.InvalidateBounds) {
+			overlay.map.fitBounds(origins.bounds);
+			overlay.map.invalidateSize({reset: true, animate: false, pan: false});
+		} else {
+			overlay.map.setView(this._map.getCenter(), this._map.getZoom() - 0.3);
+		}
+
+		var interval = setInterval(function(){
+			if (!self._isTilesLoading(overlay.map)) {
+				clearInterval(interval);
+				if (self.options.manualMode) {
+					self._setupManualPrintButton(overlay.map, origins, overlay.objects);
+				} else {
+					self._completePrinting(overlay.map, origins, overlay.objects);
+				}
+			}
+		}, 50);
+    },
+
+	_completePrinting: function (overlayMap, origins, printObjects) {
+		var self = this;
+		setTimeout(function(){
+			self._map.fire(L.Control.BrowserPrint.Event.Print, { printLayer: origins.printLayer, printMap: overlayMap, printObjects: printObjects });
+			var printPromise = window.print();
+			if (printPromise) {
+				Promise.all([printPromise]).then(function(){
+					self._printEnd(origins);
+					self._map.fire(L.Control.BrowserPrint.Event.PrintEnd, { printLayer: origins.printLayer, printMap: overlayMap, printObjects: printObjects });
+				})
+			} else {
+				self._printEnd(origins);
+				self._map.fire(L.Control.BrowserPrint.Event.PrintEnd, { printLayer: origins.printLayer, printMap: overlayMap, printObjects: printObjects });
+			}
+		}, 1000);
+	},
+
+    _getBoundsForAllVisualLayers: function () {
+	    var fitBounds = null;
+
+        // Getting all layers without URL -> not tiles.
+        for (var layerId in this._map._layers){
+            var layer = this._map._layers[layerId];
+            if (!layer._url && !layer._mutant) {
+                if (fitBounds) {
+                    if (layer.getBounds) {
+                        fitBounds.extend(layer.getBounds());
+                    } else if(layer.getLatLng){
+                        fitBounds.extend(layer.getLatLng());
+                    }
+                } else {
+                    if (layer.getBounds) {
+                        fitBounds = layer.getBounds();
+                    } else if(layer.getLatLng){
+                        fitBounds = L.latLngBounds(layer.getLatLng(), layer.getLatLng());
+                    }
+                }
+            }
+        }
+
+		if (!fitBounds) {
+			fitBounds = this._map.getBounds();
+		}
+
+		return fitBounds;
+    },
+
+	_clearPrint: function () {
+		this._removePrintClassFromContainer(this._map, "leaflet-browser-print--landscape");
+		this._removePrintClassFromContainer(this._map, "leaflet-browser-print--portrait");
+		this._removePrintClassFromContainer(this._map, "leaflet-browser-print--auto");
+		this._removePrintClassFromContainer(this._map, "leaflet-browser-print--custom");
+	},
+
+    _printEnd: function (origins) {
+		this._clearPrint();
+
+		document.body.removeChild(this.__overlay__);
+		this.__overlay__ = null;
+
+		document.body.className = document.body.className.replace(" leaflet--printing", "");
+		if (this.options.documentTitle) {
+			document.title = origins.documentTitle;
+		}
+
+		this._map.invalidateSize({reset: true, animate: false, pan: false});
+    },
+
+	_getPrintObjects: function(printLayer) {
+		var printObjects = {};
+		for (var id in this._map._layers){
+			var layer = this._map._layers[id];
+			if (!printLayer || !layer._url || layer instanceof L.TileLayer.WMS) {
+				var type = L.Control.BrowserPrint.Utils.getType(layer);
+				if (type) {
+					if (!printObjects[type]) {
+						printObjects[type] = [];
+					}
+					printObjects[type].push(layer);
+				}
+			}
+		}
+
+		return printObjects;
+	},
+
+    _addPrintCss: function (pageSize, pageMargin, pageOrientation) {
+
+        var printStyleSheet = document.createElement('style');
+		printStyleSheet.className = "leaflet-browser-print-css";
+        printStyleSheet.setAttribute('type', 'text/css');
+		printStyleSheet.innerHTML = ' @media print { .leaflet-popup-content-wrapper, .leaflet-popup-tip { box-shadow: none; }';
+		printStyleSheet.innerHTML += ' .leaflet-browser-print--manualMode-button { display: none; }';
+		printStyleSheet.innerHTML += ' * { -webkit-print-color-adjust: exact!important; printer-colors: exact!important; color-adjust: exact!important; }';
+		if (pageMargin) {
+			printStyleSheet.innerHTML += ' @page { margin: ' + pageMargin + '; }';
+		}
+		printStyleSheet.innerHTML += ' @page :first { page-break-after: always; }';
+
+        switch (pageOrientation) {
+            case "Landscape":
+                printStyleSheet.innerText += " @page { size : " + pageSize + " landscape; }";
+                break;
+            default:
+            case "Portrait":
+                printStyleSheet.innerText += " @page { size : " + pageSize + " portrait; }";
+                break;
+        }
+
+        return printStyleSheet;
+    },
+
+	_appendControlStyles:  function (container) {
+		var printControlStyleSheet = document.createElement('style');
+		printControlStyleSheet.setAttribute('type', 'text/css');
+
+		printControlStyleSheet.innerHTML += " .leaflet-control-browser-print { display: flex; } .leaflet-control-browser-print a { background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gcCCi8Vjp+aNAAAAGhJREFUOMvFksENgDAMA68RC7BBN+Cf/ZU33QAmYAT6BolAGxB+RrrIsg1BpfNBVXcPMLMDI/ytpKozMHWwK7BJJ7yYWQbGdBea9wTIkRDzKy0MT7r2NiJACRgotCzxykFI34QY2Ea7KmtxGJ+uX4wfAAAAAElFTkSuQmCC') no-repeat 5px; background-size: 18px 18px; display: block; border-radius: 0px;}";
+
+		printControlStyleSheet.innerHTML += " .leaflet-control-browser-print a.leaflet-browser-print { background-position-x: center; width:26px; heigth: 26px;}";
+		printControlStyleSheet.innerHTML += " .browser-print-holder { margin: 0px; padding: 0px; list-style: none; white-space: nowrap; } .browser-print-holder-left li:last-child { border-top-right-radius: 0px; border-bottom-right-radius: 0px; } .browser-print-holder-right li:first-child { border-top-left-radius: 0px; border-bottom-left-radius: 0px; }";
+		printControlStyleSheet.innerHTML += " .browser-print-mode { display: none; background-color: #919187; color: #FFF; font: 11px/19px 'Helvetica Neue', Arial, Helvetica, sans-serif; text-decoration: none; padding: 4px 10px; text-align: center; } .browser-print-mode { padding: 6px 10px; } .browser-print-mode:hover { background-color: #757570; cursor: pointer; }";
+		printControlStyleSheet.innerHTML += " .leaflet-browser-print--custom, .leaflet-browser-print--custom path { cursor: crosshair!important; }";
+		printControlStyleSheet.innerHTML += " .leaflet-print-overlay { width: 100%; height:auto; min-height: 100%; position: absolute; top: 0; background-color: white!important; left: 0; z-index: 1001; display: block!important; } ";
+		printControlStyleSheet.innerHTML += " .leaflet--printing { height:auto; min-height: 100%; margin: 0px!important; padding: 0px!important; } body.leaflet--printing > * { display: none; box-sizing: border-box; }";
+		printControlStyleSheet.innerHTML += " .grid-print-container { grid-template: 1fr / 1fr; box-sizing: border-box; } .grid-map-print { grid-row: 1; grid-column: 1; } body.leaflet--printing .grid-print-container [leaflet-browser-print-content]:not(style) { display: unset!important; }";
+		printControlStyleSheet.innerHTML += " .pages-print-container { box-sizing: border-box; }";
+
+        container.appendChild(printControlStyleSheet);
+	},
+
+	_setupManualPrintButton: function(map, origins, objects) {
+		var manualPrintButton = document.createElement('button');
+		manualPrintButton.className = "leaflet-browser-print--manualMode-button";
+		manualPrintButton.innerHTML = "Print";
+		manualPrintButton.style.position = "absolute";
+		manualPrintButton.style.top = "20px";
+		manualPrintButton.style.right = "20px";
+		this.__overlay__.appendChild(manualPrintButton);
+
+		var self = this;
+		L.DomEvent.addListener(manualPrintButton, 'click', function () {
+			self._completePrinting(map, origins, objects);
+		});
+	},
+
+	_addPrintMapOverlay: function (pageSize, pageMargin, printSize, pageOrientation, origins) {
+		this.__overlay__ = document.createElement("div");
+		this.__overlay__.className = this._map.getContainer().className + " leaflet-print-overlay";
+		document.body.appendChild(this.__overlay__);
+
+		this.__overlay__.appendChild(this._addPrintCss(pageSize, pageMargin, pageOrientation));
+
+		var gridContainer = document.createElement("div");
+		gridContainer.className = "grid-print-container";
+		gridContainer.style.width = "100%";
+		gridContainer.style.display = "grid";
+		this._setupPrintMapHeight(gridContainer, printSize, pageOrientation);
+
+		if (this.options.contentSelector) {
+			var content = document.querySelectorAll(this.options.contentSelector);
+			if (content && content.length) {
+				for (var i = 0; i < content.length; i++) {
+					var printContentItem = content[i].cloneNode(true);
+					gridContainer.appendChild(printContentItem);
+				}
+			}
+		}
+
+		var isMultipage = this.options.pagesSelector && document.querySelectorAll(this.options.pagesSelector).length;
+		if (isMultipage) {
+			var pagesContainer = document.createElement("div");
+			pagesContainer.className = "pages-print-container";
+			pagesContainer.style.margin = "0!important";
+			this._setupPrintPagesWidth(pagesContainer, printSize, pageOrientation);
+
+			this.__overlay__.appendChild(pagesContainer);
+			pagesContainer.appendChild(gridContainer);
+
+			var pages = document.querySelectorAll(this.options.pagesSelector);
+			if (pages && pages.length) {
+				for (var i = 0; i < pages.length; i++) {
+					var printPageItem = pages[i].cloneNode(true);
+					pagesContainer.appendChild(printPageItem);
+				}
+			}
+		} else {
+			this._setupPrintPagesWidth(gridContainer, printSize, pageOrientation);
+			this.__overlay__.appendChild(gridContainer);
+		}
+
+		var overlayMapDom = document.createElement("div");
+		overlayMapDom.id = this._map.getContainer().id + "-print";
+		overlayMapDom.className = "grid-map-print";
+		overlayMapDom.style.width = "100%";
+		overlayMapDom.style.height = "100%";
+		gridContainer.appendChild(overlayMapDom);
+
+		document.body.className += " leaflet--printing";
+
+		var newMapOptions = L.Control.BrowserPrint.Utils.cloneBasicOptionsWithoutLayers(this._map.options);
+		newMapOptions.maxZoom = this._map.getMaxZoom();
+		return this._setupPrintMap(overlayMapDom.id, newMapOptions, origins.printLayer, origins.printObjects, origins.panes);
+	},
+
+	_setupPrintMap: function (id, options, printLayer, printObjects, panes) {
+		options.zoomControl = false;
+		options.dragging = false;
+		options.zoomAnimation = false;
+		options.fadeAnimation = false;
+		options.markerZoomAnimation = false;
+		options.keyboard = false;
+		options.scrollWheelZoom = false;
+		options.tap = false;
+		options.touchZoom = false;
+		var overlayMap = L.map(id, options);
+
+		if (printLayer) {
+			printLayer.addTo(overlayMap);
+		}
+
+		panes.forEach(function(p) { overlayMap.createPane(p.name, p.container); });
+		var clones = {};
+		for (var type in printObjects){
+			var closePopupsOnPrint = this.options.closePopupsOnPrint;
+			var popupsToOpen = [];
+			printObjects[type] = printObjects[type].map(function(pLayer){
+				var clone = L.Control.BrowserPrint.Utils.cloneLayer(pLayer);
+
+				if (clone) {
+					/* Workaround for apropriate handling of popups. */
+					if (pLayer instanceof L.Popup){
+						if(!pLayer.isOpen) {
+							pLayer.isOpen = function () { return this._isOpen; };
+						}
+						if (pLayer.isOpen() && !closePopupsOnPrint) {
+							popupsToOpen.push({source: pLayer._source, popup: clone});
+						}
+					} else {
+						clone.addTo(overlayMap);
+					}
+
+					clones[pLayer._leaflet_id] = clone;
+
+					if (pLayer instanceof L.Layer) {
+						var tooltip = pLayer.getTooltip();
+						if (tooltip) {
+							clone.bindTooltip(tooltip.getContent(), tooltip.options);
+							if (pLayer.isTooltipOpen()) {
+								clone.openTooltip(tooltip.getLatLng());
+							}
+						}
+					}
+
+					return clone;
+				}
+			});
+		}
+
+		for (var p = 0; p < popupsToOpen.length; p++) {
+			var popupModel = popupsToOpen[p];
+			if (popupModel.source) {
+				var element = clones[popupModel.source._leaflet_id];
+				if (element && element.bindPopup && element.openPopup) {
+					clones[popupModel.source._leaflet_id].bindPopup(popupModel.popup).openPopup(popupModel.popup.getLatLng());
+				}
+			}
+		}
+
+		return {map: overlayMap, objects: printObjects};
+	},
+
+	// Get all layers that is tile layers and is still loading;
+	_isTilesLoading: function(overlayMap){
+		var isLoading = false;
+		var mapMajorVersion = parseFloat(L.version);
+		if (mapMajorVersion > 1) {
+			isLoading = this._getLoadingLayers(overlayMap);
+		} else {
+			isLoading = overlayMap._tilesToLoad || overlayMap._tileLayersToLoad;
+		}
+
+		return isLoading;
+	},
+
+	_getLoadingLayers: function(map) {
+		for (var l in map._layers) {
+			var layer = map._layers[l];
+			if ((layer._url || layer._mutant) && layer._loading) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+});
+
+L.Control.BrowserPrint.Event =  {
+	PrintInit: 'browser-print-init',
+	PrePrint: 'browser-pre-print',
+	PrintStart: 'browser-print-start',
+	Print: 'browser-print',
+	PrintEnd: 'browser-print-end'
+},
+
+L.control.browserPrint = function(options) {
+	if (!options || !options.printModes) {
+		options = options || {};
+		options.printModes = [
+			L.control.browserPrint.mode.portrait(),
+			L.control.browserPrint.mode.landscape(),
+			L.control.browserPrint.mode.auto(),
+			L.control.browserPrint.mode.custom()
+		]
+	}
+
+	if (options && options.printModes && (!options.printModes.filter || !options.printModes.length)) {
+		throw "Please specify valid print modes for Print action. Example: printModes: [L.control.browserPrint.mode.portrait(), L.control.browserPrint.mode.auto('Automatico'), 'Custom']";
+	}
+
+	if (options.printModesNames) {
+		console.warn("'printModesNames' option is obsolete. Please use 'L.control.browserPrint.mode.*(/*Title*/)' shortcut instead. Please check latest release and documentation.");
+	}
+
+	return new L.Control.BrowserPrint(options);
+};
+
+
 
 /***/ }),
 
@@ -113,7 +749,160 @@ eval("/**\r\n\tMIT License http://www.opensource.org/licenses/mit-license.php\r\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("/**\r\n\tMIT License http://www.opensource.org/licenses/mit-license.php\r\n\tAuthor Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.browser.print)\r\n**/\r\n\r\n/* Portrait mode sizes in mm for 0 lvl*/\r\nL.Control.BrowserPrint.Size =  {\r\n\tA: {\r\n\t\tWidth: 840,\r\n\t\tHeight: 1188\r\n\t},\r\n\tB: {\r\n\t\tWidth: 1000,\r\n\t\tHeight: 1414\r\n\t},\r\n\tC: {\r\n\t\tWidth: 916,\r\n\t\tHeight: 1296\r\n\t},\r\n\tD: {\r\n\t\tWidth: 770,\r\n\t\tHeight: 1090\r\n\t},\r\n\tLETTER: {\r\n\t\tWidth: 216,\r\n\t\tHeight: 279\r\n\t},\r\n\tHALFLETTER: {\r\n\t\tWidth: 140,\r\n\t\tHeight: 216\r\n\t},\r\n\tLEGAL: {\r\n\t\tWidth: 216,\r\n\t\tHeight: 356\r\n\t},\r\n\tJUNIORLEGAL: {\r\n\t\tWidth: 127,\r\n\t\tHeight: 203\r\n\t},\r\n\tTABLOID: {\r\n\t\tWidth: 279,\r\n\t\tHeight: 432\r\n\t},\r\n\tLEDGER: {\r\n\t\tWidth: 432,\r\n\t\tHeight: 279\r\n\t}\r\n};\r\n\r\nL.Control.BrowserPrint.Mode = function(mode, title, pageSize, action, invalidateBounds) {\r\n\tif (!mode) {\r\n\t\tthrow 'Print mode should be specified.';\r\n\t}\r\n\r\n\tthis.Mode = mode;\r\n\tthis.Title = title || mode;\r\n\tthis.PageSize = (pageSize || 'A4').toUpperCase();\r\n\tthis.PageSeries = [\"A\", \"B\", \"C\", \"D\"].indexOf(this.PageSize[0]) != -1 ? this.PageSize[0] : \"\";\r\n\tthis.PageSeriesSize = this.PageSize.substring(this.PageSeries.length);\r\n\tthis.Action = action || function(context, element) {\r\n\t\treturn function() {\r\n\t\t\tcontext['_print' + element.Mode](element);\r\n\t\t};\r\n\t};\r\n\tthis.InvalidateBounds = invalidateBounds;\r\n};\r\n\r\nL.Control.BrowserPrint.Mode.Landscape = \"Landscape\";\r\nL.Control.BrowserPrint.Mode.Portrait = \"Portrait\";\r\nL.Control.BrowserPrint.Mode.Auto = \"Auto\";\r\nL.Control.BrowserPrint.Mode.Custom = \"Custom\";\r\n\r\nL.Control.BrowserPrint.Mode.prototype.getPageMargin = function(type) {\r\n\tvar size = this.getPaperSize();\r\n\tvar marginInMm = ((size.Width + size.Height) / 39.9);\r\n\tvar result;\r\n\r\n\tswitch (type) {\r\n\t\tcase \"mm\":\r\n\t\t\tresult = marginInMm.toFixed(2) + \"mm\";\r\n\t\t\tbreak;\r\n\t\tcase \"in\":\r\n\t\t\tresult = (marginInMm / 25.4).toFixed(2) + \"in\";\r\n\t\t\tbreak;\r\n\t\tdefault:\r\n\t\t\tresult = marginInMm;\r\n\t\t\tbreak;\r\n\r\n\t}\r\n\treturn result;\r\n};\r\n\r\nL.Control.BrowserPrint.Mode.prototype.getPaperSize = function(){\r\n\tif (this.PageSeries) {\r\n\t\tvar series = L.Control.BrowserPrint.Size[this.PageSeries];\r\n\t\tvar w = series.Width;\r\n\t\tvar h = series.Height;\r\n\t\tvar switchSides = false;\r\n\t\tif (this.PageSeriesSize) {\r\n\t\t\tthis.PageSeriesSize = +this.PageSeriesSize;\r\n\t\t\tswitchSides = this.PageSeriesSize % 2 === 1;\r\n\t\t\tif (switchSides) {\r\n\t\t\t\tw = w / (this.PageSeriesSize - 1 || 1);\r\n\t\t\t\th = h / (this.PageSeriesSize + 1);\r\n\t\t\t} else {\r\n\t\t\t\tw = w / this.PageSeriesSize;\r\n\t\t\t\th = h / this.PageSeriesSize;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn {\r\n\t\t\tWidth: switchSides ? h : w,\r\n\t\t\tHeight: switchSides ? w : h\r\n\t\t};\r\n\t} else {\r\n\t\tvar size = L.Control.BrowserPrint.Size[this.PageSeriesSize];\r\n\t\treturn {\r\n\t\t\tWidth: size.Width,\r\n\t\t\tHeight: size.Height\r\n\t\t};\r\n\t}\r\n};\r\n\r\nL.Control.BrowserPrint.Mode.prototype.getSize = function(){\r\n\tvar size = this.getPaperSize();\r\n\tvar margin = this.getPageMargin() * 2 * (window.devicePixelRatio || 1);\r\n\r\n\tsize.Width = Math.floor(size.Width - margin) + 'mm';\r\n\tsize.Height = Math.floor(size.Height - margin) + 'mm';\r\n\r\n\treturn size;\r\n};\r\n\r\nL.control.browserPrint.mode = function(mode, title, type, action, invalidateBounds){\r\n\treturn new L.Control.BrowserPrint.Mode(mode, title, type, action, invalidateBounds);\r\n}\r\n\r\nL.control.browserPrint.mode.portrait = function(title, pageSize, action) {\r\n\treturn L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Portrait, title, pageSize, action, false);\r\n};\r\n\r\nL.control.browserPrint.mode.landscape = function(title, pageSize, action) {\r\n\treturn L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Landscape, title, pageSize, action, false);\r\n};\r\n\r\nL.control.browserPrint.mode.auto = function(title, pageSize, action) {\r\n\treturn L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Auto, title, pageSize, action, true);\r\n};\r\n\r\nL.control.browserPrint.mode.custom = function(title, pageSize, action) {\r\n\treturn L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Custom, title, pageSize, action, true);\r\n};\r\n\n\n//# sourceURL=webpack:///./src/leaflet.browser.print.sizes.js?");
+/**
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.browser.print)
+**/
+
+/* Portrait mode sizes in mm for 0 lvl*/
+L.Control.BrowserPrint.Size =  {
+	A: {
+		Width: 840,
+		Height: 1188
+	},
+	B: {
+		Width: 1000,
+		Height: 1414
+	},
+	C: {
+		Width: 916,
+		Height: 1296
+	},
+	D: {
+		Width: 770,
+		Height: 1090
+	},
+	LETTER: {
+		Width: 216,
+		Height: 279
+	},
+	HALFLETTER: {
+		Width: 140,
+		Height: 216
+	},
+	LEGAL: {
+		Width: 216,
+		Height: 356
+	},
+	JUNIORLEGAL: {
+		Width: 127,
+		Height: 203
+	},
+	TABLOID: {
+		Width: 279,
+		Height: 432
+	},
+	LEDGER: {
+		Width: 432,
+		Height: 279
+	}
+};
+
+L.Control.BrowserPrint.Mode = function(mode, title, pageSize, action, invalidateBounds) {
+	if (!mode) {
+		throw 'Print mode should be specified.';
+	}
+
+	this.Mode = mode;
+	this.Title = title || mode;
+	this.PageSize = (pageSize || 'A4').toUpperCase();
+	this.PageSeries = ["A", "B", "C", "D"].indexOf(this.PageSize[0]) != -1 ? this.PageSize[0] : "";
+	this.PageSeriesSize = this.PageSize.substring(this.PageSeries.length);
+	this.Action = action || function(context, element) {
+		return function() {
+			context['_print' + element.Mode](element);
+		};
+	};
+	this.InvalidateBounds = invalidateBounds;
+};
+
+L.Control.BrowserPrint.Mode.Landscape = "Landscape";
+L.Control.BrowserPrint.Mode.Portrait = "Portrait";
+L.Control.BrowserPrint.Mode.Auto = "Auto";
+L.Control.BrowserPrint.Mode.Custom = "Custom";
+
+L.Control.BrowserPrint.Mode.prototype.getPageMargin = function(type) {
+	var size = this.getPaperSize();
+	var marginInMm = ((size.Width + size.Height) / 39.9);
+	var result;
+
+	switch (type) {
+		case "mm":
+			result = marginInMm.toFixed(2) + "mm";
+			break;
+		case "in":
+			result = (marginInMm / 25.4).toFixed(2) + "in";
+			break;
+		default:
+			result = marginInMm;
+			break;
+
+	}
+	return result;
+};
+
+L.Control.BrowserPrint.Mode.prototype.getPaperSize = function(){
+	if (this.PageSeries) {
+		var series = L.Control.BrowserPrint.Size[this.PageSeries];
+		var w = series.Width;
+		var h = series.Height;
+		var switchSides = false;
+		if (this.PageSeriesSize) {
+			this.PageSeriesSize = +this.PageSeriesSize;
+			switchSides = this.PageSeriesSize % 2 === 1;
+			if (switchSides) {
+				w = w / (this.PageSeriesSize - 1 || 1);
+				h = h / (this.PageSeriesSize + 1);
+			} else {
+				w = w / this.PageSeriesSize;
+				h = h / this.PageSeriesSize;
+			}
+		}
+
+		return {
+			Width: switchSides ? h : w,
+			Height: switchSides ? w : h
+		};
+	} else {
+		var size = L.Control.BrowserPrint.Size[this.PageSeriesSize];
+		return {
+			Width: size.Width,
+			Height: size.Height
+		};
+	}
+};
+
+L.Control.BrowserPrint.Mode.prototype.getSize = function(){
+	var size = this.getPaperSize();
+	var margin = this.getPageMargin() * 2 * (window.devicePixelRatio || 1);
+
+	size.Width = Math.floor(size.Width - margin) + 'mm';
+	size.Height = Math.floor(size.Height - margin) + 'mm';
+
+	return size;
+};
+
+L.control.browserPrint.mode = function(mode, title, type, action, invalidateBounds){
+	return new L.Control.BrowserPrint.Mode(mode, title, type, action, invalidateBounds);
+}
+
+L.control.browserPrint.mode.portrait = function(title, pageSize, action) {
+	return L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Portrait, title, pageSize, action, false);
+};
+
+L.control.browserPrint.mode.landscape = function(title, pageSize, action) {
+	return L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Landscape, title, pageSize, action, false);
+};
+
+L.control.browserPrint.mode.auto = function(title, pageSize, action) {
+	return L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Auto, title, pageSize, action, true);
+};
+
+L.control.browserPrint.mode.custom = function(title, pageSize, action) {
+	return L.control.browserPrint.mode(L.Control.BrowserPrint.Mode.Custom, title, pageSize, action, true);
+};
+
+
 
 /***/ }),
 
@@ -124,7 +913,214 @@ eval("/**\r\n\tMIT License http://www.opensource.org/licenses/mit-license.php\r\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("/**\n\tMIT License http://www.opensource.org/licenses/mit-license.php\n\tAuthor Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.browser.print)\n**/\n\nL.Control.BrowserPrint.Utils = {\n\n\t_ignoreArray: [],\n\n\t_cloneFactoryArray: [],\n\t_cloneRendererArray: [],\n\t_knownRenderers: {},\n\n\tcloneOptions: function(options) {\n\t\tvar utils = this;\n\t    var retOptions = {};\n\t    for (var name in options) {\n\t        var item = options[name];\n\t\t\tif (item && item.clone) {\n\t\t\t\tretOptions[name] = item.clone();\n\t\t\t} else if (item && item.onAdd) {\n\t\t\t\tretOptions[name] = utils.cloneLayer(item);\n\t\t\t} else {\n\t\t\t\tretOptions[name] = item;\n\t\t\t}\n\t    }\n\t    return retOptions;\n\t},\n\n\tcloneBasicOptionsWithoutLayers: function(options) {\n\t    var retOptions = {};\n\t\tvar optionNames = Object.getOwnPropertyNames(options);\n\t\tif (optionNames.length) {\n\t\t\tfor (var i = 0; i < optionNames.length; i++) {\n\t\t\t\tvar optName = optionNames[i];\n\t\t\t\tif (optName && optName != \"layers\") {\n\t\t\t        retOptions[optName] = options[optName];\n\t\t\t\t}\n\t\t\t}\n\n\t\t    return this.cloneOptions(retOptions);\n\t\t}\n\n\t\treturn retOptions;\n\t},\n\n\tcloneInnerLayers: function (layer) {\n\t\tvar utils = this;\n\t\tvar layers = [];\n\n\t\tlayer.eachLayer(function (inner) {\n\t\t\tvar l = utils.cloneLayer(inner);\n\n\t\t\tif (l) {\n\t\t\t\tlayers.push(l);\n\t\t\t}\n\t\t});\n\n\t\treturn layers;\n\t},\n\n\tinitialize: function () {\n\n\t\tthis._knownRenderers = {};\n\n\t\t// Renderers\n\t\tthis.registerRenderer(L.SVG, 'L.SVG');\n\t\tthis.registerRenderer(L.Canvas, 'L.Canvas');\n\n\t\tthis.registerLayer(L.TileLayer.WMS, 'L.TileLayer.WMS', function(layer, utils) { \treturn L.tileLayer.wms(layer._url, utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.TileLayer, 'L.TileLayer', function(layer, utils) { \t\t\treturn L.tileLayer(layer._url, utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.GridLayer, 'L.GridLayer', function(layer, utils) { \t\t\treturn L.gridLayer(utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.ImageOverlay, 'L.ImageOverlay', function(layer, utils) { \t\treturn L.imageOverlay(layer._url, layer._bounds, utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.Marker, 'L.Marker', function(layer, utils) { \t\t\t\t\treturn L.marker(layer.getLatLng(), utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.Popup, 'L.Popup', function(layer, utils) { \t\t\t\t\treturn L.popup(utils.cloneOptions(layer.options)).setLatLng(layer.getLatLng()).setContent(layer.getContent()); });\n\t\tthis.registerLayer(L.Circle, 'L.Circle', function(layer, utils) { \t\t\t\t\treturn L.circle(layer.getLatLng(), layer.getRadius(), utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.CircleMarker, 'L.CircleMarker', function(layer, utils) { \t\treturn L.circleMarker(layer.getLatLng(), utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.Rectangle, 'L.Rectangle', function(layer, utils) { \t\t\treturn L.rectangle(layer.getBounds(), utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.Polygon, 'L.Polygon', function(layer, utils) { \t\t\t\treturn L.polygon(layer.getLatLngs(), utils.cloneOptions(layer.options)); });\n\n\t\t// MultiPolyline is removed in leaflet 1.0.0\n\t\tthis.registerLayer(L.MultiPolyline, 'L.MultiPolyline', function(layer, utils) { \treturn L.polyline(layer.getLatLngs(), utils.cloneOptions(layer.options)); });\n\t\t// MultiPolygon is removed in leaflet 1.0.0\n\t\tthis.registerLayer(L.MultiPolygon, 'L.MultiPolygon', function(layer, utils) { \t\treturn L.multiPolygon(layer.getLatLngs(), utils.cloneOptions(layer.options)); });\n\n\t\tthis.registerLayer(L.Polyline, 'L.Polyline', function(layer, utils) { \t\t\t\treturn L.polyline(layer.getLatLngs(), utils.cloneOptions(layer.options)); });\n\t\tthis.registerLayer(L.GeoJSON, 'L.GeoJSON', function(layer, utils) { \t\t\t\treturn L.geoJson(layer.toGeoJSON(), utils.cloneOptions(layer.options)); });\n\n\t\tthis.registerIgnoreLayer(L.FeatureGroup, 'L.FeatureGroup');\n\t\tthis.registerIgnoreLayer(L.LayerGroup, 'L.LayerGroup');\n\n\t\t// There is no point to clone tooltips here;  L.tooltip(options);\n\t\tthis.registerLayer(L.Tooltip, 'L.Tooltip', function(){\treturn null; });\n\t},\n\n\t_register: function(array, type, identifier, builderFunction) {\n\t\tif (type &&\n\t\t\t!array.filter(function(l){ return l.identifier === identifier; }).length) {\n\n\t\t\tarray.push({\n\t\t\t\ttype: type,\n\t\t\t\tidentifier: identifier,\n\t\t\t\tbuilder: builderFunction || function (layer) { return new type(layer.options); }\n\t\t\t});\n\t\t}\n\t},\n\n\tregisterLayer: function(type, identifier, builderFunction) {\n\t\tthis._register(this._cloneFactoryArray, type, identifier, builderFunction);\n\t},\n\n\tregisterRenderer: function(type, identifier, builderFunction) {\n\t\tthis._register(this._cloneRendererArray, type, identifier, builderFunction);\n\t},\n\n\tregisterIgnoreLayer: function(type, identifier) {\n\t\tthis._register(this._ignoreArray, type, identifier);\n\t},\n\n\tcloneLayer: function(layer) {\n\t\tif (!layer) return null;\n\n\t\t// First we check if this layer is actual renderer\n\t\tvar renderer = this.__getRenderer(layer);\n\t\tif (renderer) {\n\t\t\treturn renderer;\n\t\t}\n\n\t\tvar factoryObject;\n\t\tif (layer._group) { // Exceptional check for L.MarkerClusterGroup\n\t\t\tfactoryObject = this.__getFactoryObject(layer._group, true);\n\t\t} else {\n\t\t\tfactoryObject = this.__getFactoryObject(layer);\n\t\t}\n\n\t\t// We clone and recreate layer if it's simple overlay\n\t\tif (factoryObject) {\n\t\t\tfactoryObject = factoryObject.builder(layer, this);\n\t\t}\n\n\t\treturn factoryObject;\n\t},\n\n\tgetType: function(layer) {\n\t\tif (!layer) return null;\n\n\t\tvar factoryObject = this.__getFactoryObject(layer);\n\t\tif (factoryObject) {\n\t\t\tfactoryObject = factoryObject.identifier;\n\t\t}\n\n\t\treturn factoryObject;\n\t},\n\n\t__getRenderer: function(oldRenderer) {\n\t\tvar renderer = this._knownRenderers[oldRenderer._leaflet_id];\n\t\tif (!renderer) {\n\t\t\tfor (var i = 0; i < this._cloneRendererArray.length; i++) {\n\t\t\t\tvar factoryObject = this._cloneRendererArray[i];\n\t\t\t\tif (oldRenderer instanceof factoryObject.type) {\n\t\t\t\t\tthis._knownRenderers[oldRenderer._leaflet_id] = factoryObject.builder(oldRenderer.options);\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\trenderer = this._knownRenderers[oldRenderer._leaflet_id];\n\t\t}\n\n\t\treturn renderer;\n\t},\n\n\t__getFactoryObject: function (layer, skipIgnore) {\n\t\tif (!skipIgnore) {\n\t\t\tfor (var i = 0; i < this._ignoreArray.length; i++) {\n\t\t\t\tvar ignoreObject = this._ignoreArray[i];\n\t\t\t\tif (ignoreObject.type && layer instanceof ignoreObject.type) {\n\t\t\t\t\treturn null;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tfor (var i = 0; i < this._cloneFactoryArray.length; i++) {\n\t\t\tvar factoryObject = this._cloneFactoryArray[i];\n\t\t\tif (factoryObject.type && layer instanceof factoryObject.type) {\n\t\t\t\treturn factoryObject;\n\t\t\t}\n\t\t}\n\n\t\tfor (var i = 0; i < this._cloneRendererArray.length; i++) {\n\t\t\tvar factoryObject = this._cloneRendererArray[i];\n\t\t\tif (factoryObject.type && layer instanceof factoryObject.type) {\n\t\t\t\treturn null;\n\t\t\t}\n\t\t}\n\n\t\tthis.__unknownLayer__();\n\n\t\treturn null;\n\t},\n\n\t__unknownLayer__: function(){\n\t   console.warn('Unknown layer, cannot clone this layer. Leaflet version: ' + L.version);\n\t   console.info('For additional information please refer to documentation on: https://github.com/Igor-Vladyka/leaflet.browser.print.');\n\t   console.info('-------------------------------------------------------------------------------------------------------------------');\n   }\n};\n\n\n//# sourceURL=webpack:///./src/leaflet.browser.print.utils.js?");
+/**
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Igor Vladyka <igor.vladyka@gmail.com> (https://github.com/Igor-Vladyka/leaflet.browser.print)
+**/
+
+L.Control.BrowserPrint.Utils = {
+
+	_ignoreArray: [],
+
+	_cloneFactoryArray: [],
+	_cloneRendererArray: [],
+	_knownRenderers: {},
+
+	cloneOptions: function(options) {
+		var utils = this;
+	    var retOptions = {};
+	    for (var name in options) {
+	        var item = options[name];
+			if (item && item.clone) {
+				retOptions[name] = item.clone();
+			} else if (item && item.onAdd) {
+				retOptions[name] = utils.cloneLayer(item);
+			} else {
+				retOptions[name] = item;
+			}
+	    }
+	    return retOptions;
+	},
+
+	cloneBasicOptionsWithoutLayers: function(options) {
+	    var retOptions = {};
+		var optionNames = Object.getOwnPropertyNames(options);
+		if (optionNames.length) {
+			for (var i = 0; i < optionNames.length; i++) {
+				var optName = optionNames[i];
+				if (optName && optName != "layers") {
+			        retOptions[optName] = options[optName];
+				}
+			}
+
+		    return this.cloneOptions(retOptions);
+		}
+
+		return retOptions;
+	},
+
+	cloneInnerLayers: function (layer) {
+		var utils = this;
+		var layers = [];
+
+		layer.eachLayer(function (inner) {
+			var l = utils.cloneLayer(inner);
+
+			if (l) {
+				layers.push(l);
+			}
+		});
+
+		return layers;
+	},
+
+	initialize: function () {
+
+		this._knownRenderers = {};
+
+		// Renderers
+		this.registerRenderer(L.SVG, 'L.SVG');
+		this.registerRenderer(L.Canvas, 'L.Canvas');
+
+		this.registerLayer(L.TileLayer.WMS, 'L.TileLayer.WMS', function(layer, utils) { 	return L.tileLayer.wms(layer._url, utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.TileLayer, 'L.TileLayer', function(layer, utils) { 			return L.tileLayer(layer._url, utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.GridLayer, 'L.GridLayer', function(layer, utils) { 			return L.gridLayer(utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.ImageOverlay, 'L.ImageOverlay', function(layer, utils) { 		return L.imageOverlay(layer._url, layer._bounds, utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.Marker, 'L.Marker', function(layer, utils) { 					return L.marker(layer.getLatLng(), utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.Popup, 'L.Popup', function(layer, utils) { 					return L.popup(utils.cloneOptions(layer.options)).setLatLng(layer.getLatLng()).setContent(layer.getContent()); });
+		this.registerLayer(L.Circle, 'L.Circle', function(layer, utils) { 					return L.circle(layer.getLatLng(), layer.getRadius(), utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.CircleMarker, 'L.CircleMarker', function(layer, utils) { 		return L.circleMarker(layer.getLatLng(), utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.Rectangle, 'L.Rectangle', function(layer, utils) { 			return L.rectangle(layer.getBounds(), utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.Polygon, 'L.Polygon', function(layer, utils) { 				return L.polygon(layer.getLatLngs(), utils.cloneOptions(layer.options)); });
+
+		// MultiPolyline is removed in leaflet 1.0.0
+		this.registerLayer(L.MultiPolyline, 'L.MultiPolyline', function(layer, utils) { 	return L.polyline(layer.getLatLngs(), utils.cloneOptions(layer.options)); });
+		// MultiPolygon is removed in leaflet 1.0.0
+		this.registerLayer(L.MultiPolygon, 'L.MultiPolygon', function(layer, utils) { 		return L.multiPolygon(layer.getLatLngs(), utils.cloneOptions(layer.options)); });
+
+		this.registerLayer(L.Polyline, 'L.Polyline', function(layer, utils) { 				return L.polyline(layer.getLatLngs(), utils.cloneOptions(layer.options)); });
+		this.registerLayer(L.GeoJSON, 'L.GeoJSON', function(layer, utils) { 				return L.geoJson(layer.toGeoJSON(), utils.cloneOptions(layer.options)); });
+
+		this.registerIgnoreLayer(L.FeatureGroup, 'L.FeatureGroup');
+		this.registerIgnoreLayer(L.LayerGroup, 'L.LayerGroup');
+
+		// There is no point to clone tooltips here;  L.tooltip(options);
+		this.registerLayer(L.Tooltip, 'L.Tooltip', function(){	return null; });
+	},
+
+	_register: function(array, type, identifier, builderFunction) {
+		if (type &&
+			!array.filter(function(l){ return l.identifier === identifier; }).length) {
+
+			array.push({
+				type: type,
+				identifier: identifier,
+				builder: builderFunction || function (layer) { return new type(layer.options); }
+			});
+		}
+	},
+
+	registerLayer: function(type, identifier, builderFunction) {
+		this._register(this._cloneFactoryArray, type, identifier, builderFunction);
+	},
+
+	registerRenderer: function(type, identifier, builderFunction) {
+		this._register(this._cloneRendererArray, type, identifier, builderFunction);
+	},
+
+	registerIgnoreLayer: function(type, identifier) {
+		this._register(this._ignoreArray, type, identifier);
+	},
+
+	cloneLayer: function(layer) {
+		if (!layer) return null;
+
+		// First we check if this layer is actual renderer
+		var renderer = this.__getRenderer(layer);
+		if (renderer) {
+			return renderer;
+		}
+
+		var factoryObject;
+		if (layer._group) { // Exceptional check for L.MarkerClusterGroup
+			factoryObject = this.__getFactoryObject(layer._group, true);
+		} else {
+			factoryObject = this.__getFactoryObject(layer);
+		}
+
+		// We clone and recreate layer if it's simple overlay
+		if (factoryObject) {
+			factoryObject = factoryObject.builder(layer, this);
+		}
+
+		return factoryObject;
+	},
+
+	getType: function(layer) {
+		if (!layer) return null;
+
+		var factoryObject = this.__getFactoryObject(layer);
+		if (factoryObject) {
+			factoryObject = factoryObject.identifier;
+		}
+
+		return factoryObject;
+	},
+
+	__getRenderer: function(oldRenderer) {
+		var renderer = this._knownRenderers[oldRenderer._leaflet_id];
+		if (!renderer) {
+			for (var i = 0; i < this._cloneRendererArray.length; i++) {
+				var factoryObject = this._cloneRendererArray[i];
+				if (oldRenderer instanceof factoryObject.type) {
+					this._knownRenderers[oldRenderer._leaflet_id] = factoryObject.builder(oldRenderer.options);
+					break;
+				}
+			}
+
+			renderer = this._knownRenderers[oldRenderer._leaflet_id];
+		}
+
+		return renderer;
+	},
+
+	__getFactoryObject: function (layer, skipIgnore) {
+		if (!skipIgnore) {
+			for (var i = 0; i < this._ignoreArray.length; i++) {
+				var ignoreObject = this._ignoreArray[i];
+				if (ignoreObject.type && layer instanceof ignoreObject.type) {
+					return null;
+				}
+			}
+		}
+
+		for (var i = 0; i < this._cloneFactoryArray.length; i++) {
+			var factoryObject = this._cloneFactoryArray[i];
+			if (factoryObject.type && layer instanceof factoryObject.type) {
+				return factoryObject;
+			}
+		}
+
+		for (var i = 0; i < this._cloneRendererArray.length; i++) {
+			var factoryObject = this._cloneRendererArray[i];
+			if (factoryObject.type && layer instanceof factoryObject.type) {
+				return null;
+			}
+		}
+
+		this.__unknownLayer__();
+
+		return null;
+	},
+
+	__unknownLayer__: function(){
+	   console.warn('Unknown layer, cannot clone this layer. Leaflet version: ' + L.version);
+	   console.info('For additional information please refer to documentation on: https://github.com/Igor-Vladyka/leaflet.browser.print.');
+	   console.info('-------------------------------------------------------------------------------------------------------------------');
+   }
+};
+
+
 
 /***/ }),
 
@@ -135,7 +1131,11 @@ eval("/**\n\tMIT License http://www.opensource.org/licenses/mit-license.php\n\tA
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./src/leaflet.browser.print.js */\"./src/leaflet.browser.print.js\");\n__webpack_require__(/*! ./src/leaflet.browser.print.utils.js */\"./src/leaflet.browser.print.utils.js\");\nmodule.exports = __webpack_require__(/*! ./src/leaflet.browser.print.sizes.js */\"./src/leaflet.browser.print.sizes.js\");\n\n\n//# sourceURL=webpack:///multi_./src/leaflet.browser.print.js_./src/leaflet.browser.print.utils.js_./src/leaflet.browser.print.sizes.js?");
+__webpack_require__(/*! ./src/leaflet.browser.print.js */"./src/leaflet.browser.print.js");
+__webpack_require__(/*! ./src/leaflet.browser.print.utils.js */"./src/leaflet.browser.print.utils.js");
+module.exports = __webpack_require__(/*! ./src/leaflet.browser.print.sizes.js */"./src/leaflet.browser.print.sizes.js");
+
+
 
 /***/ })
 
