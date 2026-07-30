@@ -128,6 +128,29 @@
 	var vueCouranteTroncon = false;
 	
 	L.Icon.Default.imagePath = '/Ressources/API_JS/images/';
+
+	// [cd30] Portee globale : cette fonction est appelee depuis dessinerCarte
+	// (affichage ecran) ET depuis afficherOutils (gestionnaire d'impression).
+	// Declaree dans dessinerCarte, elle etait invisible du second.
+	function ajusterLargeurColonnesLegende(racineLegende) {
+	    var base = racineLegende || maCarte.getContainer();
+	    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
+	    if (!container) return;
+			
+	    // Largeur réelle du libellé le plus long
+	    var spans = container.querySelectorAll('.leaflet-legend-item span');
+	    var largeurMaxLib = 0;
+	    spans.forEach(function(span) {
+	        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
+	    });
+			
+	    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
+	    var largeurColonne = largeurMaxLib + 30;
+			
+	    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
+	        col.style.minWidth = largeurColonne + 'px';
+	    });
+	}
 	
 	var tabNettoyé = [];
 
@@ -1132,25 +1155,7 @@ function CarteLeaflet(conteneurId) {
 				});
 			}) ();
 	
-			function ajusterLargeurColonnesLegende(racineLegende) {
-			    var base = racineLegende || maCarte.getContainer();
-			    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
-			    if (!container) return;
-			
-			    // Largeur réelle du libellé le plus long
-			    var spans = container.querySelectorAll('.leaflet-legend-item span');
-			    var largeurMaxLib = 0;
-			    spans.forEach(function(span) {
-			        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
-			    });
-			
-			    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
-			    var largeurColonne = largeurMaxLib + 30;
-			
-			    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
-			        col.style.minWidth = largeurColonne + 'px';
-			    });
-			}
+
 				
 			// legende sur 2 col si nbr elts legende > 27. Répartition egale entre 2 col gérée dans plugin legend.js
 			var nbrColonnes = (tabCtrlLegendeObj.length > 27) ? 2 : 1;
