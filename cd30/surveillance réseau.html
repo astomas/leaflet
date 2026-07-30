@@ -123,7 +123,7 @@
 	});
 	
 	console.log("nom Vues normalisées: ", nomVues);
-	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon", "d30 troncon tf"];
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon", "d30 troncon tf", "d30 3vitinerairetype"];
 	var vueCouranteEtiquetteRD = false;
 	var vueCouranteTroncon = false;
 	
@@ -529,7 +529,7 @@ function CarteLeaflet(conteneurId) {
 
 		//if (élément.properties && (élément.properties.nomcouche === "Réseau routier" || élément.properties.nomcouche === "Linéaire")
 			if (vueCouranteEtiquetteRD && couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
-			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || propTrim(élément.properties, "Numero")).toString().trim();
 			couche.options.rdLabelColor = élément.properties.couleur || couche.options.color || "#888";
 			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
 			couche.options.rdProximite = /proximit/i.test(niveauRDet);
@@ -778,7 +778,7 @@ function CarteLeaflet(conteneurId) {
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // Réseau routier : mémorise la valeur RD + le niveau 
     if (vueCouranteEtiquetteRD) {
-        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || propTrim(élément.properties, "Numero")).toString().trim();
         élémentsMLS.options.rdLabelColor = couleurOrigine;
         var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
