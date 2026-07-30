@@ -122,7 +122,6 @@
 	    return vue.charAt(0).toUpperCase() + vue.slice(1);
 	});
 	
-	console.log("nom Vues normalisées: ", nomVues);
 	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon", "d30 troncon tf", "d30 3vitinerairetype"];
 	var vueCouranteEtiquetteRD = false;
 	var vueCouranteTroncon = false;
@@ -354,6 +353,8 @@ function propTrim(props, nom) {
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 }
+// nomVues tel qu'il est reellement compare a vuesEtiquetteRD
+console.log("nomVues normalisées : ", nomVues.map(normaliserNomVue));
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;

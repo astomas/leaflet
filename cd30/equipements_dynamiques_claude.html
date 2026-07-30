@@ -131,7 +131,6 @@
 	    return vue.charAt(0).toUpperCase() + vue.slice(1);
 	});
 	
-	console.log("nomVues : ", nomVues);
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
 
@@ -367,6 +366,8 @@ function propTrim(props, nom) {
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 }
+// nomVues tel qu'il est reellement compare a vuesEtiquetteRD
+console.log("nomVues normalisées : ", nomVues.map(normaliserNomVue));
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;

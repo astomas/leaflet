@@ -123,7 +123,6 @@
 	    return vue.charAt(0).toUpperCase() + vue.slice(1);
 	});
 	
-	console.log("nomVues : ", nomVues);
 	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
 	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon","d30 troncon tf","d30 3vitinerairetype"];
 	var vueCouranteEtiquetteRD = false;
@@ -332,6 +331,8 @@ function propTrim(props, nom) {
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 }
+// nomVues tel qu'il est reellement compare a vuesEtiquetteRD
+console.log("nomVues normalisées : ", nomVues.map(normaliserNomVue));
 // //// modif nouvelle UI - étiquettes RD permanentes sur les vues ciblées (vuesEtiquetteRD) ////
 // Une seule étiquette par tronçon, repositionnée dynamiquement au point le plus proche du centre
 // du viewport. Toujours visible, jamais en surnombre, affichée/masquée selon l'activation de la
