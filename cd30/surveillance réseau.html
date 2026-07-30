@@ -784,6 +784,11 @@ function CarteLeaflet(conteneurId) {
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place). Pour le réactiver, décommenter la ligne ci-dessous :
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+        // Les couches sans propriété RD (itinéraires cyclables) gardent leur infobulle :
+        // l'étiquette y est un complément, pas un remplacement.
+        if (!élément.properties["RD "] && !élément.properties["RD"]) {
+            élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+        }
     } else {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
