@@ -389,6 +389,26 @@
       });
     }
 
+    // [cd30] Impression : les entrées de légende grisées sont retirées en CSS
+    // (@media print). Il reste à masquer l'en-tête et le bloc d'une couche dont
+    // toutes les entrées sont grisées, ce que le CSS ne sait pas exprimer
+    // (:has() ne peut pas être imbriqué).
+    function marquerGroupesLegendeVides(marquer) {
+      var contenus = document.querySelectorAll(".leaflet-legend-group-content");
+      for (var i = 0; i < contenus.length; i++) {
+        var entete = contenus[i].previousElementSibling;
+        if (!entete || entete.className.indexOf("leaflet-legend-group-header") === -1) continue;
+        var vide = !contenus[i].querySelector(".leaflet-legend-item:not(.leaflet-legend-item-inactive)");
+        var methode = (marquer && vide) ? "add" : "remove";
+        entete.classList[methode]("legende-groupe-vide-impression");
+        contenus[i].classList[methode]("legende-groupe-vide-impression");
+      }
+    }
+    if (window.maCarte && window.maCarte.on) {
+      window.maCarte.on("browser-print-start", function () { marquerGroupesLegendeVides(true); });
+      window.maCarte.on("browser-print-end", function () { marquerGroupesLegendeVides(false); });
+    }
+
     // Si le fond change par ailleurs (code carte), resynchronise la liste
     if (window.maCarte && window.maCarte.on) {
       window.maCarte.on("baselayerchange", function () {

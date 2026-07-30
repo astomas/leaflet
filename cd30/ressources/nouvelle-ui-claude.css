@@ -1630,6 +1630,16 @@ div[id^="GPgeocodeResultsList"] {
   flex: 0 0 auto;
 }
 
+/* [cd30] Impression : la légende ne montre que les couches réellement affichées.
+   Les entrées désactivées (grisées, classe posée par leaflet.legend.js) sont
+   retirées, ainsi que l'en-tête d'une couche dont toutes les entrées le sont. */
+@media print {
+  .leaflet-legend-item-inactive,
+  .legende-groupe-vide-impression {
+    display: none !important;
+  }
+}
+
 /* [cd30] Chevron discret de repli du bloc légende (haut droite) */
 .leaflet-bottom.leaflet-right .leaflet-legend {
   position: relative;
