@@ -2063,11 +2063,11 @@ this.importFichier = function () {
 						var logoTitre = document.createElement("img");
 						logoTitre.className = "logo-titre-print";
 						logoTitre.src = "/leaflet/Ressources%2026/images/legard.jpg";
-						logoTitre.style.cssText = "position:absolute;left:10px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
+						logoTitre.style.cssText = "position:absolute;left:4px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
 						contPrint.appendChild(logoTitre);
-						titrePrint.style.marginLeft = "70px";
+						titrePrint.style.marginLeft = "62px";
 						// retour à la ligne anticipé (450px max)
-						titrePrint.style.setProperty("max-width", "450px", "important");	
+						titrePrint.style.setProperty("max-width", "330px", "important");	
 						// centres verticaux alignés : cale le bas du logo selon la hauteur réelle du titre
 						requestAnimationFrame(function() {
 							var basCont = contPrint.getBoundingClientRect().bottom;
