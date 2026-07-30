@@ -130,6 +130,27 @@
 	var vueCouranteTroncon = false;
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
+
+	// [cd30] Portee globale : cette fonction est appelee depuis dessinerCarte
+	// (affichage ecran) ET depuis afficherOutils (gestionnaire d'impression).
+	// Declaree dans dessinerCarte, elle etait invisible du second.
+	function ajusterLargeurColonnesLegende(racineLegende) {
+	    var base = racineLegende || maCarte.getContainer();
+	    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
+	    if (!container) return;
+
+	    var spans = container.querySelectorAll('.leaflet-legend-item span');
+	    var largeurMaxLib = 0;
+	    spans.forEach(function(span) {
+	        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
+	    });
+
+	var largeurColonne = largeurMaxLib + 30;
+
+	    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
+	        col.style.minWidth = largeurColonne + 'px';
+	    });
+	}
 	
 	var tabNettoyé = [];
 
@@ -1152,23 +1173,6 @@ function CarteLeaflet(conteneurId) {
 				});
 			})();
 	
-			function ajusterLargeurColonnesLegende(racineLegende) {
-			    var base = racineLegende || maCarte.getContainer();
-			    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
-			    if (!container) return;
-
-			    var spans = container.querySelectorAll('.leaflet-legend-item span');
-			    var largeurMaxLib = 0;
-			    spans.forEach(function(span) {
-			        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
-			    });
-
-				var largeurColonne = largeurMaxLib + 30;
-
-			    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
-			        col.style.minWidth = largeurColonne + 'px';
-			    });
-			}
 
 			window.modernLegendeParCouche = {};
 			for (i = 0; i < tabCtrlLegendeObj.length; i++) {

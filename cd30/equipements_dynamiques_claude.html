@@ -134,6 +134,29 @@
 	console.log("nomVues : ", nomVues);
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
+
+	// [cd30] Portee globale : cette fonction est appelee depuis dessinerCarte
+	// (affichage ecran) ET depuis afficherOutils (gestionnaire d'impression).
+	// Declaree dans dessinerCarte, elle etait invisible du second.
+	function ajusterLargeurColonnesLegende(racineLegende) {
+	    var base = racineLegende || maCarte.getContainer();
+	    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
+	    if (!container) return;
+			
+	    // Largeur réelle du libellé le plus long
+	    var spans = container.querySelectorAll('.leaflet-legend-item span');
+	    var largeurMaxLib = 0;
+	    spans.forEach(function(span) {
+	        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
+	    });
+			
+	    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
+	    var largeurColonne = largeurMaxLib + 30;
+			
+	    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
+	        col.style.minWidth = largeurColonne + 'px';
+	    });
+	}
 	
 	var tabNettoyé = [];
 
@@ -1168,25 +1191,6 @@ function CarteLeaflet(conteneurId) {
 				});
 			})();
 	
-			function ajusterLargeurColonnesLegende(racineLegende) {
-			    var base = racineLegende || maCarte.getContainer();
-			    var container = base.querySelector('.leaflet-legend-contents.deux-colonnes');
-			    if (!container) return;
-			
-			    // Largeur réelle du libellé le plus long
-			    var spans = container.querySelectorAll('.leaflet-legend-item span');
-			    var largeurMaxLib = 0;
-			    spans.forEach(function(span) {
-			        if (span.offsetWidth > largeurMaxLib) largeurMaxLib = span.offsetWidth;
-			    });
-			
-			    // Largeur colonne = libellé + icône/picto + petite marge de sécurité
-			    var largeurColonne = largeurMaxLib + 30;
-			
-			    container.querySelectorAll('.leaflet-legend-column').forEach(function(col) {
-			        col.style.minWidth = largeurColonne + 'px';
-			    });
-			}
 				
 			// [cd30] La légende revient dans le bloc initial en bas à droite (comme ancienne UI).
 			// legende sur 2 col si nbr elts legende > 27
