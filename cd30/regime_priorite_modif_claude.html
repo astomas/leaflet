@@ -1786,6 +1786,8 @@ this.importFichier = function () {
 							elementLegende.style.fontSize = fontSize + "px";
 							elementLegende.style.lineHeight = "1.1";
 						});
+						// dezoom supplementaire quand la legende est haute
+						e.printMap.setZoom(e.printMap.getZoom() - 0.25, { animate: false });
 						// decalage carte a gauche
 						e.printMap.panBy([85, 20], { animate: false });	// [cd30] carte imprimée : +10px à droite, +20px vers le haut
 					}
