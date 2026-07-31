@@ -126,6 +126,9 @@
 	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon", "d30 troncon tf", "d30 3vitinerairetype"];
 	var vueCouranteEtiquetteRD = false;
 	var vueCouranteTroncon = false;
+	// vues dont les lignes gardent leur infobulle malgre l'etiquette permanente
+	var vuesInfobulleGardee = ["d30 3vitinerairetype"];
+	var vueCouranteInfobulle = false;
 	
 	L.Icon.Default.imagePath = '/Ressources/API_JS/images/';
 
@@ -353,11 +356,6 @@ function propTrim(props, nom) {
 // normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD 
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
-}
-// couches conservant leur infobulle malgre l'etiquette permanente (nom de couche, compare sans accents ni casse)
-var couchesInfobulleGardee = ["itineraires cyclables euro, nat., dep."];
-function gardeInfobulle(props) {
-    return couchesInfobulleGardee.indexOf(normaliserNomVue(propTrim(props, "nomcouche"))) !== -1;
 }
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
@@ -791,7 +789,7 @@ function CarteLeaflet(conteneurId) {
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
         // Les couches sans propriété RD (itinéraires cyclables) gardent leur infobulle :
         // l'étiquette y est un complément, pas un remplacement.
-        if (gardeInfobulle(élément.properties)) {
+        if (vueCouranteInfobulle) {
             élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
         }
     } else {
@@ -852,6 +850,7 @@ function CarteLeaflet(conteneurId) {
 	    // vue ciblée pour étiquette RD (réf. nomVues) 
 	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
+	    vueCouranteInfobulle = (typeof nomVues !== "undefined" && vuesInfobulleGardee.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
