@@ -332,6 +332,11 @@ function propTrim(props, nom) {
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 }
+// couches conservant leur infobulle malgre l'etiquette permanente (nom de couche, compare sans accents ni casse)
+var couchesInfobulleGardee = ["itineraires cyclables euro, nat., dep."];
+function gardeInfobulle(props) {
+    return couchesInfobulleGardee.indexOf(normaliserNomVue(propTrim(props, "nomcouche"))) !== -1;
+}
 // //// modif nouvelle UI - étiquettes RD permanentes sur les vues ciblées (vuesEtiquetteRD) ////
 // Une seule étiquette par tronçon, repositionnée dynamiquement au point le plus proche du centre
 // du viewport. Toujours visible, jamais en surnombre, affichée/masquée selon l'activation de la
@@ -728,7 +733,7 @@ function CarteLeaflet(conteneurId) {
 			couche.bindTooltip(tooltipCourt, { sticky: true, opacity: 0.9, className: 'tooltip-polygone' });
 		} else if (élément.geometry.type === "LineString" || élément.geometry.type === "MultiLineString") {
 			// //// modif nouvelle UI - pas de tooltip ligne sur les vues RD sans 'troncon' ////
-			if (!vueCouranteEtiquetteRD || vueCouranteTroncon || !propTrim(élément.properties, "RD")) { couche.bindTooltip(texteTooltip, optionsTooltip); }
+			if (!vueCouranteEtiquetteRD || vueCouranteTroncon || gardeInfobulle(élément.properties)) { couche.bindTooltip(texteTooltip, optionsTooltip); }
 		} else {
 			couche.bindTooltip(texteTooltip, optionsTooltip);
 		}
@@ -794,7 +799,7 @@ function CarteLeaflet(conteneurId) {
         élémentsMLS.options.rdColor = couleurOrigine || "#888";
     }
     // //// modif nouvelle UI - pas de tooltip survol sur les vues RD sans 'troncon' ////
-    if (!vueCouranteEtiquetteRD || vueCouranteTroncon || !propTrim(élément.properties, "RD")) {
+    if (!vueCouranteEtiquetteRD || vueCouranteTroncon || gardeInfobulle(élément.properties)) {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
 }

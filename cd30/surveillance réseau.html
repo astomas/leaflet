@@ -354,6 +354,11 @@ function propTrim(props, nom) {
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 }
+// couches conservant leur infobulle malgre l'etiquette permanente (nom de couche, compare sans accents ni casse)
+var couchesInfobulleGardee = ["itineraires cyclables euro, nat., dep."];
+function gardeInfobulle(props) {
+    return couchesInfobulleGardee.indexOf(normaliserNomVue(propTrim(props, "nomcouche"))) !== -1;
+}
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
@@ -786,7 +791,7 @@ function CarteLeaflet(conteneurId) {
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
         // Les couches sans propriété RD (itinéraires cyclables) gardent leur infobulle :
         // l'étiquette y est un complément, pas un remplacement.
-        if (!élément.properties["RD "] && !élément.properties["RD"]) {
+        if (gardeInfobulle(élément.properties)) {
             élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
         }
     } else {
