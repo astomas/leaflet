@@ -747,8 +747,13 @@ body.is-resizing * {
   border-radius: 2px;
   background: linear-gradient(90deg, #e8530e, #f9c489);
 }
-.popup-entete-titre { 
+.popup-entete-titre {
   line-height: 1.2;
+  /* [cd30] Même filet que le contenu du popup. min-width: 0 est indispensable :
+     l'en-tête est un conteneur flex, et sans lui le titre refuse de descendre
+     sous la largeur de son plus long mot, qui déborde alors du popup. */
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 .popup-entete-icone {
   width: 30px; 
