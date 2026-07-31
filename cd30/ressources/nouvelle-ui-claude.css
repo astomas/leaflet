@@ -326,6 +326,12 @@ body.is-resizing * {
 /* [cd30] Fond blanc : blanc à opacité 0,2 (évite l'éblouissement) quand aucun fond tuile */
 .leaflet-container.fond-blanc { background: rgba(255, 255, 255, 0.2); }
 
+/* [cd30] Leaflet pose tabindex="0" sur son conteneur ; à l'ouverture des panneaux
+   Info et Aide, le plugin Dialog lui donne le focus et le navigateur trace son
+   anneau noir par défaut, visible comme un trait sur le bord haut de la carte.
+   Le focus lui-même est conservé : la carte reste pilotable aux flèches. */
+.leaflet-container:focus { outline: none; }
+
 .modern-fonds-plan {
   padding: 4px 8px 10px;
   display: grid;
