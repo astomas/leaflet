@@ -130,6 +130,8 @@
 	    vue = vue.replace(/_4map$/i, "").replace(/_/g, " ");
 	    return vue.charAt(0).toUpperCase() + vue.slice(1);
 	});
+
+	console.log("nom Vues normalisées: ", nomVues);
 	
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
@@ -366,8 +368,6 @@ function propTrim(props, nom) {
 function normaliserNomVue(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 }
-// nomVues tel qu'il est reellement compare a vuesEtiquetteRD
-console.log("nomVues normalisées : ", nomVues.map(normaliserNomVue));
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
@@ -1771,7 +1771,7 @@ this.importFichier = function () {
 				const hauteurLegende = conteneurLegende.offsetHeight;
 
 				// si hauteur < 250px, on garde le bloc original
-					if (hauteurLegende < 660) {
+					if (hauteurLegende < 400) {
 						return;
 					}
 					else {
@@ -1788,9 +1788,9 @@ this.importFichier = function () {
 							elementLegende.style.lineHeight = "1.1";
 						});
 						// dezoom supplementaire quand la legende est haute
-						e.printMap.setZoom(e.printMap.getZoom() - 0.25, { animate: false });
+						e.printMap.setZoom(e.printMap.getZoom() - 0.1, { animate: false });
 						// decalage carte a gauche
-						e.printMap.panBy([85, 20], { animate: false });	// [cd30] carte imprimée : +10px à droite, +20px vers le haut
+						e.printMap.panBy([70, 16], { animate: false });	// [cd30] carte imprimée : +10px à droite, +20px vers le haut
 					}
 				}, 100);
 			}	
@@ -2054,10 +2054,10 @@ this.importFichier = function () {
 						var logoTitre = document.createElement("img");
 						logoTitre.className = "logo-titre-print";
 						logoTitre.src = "/leaflet/Ressources 26/images/legard.jpg";
-						logoTitre.style.cssText = "position:absolute;left:4px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
+						logoTitre.style.cssText = "position:absolute;left:10px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
 						contPrint.appendChild(logoTitre);
-						titrePrint.style.marginLeft = "62px";	// bloc logo (50px, à left:10) + 10px d'écart
-						titrePrint.style.setProperty("max-width", "330px", "important");	// retour à la ligne anticipé (450px max)
+						titrePrint.style.marginLeft = "70px";	// bloc logo (50px, à left:10) + 10px d'écart
+						titrePrint.style.setProperty("max-width", "450px", "important");	// retour à la ligne anticipé (450px max)
 						// centres verticaux alignés : cale le bas du logo selon la hauteur réelle du titre
 						requestAnimationFrame(function() {
 							var basCont = contPrint.getBoundingClientRect().bottom;
