@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -42,8 +42,8 @@
 			border-radius: 8px;
 			padding: 20px 25px;
 			margin: 80px 60px 80px 10px;
-			
-		}		
+
+		}
 		.liens-haut a {
 			display: flex;
 			align-items: center;
@@ -59,20 +59,18 @@
 		.liens-haut a:hover {
 			background-color: #d0d0d0;
 			color: #0000EE;
-		}	
+		}
 		.liens-haut a {
 			border-bottom: 1px solid #ccc;
 			padding-bottom: 10px;
 		}
 		.liens-haut a:last-child {
 			border-bottom: none;
-		}		
+		}
 		.contenu-aide {
 			box-sizing: border-box;
-			height: 800px;   /* hauteur maîtrisée (ne suit plus la largeur) */
-			object-fit: fill;
-			background-color: #fde8c8;
-			padding: 20px;
+			background-color: #fdf3e3;
+			padding: 12px;
 			flex: 0 0 calc(43.333% - 10px);
 			min-width: 0;
 			border-radius: 5px;
@@ -85,6 +83,56 @@
 			font-size: 1.7em;
 		}
 
+		/* ===== Contenu de l'aide (remplace l'ancienne capture contenu_aide.png) ===== */
+		.aide-bandeau {
+			background-color: #d9eaf7;
+			border-radius: 6px;
+			padding: 12px 14px;
+			text-align: center;
+			font-weight: bold;
+			color: #1f4e79;
+			line-height: 1.5;
+		}
+		.aide-grille {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+			gap: 10px;
+			margin: 12px 0;
+		}
+		.aide-fiche {
+			display: flex;
+			align-items: flex-start;
+			gap: 10px;
+			background-color: #fff;
+			border: 1px solid #ece4d5;
+			border-radius: 6px;
+			padding: 10px 12px;
+		}
+		.aide-fiche svg {
+			flex: 0 0 auto;
+			margin-top: 2px;
+		}
+		.aide-fiche-titre {
+			display: block;
+			color: #007079;
+			font-weight: bold;
+			margin-bottom: 3px;
+		}
+		.aide-fiche p {
+			margin: 0;
+			color: #444;
+			line-height: 1.45;
+			overflow-wrap: break-word;
+		}
+		.aide-section {
+			color: #0a8f9d;
+			font-weight: bold;
+			letter-spacing: .06em;
+			text-transform: uppercase;
+			border-bottom: 1px solid #ece4d5;
+			padding-bottom: 4px;
+			margin: 16px 0 0;
+		}
     </style>
 </head>
 
@@ -104,8 +152,88 @@
 		<!-- </a> -->
 		</div>
 	</div>
+
 	<!-- Contenu aide -->
-	<!-- <img src="./contenu_aide.png" alt="Aide" class="contenu-aide"> -->
+	<section class="contenu-aide">
+		<div class="aide-bandeau">
+			Afficher la carte depuis le Système d'Information du CD 30.<br>
+			Une connexion internet est nécessaire pour les fonds de carte.
+		</div>
+
+		<div class="aide-grille">
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-.6 4"/><path d="M20 5v6h-6"/></svg>
+				<p><span class="aide-fiche-titre">Recentrer carte</span>Recentrage auto sur le Gard (ou l'UT selon carte).</p>
+			</div>
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+				<p><span class="aide-fiche-titre">Rechercher localisation</span>Commune, adresse, bâtiment, route, lieu.</p>
+			</div>
+
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke-linecap="round"><path d="M3 7h18" stroke="#94a3b8" stroke-width="2"/><path d="M3 12h18" stroke="#e11d48" stroke-width="3.5"/><path d="M3 17h18" stroke="#94a3b8" stroke-width="2"/></svg>
+				<p><span class="aide-fiche-titre">Surligner lignes</span>Surlignage en rouge des lignes au survol de la souris. Actif ou non à l'ouverture selon la carte. Les lignes surlignées peuvent être disjointes ('multilignes').</p>
+			</div>
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/><circle cx="11" cy="11" r="2.5" fill="#f0a04c" stroke="none"/></svg>
+				<p><span class="aide-fiche-titre">Rechercher élément de couche</span>Saisir éléments recherchés et afficher les correspondances. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON de l'élément trouvé dans la fenêtre.</p>
+			</div>
+
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h10M7 17h6"/></svg>
+				<p><span class="aide-fiche-titre">Légende dynamique</span>Afficher/masquer 1 élément légende en cliquant dessus. La barre latérale affiche la couche entière, la légende filtre les éléments d'une même couche. Bloc légende repliable.</p>
+			</div>
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><path d="M8 21v-6l-2-4a6 6 0 0 1 12 0l-2 4v6"/></svg>
+				<p><span class="aide-fiche-titre">Street View, G. Maps, Panoramax, Waze</span>Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.</p>
+			</div>
+
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.5" r="1.1" fill="#2C3E50" stroke="none"/></svg>
+				<p><span class="aide-fiche-titre">Informations</span>Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).</p>
+			</div>
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+				<p><span class="aide-fiche-titre">Coordonnées GPS</span>Clic droit sur la carte au zoom ville et + pour afficher/copier les coordonnées.</p>
+			</div>
+		</div>
+
+		<p class="aide-section">Outils de carte</p>
+
+		<div class="aide-grille">
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg>
+				<p><span class="aide-fiche-titre">Import couches</span>Affiche des fichiers de couches Shape, GeoJSON, Csv, GPX, Kml. Possibilité de glisser/déposer et zipper (1 couche par fichier). Clic droit sur 1 élément importé pour l'effacer.</p>
+			</div>
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"/><path d="M8 8l4-4 4 4"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
+				<p><span class="aide-fiche-titre">Export couches</span>Après validation, exporte la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+			</div>
+
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1"/><path d="M7 16h10v4H7z"/></svg>
+				<p><span class="aide-fiche-titre">Imprimer carte</span>'Vue courante' : portion affichée (format paysage). 'Auto Gard' : le département du Gard avec mise à l'échelle auto. 'Sélec. zone' : un rectangle tracé à la souris sur la carte.</p>
+			</div>
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15L15 3l6 6L9 21z"/><path d="M7.5 10.5l2 2M10.5 7.5l2 2M13.5 4.5l2 2"/></svg>
+				<p><span class="aide-fiche-titre">Mesure de distance(s)</span>Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment. Clic bouton 'Règle' ou touche 'Echap' pour tout effacer.</p>
+			</div>
+
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+				<p><span class="aide-fiche-titre">Isochrone et isodistance</span>Placer un point puis lancer le calcul (voiture ou piéton) : isochrone ou isodistance autour ou depuis le point. Le réseau routier est pris en compte.</p>
+			</div>
+			<div class="aide-fiche">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></svg>
+				<p><span class="aide-fiche-titre">Recherche par coordonnées GPS</span>Copier ou saisir des coordonnées WGS84 (ex : '43.83494, 4.35965') pour afficher la localisation et fenêtre de l'adresse la plus proche. Recliquer bouton pour effacer.</p>
+			</div>
+		</div>
+
+		<div class="aide-bandeau">
+			Les rendus des fonctions importer, mesurer et isochrone seront perdus à la réouverture de la carte.<br>
+			Pour en conserver une trace : impression papier/pdf via l'outil 'Imprimer' ou capture écran.
+		</div>
+	</section>
 </div>
 </body>
 </html>
