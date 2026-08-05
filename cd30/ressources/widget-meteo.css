@@ -39,6 +39,15 @@
 .meteo-alerte-simple.meteo-niveau-orange { background: #ff8f00; color: #fff; }
 .meteo-alerte-simple.meteo-niveau-rouge  { background: #e2001a; color: #fff; }
 
+/* [cd30] Pictogrammes des phénomènes, à gauche du libellé. La police Font Awesome
+   est déjà chargée par les cartes (boutons easyButton) : aucun fichier à déployer.
+   Les icônes héritent de la couleur du badge, donc du niveau de vigilance. */
+.meteo-alerte-simple .meteo-icone {
+	font-size: 1.05em;
+	line-height: 1;
+	margin-right: 7px;
+}
+
 .meteo-alerte-simple:hover {
 	transform: translateY(-1px);
 	box-shadow: 0 4px 10px rgba(0,0,0,0.5);

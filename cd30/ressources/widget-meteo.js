@@ -1,6 +1,6 @@
 /* //// widget vigilance Météo-France - Gard (dept 30) - opendatasoft, sans clé ////
-   [cd30] Version simplifiée : pas d'icônes ni d'échéance (jour), un seul badge
-   "Alerte météo" sur fond blanc, cliquable vers le site vigilance Gard.
+   [cd30] Un seul badge "Alerte météo" précédé du ou des pictogrammes des
+   phénomènes en cours, cliquable vers le site vigilance Gard.
    Le badge n'apparaît que s'il existe au moins une alerte (J ou J+1). */
 function initWidgetMeteo(cfg) {
 	var widget = document.getElementById('meteoWidget');
@@ -27,6 +27,23 @@ function initWidgetMeteo(cfg) {
 	/* clé = color_id Météo-France (2 jaune, 3 orange, 4 rouge) */
 	var NIVEAUX = { 2: 'jaune', 3: 'orange', 4: 'rouge' };
 
+	/* Pictogramme par phénomène : classes Font Awesome, déjà chargées par les
+	   cartes pour les boutons easyButton. Aucun fichier image à déployer.
+	   Toutes présentes dès la 6.1, donc valables aussi en 6.6. */
+	var ICONES = {
+		1: 'fa-wind',                /* vent violent       */
+		2: 'fa-cloud-showers-heavy', /* pluie-inondation   */
+		3: 'fa-cloud-bolt',          /* orages             */
+		4: 'fa-water',               /* crues              */
+		5: 'fa-snowflake',           /* neige-verglas      */
+		6: 'fa-temperature-high',    /* canicule           */
+		7: 'fa-icicles',             /* grand froid : silhouette distincte du
+		                                thermometre, illisible a cette taille  */
+		8: 'fa-hill-avalanche',      /* avalanches         */
+		9: 'fa-house-tsunami'        /* vagues-submersion  */
+	};
+	var ICONE_DEFAUT = 'fa-triangle-exclamation';
+
 	// Niveau de vigilance max parmi les alertes (color_id du flux, ou niveau des données TEST)
 	function niveauMax(alertes) {
 		var max = 0;
@@ -48,6 +65,16 @@ function initWidgetMeteo(cfg) {
 		return libs;
 	}
 
+	// Pictogrammes des phénomènes en cours, dédoublonnés, dans l'ordre des libellés
+	function iconesPhenomenes(alertes) {
+		var classes = [];
+		(alertes || []).forEach(function (a) {
+			var cls = ICONES[parseInt(a.phenomenon_id)] || ICONE_DEFAUT;
+			if (classes.indexOf(cls) === -1) classes.push(cls);
+		});
+		return classes;
+	}
+
 	function afficher(alertesJ, alertesJ1) {
 		var zone = widget.parentElement;
 		var aAlerte = (alertesJ && alertesJ.length) || (alertesJ1 && alertesJ1.length);
@@ -65,8 +92,14 @@ function initWidgetMeteo(cfg) {
 			+ (niveau ? ' ' + niveau : '') + (libs.length ? ' ' + libs.join(' / ') : '');
 		// [cd30] classe de niveau : colore le fond du badge selon la vigilance
 		var classeNiveau = niveau ? ' meteo-niveau-' + niveau : '';
+		// [cd30] pictogrammes des phénomènes, à gauche du libellé. aria-hidden :
+		// le texte du badge porte déjà l'information, l'icône ne fait que l'illustrer.
+		var icones = iconesPhenomenes(toutes).map(function (cls) {
+			return '<i class="fa-solid ' + cls + ' meteo-icone" aria-hidden="true"></i>';
+		}).join('');
 		widget.innerHTML = '<a class="meteo-alerte-simple' + classeNiveau + '" href="' + URL_VIGILANCE_GARD
-			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard">' + texte + '</a>';
+			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard">'
+			+ icones + '<span class="meteo-alerte-texte">' + texte + '</span></a>';
 		widget.style.display = 'flex';
 		if (zone) zone.style.display = 'flex';
 	}
