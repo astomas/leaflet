@@ -43,7 +43,7 @@
    est déjà chargée par les cartes (boutons easyButton) : aucun fichier à déployer.
    Les icônes héritent de la couleur du badge, donc du niveau de vigilance. */
 .meteo-alerte-simple .meteo-icone {
-	font-size: 1.05em;
+	font-size: 1.37em;   /* 1.05em + 30% */
 	line-height: 1;
 	margin-right: 7px;
 }
