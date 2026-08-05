@@ -2406,9 +2406,9 @@ this.rechercherJson = function(){
 
 	this.widgetMeteo = function() {
 		initWidgetMeteo({
-			// [cd30] SIMULATION alerte orange (orages). Remettre null pour les donnees reelles.
-			TEST_J:  [{ color_id: 3, phenomenon_id: 3 }], // null = données réelles  | ex: [{ niveau: 2, phenomene_lib: 'Vent violent' }]
-			TEST_J1: null  // null = données réelles  | ex: [{ niveau: 3, phenomene_lib: 'Orages' }]
+			// null = données réelles - exemple : var TEST_J: [{color_id:2, phenomenon_id:6}]
+			TEST_J:  null,
+			TEST_J1: null
 		});
 	};
 	
