@@ -1,0 +1,1482 @@
+:root {
+  --modern-primary: #2C3E50;
+  --modern-primary-2: #34495E;
+  --modern-accent: #3498DB;
+  --modern-warning: #F39C12;
+  --modern-tools: #16A085;
+  --modern-bg: #f8fafc;
+  --modern-border: #dfe6e9;
+  --modern-text: #2d3436;
+  --modern-muted: #636e72;
+  --modern-sidebar-width: 350px;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  color: var(--modern-text);
+  background: linear-gradient(135deg, #007079 0%, rgb(227, 227, 227) 100%)
+}
+
+.modern-carte-shell {
+  height: calc(100vh - 16px);
+  margin: 8px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .22);
+}
+
+.modern-header {
+  min-height: 74px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  /* Dégradé bleu-vert du bandeau haut */
+  background: linear-gradient(135deg, #007e8d 0%, #005f6b 100%) !important;
+}
+
+.modern-header::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  right: -8%;
+  width: 360px;
+  height: 220px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+}
+
+.modern-header-logos,
+.modern-header-titles,
+.modern-header-actions {
+  position: relative;
+  z-index: 1;
+}
+
+/* Logos de navigation remontés dans l'en-tête (remplacent le badge CD30). */
+.modern-header-logos {
+  width: auto !important;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding: 0 !important;
+}
+
+.modern-header-logos img,
+.modern-header-logos .leaflet-control-logos-img {
+  height: 53px !important;
+  width: auto !important;
+  cursor: pointer;
+  transition: transform .15s, opacity .15s;
+}
+
+.modern-header-logos img:hover {
+  transform: translateY(-1px);
+  opacity: .85;
+}
+
+.modern-header-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.modern-header h1 {
+  margin-left: 10px;
+  font-size: 1.65rem;
+  line-height: 1.1;
+  font-weight: 800;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.modern-subtitle {
+  margin-top: 5px;
+  font-size: .88rem;
+  opacity: .88;
+  font-weight: 500;
+}
+
+.modern-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.modern-header-help {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 11px;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 800;
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .18);
+}
+
+.modern-header-help:hover {
+  background: rgba(255, 255, 255, .22);
+}
+
+/* Classes individuelles pour cibler chaque bouton séparément */
+.modern-header-info  { /* styles spécifiques au bouton Info  */ }
+.modern-header-aide  { /* styles spécifiques au bouton Aide  */ }
+.btn-recentrer       { /* styles spécifiques au bouton Recentrer */ }
+
+.modern-main-content {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--modern-sidebar-width) 10px 1fr;
+}
+
+.modern-sidebar {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 5px 3px 3px 3px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--modern-bg);
+  border-right: 1px solid var(--modern-border);
+}
+
+/* Conteneur scrollable de la sidebar : absorbe le débordement vertical des
+   sections de données (Fonds de plan, Données métier). La section « Outils
+   carte » reste HORS de ce conteneur (cf. setupSidebarScroll dans le JS) car
+   ses fenêtres plugins doivent déborder en surimpression sur la carte, ce qui
+   est incompatible avec un parent en overflow:auto. */
+.modern-sidebar-scroll {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, .22) transparent;
+}
+
+.modern-sidebar-scroll::-webkit-scrollbar { width: 8px; }
+.modern-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, .22);
+  border-radius: 4px;
+}
+.modern-sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+
+.modern-sidebar-resizer {
+  position: relative;
+  z-index: 10;
+  background: var(--modern-border);
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  transition: background 0.15s;
+}
+
+.modern-sidebar-resizer::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 36px;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  background: #94a3b8;
+  opacity: .55;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.modern-sidebar-resizer:hover {
+  background: #cbd5e1;
+}
+
+.modern-sidebar-resizer:hover::before,
+.modern-sidebar-resizer.is-dragging::before {
+  opacity: 1;
+  background: #3498DB;
+}
+
+.modern-sidebar-resizer.is-dragging {
+  background: #93c5fd;
+}
+
+body.is-resizing,
+body.is-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+.modern-map-area {
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  background: #eef2f6;
+}
+
+#carteId {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+.modern-family {
+  margin-bottom: 12px;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, .06);
+  border-left: 4px solid var(--family-accent, var(--modern-accent));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+}
+
+.modern-family-fonds-plan {--family-accent: #2e7eb8; background: #eef5fb;}
+.modern-family-fonds-plan .modern-family-title:hover {background: #ddedf9; transition: background .18s ease;}
+.modern-family-metier { --family-accent: var(--modern-warning); background: #fdf4e7; }
+.modern-family-tools { --family-accent: var(--modern-tools); }
+.modern-family-tools .modern-family-title:hover {background: #e8f6f2; transition: background .18s ease;}
+
+.modern-family-title {
+  padding: 11px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  color: var(--family-accent);
+  text-transform: uppercase;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .35px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.modern-family-title > span:first-child {
+  flex: 1;
+}
+
+.modern-family-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  color: var(--family-accent);
+}
+
+.modern-family-chevron svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+}
+
+.modern-family[data-expanded="false"] .modern-family-chevron {
+  transform: rotate(-90deg);
+}
+
+.modern-family[data-expanded="false"] > :not(.modern-family-title) {
+  display: none;
+}
+
+.modern-family-title em {
+  padding: 3px 8px;
+  color: #64748b;
+  background: #eef2f6;
+  border-radius: 999px;
+  font-style: normal;
+  font-size: .68rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.modern-family p {
+  margin: 0;
+  padding: 0 12px 12px;
+  color: var(--modern-muted);
+  font-size: .75rem;
+  line-height: 1.45;
+}
+
+/* Fonds de carte déplacés dans la sidebar : présentés en pastilles.
+   Le radio natif est masqué ; chaque fond devient une pastille cliquable et
+   la pastille active (fond sélectionné) est remplie de la couleur du bloc. */
+.modern-fonds-plan {
+  padding: 4px 8px 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.modern-fonds-plan label {
+  display: block;
+  margin: 0;
+}
+
+/* Chaque fond de plan = une pastille */
+.modern-fonds-plan label > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid #b8d8f0;
+  background: #f0f7fc;
+  font-size: .8rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #2e6a9a;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.modern-fonds-plan label > span:hover {
+  background: #c2e0f5;
+  border-color: #2e7eb8;
+  color: #1a4f72;
+}
+
+/* Pastille active : fond sélectionné, rempli de la couleur du bloc */
+.modern-fonds-plan label > span:has(input:checked) {
+  background: var(--family-accent, #2e7eb8);
+  border-color: var(--family-accent, #2e7eb8);
+  color: #fff;
+}
+
+/* Radio natif masqué (conservé dans le DOM : le clic sur la pastille le bascule) */
+.modern-fonds-plan input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+/* Couches métier (cases à cocher Leaflet) déplacées dans la sidebar.
+   La case native est masquée et remplacée par une icône œil à droite du
+   libellé : œil ouvert vert = couche visible, œil barré gris = couche masquée. */
+.modern-donnees-metier {
+  padding: 4px 8px 10px;
+}
+
+.modern-donnees-metier label {
+  display: block;
+  margin: 0;
+  font-weight: 500;
+  background: #fbe7c8;
+}
+
+/* Ligne complète cliquable (le clic sur le label bascule la couche) */
+.modern-donnees-metier label > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: .84rem;
+  color: var(--modern-text);
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.modern-donnees-metier label > span:hover {
+  background: #ffd975;
+}
+
+/* Case native masquée mais conservée dans le DOM : le clic sur le label
+   continue de la basculer (donc d'afficher/masquer la couche) */
+.modern-donnees-metier input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+/* Libellé : occupe toute la largeur pour pousser l'œil à droite.
+   Couche inactive (case décochée, œil barré) → libellé grisé. */
+.modern-donnees-metier input + span {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: color .15s;
+}
+
+/* Couche active (case cochée, œil ouvert) → libellé dégrisé.
+   Bascule automatiquement à l'ouverture et en cours de session.
+   .modern-couche-active : couches à items de légende, dont l'œil est piloté
+   par modern-dock via cette classe (case native laissée décochée pour que le
+   contrôle Leaflet ne rajoute pas sa copie doublon de la couche). */
+.modern-donnees-metier input:checked + span,
+.modern-donnees-metier label.modern-couche-active input + span {
+  color: var(--modern-text);
+}
+
+/* Chevron de repli/dépli du détail légende (à gauche du libellé de couche) */
+.detail-couches-toggle {
+  flex: 0 0 auto;
+  width: 18px;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--modern-tools);
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  transition: transform .15s;
+}
+
+.detail-couches-toggle.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Détail replié : masqué */
+.detail-couches-sidebar.collapsed {
+  display: none !important;
+}
+
+/* ===== Légende plugin injectée sous chaque couche métier ===== */
+.detail-couches-sidebar {
+  position: static !important;
+  float: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 4px 8px 0px !important;
+  margin: 0 !important;
+}
+
+.detail-couches-sidebar .leaflet-legend-contents {
+  display: block !important;
+  padding: 0 !important;
+}
+
+.detail-couches-sidebar .leaflet-legend-toggle {
+  display: none !important;
+}
+
+.detail-couches-sidebar .leaflet-legend-column {
+  float: none !important;
+  width: auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.detail-couches-sidebar .leaflet-legend-group-header {
+  display: none !important;
+}
+
+.detail-couches-sidebar .leaflet-legend-group-content {
+  padding: 0 !important;
+  font-weight:600;
+}
+
+/* Étiquette blanche : display block remplace display table, l'icône et le
+   texte coulent inline. Plate au repos, effet 3D (ombre + soulèvement) au survol. */
+.detail-couches-sidebar .leaflet-legend-item {
+  display: block !important;
+  margin: 0 0 4px !important;
+  padding: 3px 3px !important;
+  background: #f7f8fa !important;
+  border: 1px solid rgba(0, 0, 0, .08) !important;
+  border-radius: 8px;
+  transition: box-shadow .18s, transform .18s, border-color .18s;
+}
+
+.detail-couches-sidebar .leaflet-legend-item span {
+  display: inline !important;
+  font-size: .70rem !important;
+  color: #374151 !important;
+  white-space: normal !important;
+  vertical-align: middle;
+}
+/* Décalage libellé lignes/polygones (symbole canvas) uniquement */
+.detail-couches-sidebar .leaflet-legend-item i:has(canvas) + span {
+  margin-left: 4px;
+}
+
+/* Agrandissement +25% des icônes des couches points (symbole image) uniquement.
+   transform:scale n'altère pas la mise en page (le <i> garde sa taille) et ne
+   touche pas aux blocs couleur canvas des couches lignes/polygones. */
+.detail-couches-sidebar .leaflet-legend-item i img {
+  transform: scale(1.25);
+  transform-origin: center;
+}
+
+/* Survol : effet 3D (ombre portée + léger soulèvement) */
+.detail-couches-sidebar .leaflet-legend-item:hover {
+  border-color: #fed7aa !important;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, .13);
+  transform: translateY(-2px);
+}
+
+.detail-couches-sidebar .leaflet-legend-item-inactive {
+  background: #eceef1 !important;
+  border-color: rgba(0, 0, 0, .06) !important;
+}
+
+.detail-couches-sidebar .leaflet-legend-item-inactive span {
+  color: #9ca3af !important;
+}
+
+/* Icône œil — état par défaut "masqué" : œil barré gris */
+.modern-donnees-metier input + span::after {
+  content: "";
+  margin-left: auto;
+  flex: 0 0 auto;
+  width: 19px;
+  height: 19px;
+  background-color: #94a3b8;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: background-color .15s;
+}
+
+/* État "visible" (couche cochée ou .modern-couche-active) : œil ouvert vert */
+.modern-donnees-metier input:checked + span::after,
+.modern-donnees-metier label.modern-couche-active input + span::after {
+  background-color: #16a34a;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+}
+
+.modern-tools-dock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /*grid-template-columns: repeat(3, minmax(0, 1fr)); */
+  gap: 8px;
+  padding: 0 10px 12px;
+}
+
+.modern-tool-button {
+  min-height: 42px;
+  padding: 0px 10px 0px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--modern-primary);
+  background: #fff;
+  border: 1px solid #dbe3ec;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, .06);
+  cursor: pointer;
+  font: 700 .76rem "Segoe UI", Arial, sans-serif;
+  text-align: left;
+  transition: box-shadow .18s ease;
+}
+
+.modern-tool-button:hover {
+  box-shadow: 0 5px 14px rgba(15, 23, 42, .28);
+}
+.modern-tools-dock .leaflet-control .easy-button-button:hover,
+.modern-tools-dock .leaflet-bar a:hover,
+.modern-tools-dock .leaflet-control-geosearch a:hover,
+.modern-tools-dock .leaflet-control-geosearch .leaflet-bar-part:hover {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.modern-tool-icon-slot {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modern-tool-button-label {
+  white-space: normal;
+  line-height: 1.1;
+}
+
+.modern-tools-dock .leaflet-control,
+.modern-tools-dock .leaflet-bar,
+.modern-tools-dock .easy-button-container {
+  position: static !important;
+  float: none !important;
+  clear: none !important;
+  margin: 0 !important;
+  z-index: auto !important;
+  box-shadow: none !important;
+}
+
+.modern-tools-dock .leaflet-bar a,
+.modern-tools-dock .leaflet-control button,
+.modern-tools-dock .leaflet-control .easy-button-button,
+.modern-tools-dock .leaflet-control img,
+.modern-tools-dock .leaflet-control .easy-button-button img {
+  max-width: 28px !important;
+  max-height: 28px !important;
+}
+
+.leaflet-bar:not(.detail-couches-sidebar),
+.legend-container,
+.leaflet-legend:not(.detail-couches-sidebar),
+.infotitre {
+  border-radius: 5px !important;
+  border: 1px solid rgba(15, 23, 42, .12) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
+}
+
+/* Importer (betterFileLayer) et Isochrone : même bordure légère que les
+   autres outils du dock (remplace leurs cadres natifs plus épais). */
+.modern-tools-dock .leaflet-control-better-filelayer,
+.modern-tools-dock label[id^="GPshowIsochronPicto"] {
+  border: 1px solid rgba(15, 23, 42, .12) !important;
+  border-radius: 5px !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
+}
+
+.leaflet-bar a,
+.leaflet-control .easy-button-button {
+  color: var(--modern-primary) !important;
+  background: #fff !important;
+  transition: background .18s, color .18s;
+}
+
+.leaflet-bar a:hover,
+.leaflet-control .easy-button-button:hover {
+  color: var(--modern-accent) !important;
+  background: #eef4fb !important;
+}
+
+/* //// modif nouvelle UI - bouton pegman (Service Visualisation) : la règle
+   globale .easy-button-button { background:#fff !important } écrasait l'état
+   actif (jaune) et l'état inactif. On rétablit avec une spécificité supérieure :
+   fond orange pâle quand inactif, jaune quand ACTIF — y compris hors survol. //// */
+.leaflet-control .easy-button-button.bouton-service-visu {
+  background: #ffe6c7 !important;
+}
+.leaflet-control .easy-button-button.bouton-service-visu-actif {
+  background: #ffff00 !important;
+}
+
+.leaflet-control-scale-line {
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .92) !important;
+  font-weight: 600;
+}
+
+.infotitre {
+  padding: 10px 13px !important;
+  color: #fff !important;
+  background: #fab529 !important;
+  font-family: "Segoe UI", Arial, sans-serif !important;
+  font-weight: 800 !important;
+}
+
+.titre { color: #fff !important; max-width: 620px !important; }
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #fff !important;
+  background-image: none !important;
+  border: 1px solid #d8dee4 !important;
+  box-shadow: 0 10px 28px rgba(31, 35, 40, .24) !important;
+}
+
+.leaflet-popup-content-wrapper { border-radius: 12px !important; }
+
+.leaflet-popup-content {
+  color: #243447 !important;
+  font-family: "Segoe UI", Arial, sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  overflow-wrap: break-word;
+  max-width: 500px !important;
+  margin-right:20px;
+}
+
+/* ===== En-tête des popups : nom de couche + icône / pastille couleur ===== */
+.popup-entete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 7px;
+  margin-bottom: 9px;
+  position: relative;
+  font-weight: 800;
+  font-size: 14px;
+  color: #1f2d3d;
+}
+.popup-entete::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #e8530e, #f9c489);
+}
+.popup-entete-titre { line-height: 1.2; }
+.popup-entete-icone {
+  width: 24px; height: 24px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+.popup-entete-pastille {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.25);
+  flex: 0 0 auto;
+}
+
+/* Champs de popup : libellé (gras sombre) + valeur (atténuée) */
+.popup-cle { font-weight: 700; color: #16222e; }
+.popup-val { color: #7a8896; font-weight: 500; }
+
+/* Conteneur scrollable des popups multi-entités (lignes superposées + import) */
+.popup-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,.22) transparent;
+}
+.popup-scroll::-webkit-scrollbar { width: 8px; }
+.popup-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.22);
+  border-radius: 4px;
+}
+.popup-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* Étiquette RD du Réseau routier (DivIcon repositionné dynamiquement).
+   Le conteneur fait 0×0 et est positionné par Leaflet sur le point de la route ;
+   le span interne se centre dessus via translate(-50%, -50%). */
+.label-route-rd-wrap {
+  width: 0;
+  height: 0;
+  background: none;
+  border: none;
+}
+.label-route-rd {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  background: rgba(255, 255, 255, .88);
+  border: 2px solid rgba(0, 0, 0, .15);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #1e293b;
+  pointer-events: none;
+}
+
+.leaflet-tooltip:not(.tooltip-import) {
+  width: max-content;
+  max-width: 400px !important;
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+.legend-container {
+  color: #334155 !important;
+  background: rgba(255, 255, 255, .96) !important;
+  backdrop-filter: blur(8px);
+}
+
+.legend-container summary {
+  color: var(--modern-primary);
+  font-weight: 800;
+}
+
+.bouton-aide,
+.bouton-info,
+.bouton-service-visu,
+.switch-control-container-discret {
+  border-radius: 8px !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .14) !important;
+}
+
+.switch-control-container-discret { border-radius: 12px !important; }
+
+#modernLogosDock.modern-logos-dock,
+.modern-logos-dock {
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 0 0 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+#modernLogosDock .leaflet-control-logos-img {
+  margin-left: 0 !important;
+}
+
+@media (max-width: 1100px) {
+  .modern-main-content { grid-template-columns: 300px 10px 1fr; }
+  .modern-tools-dock { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  .modern-carte-shell {
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .modern-header {
+    min-height: 60px;
+    padding: 10px 14px;
+  }
+
+  .modern-header h1 { font-size: 1.25rem; }
+  .modern-subtitle { display: none; }
+
+  .modern-main-content { grid-template-columns: 1fr; }
+  .modern-sidebar,
+  .modern-sidebar-resizer { display: none; }
+}
+
+@media print {
+  body { background: #fff !important; }
+
+  .modern-sidebar,
+  .modern-sidebar-resizer,
+  .modern-header-actions { display: none !important; }
+
+  .modern-carte-shell {
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .modern-main-content { grid-template-columns: 1fr !important; }
+
+  /* //// modif nouvelle UI - titre carte dans la sortie print : fonte réduite,
+     retour à la ligne au-delà de 500 px (plus de tronquage) //// */
+  .infotitre, .titre {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    max-width: 500px !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+  }
+}
+
+/* Même règle hors @media pour que ça s'applique aussi dans
+   l'overlay screen du plugin browser-print (body.leaflet--printing). */
+/* //// modif nouvelle UI - titre carte dans l'overlay print browser-print //// */
+body.leaflet--printing .infotitre,
+body.leaflet--printing .titre {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  max-width: 500px !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* Correctif boutons Info / Aide dans l'en-tête : garde le rendu compact d'origine */
+.modern-header-help .leaflet-control,
+.modern-header-help .leaflet-bar,
+.modern-header-help .easy-button-container {
+  position: static !important;
+  float: none !important;
+  clear: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: auto !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.modern-header-help .leaflet-bar a,
+.modern-header-help .leaflet-control button,
+.modern-header-help .leaflet-control .easy-button-button,
+.modern-header-help button.easy-button-button,
+.modern-header-help .modern-header-info-control {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  max-width: 30px !important;
+  line-height: 30px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, .30) !important;
+  color: #243447 !important;
+  background: #f9b062 !important;
+  box-shadow: none !important;
+}
+
+.modern-header-help .leaflet-bar a:hover,
+.modern-header-help .leaflet-control button:hover,
+.modern-header-help .leaflet-control .easy-button-button:hover,
+.modern-header-help button.easy-button-button:hover,
+.modern-header-help .modern-header-info-control:hover {
+  color: #243447 !important;
+  background: #ffd39d !important;
+}
+
+.modern-header-help .fa,
+.modern-header-help .fa-solid,
+.modern-header-help .fa-info,
+.modern-header-help .fa-question,
+.modern-header-help i {
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+
+.modern-header-help img {
+  max-width: 22px !important;
+  max-height: 22px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.modern-header-help-label {
+  line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .modern-header-help-label { display: none; }
+  .modern-header-help { padding: 5px; }
+}
+
+/* Outils carte : fenêtres plugins en surimpression, sans décaler le menu */
+.modern-sidebar,
+.modern-family,
+.modern-tools-dock,
+.modern-tool-button,
+.modern-tool-icon-slot {
+  overflow: visible !important;
+}
+
+/* Repère stable : évite la remontée au hover-out */
+.modern-tool-button {
+  position: relative !important;
+  z-index: 1 !important;
+  transform: none !important;
+}
+
+.modern-tool-button:hover,
+.modern-tool-button:focus-within {
+  z-index: 99999 !important;
+  transform: none !important;
+}
+
+/* Cas général existant, mais on exclut le formulaire Isochrone */
+.modern-tools-dock .leaflet-control form:not([id^="GPisochronForm"]),
+.modern-tools-dock .leaflet-control-geosearch form,
+.modern-tools-dock .leaflet-control-search .search-tooltip,
+.modern-tools-dock .leaflet-control-search .search-input,
+.modern-tools-dock .leaflet-control .results,
+.modern-tools-dock .leaflet-control .menu,
+.modern-tools-dock .leaflet-control .panel {
+  position: absolute !important;
+  left: 47px !important;
+  top: -4px !important;
+  z-index: 100000 !important;
+  margin: 0 !important;
+  transform: none !important;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+  border-radius: 8px;
+}
+
+/* Isochrone : on déplace le panneau complet, pas son form */
+.modern-tools-dock div[id^="GPisochronPanel-"] {
+  position: absolute !important;
+  left: 35px !important;
+  top: -263px !important;
+  z-index: 130000 !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.modern-tools-dock form[id^="GPisochronForm"] {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Isochrone au-dessus des autres boutons Outils carte */
+.modern-tool-button:has(div[id^="GPisochronPanel-"]),
+.modern-tool-button:has(form[id^="GPisochronForm"]) {
+  z-index: 200000 !important;
+}
+
+/* Panneau Isochrone au-dessus */
+.modern-tools-dock div[id^="GPisochronPanel-"] {
+  z-index: 200001 !important;
+}
+
+/* ===== PRINT / BROWSERPRINT MERGE CLEAN ===== */
+.modern-tools-dock .leaflet-control-browser-print {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: max-content !important;
+  min-width: 32px !important;
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 140000 !important;
+  opacity: 1 !important;
+  line-height: normal !important;
+  background: transparent !important;
+}
+
+.modern-tools-dock .leaflet-control-browser-print a.leaflet-browser-print {
+  flex: 0 0 32px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  display: block !important;
+  cursor: pointer !important;
+  background-color: #fff !important;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gcCCi8Vjp+aNAAAAGhJREFUOMvFksENgDAMA68RC7BBN+Cf/ZU33QAmYAT6BolAGxB+RrrIsg1BpfNBVXcPMLMDI/ytpKozMHWwK7BJJ7yYWQbGdBea9wTIkRDzKy0MT7r2NiJACRgotCzxykFI34QY2Ea7KmtxGJ+uX4wfAAAAAElFTkSuQmCC') !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: 18px 18px !important;
+  opacity: 1 !important;
+}
+
+/* BrowserPrint crée un <ul> par mode : ils doivent rester en ligne, pas superposés. */
+.modern-tools-dock .leaflet-control-browser-print .browser-print-holder {
+  position: static !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  white-space: nowrap !important;
+  background: transparent !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.modern-tools-dock .leaflet-control-browser-print .browser-print-mode {
+  display: none;
+  background: #B2B2AB !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  font: 700 11px/19px "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+  padding: 6px 10px !important;
+  text-align: center !important;
+  border-radius: 0 !important;
+}
+
+.modern-tools-dock .leaflet-control-browser-print .browser-print-mode:hover {
+  background: #757570 !important;
+}
+
+/* //// modif nouvelle UI - print « Sélec. zone » : rend le pane du rectangle de
+   sélection non-interactif. Le rectangle (décoratif, gris pointillé) est dessiné
+   dans customPrintPane (z-index 9999) via les événements souris de la CARTE.
+   Si l'utilisateur relâche la souris hors de la carte (sur le dock / la barre
+   d'outils), le mouseup de la carte ne se déclenche pas, _endAutoPoligon ne
+   s'exécute pas et le rectangle interactif restait sur la carte en interceptant
+   tous les clics sur les éléments en dessous (icônes, lignes). pointer-events:none
+   laisse le rectangle visible mais transparent au clic ; le dessin n'en dépend pas. //// */
+.leaflet-customPrint-pane {
+  pointer-events: none !important;
+}
+
+/* ===== ISOCHRONE ICON VISIBLE WHEN PANEL OPEN ===== */
+/* Le panneau Isochrone reste au-dessus, mais ne masque plus le picto du bouton. */
+.modern-tool-button:has(div[id^="GPisochronPanel-"]) .modern-tool-icon-slot,
+.modern-tool-button:has(form[id^="GPisochronForm"]) .modern-tool-icon-slot {
+  position: relative !important;
+  z-index: 200002 !important;
+  background: #fff !important;
+}
+
+.modern-tools-dock label[id^="GPshowIsochronPicto"],
+.modern-tools-dock span[id^="GPshowIsochronOpen"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 200003 !important;
+}
+
+/* Modale d'export : écran laissé clair (pas d'assombrissement). L'overlay
+   reste présent et transparent — il continue d'intercepter les clics pour
+   fermer la modale (overlay.onclick). z-index au-dessus de la sidebar
+   (max 200003) pour qu'un clic hors modale ferme au lieu d'activer un outil. */
+.export-overlay {
+  z-index: 300000 !important;
+  background: transparent !important;
+}
+
+.export-dialog {
+  z-index: 300001 !important;
+}
+
+.modern-tools-dock label[id^="GPshowIsochronPicto"] {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  background-color: #fff !important;
+}
+
+.modern-tools-dock span[id^="GPshowIsochronOpen"] {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+/* ---- Agrandissement +20% contrôles haut-gauche (zoom, recentrer, rechercher lieu) ---- */
+.leaflet-bar a,
+.leaflet-bar button,
+.leaflet-touch .leaflet-bar a,
+.leaflet-touch .leaflet-bar button {
+  width: 31px !important;
+  height: 31px !important;
+  line-height: 31px !important;
+}
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  font-size: 22px !important;
+}
+.easy-button-button .fa {
+  font-size: 1.5em !important;
+}
+.leaflet-gac-search-btn {
+  width: 31px !important;
+  height: 31px !important;
+}
+.leaflet-gac-search-btn.leaflet-gac-hidden {
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+}
+
+/* ============================================================
+   Panel Info — thème clair élégant (.dialog-info)
+   Classe assignée via fenêtreInfo._container.classList.add(…)
+   ============================================================ */
+.dialog-info {
+  background: #fff7ed !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(234, 88, 12, 0.20) !important;
+  box-shadow: 0 10px 32px rgba(154, 52, 18, 0.18), 0 2px 8px rgba(0,0,0,0.10) !important;
+  overflow: hidden;
+}
+
+/* Barre titre simulée : "ⓘ  Informations" */
+.dialog-info .leaflet-control-dialog-inner {
+  padding-top: 40px !important;
+}
+/* Fond de barre + libellé "Informations" (place réservée à gauche pour l'icône) */
+.dialog-info .leaflet-control-dialog-inner::before {
+  content: "Informations";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 38px;
+  background: #fcd689;
+  border-bottom: 1px solid rgba(250, 181, 41, 0.4);
+  color: #5b3a00;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 38px;
+  padding: 1px 36px 0 50px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+/* Icône info — badge "i" blanc dans un disque bleu cerclé */
+.dialog-info .leaflet-control-dialog-inner::after {
+  content: "i";
+  position: absolute;
+  top: 8px; left: 18px;
+  width: 22px;
+  height: 22px;
+  line-height: 20px;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: #2563eb;
+  border: 2px solid #1d4ed8;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+
+/* Grabber + bouton fermer — foncés pour rester visibles sur ambre clair */
+.dialog-info .leaflet-control-dialog-grabber,
+.dialog-info .leaflet-control-dialog-close {
+  color: rgba(91, 58, 0, 0.7) !important;
+  z-index: 1;
+}
+.dialog-info .leaflet-control-dialog-close:hover {
+  color: #5b3a00 !important;
+}
+
+/* Zone de texte */
+.dialog-info .leaflet-control-dialog-contents {
+  color: #44403c;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.75;
+  padding: 6px 22px 10px !important;
+}
+
+/* Liens dans le contenu info — bleu standard souligné */
+.dialog-info .leaflet-control-dialog-contents a {
+  color: #0000ee;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.dialog-info .leaflet-control-dialog-contents a:visited {
+  color: #551a8b;
+}
+.dialog-info .leaflet-control-dialog-contents a:hover {
+  color: #1a0dab;
+}
+
+/* Poignée de redimensionnement */
+.dialog-info .leaflet-control-dialog-resizer {
+  color: rgba(234, 88, 12, 0.30) !important;
+}
+.dialog-info .leaflet-control-dialog-resizer:hover {
+  color: rgba(234, 88, 12, 0.55) !important;
+}
+
+/* ============================================================
+   Panel Aide — présentation modernisée (.dialog-aide)
+   Barre titre cohérente avec le panel Info (ambre + badge),
+   entrées outils en cartes, intro et avertissement stylés.
+   ============================================================ */
+.dialog-aide {
+  background: #ffffff !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(250, 181, 41, 0.30) !important;
+  box-shadow: 0 12px 36px rgba(120, 72, 0, 0.18), 0 2px 8px rgba(0,0,0,0.10) !important;
+  overflow: hidden;
+}
+
+/* Barre titre simulée : "?  Aide" */
+.dialog-aide .leaflet-control-dialog-inner {
+  padding-top: 36px !important;
+}
+.dialog-aide .leaflet-control-dialog-inner::before {
+  content: "Aide";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 38px;
+  background: #fcd689;
+  border-bottom: 1px solid rgba(250, 181, 41, 0.4);
+  color: #5b3a00;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 38px;
+  padding: 1px 36px 0 50px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+/* Badge "?" blanc cerclé orange #fab529 */
+.dialog-aide .leaflet-control-dialog-inner::after {
+  content: "?";
+  position: absolute;
+  top: 8px; 
+  left: 24px;
+  width: 22px;
+  height: 22px;
+  line-height: 20px;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: #ff9500;
+  border: 2px solid #ff9500;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+.dialog-aide .leaflet-control-dialog-grabber,
+.dialog-aide .leaflet-control-dialog-close {
+  color: rgba(91, 58, 0, 0.75) !important;
+  z-index: 1;
+}
+.dialog-aide .leaflet-control-dialog-close:hover {
+  color: #5b3a00 !important;
+}
+.dialog-aide .leaflet-control-dialog-resizer {
+  color: rgba(250, 181, 41, 0.45) !important;
+}
+.dialog-aide .leaflet-control-dialog-resizer:hover {
+  color: rgba(250, 181, 41, 0.7) !important;
+}
+
+/* Zone de contenu */
+.dialog-aide .leaflet-control-dialog-contents {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #1e3a5f;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 14px 7px 16px !important;
+}
+
+/* Encadré d'introduction */
+.dialog-aide .encadré-aide {
+  text-align: center;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 3px;
+  display: block;
+  font-size: 16px;
+  line-height: 1.3;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Chaque entrée outil = texte simple, sans fond */
+.dialog-aide .leaflet-control-dialog-contents p {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 3px 2px;
+  margin: 0 0 6px;
+  line-height: 1.55;
+  text-align: left;
+}
+.dialog-aide .leaflet-control-dialog-contents p img {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.dialog-aide .leaflet-control-dialog-contents p b {
+  color: #1e3a5f;
+  font-weight: 700;
+}
+.dialog-aide .text-highlighted {
+  color: #ea580c;
+  font-weight: 700;
+}
+
+/* Toggle "voir plus / moins" — façon pilule, sans carte */
+.dialog-aide .leaflet-control-dialog-contents p:has(#lienExtensible) {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 4px 0;
+  text-align: center;
+  transform: none;
+}
+.dialog-aide #lienExtensible {
+  display: inline-block;
+  color: #1d4ed8;
+  text-decoration: none;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 6px 16px;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.dialog-aide #lienExtensible:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+.dialog-aide #contenuExtensible {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 8px;
+}
+
+/* Avertissement — carte ambre */
+.dialog-aide .leaflet-control-dialog-contents p.text-warning {
+  background: #cee6f3;
+  border: 1px solid #a9cfe2;
+  border-left: 4px solid #0284c7;
+  border-radius: 8px;
+  color: #0c4a6e;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 12px 14px;
+  box-shadow: none;
+}
+
+/* Copyright (attribution Leaflet) déplacé en bas de la sidebar */
+.modern-sidebar .modern-copyright-sidebar {
+  margin-top: auto;           /* poussé tout en bas de la sidebar */
+  padding: 6px 8px 4px;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  font-size: .7rem;
+  text-align: left;           /* calé à gauche de la sidebar */
+  color: var(--modern-muted);
+}
+.modern-sidebar .modern-copyright-sidebar a {
+  color: #0000EE;            /* bleu hyperlien standard */
+  text-decoration: underline;
+}
+.modern-sidebar .modern-copyright-sidebar a:visited {
+  color: #551A8B;            /* violet lien visité standard */
+}
+
+/* Échelle (ctrlScale) à côté du switch Surligner, en bas à gauche.
+   Le coin Leaflet empile verticalement (float+clear) : on le passe en flex,
+   switch d'abord, échelle à sa droite. Scopé à #carteId (pas la carte print). */
+#carteId .leaflet-bottom.leaflet-left {
+  display: flex;
+  align-items: flex-end;
+}
+#carteId .leaflet-bottom.leaflet-left .leaflet-control {
+  float: none;
+  clear: none;
+}
+#carteId .leaflet-bottom.leaflet-left .leaflet-control-scale {
+  order: 2;                 /* après le switch Surligner */
+  margin-left: 12px;
+  margin-bottom: 14px;      /* calé sur le bas du switch */
+}
