@@ -1,4 +1,4 @@
-/* /// widget vigilance Météo-France + Vigicrues - Gard /// */ 
+/* /// widget vigilance Météo-France - Gard - [cd30] version simplifiée /// */
 .modern-meteo-widget {
 	display: none;
 	flex-direction: column;
@@ -8,36 +8,6 @@
 	padding: 3px 0;
 	flex-shrink: 0;
 }
-.meteo-vig-label {
-	font-size: 14px;
-	font-weight: bold;
-	color: #ffd700;
-	white-space: nowrap;
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
-	text-shadow: 0 1px 4px rgba(0,0,0,0.6);
-}
-.meteo-vig-bloc {
-	display: flex;
-	align-items: center;
-	gap: 6px;
-}
-.meteo-vig-badge {
-	display: flex;
-	align-items: center;
-	padding: 5px 15px;
-	border-radius: 13px;
-	font-size: 17px;
-	font-weight: bold;
-	white-space: nowrap;
-	cursor: default;
-	box-shadow: 0 2px 6px rgba(0,0,0,0.45);
-}
-.meteo-vig-ok {
-	color: rgba(255,255,255,0.55);
-	font-size: 13px;
-	white-space: nowrap;
-}
 .meteo-zone {
 	display: none;
 	flex-direction: column;
@@ -46,29 +16,46 @@
 	flex-shrink: 0;
 	margin-right: 28px; /* décale le bloc widget vers la gauche dans la barre titre */
 }
-.meteo-vig-lien {
+
+/* [cd30] Badge unique "Alerte météo" : fond blanc, cliquable vers le site vigilance Gard */
+.meteo-alerte-simple {
 	display: inline-flex;
-	align-self: center;
 	align-items: center;
 	justify-content: center;
-	gap: 5px;
-	padding: 2px 10px;
-	border-radius: 6px;
-	background: #b04f3e;
-	color: #fff;
-	font-size: 16px;
+	padding: 5px 15px;
+	border-radius: 13px;
+	background: #fff;
+	color: #b3261e;
+	font-size: 17px;
 	font-weight: bold;
-	text-decoration: none;
 	white-space: nowrap;
-	box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-	transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+	text-decoration: none;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+	transition: transform 0.1s, box-shadow 0.15s;
 }
-.meteo-vig-lien:hover {
-	background: #c76050;
+/* [cd30] Fond du badge selon le niveau de vigilance (jaune / orange / rouge) */
+.meteo-alerte-simple.meteo-niveau-jaune  { background: #ffdf00; color: #1a1a1a; }
+.meteo-alerte-simple.meteo-niveau-orange { background: #ff8f00; color: #fff; }
+.meteo-alerte-simple.meteo-niveau-rouge  { background: #e2001a; color: #fff; }
+
+/* [cd30] Pictogrammes des phénomènes, à gauche du libellé. La police Font Awesome
+   est déjà chargée par les cartes (boutons easyButton) : aucun fichier à déployer.
+   Les icônes héritent de la couleur du badge, donc du niveau de vigilance. */
+.meteo-alerte-simple .meteo-icone {
+	font-size: 1.37em;   /* 1.05em + 30% */
+	line-height: 1;
+	margin-right: 7px;
+}
+
+.meteo-alerte-simple:hover {
 	transform: translateY(-1px);
 	box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
-.meteo-vig-lien:active {
+.meteo-alerte-simple:active {
 	transform: translateY(0);
 	box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
+
+/* [cd30] Lien vigilance d'origine masqué : le badge "Alerte météo" reprend son rôle */
+.meteo-vig-lien { display: none; }
