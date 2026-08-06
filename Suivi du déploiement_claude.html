@@ -20,13 +20,15 @@
 	<!-- création boutons - lib. fontawesome d'icones pr boutons -->
 	<script type="text/javascript" src="/leaflet/Ressources 26/easy-button.js"></script>
 	<link rel="stylesheet" href = "/leaflet/Ressources 26/easy-button.css" />
-	<link rel="stylesheet" href="/leaflet/Ressources/API_JS/images/easyButton/fontawesome-free-6.1/css/all.min.css" />
+	<link rel="stylesheet" href="/leaflet/Ressources 26/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
 
 	<!-- clé API google - limite appels/mois -->
 	<script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbn4agQo3A4Hp3Yyyros9hD7vFw0WSNOM&callback=Function.prototype&loading=async&v=beta"></script>
 	<!-- Fonds carte Google -->
 	<script src="/leaflet/Ressources 26/Leaflet.GoogleMutant.js"></script>
 	<!-- Rech. lieux Google -->
+	<script src="/leaflet/Ressources 26/GPlaceAutocomplete.js"></script>
+  	<link rel="stylesheet" href="/leaflet/Ressources 26/GPlaceAutocomplete.css" />
 
 	<!-- Widget vigilance météo -->
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/widget-meteo.css">
@@ -132,12 +134,9 @@
 	
 	console.log("nomVues : ", nomVues);
 	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
-	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon","d30 troncon tf","d30 3vitinerairetype"];
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon"];
 	var vueCouranteEtiquetteRD = false;
 	var vueCouranteTroncon = false;
-	// vues dont les lignes gardent leur infobulle malgre l'etiquette permanente
-	var vuesInfobulleGardee = ["d30 3vitinerairetype"];
-	var vueCouranteInfobulle = false;
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
 	
@@ -520,7 +519,7 @@ function CarteLeaflet(conteneurId) {
 		
 		// //// modif nouvelle UI - étiquette RD permanente : marquage de la polyligne affichée de la vue ciblée (réf. vuesEtiquetteRD), sans test de nom de couche ni de champ ////
 		if (vueCouranteEtiquetteRD && couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
-			couche.options.rdLabel = propTrim(élément.properties, "RD") || propTrim(élément.properties, "Numero");
+			couche.options.rdLabel = propTrim(élément.properties, "RD");
 			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
 			couche.options.rdProximite = /proximit/i.test(niveauRDet);
 			couche.options.rdColor = propTrim(élément.properties, "couleur") || couche.options.color || "#888";
@@ -710,7 +709,7 @@ function CarteLeaflet(conteneurId) {
 			couche.bindTooltip(tooltipCourt, { sticky: true, opacity: 0.9, className: 'tooltip-polygone' });
 		} else if (élément.geometry.type === "LineString" || élément.geometry.type === "MultiLineString") {
 			// //// modif nouvelle UI - pas de tooltip ligne sur les vues RD sans 'troncon' ////
-			if (!vueCouranteEtiquetteRD || vueCouranteTroncon || vueCouranteInfobulle) { couche.bindTooltip(texteTooltip, optionsTooltip); }
+			if (!vueCouranteEtiquetteRD || vueCouranteTroncon) { couche.bindTooltip(texteTooltip, optionsTooltip); }
 		} else {
 			couche.bindTooltip(texteTooltip, optionsTooltip);
 		}
@@ -770,13 +769,13 @@ function CarteLeaflet(conteneurId) {
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // //// modif nouvelle UI - étiquette RD permanente sur les vues ciblées (réf. vuesEtiquetteRD / nomVues) ////
     if (vueCouranteEtiquetteRD) {
-        élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD") || propTrim(élément.properties, "Numero");
+        élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
         var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         élémentsMLS.options.rdColor = couleurOrigine || "#888";
     }
     // //// modif nouvelle UI - pas de tooltip survol sur les vues RD sans 'troncon' ////
-    if (!vueCouranteEtiquetteRD || vueCouranteTroncon || vueCouranteInfobulle) {
+    if (!vueCouranteEtiquetteRD || vueCouranteTroncon) {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
 }
@@ -837,7 +836,6 @@ function CarteLeaflet(conteneurId) {
 	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    // //// modif nouvelle UI - vue 'troncon' (active le tooltip survol) ////
 	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
-	    vueCouranteInfobulle = (typeof nomVues !== "undefined" && vuesInfobulleGardee.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
@@ -1441,19 +1439,89 @@ function CarteLeaflet(conteneurId) {
     }
 	
 this.rechercherLieu = function() {		
-		// [cd30] Recherche de lieux via l'extension IGN Géoplateforme (GpPluginLeaflet.js).
-		// Remplace le plugin Google GPlaceAutocomplete (API Google Places plus nécessaire).
-		var ctrlRechLieu = L.geoportalControl.SearchEngine({
-			position: "topleft",
-			collapsed: true,
-			displayAdvancedSearch: false,
-			displayMarker: true,
-			markerStyle: "blue",
-			zoomTo: 17,
-			placeholder: "Rechercher un lieu..."
+		var limiteGeo = {
+			south: 43.5,
+			west: 3.2,
+			north: 44.5,
+			east: 5.0
+		};
+		
+		var niveauZoom = 16.3; 
+		var punaiseLocation = null;
+		var iconeLocaliser = L.icon({
+			iconUrl: '/Ressources/Images/Punaises/GPS-location.png',
+			iconSize: [40, 40],
+			iconAnchor: [20, 40] 
 		});
-		maCarte.addControl(ctrlRechLieu);
+	
+	function initGooglePlace() {
+	
+		var ctrlGooglePlace = new L.Control.GPlaceAutocomplete({
+			position: "topleft",
+			collapsed_mode: true,
+			prepend: false, 
+			autocomplete_options: {
+				types: ["geocode"], 
+				componentRestrictions: {country: "fr"},
+				bounds: limiteGeo
+			},		
+			callback: function(place){
+				if (place.location) {
+					// 2. On utilise la variable niveauZoom
+					maCarte.setView(
+						[place.location.lat(), place.location.lng()], 
+						niveauZoom, 
+						{animate: true}
+					);
+					
+					// 3. On enlève l'ancienne punaise et on met la nouvelle
+					if (punaiseLocation !== null) {
+						maCarte.removeLayer(punaiseLocation);
+					}
+				punaiseLocation = L.marker([place.location.lat(), place.location.lng()],{icon: iconeLocaliser}).addTo(maCarte);				}
+			}
+		});
+		
+		ctrlGooglePlace.addTo(maCarte);  
+		
+		// 4. Boucle pour effacer la punaise si on vide le texte
+		setInterval(function() {
+			var input = document.querySelector('.leaflet-gac-control');
+			if (input && input.value.trim() === '' && punaiseLocation !== null) {
+				maCarte.removeLayer(punaiseLocation);
+				punaiseLocation = null;
+			}
+		}, 500);
+		
+		if (ctrlGooglePlace.icon) {
+		    var buttonR = L.DomUtil.get(ctrlGooglePlace.icon);
+		    buttonR.title = "Rechercher lieu";  
+		}
+		
+		// On attend un court instant (500 ms) pour s'assurer que le champ de recherche existe dans la page
+		setTimeout(function() {
+		    var searchInput = document.querySelector('.leaflet-gac-control') || ctrlGooglePlace.getContainer().querySelector('input');
+		    
+		    if (searchInput) {
+		        searchInput.setAttribute('placeholder', 'Rechercher un lieu...');
+		    } else {
+		        console.log("Le champ de recherche n'a pas pu être trouvé.");
+		    }
+		}, 500);	
+	}
+	// bug firefox attendre que l'API Google Places soit dispo avant de lancer l'init
+    function attendreGoogleEtInit() {
+        if (window.google && google.maps && google.maps.places && google.maps.places.PlaceAutocompleteElement) {
+            initGooglePlace();
+        } else {
+            setTimeout(attendreGoogleEtInit, 200);
+        }
+    }
+
+    attendreGoogleEtInit();
+	
 }
+
 
 this.widgetMeteo = function() {
 	initWidgetMeteo({
@@ -1695,11 +1763,6 @@ this.importFichier = function () {
 		}		
 		
 		maCarte.on("browser-print-start", function(e){
-			// [cd30] Auto Gard : carte imprimée descendue de 5px. Différé car le plugin
-			// refait un fitBounds juste après cet événement (mode auto : InvalidateBounds).
-			if (maCarte.getContainer().classList.contains("leaflet-browser-print--auto")) {
-				setTimeout(function() { e.printMap.panBy([0, -5], { animate: false }); }, 150);
-			}
 			if (presenceLegende) {
 				blocLegende.addTo(e.printMap);
 				// [sans-legende] applique la mise en 2 colonnes sur la légende d'impression
@@ -1710,6 +1773,25 @@ this.importFichier = function () {
 						ajusterLargeurColonnesLegende(e.printMap.getContainer());
 					});
 				}
+			// ajout logo avant print
+			setTimeout(function() {
+				const conteneurCartePrint = e.printMap.getContainer();
+
+				const logoPrint = document.createElement("img");
+				logoPrint.src = "/Ressources/c3po_gr.png";
+				logoPrint.style.position = "absolute";
+				logoPrint.style.left = "10px";
+				logoPrint.style.width = "56px";
+				logoPrint.style.height = "50px";
+				logoPrint.style.zIndex = "10000";
+				logoPrint.style.pointerEvents = "none";
+				
+				const titrePrint = conteneurCartePrint.querySelector(".infotitre, .titre");
+				const hauteurTitre = titrePrint.offsetHeight;
+				logoPrint.style.bottom = (hauteurTitre + 15) + "px";
+
+				conteneurCartePrint.appendChild(logoPrint);
+			}, 300);
 
 			// ajuster fontes legende et centrage avant print selon hauteur legende	
 			setTimeout(function() {
@@ -1717,7 +1799,7 @@ this.importFichier = function () {
 				const hauteurLegende = conteneurLegende.offsetHeight;
 
 				// si hauteur < 250px, on garde le bloc original
-					if (hauteurLegende < 400) {
+					if (hauteurLegende < 250) {
 						return;
 					}
 					else {
@@ -1734,9 +1816,7 @@ this.importFichier = function () {
 							elementLegende.style.lineHeight = "1.1";
 						});
 						// decalage carte a gauche
-						// dezoom supplementaire quand la legende est haute
-					e.printMap.setZoom(e.printMap.getZoom() - 0.1, { animate: false });
-					e.printMap.panBy([70, 16], { animate: false });	// [cd30] carte imprimée : +10px à droite, +20px vers le haut
+						e.printMap.panBy([100, 0], { animate: false });
 					}
 				}, 100);
 			}	
@@ -1750,7 +1830,7 @@ this.importFichier = function () {
 				blocLegendeElement.style.marginTop = '12px';
 				blocLegendeElement.style.paddingBottom = '0';
 				blocLegende.remove();
-				blocLegende.addTo(maCarte);	// [cd30] re-ajout : la légende vit sur la carte
+				// [sans-legende] pas de re-ajout sur la carte : la légende reste dans la sidebar
 				conteneurVisuInfo.remove();
 				conteneurVisuInfo.addTo(maCarte);
 			}
@@ -2001,29 +2081,6 @@ this.importFichier = function () {
 			// dans la carte imprimée (bas gauche), comme avant la modernisation.
 			maCarte.on("browser-print-start", function(e){
 				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
-				// [cd30] logo Gard en bloc séparé devant le titre (10px d'écart) ;
-				// titre raccourci de ~10% (retour à la ligne plus tôt : 560 -> 504px)
-				setTimeout(function() {
-					var contPrint = e.printMap.getContainer();
-					var titrePrint = contPrint.querySelector(".infotitre, .titre");
-					if (titrePrint && !contPrint.querySelector(".logo-titre-print")) {
-						var logoTitre = document.createElement("img");
-						logoTitre.className = "logo-titre-print";
-						logoTitre.src = "/leaflet/Ressources 26/images/legard.jpg";
-						logoTitre.style.cssText = "position:absolute;left:10px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
-						contPrint.appendChild(logoTitre);
-						titrePrint.style.marginLeft = "70px";	// bloc logo (50px, à left:10) + 10px d'écart
-						titrePrint.style.setProperty("max-width", "450px", "important");	// retour à la ligne anticipé (450px max)
-						// centres verticaux alignés : cale le bas du logo selon la hauteur réelle du titre
-						requestAnimationFrame(function() {
-							var basCont = contPrint.getBoundingClientRect().bottom;
-							var rTitre = titrePrint.getBoundingClientRect();
-							var hLogo = logoTitre.getBoundingClientRect().height;
-							var centreTitre = rTitre.top + rTitre.height / 2;
-							logoTitre.style.bottom = Math.round(basCont - centreTitre - hLogo / 2) + "px";
-						});
-					}
-				}, 200);
 			});
 	}
 		

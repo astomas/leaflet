@@ -43,7 +43,7 @@ body {
   position: relative;
   overflow: hidden;
   color: #fff;
-  /* [cd30] Bandeau haut : dégradé 2 teal + halo demi-cercle (restaurés) */
+  /* Dégradé bleu-vert du bandeau haut */
   background: linear-gradient(135deg, #007e8d 0%, #005f6b 100%) !important;
 }
 
@@ -100,6 +100,13 @@ body {
   transition: opacity 0.15s;
 }
 
+.modern-subtitle {
+  margin-top: 5px;
+  font-size: .88rem;
+  opacity: .88;
+  font-weight: 500;
+}
+
 .modern-header-actions {
   display: flex;
   align-items: center;
@@ -107,17 +114,22 @@ body {
   white-space: nowrap;
 }
 
-/* padding / background / border sont redefinis plus bas (bouton Aide sans
-   pastille), inutile de les poser ici. */
 .modern-header-help {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 6px 11px;
   color: #fff;
   font-size: .78rem;
   font-weight: 800;
   border-radius: 999px;
   cursor: pointer;
+  background: rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .18);
+}
+
+.modern-header-help:hover {
+  background: rgba(255, 255, 255, .22);
 }
 
 /* Classes individuelles pour cibler chaque bouton séparément */
@@ -234,10 +246,10 @@ body.is-resizing * {
 }
 
 .modern-family-fonds-plan {--family-accent: #2e7eb8; background: #eef5fb;}
-/* [cd30] hover titre neutralisé : sections fixes */
+.modern-family-fonds-plan .modern-family-title:hover {background: #ddedf9; transition: background .18s ease;}
 .modern-family-metier { --family-accent: var(--modern-warning); background: #fdf4e7; }
 .modern-family-tools { --family-accent: var(--modern-tools); }
-/* [cd30] hover titre neutralisé : sections fixes */
+.modern-family-tools .modern-family-title:hover {background: #e8f6f2; transition: background .18s ease;}
 
 .modern-family-title {
   padding: 11px 12px;
@@ -250,7 +262,7 @@ body.is-resizing * {
   font-size: .75rem;
   font-weight: 800;
   letter-spacing: .35px;
-  cursor: default; /* [cd30] titre non cliquable : sections fixes */
+  cursor: pointer;
   user-select: none;
 }
 
@@ -259,7 +271,7 @@ body.is-resizing * {
 }
 
 .modern-family-chevron {
-  display: none; /* [cd30] chevron supprimé : sections fixes */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 18px;
@@ -285,8 +297,8 @@ body.is-resizing * {
 
 .modern-family-title em {
   padding: 3px 8px;
-  color: #475569;
-  background: #dbe3ec;
+  color: #64748b;
+  background: #eef2f6;
   border-radius: 999px;
   font-style: normal;
   font-size: .68rem;
@@ -305,33 +317,6 @@ body.is-resizing * {
 /* Fonds de carte déplacés dans la sidebar : présentés en pastilles.
    Le radio natif est masqué ; chaque fond devient une pastille cliquable et
    la pastille active (fond sélectionné) est remplie de la couleur du bloc. */
-/* [cd30] Liste déroulante des fonds de plan (remplace les pastilles) */
-.modern-family-fonds-plan .modern-fonds-select {
-  display: block;
-  width: calc(100% - 16px);
-  margin: 4px 8px 12px;
-  padding: 8px 10px;
-  border: 1px solid #b8d8f0;
-  border-radius: 8px;
-  background: #f0f7fc;
-  font-size: .84rem;
-  font-weight: 600;
-  color: #24557a;
-  cursor: pointer;
-}
-.modern-family-fonds-plan .modern-fonds-select:hover {
-  background: #c2e0f5;
-  border-color: #2e7eb8;
-}
-/* [cd30] Fond blanc : blanc à opacité 0,2 (évite l'éblouissement) quand aucun fond tuile */
-.leaflet-container.fond-blanc { background: rgba(255, 255, 255, 0.2); }
-
-/* [cd30] Leaflet pose tabindex="0" sur son conteneur ; à l'ouverture des panneaux
-   Info et Aide, le plugin Dialog lui donne le focus et le navigateur trace son
-   anneau noir par défaut, visible comme un trait sur le bord haut de la carte.
-   Le focus lui-même est conservé : la carte reste pilotable aux flèches. */
-.leaflet-container:focus { outline: none; }
-
 .modern-fonds-plan {
   padding: 4px 8px 10px;
   display: grid;
@@ -386,7 +371,8 @@ body.is-resizing * {
 }
 
 /* Couches métier (cases à cocher Leaflet) déplacées dans la sidebar.
-   [cd30] La case à cocher native reste visible (comme l'UI Leaflet d'origine). */
+   La case native est masquée et remplacée par une icône œil à droite du
+   libellé : œil ouvert vert = couche visible, œil barré gris = couche masquée. */
 .modern-donnees-metier {
   padding: 4px 8px 10px;
 }
@@ -415,8 +401,8 @@ body.is-resizing * {
   background: #ffd975;
 }
 
-/* [cd30] Case native masquée : l'icône œil (::after) reflète son état coché.
-   Le clic sur la ligne bascule la case (comportement label natif). */
+/* Case native masquée mais conservée dans le DOM : le clic sur le label
+   continue de la basculer (donc d'afficher/masquer la couche) */
 .modern-donnees-metier input {
   position: absolute;
   opacity: 0;
@@ -554,7 +540,7 @@ body.is-resizing * {
   color: #9ca3af !important;
 }
 
-/* [cd30] Icône œil pilotée par la case native : fermé gris = couche masquée */
+/* Icône œil — état par défaut "masqué" : œil barré gris */
 .modern-donnees-metier input + span::after {
   content: "";
   margin-left: auto;
@@ -566,8 +552,10 @@ body.is-resizing * {
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") center / contain no-repeat;
   transition: background-color .15s;
 }
-/* Œil ouvert vert après clic (case cochée = couche affichée) */
-.modern-donnees-metier input:checked + span::after {
+
+/* État "visible" (couche cochée ou .modern-couche-active) : œil ouvert vert */
+.modern-donnees-metier input:checked + span::after,
+.modern-donnees-metier label.modern-couche-active input + span::after {
   background-color: #16a34a;
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
@@ -643,7 +631,8 @@ body.is-resizing * {
   max-height: 28px !important;
 }
 
-.leaflet-bar:not(.detail-couches-sidebar):not(.barre-services-visu),
+.leaflet-bar:not(.detail-couches-sidebar),
+.legend-container,
 .leaflet-legend:not(.detail-couches-sidebar),
 .infotitre {
   border-radius: 5px !important;
@@ -663,27 +652,14 @@ body.is-resizing * {
 .leaflet-bar a,
 .leaflet-control .easy-button-button {
   color: var(--modern-primary) !important;
-  background-color: #fff !important;
+  background: #fff !important;
   transition: background .18s, color .18s;
 }
 
 .leaflet-bar a:hover,
 .leaflet-control .easy-button-button:hover {
   color: var(--modern-accent) !important;
-  background-color: #eef4fb !important;
-}
-
-/* [cd30] Bouton Recentrer : survol gris (comme "rechercher lieu"), pas bleu */
-.leaflet-control .easy-button-button.btn-recentrer:hover {
-  background-color: #f4f4f4 !important;      /* gris IGN, comme "rechercher lieu" */
-  color: var(--modern-primary) !important;   /* icône reste sombre, pas l'accent bleu */
-}
-
-/* [cd30] Boutons Zoom +/- : survol gris (comme recentrer / rechercher lieu), pas bleu */
-.leaflet-bar a.leaflet-control-zoom-in:hover,
-.leaflet-bar a.leaflet-control-zoom-out:hover {
-  background-color: #f4f4f4 !important;
-  color: var(--modern-primary) !important;
+  background: #eef4fb !important;
 }
 
 /* //// modif nouvelle UI - bouton pegman (Service Visualisation) : la règle
@@ -742,7 +718,7 @@ body.is-resizing * {
   margin-bottom: 9px;
   position: relative;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 14px;
   color: #1f2d3d;
 }
 .popup-entete::after {
@@ -753,20 +729,11 @@ body.is-resizing * {
   border-radius: 2px;
   background: linear-gradient(90deg, #e8530e, #f9c489);
 }
-.popup-entete-titre {
-  line-height: 1.2;
-  /* [cd30] Même filet que le contenu du popup. min-width: 0 est indispensable :
-     l'en-tête est un conteneur flex, et sans lui le titre refuse de descendre
-     sous la largeur de son plus long mot, qui déborde alors du popup. */
-  min-width: 0;
-  overflow-wrap: break-word;
-}
+.popup-entete-titre { line-height: 1.2; }
 .popup-entete-icone {
-  width: 30px; 
-  height: 30px;
+  width: 24px; height: 24px;
   object-fit: contain;
   flex: 0 0 auto;
-  margin-bottom: 3px;
 }
 .popup-entete-pastille {
   width: 14px; height: 14px;
@@ -778,13 +745,6 @@ body.is-resizing * {
 /* Champs de popup : libellé (gras sombre) + valeur (atténuée) */
 .popup-cle { font-weight: 700; color: #16222e; }
 .popup-val { color: #7a8896; font-weight: 500; }
-
-/* [cd30] pop-up doublons : nom de couche sur fond orange pâle, à chaque entrée */
-.grille-active .popup-entete-titre {
-  background: #fde8c8;
-  padding: 2px 8px;
-  border-radius: 6px;
-}
 
 /* Conteneur scrollable des popups multi-entités (lignes superposées + import) */
 .popup-scroll {
@@ -830,6 +790,17 @@ body.is-resizing * {
   white-space: normal;
   overflow-wrap: break-word;
   text-wrap: balance;
+}
+
+.legend-container {
+  color: #334155 !important;
+  background: rgba(255, 255, 255, .96) !important;
+  backdrop-filter: blur(8px);
+}
+
+.legend-container summary {
+  color: var(--modern-primary);
+  font-weight: 800;
 }
 
 .bouton-aide,
@@ -879,6 +850,7 @@ body.is-resizing * {
   }
 
   .modern-header h1 { font-size: 1.25rem; }
+  .modern-subtitle { display: none; }
 
   .modern-main-content { grid-template-columns: 1fr; }
   .modern-sidebar,
@@ -887,17 +859,6 @@ body.is-resizing * {
 
 @media print {
   body { background: #fff !important; }
-
-  /* [cd30] chevron légende : masqué sur papier, et légende toujours dépliée */
-  .legende-chevron { display: none !important; }
-  .leaflet-legend.legende-repliee .leaflet-legend-contents { display: block !important; }
-
-  /* [cd30] Fond blanc : blanc pur à l'impression (au lieu du gris #ddd Leaflet) */
-  .leaflet-container.fond-blanc {
-    background: #fff !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
 
   .modern-sidebar,
   .modern-sidebar-resizer,
@@ -917,7 +878,7 @@ body.is-resizing * {
   .infotitre, .titre {
     font-size: 14px !important;
     line-height: 1.3 !important;
-    max-width: 450px !important;
+    max-width: 500px !important;
     white-space: normal !important;
     overflow-wrap: break-word !important;
     word-break: break-word !important;
@@ -931,7 +892,7 @@ body.leaflet--printing .infotitre,
 body.leaflet--printing .titre {
   font-size: 14px !important;
   line-height: 1.3 !important;
-  max-width: 450px !important;
+  max-width: 500px !important;
   white-space: normal !important;
   overflow-wrap: break-word !important;
   word-break: break-word !important;
@@ -1403,13 +1364,11 @@ body.leaflet--printing .titre {
   padding: 14px 7px 16px !important;
 }
 
-/* Encadré d'introduction — [cd30] fond bleu doux (remplace l'orange de si3p0) */
+/* Encadré d'introduction */
 .dialog-aide .encadré-aide {
   text-align: center;
   font-weight: 700;
   border: none;
-  background-color: #d6e9f8;
-  color: #1a4f72;
   border-radius: 8px;
   padding: 5px 3px;
   display: block;
@@ -1486,84 +1445,7 @@ body.leaflet--printing .titre {
   box-shadow: none;
 }
 
-/* [cd30] Bouton Aide : texte seul, sans pastille ni rond orange, sur le fond
-   de la barre de titre. Le clic sur le texte ouvre toujours l'aide (le bouton
-   easy-button masqué reste le déclencheur, cliqué par le handler du dock). */
-.modern-header-help {
-  background: transparent;
-  border: none;
-  padding: 6px 8px;
-}
-.modern-header-help:hover {
-  background: transparent;
-}
-/* [cd30] icône ? FontAwesome : taille 20, orange, éclaircie au survol */
-.modern-header-aide .modern-header-help-label {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;        /* le rond */
-  background: #fff;          /* blanc */
-  font-size: 30px;
-  font-weight: 900;
-  color: #f9b062;            /* "?" reste orange */
-  box-sizing: border-box;
-}
-.modern-header-aide:hover .modern-header-help-label {
-  color: #ffc98f;
-}
-.modern-header-aide .leaflet-control,
-.modern-header-aide .leaflet-bar,
-.modern-header-aide .easy-button-container {
-  display: none !important;
-}
-@media (max-width: 900px) {
-  /* le label était masqué en écran étroit : on le garde puisque c'est le seul visuel */
-  .modern-header-aide .modern-header-help-label { display: inline !important; }
-}
-
-/* [cd30] Recherche IGN (SearchEngine) : espace la loupe, le champ et la liste
-   d'autocomplétion pour supprimer les chevauchements (le plugin colle le champ
-   sur la loupe avec left:-3px et décale la liste de 27px). */
-/* [cd30] Bouton loupe : même taille que les boutons zoom/recentrer (31px),
-   icône (cellule sprite 30px) centrée dans le bouton. */
-label[id^="GPshowSearchEnginePicto"] {
-  box-sizing: border-box !important;
-  width: 33px !important;
-  height: 33px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border: 1px solid rgba(15, 23, 42, .12) !important;   /* même cadre que zoom/recentrer */
-  border-radius: 5px !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
-}
-label[id^="GPshowSearchEnginePicto"] > span {
-  width: 30px !important;
-  height: 30px !important;
-}
-/* [cd30] Champ de recherche : aligné sur la loupe (même haut, même hauteur),
-   2px à sa droite, sans cadre. */
-form[id^="GPsearchInput-"] {
-  left: 2px !important;
-  top: 0 !important;
-  height: 33px !important;
-}
-form[id^="GPsearchInput-"] input {
-  border: none !important;          /* cadre retiré */
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;  /* même ombre douce que les boutons */
-  border-radius: 5px !important;
-}
-/* Les 2 listes (suggestions + résultats) suivent le champ : collées dessous */
-div[id^="GPautoCompleteList"],
-div[id^="GPgeocodeResultsList"] {
-  margin-left: 35px !important;     /* bord gauche du champ (loupe 33px + 2px) */
-  top: 33px !important;             /* juste sous le champ aligné (hauteur 33px) */
-}
-
-/* [cd30] Copyright (attribution Leaflet) déplacé en bas de la sidebar */
+/* Copyright (attribution Leaflet) déplacé en bas de la sidebar */
 .modern-sidebar .modern-copyright-sidebar {
   margin-top: auto;           /* poussé tout en bas de la sidebar */
   padding: 6px 8px 4px;
@@ -1582,7 +1464,7 @@ div[id^="GPgeocodeResultsList"] {
   color: #551A8B;            /* violet lien visité standard */
 }
 
-/* [cd30] Échelle (ctrlScale) à côté du switch Surligner, en bas à gauche.
+/* Échelle (ctrlScale) à côté du switch Surligner, en bas à gauche.
    Le coin Leaflet empile verticalement (float+clear) : on le passe en flex,
    switch d'abord, échelle à sa droite. Scopé à #carteId (pas la carte print). */
 #carteId .leaflet-bottom.leaflet-left {
@@ -1596,262 +1478,5 @@ div[id^="GPgeocodeResultsList"] {
 #carteId .leaflet-bottom.leaflet-left .leaflet-control-scale {
   order: 2;                 /* après le switch Surligner */
   margin-left: 12px;
-  margin-bottom: 6px;      /* calé sur le bas du switch */
-}
-
-/* [cd30] Légende carte : léger fond au survol des éléments de couche cliquables
-   (pas l'en-tête de la couche) */
-.leaflet-legend .leaflet-legend-item-clickable {
-  display: flex;                /* pleine largeur de la colonne, icône et libellé alignés */
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-.leaflet-legend .leaflet-legend-item-clickable:hover {
-  background-color: rgba(46, 126, 184, 0.12);
-  border-radius: 4px;
-  transition: background-color .12s;
-}
-/* [cd30] Neutralise le hover NATIF du plugin sur l'en-tête (nom) de couche
-   (leaflet.legend.css : group-header:hover #bcc1d9) : fond normal conservé */
-.leaflet-legend .leaflet-legend-group-header:hover {
-  background-color: #d0d4e8;
-}
-
-/* [cd30] Libellés de légende : retour à la ligne au-delà de 250 px de large.
-   La règle sur la colonne est indispensable : sans elle, le width: min-content
-   du plugin réduit la colonne au mot le plus long et le libellé part sur de
-   nombreuses lignes. */
-.leaflet-legend-contents .leaflet-legend-item span {
-  display: inline-block;
-  white-space: normal;
-  overflow-wrap: break-word;
-  max-width: 250px;
-  flex: 0 0 auto;               /* largeur = contenu, jamais comprimée par la colonne */
-}
-.leaflet-legend-contents .leaflet-legend-column {
-  width: max-content;
-  max-width: 100%;
-}
-/* Même plafond pour les noms de couche (en-têtes) : sans lui, un nom long
-   n'est jamais coupé et élargit tout le bloc légende. */
-.leaflet-legend-contents .leaflet-legend-group-title {
-  overflow-wrap: break-word;
-  max-width: 280px;
-  flex: 0 0 auto;
-}
-
-/* [cd30] Impression : la légende ne montre que les couches réellement affichées.
-   Les entrées désactivées (grisées, classe posée par leaflet.legend.js) sont
-   retirées, ainsi que l'en-tête d'une couche dont toutes les entrées le sont. */
-@media print {
-  .leaflet-legend-item-inactive,
-  .legende-groupe-vide-impression {
-    display: none !important;
-  }
-}
-
-/* [cd30] Chevron discret de repli du bloc légende (haut droite) */
-.leaflet-bottom.leaflet-right .leaflet-legend {
-  position: relative;
-}
-
-.leaflet-bottom.leaflet-right .boutons-conteneur {
-  margin-bottom: 0px !important;   
-}
-/* [cd30] espace entre boutons visu et info : géré par gap (remplace le margin-right hérité de si3p0) */
-.boutons-conteneur { gap: 3px; }
-.boutons-conteneur .bouton-service-visu { margin-right: 0; }
-.legende-chevron {
-  position: absolute;
-  z-index: 2;
-  line-height: 1;
-  color: #64748b;
-  cursor: pointer;
-  user-select: none;
-  padding: 2px 3px;
-  top: 5px;
-  right: 8px;
-  font-size: 16px;
-  color: #0a179b;
-}
-.legende-chevron:hover { color: #1f2937; }
-/* replié : contenu masqué, ne reste qu'une petite pastille avec le chevron */
-.leaflet-legend.legende-repliee > *:not(.legende-bandeau) {
-  display: none !important;
-}
-/* [cd30] replié : pastille [Légende ▶], libellé gras cliquable */
-.leaflet-legend.legende-repliee {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: background-color .15s;
-  background-color: #c2cade !important;  /* replié : fond plus foncé (inline du plugin écrasé) */
-}
-/* effet de survol sur la pastille repliée */
-.leaflet-legend.legende-repliee:hover {
-  background-color: #a9b6d6 !important;
-}
-.leaflet-legend.legende-repliee .legende-chevron {
-  position: static;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-}
-.legende-libelle {
-  display: none;                 /* visible uniquement quand la légende est repliée */
-  font-weight: 700;
-  font-size: 13px;
-  color: #2C3E50;
-  cursor: pointer;
-  user-select: none;
-  line-height: 1;
-}
-.leaflet-legend.legende-repliee .legende-libelle {
-  display: inline;
-  width: 75px;
-  padding-left: 15px;
-}
-
-/* [cd30] Hauteur dynamique du bloc légende : neutralise le min-height inline
-   que le plugin fige à l'ouverture (leaflet.legend.js onAdd). Le bloc rétrécit
-   ainsi quand on replie une couche via son en-tête. */
-.leaflet-bottom.leaflet-right .leaflet-legend .leaflet-legend-contents {
-  min-height: 0 !important;
-}
-
-/* [cd30] Écran < 1000px : barre de titre (header vert) réduite de moitié,
-   idem pour ses deux icônes (logos) et la taille des caractères du titre. */
-@media (max-width: 999px) {
-  .modern-header {
-    min-height: 44px;
-    padding: 8px;
-    gap: 11px;
-  }
-  .modern-header-logos img,
-  .modern-header-logos .leaflet-control-logos-img {
-    height: 31px !important;   /* moitié de 53px, +20% */
-  }
-  .modern-header h1 {
-    font-size: 0.98rem;        /* moitié de 1.65rem, +20% */
-  }
-  .modern-header-aide .modern-header-help-label {
-    font-size: 22px;           /* moitié de 36px, +20% */
-  }
-}
-
-/* [cd30] Aide modernisée : grille de cartes */
-.dialog-aide .aide-grille {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 8px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.dialog-aide .aide-carte {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 9px 11px;
-  background: #fff;
-  border: 1px solid rgba(15, 23, 42, .1);
-  border-radius: 8px;
-}
-.dialog-aide .aide-carte img {
-  flex: 0 0 auto;
-  width: auto;
-  max-width: 64px;
-  max-height: 28px;
-  margin-top: 2px;
-}
-.dialog-aide .aide-carte-txt {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.dialog-aide .aide-carte-txt b {
-  font-size: 13px;
-  color: #1f3a56;
-}
-.dialog-aide .aide-carte-txt span {
-  font-size: 12px;
-  line-height: 1.35;
-  color: #55606e;
-}
-/* bandeau titre du dialog d'aide au teal du header */
-.dialog-aide .leaflet-control-dialog-inner::before {
-  background: #007e8d !important;
-  color: #fff !important;
-  border-bottom-color: rgba(255, 255, 255, .25) !important;
-}
-
-/* [cd30] Aide : sous-titre de section dans la grille (pleine largeur) */
-.dialog-aide .aide-sous-titre {
-  grid-column: 1 / -1;
-  margin-top: 6px;
-  padding: 4px 2px 0;
-  color: #007e8d;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .4px;
-  border-bottom: 2px solid rgba(0, 126, 141, .25);
-}
-
-/* [cd30] Bandeau en haut du bloc légende : porte le chevron de repli global.
-   Un clic dessus (ou sur un élément de légende) maintient le bloc ouvert. */
-.legende-bandeau {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 8px;            /* hauteur ~ chevron + marge */
-  background: #b3bdd9;         /* plus foncé que le fond du bloc */
-  border-radius: 4px 4px 0 0;
-  cursor: pointer;
-  user-select: none;
-}
-.legende-bandeau .legende-chevron {
-  position: static !important; /* le chevron vit dans le bandeau (annule top/right absolus) */
-  margin-left: auto;
-  padding: 0;
-}
-/* replié : le bandeau devient le contenu de la pastille (fond porté par la pastille) */
-.leaflet-legend.legende-repliee .legende-bandeau {
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
-}
-
-/* [cd30] Le panneau d'aide passe au-dessus du bouton de recherche JSON.
-   Chaque coin Leaflet étant un contexte d'empilement, on élève le coin
-   qui contient le dialog d'aide ouvert. */
-.leaflet-top.leaflet-left:has(.dialog-aide),
-.leaflet-bottom.leaflet-left:has(.dialog-aide) {
-  z-index: 1100 !important;
-}
-
-/* [cd30] Bouton Info : icône fa-info-circle centrée (H+V) et occupant la largeur du bouton */
-.easy-button-button.bouton-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-.easy-button-button.bouton-info .button-state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  right: 0;                     /* annule le décalage 1px hérité d'easy-button.css */
-}
-.easy-button-button.bouton-info .fa {
-  display: flex;                /* le glyphe devient un item flex... */
-  align-items: center;          /* ...centré verticalement... */
-  justify-content: center;      /* ...et horizontalement (indépendant des métriques de police) */
-  font-size: 2.2em !important;  /* diamètre du cercle -> remplit le bouton */
-  line-height: 1 !important;
+  margin-bottom: 14px;      /* calé sur le bas du switch */
 }

@@ -274,9 +274,14 @@
   // ce qui permet au CSS de masquer/afficher le corps via un simple sélecteur
   // d'attribut sans JS supplémentaire.
   function setupAccordion() {
-    // [cd30] Sections fixes : toujours ouvertes, pas de repli au clic sur le titre.
     document.querySelectorAll(".modern-family").forEach(function (section) {
-      section.dataset.expanded = "true";
+      var title = section.querySelector(".modern-family-title");
+      if (!title) return;
+      // État initial : ouvert si l'attribut est absent
+      if (!section.hasAttribute("data-expanded")) section.dataset.expanded = "true";
+      title.addEventListener("click", function () {
+        section.dataset.expanded = section.dataset.expanded === "false" ? "true" : "false";
+      });
     });
   }
 
@@ -336,92 +341,9 @@
     base.classList.add("modern-fonds-plan");
     section.appendChild(base);
 
-    // [cd30] Les pastilles sont remplacées par une liste déroulante.
-    // Les radios natifs restent dans le DOM (masqués) : ils pilotent la carte.
-    base.style.display = "none";
-    var select = document.createElement("select");
-    select.className = "modern-fonds-select";
-    // Les radios sont RECONSTRUITS par Leaflet à chaque layeradd/layerremove
-    // (_update) : toujours les requêter au moment de l'usage, jamais les cacher.
-    function radiosActuels() {
-      return Array.prototype.slice.call(base.querySelectorAll("input"));
-    }
-    var radios = radiosActuels();
-    radios.forEach(function (r, i) {
-      var opt = document.createElement("option");
-      var lbl = r.nextElementSibling;
-      opt.value = String(i);
-      opt.textContent = (lbl ? lbl.textContent : "Fond " + (i + 1)).trim();
-      if (r.checked) opt.selected = true;
-      select.appendChild(opt);
-    });
-    var optBlanc = document.createElement("option");
-    optBlanc.value = "__blanc__";
-    optBlanc.textContent = "Fond blanc";
-    select.appendChild(optBlanc);
-
-    // Fond blanc = retire les couches tuiles de la carte + fond de conteneur blanc
-    function retirerFond() {
-      var map = window.maCarte;
-      if (!map) return;
-      Object.keys(map._layers).forEach(function (k) {
-        var ly = map._layers[k];
-        if (ly instanceof L.GridLayer || ly instanceof L.TileLayer) map.removeLayer(ly);
-      });
-      map.getContainer().classList.add("fond-blanc");
-    }
-    select.addEventListener("change", function () {
-      if (select.value === "__blanc__") { retirerFond(); return; }
-      var map = window.maCarte;
-      if (map) map.getContainer().classList.remove("fond-blanc");
-      var r = radiosActuels()[Number(select.value)];
-      if (r) r.click();
-    });
-    section.appendChild(select);
-
-    // [cd30] Impression : recopie le fond blanc sur la carte d'impression
-    // (le plugin browser.print crée un conteneur neuf, sans la classe).
-    if (window.maCarte && window.maCarte.on) {
-      window.maCarte.on("browser-print-start", function (e) {
-        if (e.printMap && window.maCarte.getContainer().classList.contains("fond-blanc")) {
-          e.printMap.getContainer().classList.add("fond-blanc");
-        }
-      });
-    }
-
-    // [cd30] Impression : les entrées de légende grisées sont retirées en CSS
-    // (@media print). Il reste à masquer l'en-tête et le bloc d'une couche dont
-    // toutes les entrées sont grisées, ce que le CSS ne sait pas exprimer
-    // (:has() ne peut pas être imbriqué).
-    function marquerGroupesLegendeVides(marquer) {
-      var contenus = document.querySelectorAll(".leaflet-legend-group-content");
-      for (var i = 0; i < contenus.length; i++) {
-        var entete = contenus[i].previousElementSibling;
-        if (!entete || entete.className.indexOf("leaflet-legend-group-header") === -1) continue;
-        var vide = !contenus[i].querySelector(".leaflet-legend-item:not(.leaflet-legend-item-inactive)");
-        var methode = (marquer && vide) ? "add" : "remove";
-        entete.classList[methode]("legende-groupe-vide-impression");
-        contenus[i].classList[methode]("legende-groupe-vide-impression");
-      }
-    }
-    if (window.maCarte && window.maCarte.on) {
-      window.maCarte.on("browser-print-start", function () { marquerGroupesLegendeVides(true); });
-      window.maCarte.on("browser-print-end", function () { marquerGroupesLegendeVides(false); });
-    }
-
-    // Si le fond change par ailleurs (code carte), resynchronise la liste
-    if (window.maCarte && window.maCarte.on) {
-      window.maCarte.on("baselayerchange", function () {
-        var rs = radiosActuels();
-        for (var i = 0; i < rs.length; i++) {
-          if (rs[i].checked) { select.value = String(i); break; }
-        }
-      });
-    }
-
-    // Met à jour le badge <em> avec le nombre de fonds (y compris fond blanc)
+    // Met à jour le badge <em> avec le nombre de fonds de carte
     var badge = section.querySelector(".modern-family-title em");
-    var nb = select.options.length;
+    var nb = base.querySelectorAll("input").length;
     if (badge && nb) badge.textContent = nb + (nb > 1 ? " fonds" : " fond");
 
     // Place la section "Fonds de plan" juste sous "Données métier"
@@ -474,10 +396,8 @@
       control.style.display = "none";
     }
 
-    // [cd30] Injection des items légende dans la sidebar DÉSACTIVÉE :
-    // la légende vit dans son bloc initial en bas à droite de la carte.
-    // Les cases natives de la sidebar basculent les couches entières (comportement Leaflet d'origine).
-    // injecterLegende(overlays);
+    // Injection des items légende sous chaque label de couche
+    injecterLegende(overlays);
 
     return true;
   };
@@ -764,32 +684,58 @@
   // Appelé une seule fois à l'init de chaque carte via : this.aide = function(){ window.aideCarto(maCarte); }
   // Textes mis à jour : "cases à cocher" → icône œil dans la barre latérale ; export → "barre latérale". ////
   window.aideCarto = function (maCarte) {
-    // [cd30] Aide modernisée : grille de cartes (icône + titre + description).
-    function carteAide(img, titre, texte) {
-      var src = (img.charAt(0) === "/") ? img : "/leaflet/Ressources/API_JS/images/Aide/" + img;
-      return "<div class='aide-carte'><img src='" + src + "'>"
-        + "<div class='aide-carte-txt'><b>" + titre + "</b><span>" + texte + "</span></div></div>";
-    }
-    var contenuAideComplet =
-      "<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>"
-      + "<div class='aide-grille'>"
-      + carteAide("recentrer.png", "Recentrer carte", "Recentre automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).")
-      + carteAide("rechGoogle.gif", "Rechercher localisation", "Commune, adresse, bâtiment, route, lieu")
-      + carteAide("/leaflet/cd30/ressources/aide-surlignage.svg", "Surligner lignes", "Surlignage en rouge des lignes au survol de la souris (actif ou non à l'ouverture selon la carte). Les lignes surlignées peuvent être disjointes ('multilignes').")
-      + carteAide("recherche.gif", "Rechercher élément de couche", "Saisir des caractères pour afficher les correspondances et zoomer dessus. Touche 'Espace' pour la liste entière. Bouton d'export GeoJSON de l'élément dans la fenêtre.")
-      + carteAide("legende.gif", "Légende dynamique", "Afficher/masquer chaque élément de la légende en cliquant dessus. L'œil de la barre latérale bascule la couche entière ; la légende filtre les éléments d'une même couche. Bloc légende repliable.")
-      + carteAide("streetview.gif", "Street View, Panoramax, Maps, Waze", "Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.")
-      + carteAide("info.png", "Informations", "Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).")
-      + carteAide("coordGPS.gif", "Coordonnées GPS", "Clic droit sur la carte (zoom ville et +) pour afficher/copier les coordonnées 'lat, long'.")
-      + "<div class='aide-sous-titre'>Outils de carte</div>"
-      + carteAide("dossier.gif", "Import couches", "Affiche des fichiers de couches WGS84 (Shape, GeoJSON, csv, GPX, Kml). Glisser/déposer possible, zip (1 couche par fichier), clic droit sur 1 élément importé pour effacer.")
-      + carteAide("/leaflet/cd30/ressources/aide-export.svg", "Export couches", "Exporte la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.")
-      + carteAide("imprimer.gif", "Imprimer carte", "'Vue courante' : la portion affichée, en paysage. 'Auto Gard' : tout le département (échelle auto). 'Sélec. zone' : un rectangle tracé à la souris.")
-      + carteAide("distance.gif", "Mesure de distance(s)", "Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment ; plusieurs tronçons possibles. Bouton 'Règle' ou 'Echap' pour tout effacer.")
-      + carteAide("isochrone.gif", "Isochrone et isodistance", "Placer un point puis lancer le calcul (voiture ou piéton) : isochrone ou isodistance autour ou depuis le point. Le réseau routier est pris en compte.")
-      + carteAide("/leaflet/Ressources/Images/Punaises/GPS-Location.png", "Recherche par coordonnées GPS", "Copier ou saisir des coordonnées WGS84 (ex : '43.83494, 4.35965') pour afficher icône et fenêtre. Re-clic sur le bouton pour effacer.")
-      + "</div>"
-      + "<p class='text-warning'>Les rendus des fonctions importer, mesurer et isochrone seront perdus à la réouverture de la carte.<br>Pour en conserver une trace : impression papier/pdf via l'outil 'Imprimer' ou capture écran.</p>";
+    var contenuAideInitial =
+    `<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>
+    <p><img src='/ressources/API_JS/images/Aide/recentrer.png' width='27' height='27'><b> Recentrer carte: </b> recentrer automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/rechGoogle.gif' width='27' height='27'><b> Rechercher localisation:</b> commune, adresse, bâtiment, route, lieu, etc. Géocodage Google Maps, Gard priorisé.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/dossier.gif' width='27' height='27'><b>Import couches:</b> afficher des fichiers de couches WGS84 au format Shape, GeoJSON, csv, GPX, Kml sur la carte. 
+    Possibilité de faire un glisser/déposer, de zipper (1 couche / fichier .zip), clic droit pour effacer une couche, import csv de couches points uniquement.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/export.png' width='27' height='27'><b>Export couches:</b> exporter la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/clé.png' width='27' height='27'> <b>Autres outils:</b> imprimer, mesurer distance(s), isochrone et recherche par coord. GPS. Détails en bas de fenêtre <span class='text-highlighted'>(*)</span>.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/surlignage.png' height='35'> <b>Surligner lignes:</b> activation du surlignage en rouge des lignes au survol de la souris. Selon la carte, le surlignage est actif ou inactif à l'ouverture.
+    Selon leurs nature, les lignes surlignées peuvent être disjointes ('multilignes').</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/recherche.gif' width='27' height='27'><b> Rechercher élément de couche:</b> saisir les caractères pour afficher les correspondances et zoomer dessus.
+    La nature de l'entité à rechercher est indiquée dans l'invite de saisie. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON dans fenêtre.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/legende.gif' height='35'> <b> Légende dynamique:</b> afficher/masquer chaque élément de la légende en cliquant dessus. L'icône <b>œil</b> dans la barre latérale affiche/masque une couche entière, 
+    la légende permet en plus de filtrer les éléments d'une même couche.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/streetview.gif' height='30'> <b>Accès Street View </b>+ Panoramax, Google Maps, Waze:
+    après clic, positionner Pegman (personnage orange) sur la carte et cliquer sur l'un des services de visualisation. Pour désactiver, appuyer sur une touche clavier ou recliquer le bouton.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/info.png' height='30'> <b>Informations: </b> afficher les infos relatives aux données représentées. Fermer la fenêtre en réappuyant sur l'icone 'i' (ou via croix).</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/coordGPS.png' width='90' height='35'> <b>Coordonnées GPS:</b> Faire un clic droit sur la carte au niveau de zoom ville et + pour afficher/copier les coord GPS d'un point sous la forme 'latitude, longitude'.
+    Le menu d'origine est toujours accessible par clic droit sur la barre latérale ou la barre titre.</p>
+
+    <p><a href='#' id='lienExtensible'><b>(*) Voir plus de détails sur les autres outils</b></a></p>
+    <div id='contenuExtensible' style='display:none;'</div>`;
+
+    var contenuAideExtensible =
+    `<p><img src='/ressources/API_JS/images/Aide/imprimer.gif' width='27' height='27'> <b> Imprimer carte:</b> 'Vue courante': imprimer au format paysage la portion de carte représentée à l'écran. 'Auto Gard': imprimer l'ensemble du département (mise à l'échelle auto). 'Sélec. zone' :
+    imprimer une portion de la carte selon un rectangle tracé à la souris.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/distance.gif' width='27'><b> Mesure de distance(s):</b> Tracer une ligne sur la carte pour mesurer une distance en km (3 décimales), angles possibles après clic. Pour terminer la mesure d'un segment (dernière valeur = longeur totale du segment)
+    , appuyer sur la touche 'Echap' ou double-cliquer. Il est ainsi possible de mesurer plusieurs tronçons. ré-appuyer sur le bouton 'Régle' ou la touche 'Echap' pour tout effacer.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/isochrone.gif' width='27' height='27'> <b> Calcul isochrone et isodistance:</b> après activation, placer un point sur la carte puis lancer le calcul (voiture ou piéton)
+    affichant l'isochrone ou l'isodistance autour ou depuis le point (valeurs Départ/Arrivée).
+    Les calculs prennent en compte le réseau routier.</p>
+
+    <p><img src='/ressources/API_JS/images/Aide/rech_GPS.png' width='27' height='26'> <b> Recherche par coordonnées GPS:</b> copier ou saisir des coord. GPS WGS84 (exemple : '43.83494, 4.35965')
+    pour afficher sur la carte icones et fenêtres correspondants. Géocodage OpenStreet. Recliquer sur le bouton pour effacer les icones.</p>
+
+    <p class='text-warning'>Les rendus liés à l'utilisation des fonctions importer, mesurer, isochrone seront perdus à la réouverture de la carte.<br>
+    Pour en conserver une trace, effectuer une impression papier ou pdf via l'outil 'Imprimer' ou bien faire une capture écran.</p>
+    </div>`;
+
+    var contenuAideComplet = contenuAideInitial + contenuAideExtensible;
 
     if (!L.Browser.mobile) {
       var fenêtreAide = new L.control.dialog({size: [790,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
@@ -803,6 +749,18 @@
       if (estOuverte) {
         fenêtreAide.setContent(contenuAideComplet).addTo(map);
         fenêtreAide._container.classList.add('dialog-aide');
+        var lien = document.getElementById('lienExtensible');
+        var contenu = document.getElementById('contenuExtensible');
+        lien.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (contenu.style.display === 'none') {
+            contenu.style.display = 'block';
+            lien.textContent = 'Voir moins de détails';
+          } else {
+            contenu.style.display = 'none';
+            lien.textContent = '(*) Voir plus de détails sur les autres fonctions';
+          }
+        });
       } else {
         map.removeControl(fenêtreAide);
       }
@@ -825,8 +783,7 @@
       headerHelpDock.appendChild(containerAide);
       var headerHelpLabel = document.createElement('span');
       headerHelpLabel.className = 'modern-header-help-label';
-      headerHelpLabel.textContent = '?'; // [cd30] "?" au lieu du texte Aide (FontAwesome absent du dépôt : rendu texte équivalent)
-      headerHelpLabel.title = 'Aide';
+      headerHelpLabel.textContent = 'Aide';
       headerHelpDock.appendChild(headerHelpLabel);
       headerHelpDock.addEventListener('click', function(e) {
         if (e.target.closest('.leaflet-control')) return;
@@ -839,7 +796,7 @@
   // Initialisation au chargement du DOM
   // =========================================================================
 
-  // [cd30] Déplace le copyright (attribution Leaflet) en bas de la sidebar.
+  // Déplace le copyright (attribution Leaflet) en bas de la sidebar.
   function setupCopyrightSidebar(essaisRestants) {
     var attribution = document.querySelector(".leaflet-control-attribution");
     var sidebar = document.querySelector(".modern-sidebar");
@@ -852,78 +809,14 @@
     sidebar.appendChild(attribution);
   }
 
-  // [cd30] Chevron discret en haut à droite du bloc légende : replie/déplie
-  // tout le bloc au clic (mêmes flèches que les en-têtes de couche).
-  function setupLegendeChevron(essaisRestants) {
-    var legende = document.querySelector(".leaflet-bottom.leaflet-right .leaflet-legend");
-    if (!legende) {
-      var n = (typeof essaisRestants === "number") ? essaisRestants : 40;
-      if (n > 0) setTimeout(function () { setupLegendeChevron(n - 1); }, 400);
-      return;
-    }
-    if (legende.querySelector(".legende-chevron")) return;
-    var libelle = document.createElement("span");
-    libelle.className = "legende-libelle";
-    libelle.textContent = "Légende";
-    libelle.title = "Déplier la légende";
-    var chev = document.createElement("span");
-    chev.className = "legende-chevron";
-    chev.title = "Replier / déplier la légende";
-    chev.textContent = "▼";
-    // [cd30] bandeau en haut du bloc : porte le libellé (état replié) et le chevron
-    var bandeau = document.createElement("div");
-    bandeau.className = "legende-bandeau";
-    bandeau.appendChild(libelle);
-    bandeau.appendChild(chev);
-    legende.insertBefore(bandeau, legende.firstChild);
-    chev.addEventListener("click", function (e) {
-      e.stopPropagation();
-      var replie = legende.classList.toggle("legende-repliee");
-      chev.textContent = replie ? "▶" : "▼";
-    });
-    // clic sur le libellé (visible uniquement replié) : maximise aussi
-    libelle.addEventListener("click", function (e) {
-      e.stopPropagation();
-      legende.classList.remove("legende-repliee");
-      chev.textContent = "▼";
-    });
-    // [cd30] survol de la pastille repliée : dépliage temporaire, repli à la
-    // sortie ; un clic pendant le survol maintient le bloc déplié.
-    legende.addEventListener("mouseenter", function () {
-      if (legende.classList.contains("legende-repliee")) {
-        legende.dataset.deplieSurvol = "1";
-        legende.classList.remove("legende-repliee");
-        chev.textContent = "▼";
-      }
-    });
-    legende.addEventListener("mouseleave", function () {
-      if (legende.dataset.deplieSurvol === "1") {
-        delete legende.dataset.deplieSurvol;
-        legende.classList.add("legende-repliee");
-        chev.textContent = "▶";
-      }
-    });
-    legende.addEventListener("click", function () {
-      if (legende.dataset.deplieSurvol === "1") {
-        delete legende.dataset.deplieSurvol;   // maintien : le mouseleave ne repliera plus
-      }
-    });
-    // [cd30] petit écran (< 1000px de large) : légende repliée à l'ouverture
-    if (window.innerWidth < 1000) {
-      legende.classList.add("legende-repliee");
-      chev.textContent = "▶";
-    }
-  }
-
   document.addEventListener("DOMContentLoaded", function () {
-    setupLegendeChevron();
     setupCopyrightSidebar();
     setupSidebarScroll();
     setupSidebarResizer();
     setupTitre();
     setupAccordion();
     setupBadgeMetier();
-    // setupVigilanceNimes(); // [cd30] bandeau vigilance retiré de la carte priorités
+    setupVigilanceNimes();
   });
 
 })();
