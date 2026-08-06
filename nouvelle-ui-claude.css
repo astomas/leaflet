@@ -1480,3 +1480,42 @@ body.leaflet--printing .titre {
   margin-left: 12px;
   margin-bottom: 14px;      /* calé sur le bas du switch */
 }
+
+/* [cd30] Aide modernisée : grille de cartes */
+.dialog-aide .aide-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.dialog-aide .aide-carte {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 11px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, .1);
+  border-radius: 8px;
+}
+.dialog-aide .aide-carte img {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 64px;
+  max-height: 28px;
+  margin-top: 2px;
+}
+.dialog-aide .aide-carte-txt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dialog-aide .aide-carte-txt b {
+  font-size: 13px;
+  color: #1f3a56;
+}
+.dialog-aide .aide-carte-txt span {
+  font-size: 12px;
+  line-height: 1.35;
+  color: #55606e;
+}
