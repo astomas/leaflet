@@ -1543,27 +1543,13 @@ this.importFichier = function () {
 		}		
 		
 		maCarte.on("browser-print-start", function(e){
+			// [cd30] Auto Gard : carte imprimée descendue de 5px. Différé car le plugin
+			// refait un fitBounds juste après cet événement (mode auto : InvalidateBounds).
+			if (maCarte.getContainer().classList.contains("leaflet-browser-print--auto")) {
+				setTimeout(function() { e.printMap.panBy([0, -5], { animate: false }); }, 150);
+			}
 			if (presenceLegende) {			
 				blocLegende.addTo(e.printMap);						
-			// ajout logo avant print
-			setTimeout(function() {
-				const conteneurCartePrint = e.printMap.getContainer();
-
-				const logoPrint = document.createElement("img");
-				logoPrint.src = "/leaflet/Ressources/c3po_gr.png";
-				logoPrint.style.position = "absolute";
-				logoPrint.style.left = "10px";
-				logoPrint.style.width = "56px";
-				logoPrint.style.height = "50px";
-				logoPrint.style.zIndex = "10000";
-				logoPrint.style.pointerEvents = "none";
-				
-				const titrePrint = conteneurCartePrint.querySelector(".infotitre, .titre");
-				const hauteurTitre = titrePrint.offsetHeight;
-				logoPrint.style.bottom = (hauteurTitre + 15) + "px";
-
-				conteneurCartePrint.appendChild(logoPrint);
-			}, 300);
 
 			// ajuster fontes legende et centrage avant print selon hauteur legende	
 			setTimeout(function() {
@@ -1571,7 +1557,7 @@ this.importFichier = function () {
 				const hauteurLegende = conteneurLegende.offsetHeight;
 
 				// si hauteur < 250px, on garde le bloc original
-					if (hauteurLegende < 250) {
+					if (hauteurLegende < 400) {
 						return;
 					}
 					else {
@@ -1588,7 +1574,9 @@ this.importFichier = function () {
 							elementLegende.style.lineHeight = "1.1";
 						});
 						// decalage carte a gauche
-						e.printMap.panBy([100, 0], { animate: false });
+						// dezoom supplementaire quand la legende est haute
+					e.printMap.setZoom(e.printMap.getZoom() - 0.1, { animate: false });
+					e.printMap.panBy([70, 16], { animate: false });	// [cd30] carte imprimée : +10px à droite, +20px vers le haut
 					}
 				}, 100);
 			}	
@@ -1946,6 +1934,29 @@ this.importFichier = function () {
 			 
 			(maCarte).on("browser-print-start", function(e){
 				L.ctrlTitre({position: "bottomleft"}).addTo(e.printMap);
+				// [cd30] logo Gard en bloc séparé devant le titre (10px d'écart) ;
+				// titre raccourci de ~10% (retour à la ligne plus tôt : 560 -> 504px)
+				setTimeout(function() {
+					var contPrint = e.printMap.getContainer();
+					var titrePrint = contPrint.querySelector(".infotitre, .titre");
+					if (titrePrint && !contPrint.querySelector(".logo-titre-print")) {
+						var logoTitre = document.createElement("img");
+						logoTitre.className = "logo-titre-print";
+						logoTitre.src = "/leaflet/Ressources 26/images/legard.jpg";
+						logoTitre.style.cssText = "position:absolute;left:10px;bottom:10px;height:44px;z-index:10000;pointer-events:none;background:#fff;padding:3px;border-radius:5px;box-shadow:0 0 15px rgba(0,0,0,0.2);";
+						contPrint.appendChild(logoTitre);
+						titrePrint.style.marginLeft = "70px";	// bloc logo (50px, à left:10) + 10px d'écart
+						titrePrint.style.setProperty("max-width", "450px", "important");	// retour à la ligne anticipé (450px max)
+						// centres verticaux alignés : cale le bas du logo selon la hauteur réelle du titre
+						requestAnimationFrame(function() {
+							var basCont = contPrint.getBoundingClientRect().bottom;
+							var rTitre = titrePrint.getBoundingClientRect();
+							var hLogo = logoTitre.getBoundingClientRect().height;
+							var centreTitre = rTitre.top + rTitre.height / 2;
+							logoTitre.style.bottom = Math.round(basCont - centreTitre - hLogo / 2) + "px";
+						});
+					}
+				}, 200);
 			});
 	}
 		
