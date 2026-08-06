@@ -126,6 +126,14 @@
 	strRechJson = "2|leafletsearch|stations par Commune, RD, Etat";
 	clicZoomActif = true;	
 
+	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon","d30 troncon tf","d30 3vitinerairetype"];
+	var vueCouranteEtiquetteRD = false;
+	var vueCouranteTroncon = false;
+	// vues dont les lignes gardent leur infobulle malgre l'etiquette permanente
+	var vuesInfobulleGardee = ["d30 3vitinerairetype"];
+	var vueCouranteInfobulle = false;
+
 	nomVues = nomVues.map(vue => {
 	    vue = vue.replace(/_4map$/i, "").replace(/_/g, " ");
 	    return vue.charAt(0).toUpperCase() + vue.slice(1);
@@ -333,6 +341,17 @@ function formaterChampPopup(label, valeurHtml) {
 // dynamiquement au point de la route le plus proche du centre du viewport. Toujours
 // visible (quel que soit le zoom / la position de la souris), jamais en surnombre,
 // et affichée/masquée automatiquement selon l'activation de la couche.
+// lecture d'une propriete dont le nom peut porter des espaces parasites
+function propTrim(props, nom) {
+    for (var cle in props) {
+        if (cle.trim() === nom) return (props[cle] || "").toString().trim();
+    }
+    return "";
+}
+// //// modif nouvelle UI - normalisation nom de vue (sans accents ni casse) pour ciblage étiquettes RD ////
+function normaliserNomVue(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
 var groupeEtiquettesRD = null;
 function gererEtiquettesRD(map) {
     if (!map) return;
@@ -492,6 +511,17 @@ function CarteLeaflet(conteneurId) {
 	}
 
 	function traiterEltsCouche (élément, couche) {
+
+		// [cd30] étiquette RD : marque aussi les polylignes des couches "cases à cocher"
+		// (copies des couches légende) pour que cocher "Réseau routier" affiche les
+		// étiquettes, comme dans la carte Surveillance.
+		if (vueCouranteEtiquetteRD
+			&& couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
+			couche.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || propTrim(élément.properties, "Numero")).toString().trim();
+			couche.options.rdLabelColor = élément.properties.couleur || couche.options.color || "#888";
+			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
+			couche.options.rdProximite = /proximit/i.test(niveauRDet);
+		}
 		
 		function nettoyerValNulles() {
 			for (var nomPpté in élément.properties) {	
@@ -732,14 +762,19 @@ function CarteLeaflet(conteneurId) {
     tabEltsMLSLeg.push(élémentsMLS);
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // Réseau routier : mémorise la valeur RD + le niveau pour l'étiquette permanente (gererEtiquettesRD)
-    if (élément.properties.nomcouche === "Réseau routier") {
-        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || "").toString().trim();
+    if (vueCouranteEtiquetteRD) {
+        élémentsMLS.options.rdLabel = (élément.properties["RD "] || élément.properties["RD"] || propTrim(élément.properties, "Numero")).toString().trim();
         élémentsMLS.options.rdLabelColor = couleurOrigine;
         var niveauRD = (élément.properties["Niveau"] || élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         // Tooltip classique désactivé pour le réseau routier (étiquette RD permanente à la place).
         // Pour le réactiver, décommenter la ligne ci-dessous :
         //élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+        // Les vues listées dans vuesInfobulleGardee (itinéraires cyclables)
+        // gardent leur infobulle : l'étiquette y est un complément.
+        if (vueCouranteInfobulle) {
+            élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
+        }
     } else {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
@@ -797,6 +832,10 @@ function CarteLeaflet(conteneurId) {
 	        });
 	    }
 	    
+	    // //// modif nouvelle UI - vue ciblée pour étiquette RD (réf. nomVues) ////
+	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
+	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
+	    vueCouranteInfobulle = (typeof nomVues !== "undefined" && vuesInfobulleGardee.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
