@@ -134,9 +134,12 @@
 	
 	console.log("nomVues : ", nomVues);
 	// //// modif nouvelle UI - vues recevant l'étiquette RD permanente (comparaison sans accents ni casse) ////
-	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon"];
+	var vuesEtiquetteRD = ["reseauroutier","reseauroutier sanslegende","lineaire","utvi troncon","utva troncon","utal troncon","utbe troncon","utba troncon","d30 troncon","d30 troncon tf","d30 3vitinerairetype","d30 3vitinerairetype filtre"];
 	var vueCouranteEtiquetteRD = false;
 	var vueCouranteTroncon = false;
+	// vues dont les lignes gardent leur infobulle malgre l'etiquette permanente
+	var vuesInfobulleGardee = ["d30 3vitinerairetype","d30 3vitinerairetype filtre"];
+	var vueCouranteInfobulle = false;
 	
 	L.Icon.Default.imagePath = '/leaflet/Ressources 26/images/';
 	
@@ -519,7 +522,7 @@ function CarteLeaflet(conteneurId) {
 		
 		// //// modif nouvelle UI - étiquette RD permanente : marquage de la polyligne affichée de la vue ciblée (réf. vuesEtiquetteRD), sans test de nom de couche ni de champ ////
 		if (vueCouranteEtiquetteRD && couche instanceof L.Polyline && !(couche instanceof L.Polygon)) {
-			couche.options.rdLabel = propTrim(élément.properties, "RD");
+			couche.options.rdLabel = propTrim(élément.properties, "RD") || propTrim(élément.properties, "Numero");
 			var niveauRDet = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
 			couche.options.rdProximite = /proximit/i.test(niveauRDet);
 			couche.options.rdColor = propTrim(élément.properties, "couleur") || couche.options.color || "#888";
@@ -709,7 +712,7 @@ function CarteLeaflet(conteneurId) {
 			couche.bindTooltip(tooltipCourt, { sticky: true, opacity: 0.9, className: 'tooltip-polygone' });
 		} else if (élément.geometry.type === "LineString" || élément.geometry.type === "MultiLineString") {
 			// //// modif nouvelle UI - pas de tooltip ligne sur les vues RD sans 'troncon' ////
-			if (!vueCouranteEtiquetteRD || vueCouranteTroncon) { couche.bindTooltip(texteTooltip, optionsTooltip); }
+			if (!vueCouranteEtiquetteRD || vueCouranteTroncon || vueCouranteInfobulle) { couche.bindTooltip(texteTooltip, optionsTooltip); }
 		} else {
 			couche.bindTooltip(texteTooltip, optionsTooltip);
 		}
@@ -769,13 +772,13 @@ function CarteLeaflet(conteneurId) {
     élémentsMLS.bindPopup(contenuFinalPopup, optionsPopup);
     // //// modif nouvelle UI - étiquette RD permanente sur les vues ciblées (réf. vuesEtiquetteRD / nomVues) ////
     if (vueCouranteEtiquetteRD) {
-        élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD");
+        élémentsMLS.options.rdLabel = propTrim(élément.properties, "RD") || propTrim(élément.properties, "Numero");
         var niveauRD = propTrim(élément.properties, "Niveau") || (élément.properties["legende"] || "").toString();
         élémentsMLS.options.rdProximite = /proximit/i.test(niveauRD);
         élémentsMLS.options.rdColor = couleurOrigine || "#888";
     }
     // //// modif nouvelle UI - pas de tooltip survol sur les vues RD sans 'troncon' ////
-    if (!vueCouranteEtiquetteRD || vueCouranteTroncon) {
+    if (!vueCouranteEtiquetteRD || vueCouranteTroncon || vueCouranteInfobulle) {
         élémentsMLS.bindTooltip(texteTooltip, optionsTooltip);
     }
 }
@@ -836,6 +839,7 @@ function CarteLeaflet(conteneurId) {
 	    vueCouranteEtiquetteRD = (typeof nomVues !== "undefined" && vuesEtiquetteRD.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    // //// modif nouvelle UI - vue 'troncon' (active le tooltip survol) ////
 	    vueCouranteTroncon = (typeof nomVues !== "undefined" && normaliserNomVue(nomVues[i]).indexOf("troncon") !== -1);
+	    vueCouranteInfobulle = (typeof nomVues !== "undefined" && vuesInfobulleGardee.some(function(v){return v===normaliserNomVue(nomVues[i]);}));
 	    tabCoucheMG.push(L.geoJson(donneesCouche, {
 	        style: styleCoucheMétier, 
 	        onEachFeature: traiterEltsCouche, 
