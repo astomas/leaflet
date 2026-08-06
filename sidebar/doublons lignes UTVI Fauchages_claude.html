@@ -23,9 +23,7 @@
 	<link rel="stylesheet" href="/leaflet/Ressources 26/images/easyButton/fontawesome-free-6.6/css/all.min.css" />
 
 	<!-- clé API google - limite appels/mois -->
-	<script async src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBbn4agQo3A4Hp3Yyyros9hD7vFw0WSNOM&callback=Function.prototype&loading=async&v=beta"></script>
 	<!-- Fonds carte Google -->
-	<script src="/leaflet/Ressources 26/Leaflet.GoogleMutant.js"></script>
 	<!-- Rech. lieux Google -->
 
 	<!-- Widget vigilance météo -->
@@ -398,11 +396,11 @@ function gererEtiquettesRD(map) {
 
 function CarteLeaflet(conteneurId) {   
     
- 	var googleSat = L.gridLayer.googleMutant({
+ 	/*var googleSat = L.gridLayer.googleMutant({
 		maxZoom: 22	, 
 		type:"hybrid", 
 		styles:[]			
-	});		
+	});*/		// [cd30] fonds Google supprimés
 	 
 	var coucheWMTSIGN = "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2";
 	var fdcIGN = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGN + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png"
@@ -922,11 +920,11 @@ function CarteLeaflet(conteneurId) {
 		}
 
 		// mini-zoom pr affichage G Sat
-		maCarte.on("baselayerchange", function() {
+		/*maCarte.on("baselayerchange", function() {
 			if (maCarte.hasLayer(googleSat)) {
 				setTimeout(() => maCarte.fire('zoomend'), 100);
 			}
-		});
+		});*/ // [cd30] fonds Google supprimés
 
 		// Priorité affichage selon type geom couche
 		// Points dessus
@@ -1182,7 +1180,7 @@ function CarteLeaflet(conteneurId) {
 			"CartoDB N&B": cartoDB, 		
 			"Stadia Map": StadiaMap,
 			"Plan IGN": fdcIGN,		
-			//"Google Satellite": googleSat,
+			//"Google Satellite": googleSat,	// [cd30] fond Google supprimé
 			"Ortho IGN": orthoIGN			
 		};	
 	
@@ -1334,7 +1332,7 @@ function CarteLeaflet(conteneurId) {
 		};
 		
 		function verifBaseLayer() {
-			if (maCarte.hasLayer(orthoIGN) || maCarte.hasLayer(googleSat)) {
+			if (maCarte.hasLayer(orthoIGN) /*|| maCarte.hasLayer(googleSat)*/) {
 				coucheLimiteAdmin.setStyle(styleLimiteOrtho);
 				maCarte.getContainer().style.background = "#3a4a3a"; // //// modif nouvelle UI - fond sombre pour masquer coutures tuiles ortho ////
 			} else {
@@ -1638,10 +1636,7 @@ this.importFichier = function () {
 				//L.control.browserPrint.mode.portrait("Portrait"),
 			],
 		});
-		L.Control.BrowserPrint.Utils.registerLayer(L.GridLayer.GoogleMutant,"L.GridLayer.GoogleMutant", function(layer) {
-			return new L.GridLayer.GoogleMutant({type: "hybrid", maxZoom: 22});	
-			}
-		);		
+		// [cd30] registerLayer GoogleMutant retiré (fonds Google supprimés, GoogleMutant.js non chargé)
 
 		let sauvegardeStyleLegende = null;
 
