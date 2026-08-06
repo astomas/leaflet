@@ -27,8 +27,6 @@
 	<!-- Fonds carte Google -->
 	<script src="/leaflet/Ressources 26/Leaflet.GoogleMutant.js"></script>
 	<!-- Rech. lieux Google -->
-	<script src="/leaflet/Ressources 26/GPlaceAutocomplete.js"></script>
-  	<link rel="stylesheet" href="/leaflet/Ressources 26/GPlaceAutocomplete.css" />
 
 	<!-- Widget vigilance météo -->
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/widget-meteo.css">
@@ -1353,96 +1351,19 @@ function CarteLeaflet(conteneurId) {
     }
 	
 this.rechercherLieu = function() {		
-		var limiteGeo = {
-			south: 43.5,
-			west: 3.2,
-			north: 44.5,
-			east: 5.0
-		};
-		
-		var niveauZoom = 16.3; 
-		var punaiseLocation = null;
-		var iconeLocaliser = L.icon({
-			iconUrl: '/Ressources/Images/Punaises/GPS-location.png',
-			iconSize: [40, 40],
-			iconAnchor: [20, 40] 
-		});
-	
-	function initGooglePlace() {
-	
-		var ctrlGooglePlace = new L.Control.GPlaceAutocomplete({
+		// [cd30] Recherche de lieux via l'extension IGN Géoplateforme (GpPluginLeaflet.js).
+		// Remplace le plugin Google GPlaceAutocomplete (API Google Places plus nécessaire).
+		var ctrlRechLieu = L.geoportalControl.SearchEngine({
 			position: "topleft",
-			collapsed_mode: true,
-			prepend: false, 
-			autocomplete_options: {
-				types: ["geocode"], 
-				componentRestrictions: {country: "fr"},
-				bounds: limiteGeo
-			},		
-			callback: function(place){
-				if (place.location) {
-					// 2. On utilise la variable niveauZoom
-					maCarte.setView(
-						[place.location.lat(), place.location.lng()], 
-						niveauZoom, 
-						{animate: true}
-					);
-					
-					// 3. On enlève l'ancienne punaise et on met la nouvelle
-					if (punaiseLocation !== null) {
-						maCarte.removeLayer(punaiseLocation);
-					}
-				punaiseLocation = L.marker([place.location.lat(), place.location.lng()],{icon: iconeLocaliser}).addTo(maCarte);				}
-			}
+			collapsed: true,
+			displayAdvancedSearch: false,
+			displayMarker: true,
+			markerStyle: "blue",
+			zoomTo: 17,
+			placeholder: "Rechercher un lieu..."
 		});
-		
-		ctrlGooglePlace.addTo(maCarte);  
-		
-		// 4. Boucle pour effacer la punaise si on vide le texte
-		setInterval(function() {
-			var input = document.querySelector('.leaflet-gac-control');
-			if (input && input.value.trim() === '' && punaiseLocation !== null) {
-				maCarte.removeLayer(punaiseLocation);
-				punaiseLocation = null;
-			}
-		}, 500);
-		
-		if (ctrlGooglePlace.icon) {
-		    var buttonR = L.DomUtil.get(ctrlGooglePlace.icon);
-		    buttonR.title = "Rechercher lieu";  
-		}
-		
-		// On attend un court instant (500 ms) pour s'assurer que le champ de recherche existe dans la page
-		setTimeout(function() {
-		    var searchInput = document.querySelector('.leaflet-gac-control') || ctrlGooglePlace.getContainer().querySelector('input');
-		    
-		    if (searchInput) {
-		        searchInput.setAttribute('placeholder', 'Rechercher un lieu...');
-		    } else {
-		        console.log("Le champ de recherche n'a pas pu être trouvé.");
-		    }
-		}, 500);	
-	}
-	// bug firefox attendre que l'API Google Places soit dispo avant de lancer l'init
-    function attendreGoogleEtInit() {
-        if (window.google && google.maps && google.maps.places && google.maps.places.PlaceAutocompleteElement) {
-            initGooglePlace();
-        } else {
-            setTimeout(attendreGoogleEtInit, 200);
-        }
-    }
-
-    attendreGoogleEtInit();
-	
+		maCarte.addControl(ctrlRechLieu);
 }
-
-
-this.widgetMeteo = function() {
-	initWidgetMeteo({
-		TEST_J:  null, // null = données réelles
-		TEST_J1: null  // null = données réelles
-	});
-};
 
 this.importFichier = function () {	
     let indexSpatialImport = {};
