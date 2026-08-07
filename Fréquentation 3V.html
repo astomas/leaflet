@@ -183,7 +183,7 @@ tabCoucheMetier = tabCoucheMetier.map(function(couche, index) {
 				"geometry": {"type": "Point", "coordinates": [14, 43]}, 
 				"properties": {
 					"Couche": "Couche vide", 
-					"nomcouche": "Couche " + (index + 1) + " vide"
+					"nomcouche": `<span style="color:#9a3108;">${nomVues[index]} vide</span>`
 				}
 			}]
 		}];
@@ -1132,14 +1132,21 @@ function CarteLeaflet(conteneurId) {
 		var nbEltsCouche = tabCoucheMG[i].getLayers().length; // //// modif nouvelle UI - nb éléments couche ////
 		// [cd30] couche vide : le geojson de remplacement porte 1 point factice
 		// pour ne pas planter la carte. On affiche 0, pas 1.
+		var coucheVide = false;
 		if (nbEltsCouche === 1) {
 			var eltUnique = tabCoucheMG[i].getLayers()[0];
 			if (eltUnique && eltUnique.feature && eltUnique.feature.properties
 				&& eltUnique.feature.properties["Couche"] === "Couche vide") {
 				nbEltsCouche = 0;
+				coucheVide = true;
 			}
 		}
-		tabCtrlboxNom.push({nom: tabNettoyé[i][1] + " (" + nbEltsCouche + ")", couche: tabCoucheMG[i]}); // //// modif nouvelle UI - libellé avec compteur ////
+		// [cd30] couche vide : compteur glisse dans le span rouge, sinon il en garde
+			// la couleur normale et l'espace qui le precede est mangee par le flex.
+			var libelleCoucheNb = coucheVide
+				? tabNettoyé[i][1].replace(/<\/span>\s*$/, " (0)</span>")
+				: tabNettoyé[i][1] + " (" + nbEltsCouche + ")";
+			tabCtrlboxNom.push({nom: libelleCoucheNb, couche: tabCoucheMG[i]}); // //// modif nouvelle UI - libellé avec compteur ////
 	}
 
 	libelleCouche = Object.assign({}, ...tabCtrlboxNom.map(item => ({ [item.nom]: item.couche })));
