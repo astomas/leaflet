@@ -1666,9 +1666,9 @@ div[id^="GPgeocodeResultsList"] {
 }
 .modern-header-help.modern-header-info button.modern-header-info-control .fa,
 .modern-header-help.modern-header-info button.modern-header-info-control .fa-info-circle {
-  font-size: 30px !important;
+  font-size: 27px !important;
   font-weight: 900 !important;
-  line-height: 1.35 !important;
+  line-height: 1.4 !important;
 }
 @media (max-width: 999px) {
   .modern-header-help.modern-header-info button.modern-header-info-control .fa,
