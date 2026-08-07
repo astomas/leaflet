@@ -1649,3 +1649,30 @@ div[id^="GPgeocodeResultsList"] {
     font-size: 19px !important;
   }
 }
+
+/* [cd30] En-tete : les deux boutons Info et Aide sans pastille de fond,
+   directement sur le fond de la barre de titre. */
+.modern-header-actions .modern-header-info,
+.modern-header-actions .modern-header-aide {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+/* [cd30] Le glyphe fa-info-circle est un "i" cercle : dans la pastille blanche
+   il donnait un petit rond orange. On bascule sur le "i" simple (\f129), a la
+   meme taille que le "?" du bouton d'aide. */
+.modern-header-info .modern-header-info-control .fa-info-circle::before {
+  content: "\f129" !important;
+}
+.modern-header-help.modern-header-info button.modern-header-info-control .fa,
+.modern-header-help.modern-header-info button.modern-header-info-control .fa-info-circle {
+  font-size: 30px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+@media (max-width: 999px) {
+  .modern-header-help.modern-header-info button.modern-header-info-control .fa,
+  .modern-header-help.modern-header-info button.modern-header-info-control .fa-info-circle {
+    font-size: 22px !important;
+  }
+}
