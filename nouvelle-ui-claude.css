@@ -1604,3 +1604,48 @@ div[id^="GPgeocodeResultsList"] {
   /* le label etait masque en ecran etroit : on le garde puisque c'est le seul visuel */
   .modern-header-aide .modern-header-help-label { display: inline-flex !important; }
 }
+
+/* [cd30] Bouton Info : meme pastille que le bouton Aide - rond blanc de 44px,
+   "i" orange centre. Le libelle texte "Info" est masque, l'icone suffit. */
+.modern-header-help.modern-header-info button.modern-header-info-control {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  line-height: 44px !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  border: none !important;
+  color: #f9b062 !important;
+  box-shadow: none !important;
+}
+.modern-header-help.modern-header-info button.modern-header-info-control:hover {
+  background: #fff !important;
+  color: #ffc98f !important;
+}
+.modern-header-help.modern-header-info button.modern-header-info-control i,
+.modern-header-help.modern-header-info button.modern-header-info-control .fa,
+.modern-header-help.modern-header-info button.modern-header-info-control .fa-solid,
+.modern-header-help.modern-header-info button.modern-header-info-control .fa-info {
+  font-size: 26px !important;
+  color: inherit !important;
+}
+/* le mot "Info" a cote de la pastille : masque, comme pour le bouton Aide */
+.modern-header-info .modern-header-help-label {
+  display: none !important;
+}
+@media (max-width: 999px) {
+  .modern-header-help.modern-header-info button.modern-header-info-control {
+    width: 33px !important;
+    height: 33px !important;
+    min-width: 33px !important;
+    max-width: 33px !important;
+    line-height: 33px !important;
+  }
+  .modern-header-help.modern-header-info button.modern-header-info-control i,
+  .modern-header-help.modern-header-info button.modern-header-info-control .fa,
+  .modern-header-help.modern-header-info button.modern-header-info-control .fa-solid,
+  .modern-header-help.modern-header-info button.modern-header-info-control .fa-info {
+    font-size: 19px !important;
+  }
+}
