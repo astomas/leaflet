@@ -1571,3 +1571,36 @@ div[id^="GPgeocodeResultsList"] {
   margin-left: 35px !important;     /* bord gauche du champ (loupe 33px + 2px) */
   top: 33px !important;             /* juste sous le champ aligné (hauteur 33px) */
 }
+
+/* [cd30] Bouton Aide : pastille ronde blanche, "?" orange centre.
+   Le controle Leaflet d'origine est masque, le label porte tout le visuel. */
+.modern-header-aide .modern-header-help-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;        /* le rond */
+  background: #fff;          /* blanc */
+  font-size: 30px;
+  font-weight: 900;
+  color: #f9b062;            /* "?" reste orange */
+  box-sizing: border-box;
+}
+.modern-header-aide:hover .modern-header-help-label {
+  color: #ffc98f;
+}
+.modern-header-aide .leaflet-control,
+.modern-header-aide .leaflet-bar,
+.modern-header-aide .easy-button-container {
+  display: none !important;
+}
+@media (max-width: 999px) {
+  .modern-header-aide .modern-header-help-label {
+    font-size: 22px;           /* moitie de 36px, +20% */
+  }
+}
+@media (max-width: 900px) {
+  /* le label etait masque en ecran etroit : on le garde puisque c'est le seul visuel */
+  .modern-header-aide .modern-header-help-label { display: inline-flex !important; }
+}
