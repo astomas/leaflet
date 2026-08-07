@@ -1658,21 +1658,32 @@ div[id^="GPgeocodeResultsList"] {
   border: none !important;
   padding: 0 !important;
 }
-/* [cd30] Le glyphe fa-info-circle est un "i" cercle : dans la pastille blanche
-   il donnait un petit rond orange. On bascule sur le "i" simple (\f129), a la
-   meme taille que le "?" du bouton d'aide. */
-.modern-header-info .modern-header-info-control .fa-info-circle::before {
-  content: "\f129" !important;
+
+/* [cd30] Bouton Info : icone fa-info-circle centree (H+V) et occupant la
+   largeur du bouton, comme sur les cartes cd30. */
+.easy-button-button.bouton-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
-.modern-header-help.modern-header-info button.modern-header-info-control .fa,
-.modern-header-help.modern-header-info button.modern-header-info-control .fa-info-circle {
-  font-size: 27px !important;
-  font-weight: 900 !important;
-  line-height: 1.4 !important;
+.easy-button-button.bouton-info .button-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  right: 0;                     /* annule le decalage 1px herite d'easy-button.css */
+}
+.modern-header-help.modern-header-info button.bouton-info .fa {
+  display: flex;                /* le glyphe devient un item flex... */
+  align-items: center;          /* ...centre verticalement... */
+  justify-content: center;      /* ...et horizontalement */
+  font-size: 44px !important;   /* diametre du cercle -> remplit la pastille */
+  line-height: 1 !important;
 }
 @media (max-width: 999px) {
-  .modern-header-help.modern-header-info button.modern-header-info-control .fa,
-  .modern-header-help.modern-header-info button.modern-header-info-control .fa-info-circle {
-    font-size: 22px !important;
+  .modern-header-help.modern-header-info button.bouton-info .fa {
+    font-size: 33px !important;
   }
 }
