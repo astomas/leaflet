@@ -330,11 +330,33 @@ function gererEtiquettesRD(map) {
 
 function CarteLeaflet(conteneurId) {   
     
- 	/*var googleSat = L.gridLayer.googleMutant({
-		maxZoom: 22	, 
-		type:"hybrid", 
-		styles:[]			
-	});*/		// [cd30] fonds Google supprimés
+	var scan25 = L.tileLayer.wms("https://data.geopf.fr/private/wms-r/",
+	  {
+		apikey: "fmHejeatQYlH7u23w1cRIZ3KGiJ1rRh9",
+		layers: "SCAN25TOUR_PYR-JPEG_WLD_WM",
+		format: "image/jpeg",		
+		maxZoom: 17,
+		transparent: false,
+		version: "1.3.0",
+		attribution:'&copy; <a href="https://cartes.gouv.fr" target="_blank">IGN geoplateforme</a>'
+	  });
+	
+	/*var coucheBDTopo = "TRANSPORTNETWORKS.ROADS";
+	var BDTopo = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheBDTopo + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png"
+		,{
+			maxZoom: 20,
+			maxNativeZoom: 18,
+			attribution:''&copy; <a href="https://cartes.gouv.fr" target="_blank">IGN geoplateforme</a>''
+		});	*/
+
+	var coucheWMTSLidarHD = "IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.SHADOW";	// [cd30] MNS LiDAR HD (ombrage) - Géoplateforme
+	var lidarHD = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSLidarHD + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png"
+		,{
+			maxZoom: 20,
+			maxNativeZoom: 18,
+			//opacity: 0.5,
+			attribution:'&copy; <a href="https://cartes.gouv.fr" target="_blank">IGN geoplateforme</a>'
+		});	
 	 
 	var coucheWMTSIGN = "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2";
 	var fdcIGN = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGN + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png"
@@ -1113,12 +1135,18 @@ function CarteLeaflet(conteneurId) {
 	for (i=0; i < tabEltsMPLeg.length; i++) {
 		tabEltsMPLeg[i].bringToBack();		
 	}
+
+	// 2 fonds superposés avec opacity 0.5 lidar
+	/*var groupefdcIGNLidar = L.layerGroup([
+		fdcIGN,
+		lidarHD
+	]);*/
 	
 	var fondsCarte = { // //// modif nouvelle UI - sans Google Satellite ////
 		"CartoDB N&B": cartoDB,
 		"Stadia Map": StadiaMap,
 		"Plan IGN": fdcIGN,
-		//"Google Satellite": googleSat,
+		//"fdcIGN + LiDAR": groupefdcIGNLidar,
 		"Ortho IGN": orthoIGN
 	};
 
