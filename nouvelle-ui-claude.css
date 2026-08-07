@@ -1668,7 +1668,7 @@ div[id^="GPgeocodeResultsList"] {
 .modern-header-help.modern-header-info button.modern-header-info-control .fa-info-circle {
   font-size: 30px !important;
   font-weight: 900 !important;
-  line-height: 1 !important;
+  line-height: 1.35 !important;
 }
 @media (max-width: 999px) {
   .modern-header-help.modern-header-info button.modern-header-info-control .fa,
