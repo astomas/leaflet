@@ -346,9 +346,17 @@
     var nb = base.querySelectorAll("input").length;
     if (badge && nb) badge.textContent = nb + (nb > 1 ? " fonds" : " fond");
 
-    // Place la section "Fonds de plan" juste sous "Données métier"
-    var business = document.querySelector(".modern-family-metier");
-    if (business && business.parentNode) business.after(section);
+    // [cd30] Place la section "Fonds de plan" apres la zone de defilement, et
+    // non derriere "Donnees metier" : les trois blocs restent independants et
+    // seul "Donnees metier" defile. Repli sur l'ancien comportement si la zone
+    // de defilement n'existe pas.
+    var zoneDefilement = document.querySelector(".modern-sidebar-scroll");
+    if (zoneDefilement && zoneDefilement.parentNode) {
+      zoneDefilement.after(section);
+    } else {
+      var business = document.querySelector(".modern-family-metier");
+      if (business && business.parentNode) business.after(section);
+    }
 
     return true;
   };
@@ -564,12 +572,16 @@
     var scroll = document.createElement("div");
     scroll.className = "modern-sidebar-scroll";
 
-    // Déplace toutes les sections SAUF « Outils carte » dans le conteneur
-    sidebar.querySelectorAll(":scope > .modern-family:not(.modern-family-tools)")
+    // [cd30] Seul « Données métier » defile : « Fonds de plan » et « Outils carte »
+    // restent epingles, pour trois blocs reellement independants.
+    var fonds = sidebar.querySelector(":scope > .modern-family-fonds-plan");
+    sidebar.querySelectorAll(
+      ":scope > .modern-family:not(.modern-family-tools):not(.modern-family-fonds-plan)")
       .forEach(function (fam) { scroll.appendChild(fam); });
 
-    // Insère le conteneur scrollable avant la section Outils (qui reste épinglée)
-    if (tools) sidebar.insertBefore(scroll, tools);
+    // Insère le conteneur scrollable avant Fonds de plan, sinon avant Outils
+    if (fonds) sidebar.insertBefore(scroll, fonds);
+    else if (tools) sidebar.insertBefore(scroll, tools);
     else sidebar.appendChild(scroll);
   }
 
