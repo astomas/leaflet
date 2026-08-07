@@ -1249,6 +1249,15 @@ function CarteLeaflet(conteneurId) {
 		var libelleCouche = {};
 		for (i=0; i < nbreDeVues; i++) {
 			var nbEltsCouche = tabCoucheMG[i].getLayers().length;
+			// [cd30] couche vide : le geojson de remplacement porte 1 point factice
+			// pour ne pas planter la carte. On affiche 0, pas 1.
+			if (nbEltsCouche === 1) {
+				var eltUnique = tabCoucheMG[i].getLayers()[0];
+				if (eltUnique && eltUnique.feature && eltUnique.feature.properties
+					&& eltUnique.feature.properties["Couche"] === "Couche vide") {
+					nbEltsCouche = 0;
+				}
+			}
 			tabCtrlboxNom.push({nom: tabNettoyé[i][1] + " (" + nbEltsCouche + ")", couche: tabCoucheMG[i]});
 		}
 		libelleCouche = Object.assign({}, ...tabCtrlboxNom.map(item => ({ [item.nom]: item.couche })));
