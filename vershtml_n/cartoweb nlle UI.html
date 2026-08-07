@@ -2452,7 +2452,7 @@ function main() {
 	carteLeaflet.rechercherJson();
 	carteLeaflet.visuEtInfo(); 
 	carteLeaflet.visuBatiments3D();	
-	if (valeurTitre1.indexOf("Surveillance du r") !== -1) carteLeaflet.widgetMeteo(); 
+	if (valeurTitre1.includes("Surveillance du r")) carteLeaflet.widgetMeteo(); 
 }
 		
 </script> 

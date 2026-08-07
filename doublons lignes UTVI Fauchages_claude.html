@@ -2405,7 +2405,7 @@ function main() {
 	carteLeaflet.visuEtInfo(); 
 	carteLeaflet.visuBatiments3D();	
 	carteLeaflet.spiderfyPoints();
-	if (valeurTitre1.indexOf("Surveillance du r") !== -1) carteLeaflet.widgetMeteo(); // widget météo : carte Surveillance réseau uniquement
+	if (valeurTitre1.includes("Surveillance du r")) carteLeaflet.widgetMeteo(); // widget météo : carte Surveillance réseau uniquement
 	gererEtiquettesRD(maCarte);
 }
 		
