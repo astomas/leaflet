@@ -1855,26 +1855,3 @@ div[id^="GPgeocodeResultsList"] {
   font-size: 2.2em !important;  /* diamètre du cercle -> remplit le bouton */
   line-height: 1 !important;
 }
-
-/* [cd30] Impression : liste des couches cochees dans la barre laterale,
-   ajoutee en tete de la legende imprimee puis retiree au retour sur la carte. */
-.legende-couches-sidebar-impression {
-  margin-bottom: 6px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid rgba(15, 23, 42, .15);
-}
-.leaflet-legend-item.legende-couches-sidebar-titre span {
-  color: #0a8f9d;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-  font-size: .82em;
-}
-.leaflet-legend-item.legende-couche-sidebar span {
-  font-weight: 700;
-  padding-left: 10px;
-}
-.leaflet-legend-item.legende-couches-sidebar-titre,
-.leaflet-legend-item.legende-couche-sidebar {
-  min-height: 0;
-}
