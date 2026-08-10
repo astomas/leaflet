@@ -1782,9 +1782,56 @@ this.importFichier = function () {
 		    sauvegardeStyleLegende = null;
 		}		
 		
+
+	// [cd30] Impression : la legende imprimee recoit en tete la liste des couches
+	// cochees dans la barre laterale, en plus des elements du bloc legende.
+	// Ces lignes sont marquees pour etre retirees au retour sur la carte.
+	function couchesCocheesSidebar() {
+		return Array.prototype.slice
+			.call(document.querySelectorAll(".modern-family-metier input:checked"))
+			.map(function (input) {
+				var etiquette = input.closest("label");
+				if (!etiquette) return "";
+				// libelle sans le compteur final " (12)"
+				return etiquette.textContent.replace(/\s*\(\d+\)\s*$/, "").trim();
+			})
+			.filter(function (nom) { return nom !== ""; });
+	}
+
+	function ajouterCouchesSidebarLegende() {
+		if (!presenceLegende || !blocLegende) return;
+		var conteneur = blocLegende.getContainer();
+		if (!conteneur) return;
+		var contenus = conteneur.querySelector(".leaflet-legend-contents");
+		if (!contenus) return;
+		retirerCouchesSidebarLegende();               // jamais deux fois
+		var noms = couchesCocheesSidebar();
+		if (!noms.length) return;
+		var colonne = contenus.querySelector(".leaflet-legend-column") || contenus;
+		var bloc = document.createElement("div");
+		bloc.className = "legende-couches-sidebar-impression";
+		bloc.innerHTML = '<div class="leaflet-legend-item legende-couches-sidebar-titre">'
+			+ '<span>Couches affich\u00e9es</span></div>'
+			+ noms.map(function (nom) {
+				return '<div class="leaflet-legend-item legende-couche-sidebar">'
+					+ '<span>' + nom + '</span></div>';
+			}).join("");
+		colonne.insertBefore(bloc, colonne.firstChild);
+	}
+
+	function retirerCouchesSidebarLegende() {
+		if (!blocLegende) return;
+		var conteneur = blocLegende.getContainer();
+		if (!conteneur) return;
+		Array.prototype.slice
+			.call(conteneur.querySelectorAll(".legende-couches-sidebar-impression"))
+			.forEach(function (bloc) { bloc.remove(); });
+	}
+
 		maCarte.on("browser-print-start", function(e){
 			if (presenceLegende) {
 				blocLegende.addTo(e.printMap);
+				ajouterCouchesSidebarLegende();
 				// applique la mise en 2 colonnes sur la légende d'impression
 				if (blocLegende.options.column === 2) {
 					var contenuLegPrint = blocLegende.getContainer().querySelector('.leaflet-legend-contents');
@@ -1828,6 +1875,7 @@ this.importFichier = function () {
 		maCarte.on("browser-print-end", function(){		
 			if (presenceLegende) {			
         		// remet la légende comme avant impression
+        		retirerCouchesSidebarLegende();
         		restaurerStyleLegende();
 			 	var blocLegendeElement = blocLegende.getContainer();
 				blocLegendeElement.style.marginTop = '12px';
