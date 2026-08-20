@@ -1614,14 +1614,12 @@ div[id^="GPgeocodeResultsList"] {
   border-radius: 4px;
 }
 /* [cd30] En-tête de couche (nom) dans la boîte légende : dégradé orange doux,
-   entre le bandeau soutenu et le corps clair (écrase le bleu #d0d4e8 du plugin). */
-.leaflet-legend:not(.detail-couches-sidebar) .leaflet-legend-group-header {
-  background: linear-gradient(180deg, #ffe6c4 0%, #ffd39c 100%);
-}
-/* [cd30] Survol de l'en-tête : ambre franc, nettement distinct du repos
-   (remplace le hover natif #bcc1d9 du plugin, incohérent avec le thème orange). */
+   entre le bandeau soutenu et le corps clair (écrase le bleu #d0d4e8 du plugin).
+   Le survol conserve la couleur de repos — comportement d'origine, qui
+   neutralisait déjà le hover natif #bcc1d9 du plugin. */
+.leaflet-legend:not(.detail-couches-sidebar) .leaflet-legend-group-header,
 .leaflet-legend:not(.detail-couches-sidebar) .leaflet-legend-group-header:hover {
-  background: linear-gradient(180deg, #ffc978 0%, #f59e0b 100%);
+  background: linear-gradient(180deg, #ffe6c4 0%, #ffd39c 100%);
 }
 
 /* [cd30] Libellés de légende : retour à la ligne au-delà de 250 px de large.
