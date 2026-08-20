@@ -1612,10 +1612,15 @@ div[id^="GPgeocodeResultsList"] {
   border-radius: 4px;
   transition: background-color .12s;
 }
-/* [cd30] Neutralise le hover NATIF du plugin sur l'en-tête (nom) de couche
-   (leaflet.legend.css : group-header:hover #bcc1d9) : fond normal conservé */
-.leaflet-legend .leaflet-legend-group-header:hover {
-  background-color: #d0d4e8;
+/* [cd30] En-tête de couche (nom) dans la boîte légende : dégradé orange doux,
+   entre le bandeau soutenu et le corps clair (écrase le bleu #d0d4e8 du plugin). */
+.leaflet-legend:not(.detail-couches-sidebar) .leaflet-legend-group-header {
+  background: linear-gradient(180deg, #ffe6c4 0%, #ffd39c 100%);
+}
+/* [cd30] Survol de l'en-tête : dégradé légèrement assombri (remplace le hover
+   natif #bcc1d9 du plugin, incohérent avec le thème orange). */
+.leaflet-legend:not(.detail-couches-sidebar) .leaflet-legend-group-header:hover {
+  background: linear-gradient(180deg, #ffdcac 0%, #ffc986 100%);
 }
 
 /* [cd30] Libellés de légende : retour à la ligne au-delà de 250 px de large.
@@ -1649,6 +1654,12 @@ div[id^="GPgeocodeResultsList"] {
   .legende-groupe-vide-impression {
     display: none !important;
   }
+}
+
+/* [cd30] Corps de la boîte légende dépliée : dégradé orange clair (le plugin
+   pose un background-color bleu en inline, écrasé ici en !important). */
+.leaflet-legend.leaflet-legend-expanded:not(.detail-couches-sidebar):not(.legende-repliee) {
+  background: linear-gradient(160deg, #fff4e4 0%, #ffd9a6 100%) !important;
 }
 
 /* [cd30] Chevron discret de repli du bloc légende (haut droite) */
@@ -1688,12 +1699,13 @@ div[id^="GPgeocodeResultsList"] {
   padding: 5px 12px;
   margin-right: 10px;
   cursor: pointer;
-  transition: background-color .15s;
-  background-color: #c2cade !important;  /* replié : fond plus foncé (inline du plugin écrasé) */
+  transition: filter .15s;
+  /* dégradé orange (inline bleu du plugin écrasé) */
+  background: linear-gradient(180deg, #f9b45f 0%, #f39c12 100%) !important;
 }
-/* effet de survol sur la pastille repliée */
+/* effet de survol sur la pastille repliée : dégradé assombri */
 .leaflet-legend.legende-repliee:hover {
-  background-color: #a9b6d6 !important;
+  filter: brightness(0.93);
 }
 .leaflet-legend.legende-repliee .legende-chevron {
   position: static;
@@ -1808,7 +1820,7 @@ div[id^="GPgeocodeResultsList"] {
   align-items: center;
   gap: 6px;
   padding: 4px 8px;            /* hauteur ~ chevron + marge */
-  background: #b3bdd9;         /* plus foncé que le fond du bloc */
+  background: linear-gradient(180deg, #f9b45f 0%, #f39c12 100%);  /* dégradé orange, plus soutenu que le corps */
   border-radius: 4px 4px 0 0;
   cursor: pointer;
   user-select: none;
