@@ -106,7 +106,7 @@ def envoyer_alerte_mail(fichiers, rapport):
     f"{len(fichiers)} fichier(s) HTML strictement inférieur(s) "
     "à 1 Ko ont été détecté(s).\n\n"
     f"{liste_fichiers}\n\n"
-    "Le rapport CSV complet est disponible en pièce jointe ou sur Q:\Dossiers\MSI\Partages\SI3P0-P0446\Rapports."
+    "Le rapport CSV complet est disponible en pièce jointe."
     )
 
     message.set_content(texte)
