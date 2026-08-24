@@ -93,14 +93,20 @@
 			color: #1f4e79;
 			line-height: 1.5;
 		}
-		.aide-grille {
+		.aide-colonnes {
 			display: grid;
 			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 10px;
+			align-items: start;
+			gap: 10px 16px;
 			margin: 12px 0;
 		}
+		.aide-colonne {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
 		@media (max-width: 700px) {
-			.aide-grille {
+			.aide-colonnes {
 				grid-template-columns: 1fr;
 			}
 		}
@@ -141,7 +147,7 @@
 			text-transform: uppercase;
 			border-bottom: 1px solid #ece4d5;
 			padding-bottom: 4px;
-			margin: 16px 0 0;
+			margin: 0;
 		}
     </style>
 </head>
@@ -151,82 +157,79 @@
 	<div class="bloc-carte">
 		<!-- Carte -->
 		<img src="./carte_new.png" alt="Carte" class="img-carte">
-		<!-- Liens tutoriels -->
+		<!-- Liens tutoriels (masques pour l'instant)
 		<div class="liens-haut">
 			<a href="./Tutorial_Si3p0_new.ppsx">
 				<img src="./powerpoint.png" width="22" height="22"> Tutoriel carte dynamique Si3p0 - ppt
 			</a>
 		</div>
+		-->
 	</div>
 
 	<!-- Contenu aide : sous la carte, sur deux colonnes -->
 	<section class="contenu-aide">
-		<div class="aide-grille">
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/recentrer.png" alt="">
-				<p><span class="aide-fiche-titre">Recentrer carte</span>Recentrage auto sur le Gard (ou l'UT selon carte).</p>
-			</div>
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/rechLieu.png" alt="">
-				<p><span class="aide-fiche-titre">Rechercher localisation</span>Commune, adresse, bâtiment, route, lieu.</p>
-			</div>
-
-			<div class="aide-fiche">
-				<img src="/ressources/API_JS/images/Aide/surlignage.png" alt="">
-				<p><span class="aide-fiche-titre">Surligner lignes</span>Surlignage en rouge des lignes au survol de la souris. Actif ou non à l'ouverture selon la carte. Les lignes surlignées peuvent être disjointes ('multilignes').</p>
-			</div>
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/recherche.gif" alt="">
-				<p><span class="aide-fiche-titre">Rechercher élément de couche</span>Saisir éléments recherchés et afficher les correspondances. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON de l'élément trouvé dans la fenêtre.</p>
-			</div>
-
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/legende.gif" alt="">
-				<p><span class="aide-fiche-titre">Légende dynamique</span>Afficher/masquer 1 élément légende en cliquant dessus. La barre latérale affiche la couche entière, la légende filtre les éléments d'une même couche. Bloc légende repliable.</p>
-			</div>
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/streetview.png" alt="">
-				<p><span class="aide-fiche-titre">Street View, G. Maps, Panoramax, Waze</span>Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.</p>
-			</div>
-
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/info.png" alt="">
-				<p><span class="aide-fiche-titre">Informations</span>Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).</p>
-			</div>
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/coordGPS.png" alt="">
-				<p><span class="aide-fiche-titre">Coordonnées GPS</span>Clic droit sur la carte au zoom ville et + pour afficher/copier les coordonnées.</p>
-			</div>
-		</div>
-
-		<p class="aide-section">Outils de carte</p>
-
-		<div class="aide-grille">
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/dossier.gif" alt="">
-				<p><span class="aide-fiche-titre">Importer</span>Affiche des fichiers de couches Shape, GeoJSON, Csv, GPX, Kml. Possibilité de glisser/déposer et zipper (1 couche par fichier). Clic droit sur 1 élément importé pour l'effacer.</p>
-			</div>
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/export.png" alt="">
-				<p><span class="aide-fiche-titre">Exporter</span>Après validation, exporter la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+		<div class="aide-colonnes">
+			<div class="aide-colonne">
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/recentrer.png" alt="">
+					<p><span class="aide-fiche-titre">Recentrer carte</span>Recentrage auto sur le Gard (ou l'UT selon carte).</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/rechLieu.png" alt="">
+					<p><span class="aide-fiche-titre">Rechercher localisation</span>Commune, adresse, bâtiment, route, lieu.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/ressources/API_JS/images/Aide/surlignage.png" alt="">
+					<p><span class="aide-fiche-titre">Surligner lignes</span>Surlignage en rouge des lignes au survol de la souris. Actif ou non à l'ouverture selon la carte. Les lignes surlignées peuvent être disjointes ('multilignes').</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/recherche.gif" alt="">
+					<p><span class="aide-fiche-titre">Rechercher élément de couche</span>Saisir éléments recherchés et afficher les correspondances. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON de l'élément trouvé dans la fenêtre.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/legende.gif" alt="">
+					<p><span class="aide-fiche-titre">Légende dynamique</span>Afficher/masquer 1 élément légende en cliquant dessus. La barre latérale affiche la couche entière, la légende filtre les éléments d'une même couche. Bloc légende repliable.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/streetview.png" alt="">
+					<p><span class="aide-fiche-titre">Street View, G. Maps, Panoramax, Waze</span>Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/info.png" alt="">
+					<p><span class="aide-fiche-titre">Informations</span>Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/coordGPS.png" alt="">
+					<p><span class="aide-fiche-titre">Coordonnées GPS</span>Clic droit sur la carte au zoom ville et + pour afficher/copier les coordonnées.</p>
+				</div>
 			</div>
 
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/imprimer.gif" alt="">
-				<p><span class="aide-fiche-titre">Imprimer</span>'Vue courante' : portion affichée (format paysage). 'Auto Gard' : le département du Gard avec mise à l'échelle auto. 'Sélec. zone' : un rectangle tracé à la souris sur la carte.</p>
-			</div>
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/distance.gif" alt="">
-				<p><span class="aide-fiche-titre">Mesurer</span>Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment. Clic bouton 'Règle' ou touche 'Echap' pour tout effacer.</p>
-			</div>
-
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/isochrone.gif" alt="">
-				<p><span class="aide-fiche-titre">Isochrone</span>Placer un point puis lancer le calcul (voiture ou piéton) : isochrone ou isodistance autour ou depuis le point. Le réseau routier est pris en compte.</p>
-			</div>
-			<div class="aide-fiche">
-				<img src="/Ressources/API_JS/images/Aide/rech-GPS.png" alt="">
-				<p><span class="aide-fiche-titre">Rech. coordonnées GPS</span>Copier ou saisir des coordonnées WGS84 (ex : '43.83494, 4.35965') pour afficher la localisation et fenêtre de l'adresse la plus proche. Recliquer bouton pour effacer.</p>
+			<div class="aide-colonne">
+				<p class="aide-section">Outils de carte</p>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/dossier.gif" alt="">
+					<p><span class="aide-fiche-titre">Importer</span>Affiche des fichiers de couches Shape, GeoJSON, Csv, GPX, Kml. Possibilité de glisser/déposer et zipper (1 couche par fichier). Clic droit sur 1 élément importé pour l'effacer.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/export.png" alt="">
+					<p><span class="aide-fiche-titre">Exporter</span>Après validation, exporter la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/imprimer.gif" alt="">
+					<p><span class="aide-fiche-titre">Imprimer</span>'Vue courante' : portion affichée (format paysage). 'Auto Gard' : le département du Gard avec mise à l'échelle auto. 'Sélec. zone' : un rectangle tracé à la souris sur la carte.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/distance.gif" alt="">
+					<p><span class="aide-fiche-titre">Mesurer</span>Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment. Clic bouton 'Règle' ou touche 'Echap' pour tout effacer.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/isochrone.gif" alt="">
+					<p><span class="aide-fiche-titre">Isochrone</span>Placer un point puis lancer le calcul (voiture ou piéton) : isochrone ou isodistance autour ou depuis le point. Le réseau routier est pris en compte.</p>
+				</div>
+				<div class="aide-fiche">
+					<img src="/Ressources/API_JS/images/Aide/rech-GPS.png" alt="">
+					<p><span class="aide-fiche-titre">Rech. coordonnées GPS</span>Copier ou saisir des coordonnées WGS84 (ex : '43.83494, 4.35965') pour afficher la localisation et fenêtre de l'adresse la plus proche. Recliquer bouton pour effacer.</p>
+				</div>
 			</div>
 		</div>
 
