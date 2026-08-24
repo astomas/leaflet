@@ -22,32 +22,38 @@
 		}
 		.bloc-carte {
 			width: 100%;
-			max-width: 1000px;
 			min-width: 0;
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
 			align-items: center;
-			gap: 10px;
+			justify-content: center;
+			gap: 25px;
 		}
 		.img-carte {
-			width: 100%;
+			flex: 1 1 auto;
+			min-width: 0;
+			max-width: 1000px;
 			height: 480px;
 			object-fit: contain;
 			border-radius: 5px;
 		}
 		.liens-haut {
+			flex: 0 0 auto;
+			align-self: center;
 			display: inline-flex;
 			flex-direction: column;
 			gap: 10px;
 			background-color: #ffda97;
 			border-radius: 8px;
-			padding: 20px 25px;
-			margin: 5px 0 15px;
+			padding: 16px 22px;
+			margin: 0;
 		}
 		.liens-haut a {
 			display: flex;
+			flex-direction: column;
 			align-items: center;
-			gap: 8px;
+			text-align: center;
+			gap: 6px;
 			text-decoration: none;
 			color: #333;
 			font-weight: bold;
@@ -157,13 +163,13 @@
 	<div class="bloc-carte">
 		<!-- Carte -->
 		<img src="./carte_new.png" alt="Carte" class="img-carte">
-		<!-- Liens tutoriels (masques pour l'instant)
+		<!-- Lien tutoriel : icone PowerPoint a droite de la carte -->
 		<div class="liens-haut">
-			<a href="./Tutorial_Si3p0_new.ppsx">
-				<img src="./powerpoint.png" width="22" height="22"> Tutoriel carte dynamique Si3p0 - ppt
+			<a href="./Tutorial_Si3p0_new.ppsx" title="Tutoriel carte dynamique Si3p0 (PowerPoint)">
+				<img src="./powerpoint.png" width="56" height="56" alt="PowerPoint">
+				Tutoriel
 			</a>
 		</div>
-		-->
 	</div>
 
 	<!-- Contenu aide : sous la carte, sur deux colonnes -->
