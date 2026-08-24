@@ -15,21 +15,24 @@
 		}
 		.page-layout {
 			display: flex;
-			align-items: flex-start;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
 			margin-top: 10px;
 		}
-		.col-gauche {
-			<!-- flex: 0 0 calc(66% - 10px); -->
-			width: 58%;
+		.bloc-carte {
+			width: 100%;
+			max-width: 1000px;
 			min-width: 0;
 			display: flex;
 			flex-direction: column;
-			align-items: flex-start;
-			gap: 15px;
+			align-items: center;
+			gap: 10px;
 		}
 		.img-carte {
 			width: 100%;
 			height: 480px;
+			object-fit: contain;
 			border-radius: 5px;
 		}
 		.liens-haut {
@@ -39,8 +42,7 @@
 			background-color: #ffda97;
 			border-radius: 8px;
 			padding: 20px 25px;
-			margin: 20px 160px 80px 30px;
-
+			margin: 5px 0 15px;
 		}
 		.liens-haut a {
 			display: flex;
@@ -68,8 +70,8 @@
 		.contenu-aide {
 			box-sizing: border-box;
 			background-color: #fdf3e3;
-			padding: 12px;
-			flex: 0 0 calc(46% - 10px);
+			padding: 12px 16px;
+			width: 100%;
 			min-width: 0;
 			border-radius: 5px;
 		}
@@ -93,9 +95,14 @@
 		}
 		.aide-grille {
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 			gap: 10px;
 			margin: 12px 0;
+		}
+		@media (max-width: 700px) {
+			.aide-grille {
+				grid-template-columns: 1fr;
+			}
 		}
 		.aide-fiche {
 			display: flex;
@@ -141,7 +148,7 @@
 
 <body>
 <div class="page-layout">
-	<div class="col-gauche">
+	<div class="bloc-carte">
 		<!-- Carte -->
 		<img src="./carte_new.png" alt="Carte" class="img-carte">
 		<!-- Liens tutoriels -->
@@ -152,7 +159,7 @@
 		</div>
 	</div>
 
-	<!-- Contenu aide -->
+	<!-- Contenu aide : sous la carte, sur deux colonnes -->
 	<section class="contenu-aide">
 		<div class="aide-grille">
 			<div class="aide-fiche">
