@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Aide si3p0</title>
+    <link rel="stylesheet" href="/Ressources/API_JS/librairies_cd30/leaflet-si3p0.css">
+    <style>
+		html {
+			background-color: #f0f0f0;
+		}
+		body {
+			font-family: Montserrat, Lato, Verdana, Sans-Serif;
+			background: transparent;
+			font-size: 0.7em;
+		}
+		.page-layout {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
+			margin-top: 10px;
+		}
+		.bloc-carte {
+			width: 100%;
+			min-width: 0;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 25px;
+		}
+		.img-carte {
+			flex: 1 1 auto;
+			min-width: 0;
+			max-width: 1000px;
+			height: 480px;
+			object-fit: contain;
+			border-radius: 5px;
+		}
+		.liens-haut {
+			flex: 0 0 auto;
+			align-self: center;
+			max-width: 240px;
+			display: inline-flex;
+			flex-direction: column;
+			gap: 10px;
+			background-color: #ffda97;
+			border-radius: 8px;
+			padding: 18px 20px;
+			margin: 0;
+		}
+		.liens-haut a {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+			gap: 8px;
+			text-decoration: none;
+			color: #333;
+			font-weight: bold;
+			font-size: 1.2em;
+			padding: 6px 8px;
+			border-radius: 5px;
+			transition: background-color 0.2s;
+		}
+		.liens-haut a:hover {
+			background-color: #d0d0d0;
+			color: #0000EE;
+		}
+		.liens-haut a {
+			border-bottom: 1px solid #ccc;
+			padding-bottom: 10px;
+		}
+		.liens-haut a:last-child {
+			border-bottom: none;
+		}
+		.contenu-aide {
+			box-sizing: border-box;
+			background-color: #fdf3e3;
+			padding: 12px 16px;
+			width: 100%;
+			min-width: 0;
+			border-radius: 5px;
+		}
+		.titre-centre {
+			text-align: center;
+			margin-bottom: 20px;
+			margin-top: 0;
+			color: #007079;
+			font-size: 1.7em;
+		}
+
+		/* ===== Contenu de l'aide ===== */
+		.aide-bandeau {
+			background-color: #d9eaf7;
+			border-radius: 6px;
+			padding: 12px 14px;
+			text-align: center;
+			font-weight: bold;
+			color: #1f4e79;
+			line-height: 1.5;
+		}
+		.aide-grille {
+			display: grid;
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			align-items: start;
+			gap: 8px;
+			margin: 10px 0;
+		}
+		@media (max-width: 1300px) {
+			.aide-grille {
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+			}
+		}
+		@media (max-width: 800px) {
+			.aide-grille {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+		}
+		@media (max-width: 550px) {
+			.aide-grille {
+				grid-template-columns: 1fr;
+			}
+		}
+		.aide-fiche {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 6px;
+			background-color: #fff;
+			border: 1px solid #ece4d5;
+			border-radius: 6px;
+			padding: 10px 12px;
+		}
+		.aide-fiche svg,
+		.aide-fiche img {
+			flex: 0 0 auto;
+			margin-top: 2px;
+			height: 26px;
+			width: auto;
+			max-width: 72px;
+			object-fit: contain;
+		}
+		.aide-fiche-titre {
+			display: block;
+			color: #007079;
+			font-weight: bold;
+			margin-bottom: 3px;
+		}
+		.aide-fiche p {
+			margin: 0;
+			color: #444;
+			line-height: 1.45;
+			overflow-wrap: break-word;			
+		}
+		.aide-section {
+			color: #0a8f9d;
+			font-weight: bold;
+			letter-spacing: .06em;
+			text-transform: uppercase;
+			border-bottom: 1px solid #ece4d5;
+			padding-bottom: 4px;
+			margin: 14px 0 0;
+		}
+    </style>
+</head>
+
+<body>
+<div class="page-layout">
+	<div class="bloc-carte">
+		<!-- Carte -->
+		<img src="./carte_new.png" alt="Carte" class="img-carte">
+		<!-- Lien tutoriel, cale a droite de la carte -->
+		<div class="liens-haut">
+			<a href="./Tutorial_Si3p0_new.ppsx">
+				<img src="./powerpoint.png" width="48" height="48"> Tutoriel carte dynamique Si3p0 - ppt
+			</a>
+		</div>
+	</div>
+
+	<!-- Contenu aide : sous la carte, sur six colonnes -->
+	<section class="contenu-aide">
+		<div class="aide-grille">
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/recentrer.png" alt="">
+				<p><span class="aide-fiche-titre">Recentrer carte</span>Recentrage auto sur le Gard (ou l'UT selon carte).</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/rechLieu.png" alt="">
+				<p><span class="aide-fiche-titre">Rechercher localisation</span>Commune, adresse, bâtiment, route, lieu.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/ressources/API_JS/images/Aide/surlignage.png" alt="">
+				<p><span class="aide-fiche-titre">Surligner lignes</span>Surlignage en rouge des lignes au survol de la souris. Actif ou non à l'ouverture selon la carte. Les lignes surlignées peuvent être disjointes ('multilignes').</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/recherche.gif" alt="">
+				<p><span class="aide-fiche-titre">Rechercher élément de couche</span>Saisir éléments recherchés et afficher les correspondances. Touche 'Espace' pour afficher la liste entière. Bouton d'export GeoJSON de l'élément trouvé dans la fenêtre.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/legende.gif" alt="">
+				<p><span class="aide-fiche-titre">Légende dynamique</span>Afficher/masquer 1 élément légende en cliquant dessus. La barre latérale affiche la couche entière, la légende filtre les éléments d'une même couche. Bloc légende repliable.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/streetview.png" alt="">
+				<p><span class="aide-fiche-titre">Street View, G. Maps, Panoramax, Waze</span>Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/info.png" alt="">
+				<p><span class="aide-fiche-titre">Informations</span>Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/coordGPS.png" alt="">
+				<p><span class="aide-fiche-titre">Coordonnées GPS</span>Clic droit sur la carte au zoom ville et + pour afficher/copier les coordonnées.</p>
+			</div>
+		</div>
+
+		<p class="aide-section">Outils de carte</p>
+
+		<div class="aide-grille">
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/dossier.gif" alt="">
+				<p><span class="aide-fiche-titre">Importer</span>Affiche des fichiers de couches Shape, GeoJSON, Csv, GPX, Kml. Possibilité de glisser/déposer et zipper (1 couche par fichier). Clic droit sur 1 élément importé pour l'effacer.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/export.png" alt="">
+				<p><span class="aide-fiche-titre">Exporter</span>Après validation, exporter la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/imprimer.gif" alt="">
+				<p><span class="aide-fiche-titre">Imprimer</span>'Vue courante' : portion affichée (format paysage). 'Auto Gard' : le département du Gard avec mise à l'échelle auto. 'Sélec. zone' : un rectangle tracé à la souris sur la carte.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/distance.gif" alt="">
+				<p><span class="aide-fiche-titre">Mesurer</span>Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment. Clic bouton 'Règle' ou touche 'Echap' pour tout effacer.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/isochrone.gif" alt="">
+				<p><span class="aide-fiche-titre">Isochrone</span>Placer un point puis lancer le calcul (voiture ou piéton) : isochrone ou isodistance autour ou depuis le point. Le réseau routier est pris en compte.</p>
+			</div>
+			<div class="aide-fiche">
+				<img src="/Ressources/API_JS/images/Aide/rech-GPS.png" alt="">
+				<p><span class="aide-fiche-titre">Rech. coordonnées GPS</span>Copier ou saisir des coordonnées WGS84 (ex : '43.83494, 4.35965') pour afficher la localisation et fenêtre de l'adresse la plus proche. Recliquer bouton pour effacer.</p>
+			</div>
+		</div>
+
+		<div class="aide-bandeau">
+			Les rendus des fonctions importer, mesurer, isochrone, coord. GPS seront perdus à la réouverture de la carte.<br>
+			Pour en conserver une trace faire une copie d'écran ou une impression pdf/papier via l'outil 'Imprimer'.
+		</div>
+	</section>
+</div>
+</body>
+</html>
