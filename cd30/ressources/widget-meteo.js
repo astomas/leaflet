@@ -116,12 +116,19 @@ function initWidgetMeteo(cfg) {
 		.then(function(r) { return r.json(); })
 		.then(function(data) {
 			var recs = (data && data.results) || [];
+			// L'echeance du lendemain est publiee tantot "J1" (convention de
+			// l'API Meteo-France) tantot "J+1". On normalise (majuscules, on
+			// retire tout ce qui n'est ni lettre ni chiffre) pour reconnaitre
+			// les deux : sans cela les alertes de demain n'apparaissent jamais.
+			function normEcheance(v) {
+				return ('' + (v || '')).toUpperCase().replace(/[^A-Z0-9]/g, '');
+			}
 			function filtrer(ech) {
 				return recs.filter(function(r) {
-					return (r.echeance || '').trim() === ech && parseInt(r.color_id) >= 2;
+					return normEcheance(r.echeance) === ech && parseInt(r.color_id) >= 2;
 				});
 			}
-			afficher(filtrer('J'), filtrer('J+1'));
+			afficher(filtrer('J'), filtrer('J1'));
 		}).catch(function() { afficher([], []); });
 	}
 
