@@ -368,6 +368,9 @@
 
         _buildLegendItems: function (legendContainer, legend) {
             var legendItemDiv = L.DomUtil.create("div", "leaflet-legend-item", legendContainer);
+            // [cd30] Appariement DOM <-> entree de legende : permet de reagir a
+            // l'etat reel des couches (synchro du bloc legende avant impression).
+            legendItemDiv._legendEntry = legend;
             if (legend.inactive) {
                 L.DomUtil.addClass(legendItemDiv, "leaflet-legend-item-inactive");
             }
