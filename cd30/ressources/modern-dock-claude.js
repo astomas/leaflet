@@ -404,52 +404,9 @@
         contenus[i].classList[methode]("legende-groupe-vide-impression");
       }
     }
-    // [cd30] Impression : le bloc legende garde les classes "inactif" telles
-    // qu'elles etaient a l'ouverture de la carte. Une couche activee ensuite
-    // dans la barre laterale restait donc absente du print, et une couche
-    // eteinte y figurait encore. On realigne les classes sur l'etat reel de la
-    // carte juste avant l'impression, puis on les restaure au retour a l'ecran.
-    // Les symboles (icone, couleur) sont ceux des entrees existantes : rien a
-    // reconstruire, le rendu imprime reprend exactement celui de la couche.
-    var classesLegendeAvantImpression = null;
-
-    function synchroniserLegendeImpression(avantImpression) {
-      var map = window.maCarte;
-      var items = document.querySelectorAll(
-        ".leaflet-legend:not(.detail-couches-sidebar) .leaflet-legend-item");
-      if (!map || !items.length) return;
-
-      if (avantImpression) {
-        classesLegendeAvantImpression = [];
-        for (var i = 0; i < items.length; i++) {
-          classesLegendeAvantImpression.push(
-            items[i].classList.contains("leaflet-legend-item-inactive"));
-          var entree = items[i]._legendEntry;          // pose par leaflet.legend.js
-          if (!entree || !entree.layers) continue;     // entree non pilotable : on n'y touche pas
-          items[i].classList.toggle(
-            "leaflet-legend-item-inactive", !map.hasLayer(entree.layers));
-        }
-      } else if (classesLegendeAvantImpression) {
-        for (var j = 0; j < items.length; j++) {
-          if (j >= classesLegendeAvantImpression.length) break;
-          items[j].classList.toggle(
-            "leaflet-legend-item-inactive", classesLegendeAvantImpression[j]);
-        }
-        classesLegendeAvantImpression = null;
-      }
-    }
-
     if (window.maCarte && window.maCarte.on) {
-      // ordre important : la synchro d'abord, le masquage des groupes vides
-      // ensuite, pour qu'il soit calcule sur les classes fraiches.
-      window.maCarte.on("browser-print-start", function () {
-        synchroniserLegendeImpression(true);
-        marquerGroupesLegendeVides(true);
-      });
-      window.maCarte.on("browser-print-end", function () {
-        marquerGroupesLegendeVides(false);
-        synchroniserLegendeImpression(false);
-      });
+      window.maCarte.on("browser-print-start", function () { marquerGroupesLegendeVides(true); });
+      window.maCarte.on("browser-print-end", function () { marquerGroupesLegendeVides(false); });
     }
 
     // Si le fond change par ailleurs (code carte), resynchronise la liste
