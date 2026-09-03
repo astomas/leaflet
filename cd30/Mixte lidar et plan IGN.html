@@ -966,6 +966,7 @@ function CarteLeaflet(conteneurId) {
 		// Points dessus
 		var zIndexDynamiquePoints = 200000;
 		var zIndexReactivation = 1000000;
+		var timerArrierePlan = null;   // debounce : declare HORS du handler, sinon chaque layeradd repart d'un timer vide
 		maCarte.on("layeradd", function(e) {
 			var coucheAjoutee = e.layer;
 			if (coucheAjoutee instanceof L.Marker) {
@@ -984,7 +985,6 @@ function CarteLeaflet(conteneurId) {
 				}
 			}
 			// Polygones dessous
-			var timerArrierePlan = null;
 			clearTimeout(timerArrierePlan);
 			timerArrierePlan = setTimeout(function() {				
 				for (var i = 0; i < tabCoucheMG.length; i++) {
