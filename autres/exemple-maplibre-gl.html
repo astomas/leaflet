@@ -9,9 +9,12 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<!-- 2) MapLibre GL JS : son CSS est OBLIGATOIRE (sinon le canvas est mal positionné) -->
-<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.css" />
-<script src="https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.js"></script>
+<!-- 2) MapLibre GL JS : son CSS est OBLIGATOIRE (sinon le canvas est mal positionné).
+     Version 5.x impérative ici : depuis la 6.0, MapLibre ne publie plus de build UMD
+     (dist/maplibre-gl.js n'existe plus, seulement dist/maplibre-gl.mjs), il n'y a donc
+     plus de variable globale 'maplibregl' pour un chargement par simple <script>. -->
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 
 <!-- 3) Le plugin : il doit être chargé APRÈS Leaflet et MapLibre -->
 <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
