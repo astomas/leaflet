@@ -75,12 +75,22 @@ function coucheVectorielle(urlStyle) {
     style: urlStyle,
     pane: 'tilePane',
     fadeDuration: 0,
+    validateStyle: false,       // voir l'explication ci-dessous
     attributionControl: { customAttribution: ATTRIBUTION_IGN }
   });
 }
 
+/* validateStyle: false est INDISPENSABLE avec transparent.json.
+   Ce style porte une propriété fill-opacity sur des couches qui ne sont pas
+   de type fill (background, line, symbol...), ce que le validateur de
+   MapLibre refuse. Or dans Style._load, la moindre erreur de validation
+   annule le chargement du style ENTIER : la carte reste vide.
+   En désactivant la validation, le style se charge et MapLibre ignore
+   simplement la propriété qu'il ne sait pas appliquer. */
+
 var planStandard = coucheVectorielle('https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json');
 var planGris     = coucheVectorielle('https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/gris.json');
+var planTransparent = coucheVectorielle('https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/transparent.json');
 
 
 /* ------------------------------------------------------------------
@@ -214,6 +224,7 @@ L.marker([43.8367, 4.3601]).addTo(map)
 L.control.layers({
   'Plan IGN vectoriel': planStandard,
   'Plan IGN vectoriel (gris)': planGris,
+  'Plan IGN vectoriel (transparent)': planTransparent,
   'OSM (raster)': osm
 }, null, { collapsed: false }).addTo(map);
 
