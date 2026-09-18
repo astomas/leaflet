@@ -33,23 +33,17 @@
 /* ------------------------------------------------------------------
    Carte Leaflet classique : c'est toujours Leaflet qui pilote la vue
    (centre, zoom, interactions). MapLibre n'est qu'une couche de rendu.
-
-   FLUIDITE DU ZOOM - réglages importants avec ce plugin :
-   - zoomAnimation:false : pendant son animation de zoom, Leaflet étire le
-     canvas WebGL en CSS (image floue agrandie), puis MapLibre redessine
-     proprement à la fin. On voit donc deux images successives à chaque cran,
-     effet très visible en zoom/dézoom rapide. Sans animation, il n'y a plus
-     qu'un seul rendu par cran : le zoom est plus sec mais l'image est stable.
-   - wheelPxPerZoomLevel / wheelDebounceTime : un coup de molette rapide
-     déclenche sinon 4 ou 5 crans de zoom d'affilée, donc autant de rendus
-     complets. On demande plus de défilement par cran et on regroupe les
-     événements pour n'en garder que quelques-uns.
+   Aucune option particulière ici : les fonds raster gardent le comportement
+   standard de Leaflet (voir plus bas le mode vectoriel, activé à la demande).
    ------------------------------------------------------------------ */
-var map = L.map('map', {
-  zoomAnimation: false,
-  wheelPxPerZoomLevel: 120,   // défaut 60
-  wheelDebounceTime: 100      // défaut 40 (ms)
-}).setView([43.8367, 4.3601], 13);   // Nîmes
+var map = L.map('map').setView([43.8367, 4.3601], 13);   // Nîmes
+
+/* On mémorise les réglages d'origine pour pouvoir les restaurer à l'identique. */
+var REGLAGES_ORIGINE = {
+  zoomAnime: map._zoomAnimated,
+  wheelPx: map.options.wheelPxPerZoomLevel,
+  wheelDebounce: map.options.wheelDebounceTime
+};
 
 /* Fond raster "témoin", pour comparer avec le fond vectoriel */
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -79,7 +73,43 @@ var planIgn = L.maplibreGL({
   pane: 'tilePane',
   fadeDuration: 0,            // défaut 300 ms : supprime le fondu des libellés à chaque zoom
   attributionControl: { customAttribution: '&copy; <a href="https://www.ign.fr/">IGN</a> - Géoplateforme' }
-}).addTo(map);
+});
+
+/* ------------------------------------------------------------------
+   FLUIDITE DU ZOOM, uniquement quand le fond vectoriel est affiché.
+
+   Le problème : pendant son animation de zoom, Leaflet se contente d'étirer
+   le canvas WebGL en CSS (image agrandie, donc floue), puis MapLibre
+   redessine proprement à la fin. On perçoit deux images par cran de zoom,
+   très visible en zoom/dézoom rapide. Les fonds raster, eux, n'ont pas ce
+   défaut : inutile de les pénaliser.
+
+   D'où une bascule branchée sur les événements 'add' et 'remove' de la
+   couche : L.Control.Layers retire toujours l'ancien fond AVANT d'ajouter le
+   nouveau, donc les réglages standard sont bien rétablis quand le fond raster
+   s'initialise.
+
+   map._zoomAnimated est une propriété interne de Leaflet, mais elle est relue
+   à chaque zoom : la modifier en cours de route fonctionne, alors que
+   map.options.zoomAnimation n'est lu qu'à la création de la carte.
+   Pour comparer avec le comportement par défaut, commenter les deux
+   planIgn.on(...) ci-dessous.
+   ------------------------------------------------------------------ */
+planIgn.on('add', function () {
+  map._zoomAnimated = false;                 // un seul rendu net par cran
+  map.options.wheelPxPerZoomLevel = 120;     // défaut 60 : molette moins nerveuse
+  map.options.wheelDebounceTime = 100;       // défaut 40 ms : moins de crans enchainés
+});
+
+planIgn.on('remove', function () {
+  map._zoomAnimated = REGLAGES_ORIGINE.zoomAnime;
+  map.options.wheelPxPerZoomLevel = REGLAGES_ORIGINE.wheelPx;
+  map.options.wheelDebounceTime = REGLAGES_ORIGINE.wheelDebounce;
+});
+
+/* Ajout seulement maintenant : 'add' ne se déclenche que sur les écouteurs
+   déjà en place, donc addTo() doit venir après les deux planIgn.on(). */
+planIgn.addTo(map);
 
 /* Accès à l'objet maplibregl.Map sous-jacent : c'est par lui que passent
    toutes les opérations "vectorielles" (styles, sources, couches, filtres). */
