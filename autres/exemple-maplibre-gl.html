@@ -33,8 +33,23 @@
 /* ------------------------------------------------------------------
    Carte Leaflet classique : c'est toujours Leaflet qui pilote la vue
    (centre, zoom, interactions). MapLibre n'est qu'une couche de rendu.
+
+   FLUIDITE DU ZOOM - réglages importants avec ce plugin :
+   - zoomAnimation:false : pendant son animation de zoom, Leaflet étire le
+     canvas WebGL en CSS (image floue agrandie), puis MapLibre redessine
+     proprement à la fin. On voit donc deux images successives à chaque cran,
+     effet très visible en zoom/dézoom rapide. Sans animation, il n'y a plus
+     qu'un seul rendu par cran : le zoom est plus sec mais l'image est stable.
+   - wheelPxPerZoomLevel / wheelDebounceTime : un coup de molette rapide
+     déclenche sinon 4 ou 5 crans de zoom d'affilée, donc autant de rendus
+     complets. On demande plus de défilement par cran et on regroupe les
+     événements pour n'en garder que quelques-uns.
    ------------------------------------------------------------------ */
-var map = L.map('map').setView([43.8367, 4.3601], 13);   // Nîmes
+var map = L.map('map', {
+  zoomAnimation: false,
+  wheelPxPerZoomLevel: 120,   // défaut 60
+  wheelDebounceTime: 100      // défaut 40 (ms)
+}).setView([43.8367, 4.3601], 13);   // Nîmes
 
 /* Fond raster "témoin", pour comparer avec le fond vectoriel */
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -62,6 +77,7 @@ var STYLE_GRIS     = 'https://data.geopf.fr/annexes/ressources/vectorTiles/style
 var planIgn = L.maplibreGL({
   style: STYLE_STANDARD,
   pane: 'tilePane',
+  fadeDuration: 0,            // défaut 300 ms : supprime le fondu des libellés à chaque zoom
   attributionControl: { customAttribution: '&copy; <a href="https://www.ign.fr/">IGN</a> - Géoplateforme' }
 }).addTo(map);
 
