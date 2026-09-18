@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exemple - plugin Leaflet maplibre-gl</title>
+
+<!-- 1) Leaflet (dans les autres pages du dépôt : /leaflet/Ressources 26/librairies_cd30/leaflet.js) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- 2) MapLibre GL JS : son CSS est OBLIGATOIRE (sinon le canvas est mal positionné) -->
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.js"></script>
+
+<!-- 3) Le plugin : il doit être chargé APRÈS Leaflet et MapLibre -->
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
+
+<style>
+  html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+  #map { height: 100%; }
+  .panneau { background: #fff; padding: 8px 10px; border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,.4); font-size: 13px; line-height: 1.7; }
+  .panneau button { display: block; width: 100%; margin: 2px 0; cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+/* ------------------------------------------------------------------
+   Carte Leaflet classique : c'est toujours Leaflet qui pilote la vue
+   (centre, zoom, interactions). MapLibre n'est qu'une couche de rendu.
+   ------------------------------------------------------------------ */
+var map = L.map('map').setView([43.8367, 4.3601], 13);   // Nîmes
+
+/* Fond raster "témoin", pour comparer avec le fond vectoriel */
+var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap'
+});
+
+/* ------------------------------------------------------------------
+   LE PLUGIN : L.maplibreGL(options)
+   - style  : URL (ou objet) d'un style MapLibre / Mapbox GL
+   - pane   : 'tilePane' est la valeur par défaut ; le canvas WebGL reste
+              donc sous les objets Leaflet (marqueurs, GeoJSON, popups)
+   - attributionControl : le plugin désactive le contrôle natif de MapLibre
+              et reprend par défaut l'attribution déclarée dans les sources du
+              style ; on peut la forcer avec { customAttribution: ... }
+   Toutes les autres options sont transmises telles quelles au constructeur
+   maplibregl.Map (bearing, pitch, maxZoom, transformRequest...).
+   Attention : le plugin cale la vue GL sur <zoom Leaflet - 1> (tuiles 512 px
+   côté vecteur, 256 px côté Leaflet) ; les expressions de style dépendantes
+   du zoom sont donc décalées d'un niveau.
+   ------------------------------------------------------------------ */
+var STYLE_STANDARD = 'https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json';
+var STYLE_GRIS     = 'https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/gris.json';
+
+var planIgn = L.maplibreGL({
+  style: STYLE_STANDARD,
+  pane: 'tilePane',
+  attributionControl: { customAttribution: '&copy; <a href="https://www.ign.fr/">IGN</a> - Géoplateforme' }
+}).addTo(map);
+
+/* Accès à l'objet maplibregl.Map sous-jacent : c'est par lui que passent
+   toutes les opérations "vectorielles" (styles, sources, couches, filtres). */
+var glMap = planIgn.getMaplibreMap();
+
+/* ------------------------------------------------------------------
+   Données métier ajoutées DANS le moteur vectoriel (rendu GPU).
+   À réserver aux gros volumes : au-delà de quelques milliers d'objets,
+   c'est nettement plus fluide qu'un L.geoJSON classique.
+   ------------------------------------------------------------------ */
+var chantiers = {
+  type: 'FeatureCollection',
+  features: [
+    { type: 'Feature', properties: { nom: 'RD 999 - PR 12', etat: 'en cours' }, geometry: { type: 'Point', coordinates: [4.330, 43.845] } },
+    { type: 'Feature', properties: { nom: 'RD 6113 - PR 3',  etat: 'terminé'  }, geometry: { type: 'Point', coordinates: [4.390, 43.828] } },
+    { type: 'Feature', properties: { nom: 'RD 907 - PR 45',  etat: 'en cours' }, geometry: { type: 'Point', coordinates: [4.365, 43.855] } }
+  ]
+};
+
+function ajouterCouchesMetier() {
+  if (glMap.getSource('chantiers')) return;          // déjà présentes
+  glMap.addSource('chantiers', { type: 'geojson', data: chantiers });
+  glMap.addLayer({
+    id: 'chantiers-pts',
+    type: 'circle',
+    source: 'chantiers',
+    paint: {
+      'circle-radius': 7,
+      'circle-color': ['match', ['get', 'etat'], 'en cours', '#e8590c', '#2b8a3e'],
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#fff'
+    }
+  });
+}
+
+/* Le style est chargé en ASYNCHRONE : toute addSource/addLayer faite trop
+   tôt lève une erreur. On attend donc l'évènement 'load'.
+   'styledata' rejoue l'ajout après chaque changement de style (setStyle
+   remet le style à zéro et supprime les couches personnalisées). */
+glMap.on('load', ajouterCouchesMetier);
+glMap.on('styledata', ajouterCouchesMetier);
+
+/* ------------------------------------------------------------------
+   Objets Leaflet habituels : ils restent au-dessus du canvas WebGL
+   grâce au pane 'tilePane' choisi plus haut.
+   ------------------------------------------------------------------ */
+L.marker([43.8367, 4.3601]).addTo(map)
+ .bindPopup('Marqueur <b>Leaflet</b> au-dessus du fond vectoriel MapLibre.');
+
+/* Sélecteur de fonds : le plugin se comporte comme n'importe quelle couche
+   Leaflet (add/remove, contrôle de couches, opacité de pane...). */
+L.control.layers({ 'Plan IGN vectoriel': planIgn, 'OSM (raster)': osm }, null, { collapsed: false }).addTo(map);
+
+/* ------------------------------------------------------------------
+   Panneau de démonstration des actions "vecteur"
+   ------------------------------------------------------------------ */
+var Panneau = L.Control.extend({
+  options: { position: 'topright' },
+  onAdd: function () {
+    var div = L.DomUtil.create('div', 'panneau');
+    div.innerHTML = '<b>Actions MapLibre</b>';
+    L.DomEvent.disableClickPropagation(div);        // sinon les clics zooment la carte
+
+    bouton(div, 'Libellés on/off', basculerLibelles);
+    bouton(div, 'Style gris / standard', basculerStyle);
+    bouton(div, 'Points chantiers on/off', basculerChantiers);
+    return div;
+  }
+});
+function bouton(parent, texte, action) {
+  var b = L.DomUtil.create('button', '', parent);
+  b.textContent = texte;
+  L.DomEvent.on(b, 'click', action);
+}
+map.addControl(new Panneau());
+
+/* Masquer tous les libellés : on parcourt les couches du style et on
+   bascule la propriété de layout 'visibility' des couches de type symbol. */
+var libellesVisibles = true;
+function basculerLibelles() {
+  libellesVisibles = !libellesVisibles;
+  glMap.getStyle().layers
+    .filter(function (c) { return c.type === 'symbol'; })
+    .forEach(function (c) {
+      glMap.setLayoutProperty(c.id, 'visibility', libellesVisibles ? 'visible' : 'none');
+    });
+}
+
+/* Changement de style à chaud : la vue Leaflet n'est pas perturbée,
+   seul le rendu est remplacé (d'où le réajout via 'styledata'). */
+var styleStandard = true;
+function basculerStyle() {
+  styleStandard = !styleStandard;
+  glMap.setStyle(styleStandard ? STYLE_STANDARD : STYLE_GRIS);
+}
+
+function basculerChantiers() {
+  if (!glMap.getLayer('chantiers-pts')) return;
+  var v = glMap.getLayoutProperty('chantiers-pts', 'visibility');
+  glMap.setLayoutProperty('chantiers-pts', 'visibility', v === 'none' ? 'visible' : 'none');
+}
+
+/* Interrogation des objets vectoriels : le clic est capté par Leaflet.
+   Le canvas WebGL est plus grand que la carte (option 'padding' du plugin) :
+   ses coordonnées écran ne sont donc PAS celles de e.containerPoint.
+   On repasse par glMap.project(), qui rend le point dans le repère du canvas,
+   puis on interroge une petite boîte de 10 px pour la tolérance de clic. */
+map.on('click', function (e) {
+  if (!glMap.getLayer('chantiers-pts')) return;
+  var p = glMap.project([e.latlng.lng, e.latlng.lat]);
+  var objets = glMap.queryRenderedFeatures(
+    [[p.x - 5, p.y - 5], [p.x + 5, p.y + 5]],
+    { layers: ['chantiers-pts'] }
+  );
+  if (objets.length) {
+    L.popup().setLatLng(e.latlng)
+      .setContent('<b>' + objets[0].properties.nom + '</b><br>État : ' + objets[0].properties.etat)
+      .openOn(map);
+  }
+});
+</script>
+</body>
+</html>
