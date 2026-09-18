@@ -24,6 +24,8 @@
   #map { height: 100%; }
   .panneau { background: #fff; padding: 8px 10px; border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,.4); font-size: 13px; line-height: 1.7; }
   .panneau button { display: block; width: 100%; margin: 2px 0; cursor: pointer; }
+  .panneau label { display: block; margin-top: 6px; }
+  .panneau input[type=range] { width: 100%; }
 </style>
 </head>
 <body>
@@ -175,8 +177,8 @@ map.on('layeradd', function (e) {
 
   activerModeVectoriel();
   var gl = e.layer.getMaplibreMap();
-  gl.on('load', function () { ajouterCouchesMetier(gl); });
-  gl.on('styledata', function () { ajouterCouchesMetier(gl); });
+  gl.on('load', function () { ajouterCouchesMetier(gl); appliquerTransparence(); });
+  gl.on('styledata', function () { ajouterCouchesMetier(gl); appliquerTransparence(); });
   gl.on('error', function (ev) {       // style introuvable, tuiles en erreur...
     console.error('MapLibre :', ev && ev.error ? ev.error.message : ev);
   });
@@ -216,6 +218,45 @@ L.control.layers({
 }, null, { collapsed: false }).addTo(map);
 
 /* ------------------------------------------------------------------
+   TRANSPARENCE DU FOND VECTORIEL
+
+   Il n'existe pas de propriété d'opacité globale sur une carte MapLibre :
+   l'opacité se règle couche de style par couche de style, et le NOM de la
+   propriété dépend du type de la couche. C'est la source de l'erreur
+   « unknown property "fill-opacity" » : fill-opacity n'est valide que sur
+   une couche de type fill, pas sur un background, une line ou un symbol.
+   MapLibre valide chaque propriété contre le type de la couche visée,
+   ignore celle qu'il refuse (l'erreur n'est pas bloquante) et continue.
+
+   D'où cette table de correspondance type -> propriétés d'opacité.
+   ------------------------------------------------------------------ */
+var PROPS_OPACITE = {
+  'background':     ['background-opacity'],
+  'fill':           ['fill-opacity'],
+  'line':           ['line-opacity'],
+  'symbol':         ['icon-opacity', 'text-opacity'],
+  'circle':         ['circle-opacity'],
+  'raster':         ['raster-opacity'],
+  'fill-extrusion': ['fill-extrusion-opacity'],
+  'heatmap':        ['heatmap-opacity']
+};
+
+var opaciteFond = 1;
+
+function appliquerTransparence() {
+  var gl = glActif();
+  if (!gl || !gl.isStyleLoaded()) { return; }
+
+  gl.getStyle().layers.forEach(function (couche) {
+    if (couche.id.indexOf('chantiers') === 0) { return; }   // nos données restent opaques
+    var props = PROPS_OPACITE[couche.type] || [];
+    props.forEach(function (prop) {
+      gl.setPaintProperty(couche.id, prop, opaciteFond);
+    });
+  });
+}
+
+/* ------------------------------------------------------------------
    Panneau de démonstration des actions "vecteur"
    ------------------------------------------------------------------ */
 var Panneau = L.Control.extend({
@@ -224,9 +265,20 @@ var Panneau = L.Control.extend({
     var div = L.DomUtil.create('div', 'panneau');
     div.innerHTML = '<b>Actions MapLibre</b>';
     L.DomEvent.disableClickPropagation(div);        // sinon les clics zooment la carte
+    L.DomEvent.disableScrollPropagation(div);       // et la molette sur le curseur
 
     bouton(div, 'Libellés on/off', basculerLibelles);
     bouton(div, 'Points chantiers on/off', basculerChantiers);
+
+    var ligne = L.DomUtil.create('label', '', div);
+    ligne.textContent = 'Opacité du fond ';
+    var curseur = L.DomUtil.create('input', '', ligne);
+    curseur.type = 'range';
+    curseur.min = 0; curseur.max = 100; curseur.value = 100;
+    L.DomEvent.on(curseur, 'input', function () {
+      opaciteFond = curseur.value / 100;
+      appliquerTransparence();
+    });
     return div;
   }
 });
