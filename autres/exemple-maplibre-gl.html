@@ -38,14 +38,14 @@
    ------------------------------------------------------------------ */
 var map = L.map('map').setView([43.8367, 4.3601], 13);   // Nîmes
 
-/* On mémorise les réglages d'origine pour pouvoir les restaurer à l'identique. */
+/* Réglages d'origine, mémorisés pour pouvoir les restaurer à l'identique. */
 var REGLAGES_ORIGINE = {
   zoomAnime: map._zoomAnimated,
   wheelPx: map.options.wheelPxPerZoomLevel,
   wheelDebounce: map.options.wheelDebounceTime
 };
 
-/* Fond raster "témoin", pour comparer avec le fond vectoriel */
+/* Fond raster "témoin", pour comparer avec les fonds vectoriels */
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
   attribution: '&copy; OpenStreetMap'
@@ -59,24 +59,33 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
    - attributionControl : le plugin désactive le contrôle natif de MapLibre
               et reprend par défaut l'attribution déclarée dans les sources du
               style ; on peut la forcer avec { customAttribution: ... }
+   - fadeDuration : défaut 300 ms, supprime le fondu des libellés à chaque zoom
    Toutes les autres options sont transmises telles quelles au constructeur
    maplibregl.Map (bearing, pitch, maxZoom, transformRequest...).
    Attention : le plugin cale la vue GL sur <zoom Leaflet - 1> (tuiles 512 px
    côté vecteur, 256 px côté Leaflet) ; les expressions de style dépendantes
    du zoom sont donc décalées d'un niveau.
    ------------------------------------------------------------------ */
-var STYLE_STANDARD = 'https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json';
-var STYLE_GRIS     = 'https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/gris.json';
+var ATTRIBUTION_IGN = '&copy; <a href="https://www.ign.fr/">IGN</a> - Géoplateforme';
 
-var planIgn = L.maplibreGL({
-  style: STYLE_STANDARD,
-  pane: 'tilePane',
-  fadeDuration: 0,            // défaut 300 ms : supprime le fondu des libellés à chaque zoom
-  attributionControl: { customAttribution: '&copy; <a href="https://www.ign.fr/">IGN</a> - Géoplateforme' }
-});
+function coucheVectorielle(urlStyle) {
+  return L.maplibreGL({
+    style: urlStyle,
+    pane: 'tilePane',
+    fadeDuration: 0,
+    attributionControl: { customAttribution: ATTRIBUTION_IGN }
+  });
+}
+
+var planStandard = coucheVectorielle('https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json');
+var planGris     = coucheVectorielle('https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/gris.json');
+
+/* Liste des couches soumises au traitement particulier du zoom (voir plus bas).
+   Toute nouvelle couche vectorielle doit être ajoutée ici. */
+var COUCHES_VECTORIELLES = [planStandard, planGris];
 
 /* ------------------------------------------------------------------
-   FLUIDITE DU ZOOM, uniquement quand le fond vectoriel est affiché.
+   FLUIDITÉ DU ZOOM, uniquement quand un fond vectoriel est affiché.
 
    Le problème : pendant son animation de zoom, Leaflet se contente d'étirer
    le canvas WebGL en CSS (image agrandie, donc floue), puis MapLibre
@@ -84,36 +93,28 @@ var planIgn = L.maplibreGL({
    très visible en zoom/dézoom rapide. Les fonds raster, eux, n'ont pas ce
    défaut : inutile de les pénaliser.
 
-   D'où une bascule branchée sur les événements 'add' et 'remove' de la
-   couche : L.Control.Layers retire toujours l'ancien fond AVANT d'ajouter le
-   nouveau, donc les réglages standard sont bien rétablis quand le fond raster
-   s'initialise.
+   D'où une bascule branchée sur les événements 'add' et 'remove' des couches
+   vectorielles : L.Control.Layers retire toujours l'ancien fond AVANT
+   d'ajouter le nouveau, donc les réglages standard sont bien rétablis quand
+   un fond raster s'initialise, et réappliqués si l'on passe d'un fond
+   vectoriel à l'autre.
 
    map._zoomAnimated est une propriété interne de Leaflet, mais elle est relue
    à chaque zoom : la modifier en cours de route fonctionne, alors que
    map.options.zoomAnimation n'est lu qu'à la création de la carte.
-   Pour comparer avec le comportement par défaut, commenter les deux
-   planIgn.on(...) ci-dessous.
+   Pour comparer avec le comportement par défaut, vider COUCHES_VECTORIELLES.
    ------------------------------------------------------------------ */
-planIgn.on('add', function () {
+function activerModeVectoriel() {
   map._zoomAnimated = false;                 // un seul rendu net par cran
   map.options.wheelPxPerZoomLevel = 120;     // défaut 60 : molette moins nerveuse
-  map.options.wheelDebounceTime = 100;       // défaut 40 ms : moins de crans enchainés
-});
+  map.options.wheelDebounceTime = 100;       // défaut 40 ms : moins de crans enchaînés
+}
 
-planIgn.on('remove', function () {
+function restaurerModeStandard() {
   map._zoomAnimated = REGLAGES_ORIGINE.zoomAnime;
   map.options.wheelPxPerZoomLevel = REGLAGES_ORIGINE.wheelPx;
   map.options.wheelDebounceTime = REGLAGES_ORIGINE.wheelDebounce;
-});
-
-/* Ajout seulement maintenant : 'add' ne se déclenche que sur les écouteurs
-   déjà en place, donc addTo() doit venir après les deux planIgn.on(). */
-planIgn.addTo(map);
-
-/* Accès à l'objet maplibregl.Map sous-jacent : c'est par lui que passent
-   toutes les opérations "vectorielles" (styles, sources, couches, filtres). */
-var glMap = planIgn.getMaplibreMap();
+}
 
 /* ------------------------------------------------------------------
    Données métier ajoutées DANS le moteur vectoriel (rendu GPU).
@@ -129,10 +130,10 @@ var chantiers = {
   ]
 };
 
-function ajouterCouchesMetier() {
-  if (glMap.getSource('chantiers')) return;          // déjà présentes
-  glMap.addSource('chantiers', { type: 'geojson', data: chantiers });
-  glMap.addLayer({
+function ajouterCouchesMetier(gl) {
+  if (gl.getSource('chantiers')) return;          // déjà présentes
+  gl.addSource('chantiers', { type: 'geojson', data: chantiers });
+  gl.addLayer({
     id: 'chantiers-pts',
     type: 'circle',
     source: 'chantiers',
@@ -145,12 +146,41 @@ function ajouterCouchesMetier() {
   });
 }
 
-/* Le style est chargé en ASYNCHRONE : toute addSource/addLayer faite trop
-   tôt lève une erreur. On attend donc l'évènement 'load'.
-   'styledata' rejoue l'ajout après chaque changement de style (setStyle
-   remet le style à zéro et supprime les couches personnalisées). */
-glMap.on('load', ajouterCouchesMetier);
-glMap.on('styledata', ajouterCouchesMetier);
+/* ------------------------------------------------------------------
+   Branchement commun aux couches vectorielles.
+
+   Point important : le plugin détruit l'objet maplibregl.Map dans son
+   onRemove et en recrée un neuf au prochain onAdd. On ne peut donc PAS
+   mémoriser getMaplibreMap() une fois pour toutes : les écouteurs sont
+   (ré)installés à chaque ajout de la couche.
+
+   Le style est chargé en asynchrone : toute addSource/addLayer faite trop
+   tôt lève une erreur, d'où l'attente de l'évènement 'load'. 'styledata'
+   rejoue l'ajout après un éventuel setStyle(), qui remet le style à zéro
+   et supprime les couches personnalisées.
+   ------------------------------------------------------------------ */
+COUCHES_VECTORIELLES.forEach(function (couche) {
+  couche.on('add', function () {
+    activerModeVectoriel();
+    var gl = couche.getMaplibreMap();
+    gl.on('load', function () { ajouterCouchesMetier(gl); });
+    gl.on('styledata', function () { ajouterCouchesMetier(gl); });
+  });
+  couche.on('remove', restaurerModeStandard);
+});
+
+/* La couche n'est ajoutée que maintenant : 'add' ne déclenche que les
+   écouteurs déjà en place, donc addTo() doit venir après le forEach. */
+planStandard.addTo(map);
+
+/* Renvoie la carte MapLibre du fond vectoriel actuellement affiché, ou null
+   si c'est un fond raster qui est sélectionné. */
+function glActif() {
+  for (var i = 0; i < COUCHES_VECTORIELLES.length; i++) {
+    if (map.hasLayer(COUCHES_VECTORIELLES[i])) return COUCHES_VECTORIELLES[i].getMaplibreMap();
+  }
+  return null;
+}
 
 /* ------------------------------------------------------------------
    Objets Leaflet habituels : ils restent au-dessus du canvas WebGL
@@ -161,7 +191,11 @@ L.marker([43.8367, 4.3601]).addTo(map)
 
 /* Sélecteur de fonds : le plugin se comporte comme n'importe quelle couche
    Leaflet (add/remove, contrôle de couches, opacité de pane...). */
-L.control.layers({ 'Plan IGN vectoriel': planIgn, 'OSM (raster)': osm }, null, { collapsed: false }).addTo(map);
+L.control.layers({
+  'Plan IGN vectoriel': planStandard,
+  'Plan IGN vectoriel (gris)': planGris,
+  'OSM (raster)': osm
+}, null, { collapsed: false }).addTo(map);
 
 /* ------------------------------------------------------------------
    Panneau de démonstration des actions "vecteur"
@@ -174,7 +208,6 @@ var Panneau = L.Control.extend({
     L.DomEvent.disableClickPropagation(div);        // sinon les clics zooment la carte
 
     bouton(div, 'Libellés on/off', basculerLibelles);
-    bouton(div, 'Style gris / standard', basculerStyle);
     bouton(div, 'Points chantiers on/off', basculerChantiers);
     return div;
   }
@@ -190,37 +223,33 @@ map.addControl(new Panneau());
    bascule la propriété de layout 'visibility' des couches de type symbol. */
 var libellesVisibles = true;
 function basculerLibelles() {
+  var gl = glActif();
+  if (!gl) return;
   libellesVisibles = !libellesVisibles;
-  glMap.getStyle().layers
+  gl.getStyle().layers
     .filter(function (c) { return c.type === 'symbol'; })
     .forEach(function (c) {
-      glMap.setLayoutProperty(c.id, 'visibility', libellesVisibles ? 'visible' : 'none');
+      gl.setLayoutProperty(c.id, 'visibility', libellesVisibles ? 'visible' : 'none');
     });
 }
 
-/* Changement de style à chaud : la vue Leaflet n'est pas perturbée,
-   seul le rendu est remplacé (d'où le réajout via 'styledata'). */
-var styleStandard = true;
-function basculerStyle() {
-  styleStandard = !styleStandard;
-  glMap.setStyle(styleStandard ? STYLE_STANDARD : STYLE_GRIS);
-}
-
 function basculerChantiers() {
-  if (!glMap.getLayer('chantiers-pts')) return;
-  var v = glMap.getLayoutProperty('chantiers-pts', 'visibility');
-  glMap.setLayoutProperty('chantiers-pts', 'visibility', v === 'none' ? 'visible' : 'none');
+  var gl = glActif();
+  if (!gl || !gl.getLayer('chantiers-pts')) return;
+  var v = gl.getLayoutProperty('chantiers-pts', 'visibility');
+  gl.setLayoutProperty('chantiers-pts', 'visibility', v === 'none' ? 'visible' : 'none');
 }
 
 /* Interrogation des objets vectoriels : le clic est capté par Leaflet.
    Le canvas WebGL est plus grand que la carte (option 'padding' du plugin) :
    ses coordonnées écran ne sont donc PAS celles de e.containerPoint.
-   On repasse par glMap.project(), qui rend le point dans le repère du canvas,
+   On repasse par gl.project(), qui rend le point dans le repère du canvas,
    puis on interroge une petite boîte de 10 px pour la tolérance de clic. */
 map.on('click', function (e) {
-  if (!glMap.getLayer('chantiers-pts')) return;
-  var p = glMap.project([e.latlng.lng, e.latlng.lat]);
-  var objets = glMap.queryRenderedFeatures(
+  var gl = glActif();
+  if (!gl || !gl.getLayer('chantiers-pts')) return;
+  var p = gl.project([e.latlng.lng, e.latlng.lat]);
+  var objets = gl.queryRenderedFeatures(
     [[p.x - 5, p.y - 5], [p.x + 5, p.y + 5]],
     { layers: ['chantiers-pts'] }
   );
