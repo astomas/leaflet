@@ -101,6 +101,9 @@ var planGris     = coucheVectorielle('https://data.geopf.fr/annexes/ressources/v
    map.options.zoomAnimation n'est lu qu'à la création de la carte.
    Pour comparer avec le comportement par défaut, commenter les deux
    map.on(...) plus bas.
+
+   Le tri se fait sur le type de couche (instanceof L.MaplibreGL) : ajouter
+   un nouveau style vectoriel ne demande donc aucune modification ici.
    ------------------------------------------------------------------ */
 function activerModeVectoriel() {
   map._zoomAnimated = false;                 // un seul rendu net par cran
@@ -157,21 +160,30 @@ function ajouterCouchesMetier(gl) {
    rejoue l'ajout après un éventuel setStyle(), qui remet le style à zéro
    et supprime les couches personnalisées.
    ------------------------------------------------------------------ */
+/* layeradd se déclenche pour TOUTE couche ajoutée (marqueurs, popups, fond
+   raster...). Le test instanceof L.MaplibreGL fait le tri sur le TYPE de la
+   couche plutôt que sur une liste nominative : n'importe quelle couche
+   vectorielle créée ensuite est prise en charge sans rien modifier ici.
+   L.MaplibreGL est la classe exportée par le plugin (L.maplibreGL() en est
+   la fabrique, avec un m minuscule). */
+function estCoucheVectorielle(couche) {
+  return couche instanceof L.MaplibreGL;
+}
+
 map.on('layeradd', function (e) {
-  /* layeradd se déclenche pour TOUTE couche ajoutée (marqueurs, popups,
-     fond raster...). Le || fait le tri : on ne traite que nos deux fonds
-     vectoriels. Pour en ajouter un troisième, il faudra compléter ce test
-     ainsi que celui de layerremove et celui de glActif(). */
-  if (e.layer !== planStandard && e.layer !== planGris) { return; }
+  if (!estCoucheVectorielle(e.layer)) { return; }
 
   activerModeVectoriel();
   var gl = e.layer.getMaplibreMap();
   gl.on('load', function () { ajouterCouchesMetier(gl); });
   gl.on('styledata', function () { ajouterCouchesMetier(gl); });
+  gl.on('error', function (ev) {       // style introuvable, tuiles en erreur...
+    console.error('MapLibre :', ev && ev.error ? ev.error.message : ev);
+  });
 });
 
 map.on('layerremove', function (e) {
-  if (e.layer === planStandard || e.layer === planGris) { restaurerModeStandard(); }
+  if (estCoucheVectorielle(e.layer)) { restaurerModeStandard(); }
 });
 
 /* La couche n'est ajoutée que maintenant : layeradd ne déclenche que les
@@ -181,9 +193,11 @@ planStandard.addTo(map);
 /* Renvoie la carte MapLibre du fond vectoriel actuellement affiché, ou null
    si c'est un fond raster qui est sélectionné. */
 function glActif() {
-  if (map.hasLayer(planStandard)) { return planStandard.getMaplibreMap(); }
-  if (map.hasLayer(planGris))     { return planGris.getMaplibreMap(); }
-  return null;
+  var gl = null;
+  map.eachLayer(function (couche) {
+    if (estCoucheVectorielle(couche)) { gl = couche.getMaplibreMap(); }
+  });
+  return gl;
 }
 
 /* ------------------------------------------------------------------
