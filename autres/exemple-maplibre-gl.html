@@ -80,9 +80,6 @@ function coucheVectorielle(urlStyle) {
 var planStandard = coucheVectorielle('https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/standard.json');
 var planGris     = coucheVectorielle('https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/gris.json');
 
-/* Liste des couches soumises au traitement particulier du zoom (voir plus bas).
-   Toute nouvelle couche vectorielle doit être ajoutée ici. */
-var COUCHES_VECTORIELLES = [planStandard, planGris];
 
 /* ------------------------------------------------------------------
    FLUIDITÉ DU ZOOM, uniquement quand un fond vectoriel est affiché.
@@ -93,8 +90,8 @@ var COUCHES_VECTORIELLES = [planStandard, planGris];
    très visible en zoom/dézoom rapide. Les fonds raster, eux, n'ont pas ce
    défaut : inutile de les pénaliser.
 
-   D'où une bascule branchée sur les événements 'add' et 'remove' des couches
-   vectorielles : L.Control.Layers retire toujours l'ancien fond AVANT
+   D'où une bascule branchée sur les événements 'layeradd' et 'layerremove'
+   de la carte : L.Control.Layers retire toujours l'ancien fond AVANT
    d'ajouter le nouveau, donc les réglages standard sont bien rétablis quand
    un fond raster s'initialise, et réappliqués si l'on passe d'un fond
    vectoriel à l'autre.
@@ -102,7 +99,8 @@ var COUCHES_VECTORIELLES = [planStandard, planGris];
    map._zoomAnimated est une propriété interne de Leaflet, mais elle est relue
    à chaque zoom : la modifier en cours de route fonctionne, alors que
    map.options.zoomAnimation n'est lu qu'à la création de la carte.
-   Pour comparer avec le comportement par défaut, vider COUCHES_VECTORIELLES.
+   Pour comparer avec le comportement par défaut, commenter les deux
+   map.on(...) plus bas.
    ------------------------------------------------------------------ */
 function activerModeVectoriel() {
   map._zoomAnimated = false;                 // un seul rendu net par cran
@@ -159,26 +157,32 @@ function ajouterCouchesMetier(gl) {
    rejoue l'ajout après un éventuel setStyle(), qui remet le style à zéro
    et supprime les couches personnalisées.
    ------------------------------------------------------------------ */
-COUCHES_VECTORIELLES.forEach(function (couche) {
-  couche.on('add', function () {
-    activerModeVectoriel();
-    var gl = couche.getMaplibreMap();
-    gl.on('load', function () { ajouterCouchesMetier(gl); });
-    gl.on('styledata', function () { ajouterCouchesMetier(gl); });
-  });
-  couche.on('remove', restaurerModeStandard);
+map.on('layeradd', function (e) {
+  /* layeradd se déclenche pour TOUTE couche ajoutée (marqueurs, popups,
+     fond raster...). Le || fait le tri : on ne traite que nos deux fonds
+     vectoriels. Pour en ajouter un troisième, il faudra compléter ce test
+     ainsi que celui de layerremove et celui de glActif(). */
+  if (e.layer !== planStandard && e.layer !== planGris) { return; }
+
+  activerModeVectoriel();
+  var gl = e.layer.getMaplibreMap();
+  gl.on('load', function () { ajouterCouchesMetier(gl); });
+  gl.on('styledata', function () { ajouterCouchesMetier(gl); });
 });
 
-/* La couche n'est ajoutée que maintenant : 'add' ne déclenche que les
-   écouteurs déjà en place, donc addTo() doit venir après le forEach. */
+map.on('layerremove', function (e) {
+  if (e.layer === planStandard || e.layer === planGris) { restaurerModeStandard(); }
+});
+
+/* La couche n'est ajoutée que maintenant : layeradd ne déclenche que les
+   écouteurs déjà en place, donc addTo() doit venir après les map.on(). */
 planStandard.addTo(map);
 
 /* Renvoie la carte MapLibre du fond vectoriel actuellement affiché, ou null
    si c'est un fond raster qui est sélectionné. */
 function glActif() {
-  for (var i = 0; i < COUCHES_VECTORIELLES.length; i++) {
-    if (map.hasLayer(COUCHES_VECTORIELLES[i])) return COUCHES_VECTORIELLES[i].getMaplibreMap();
-  }
+  if (map.hasLayer(planStandard)) { return planStandard.getMaplibreMap(); }
+  if (map.hasLayer(planGris))     { return planGris.getMaplibreMap(); }
   return null;
 }
 
