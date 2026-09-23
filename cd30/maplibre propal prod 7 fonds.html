@@ -1741,10 +1741,8 @@ this.importFichier = function () {
 		
 		// bouton imprimer
 		// impression des fonds tuiles vecteur
-		console.log(L.BrowserPrint.Utils);
-		console.log(L.BrowserPrint.Utils.registerLayer);		
 		
-		L.BrowserPrint.Utils.registerLayer(
+		L.Control.BrowserPrint.Utils.registerLayer(
 		  L.maptiler.MaptilerLayer,
 		  "L.maptiler.MaptilerLayer",
 		  function (layer) {
