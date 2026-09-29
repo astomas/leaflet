@@ -1,0 +1,69 @@
+# //// Vigilance crues du Gard pour widget-meteo-crues.js ////
+# Vigicrues ne renvoie pas d'en-tête CORS : une page web ne peut pas le lire.
+# Ce workflow le lit toutes les 15 min (cd30/ressources/vigicrues-30.ps1) et
+# publie vigicrues-30.json sur la branche « donnees-vigicrues », servie par
+# raw.githubusercontent.com qui, elle, autorise la lecture depuis une page.
+# Aucun commit sur main : seule la branche de données reçoit un commit, et
+# uniquement quand Vigicrues publie une nouvelle production.
+name: Vigilance crues Gard
+
+on:
+  schedule:
+    # toutes les 15 min, décalé de l'heure pile (créneaux saturés chez GitHub)
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+  push:
+    branches: ['**']
+    paths:
+      - '.github/workflows/vigicrues-30.yml'
+      - 'cd30/ressources/vigicrues-30.ps1'
+
+permissions:
+  contents: write
+
+# deux exécutions simultanées pousseraient sur la même branche
+concurrency:
+  group: vigicrues-30
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # seul le script est utile : inutile de récupérer les cartes de 10 Mo
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: cd30/ressources/vigicrues-30.ps1
+          sparse-checkout-cone-mode: false
+
+      - name: Lecture de Vigicrues et calcul du niveau du Gard
+        shell: pwsh
+        run: ./cd30/ressources/vigicrues-30.ps1 -Sortie "$env:RUNNER_TEMP/vigicrues-30.json"
+
+      - name: Publication sur la branche donnees-vigicrues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # dépôt minimal, sans l'historique de main : la branche de données
+          # ne contient que vigicrues-30.json
+          git init -q -b donnees-vigicrues "$RUNNER_TEMP/donnees"
+          cd "$RUNNER_TEMP/donnees"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          # branche déjà créée : on repart de son dernier commit ;
+          # sinon le premier commit la crée (push sans --force : il ne peut
+          # jamais écraser une branche existante)
+          if git ls-remote --exit-code --heads origin donnees-vigicrues > /dev/null; then
+            git fetch -q --depth=1 origin donnees-vigicrues
+            git reset -q --hard FETCH_HEAD
+          fi
+          cp "$RUNNER_TEMP/vigicrues-30.json" vigicrues-30.json
+          git add vigicrues-30.json
+          if git diff --cached --quiet; then
+            echo "Pas de nouvelle production Vigicrues : rien à publier"
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -q -m "Vigilance crues Gard : production $(jq -r .ref vigicrues-30.json), niveau $(jq -r .niveau vigicrues-30.json)"
+          git push -q origin donnees-vigicrues
