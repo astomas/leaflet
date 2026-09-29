@@ -51,9 +51,10 @@ CHEMINS_EXCLUS_ANCIENNETE = [
 
 # Log LàD_4h : alerte si le log de la veille fait moins de 1 Mo ou est absent
 DOSSIER_LOG = Path(CHEMIN_BASE, "rapport")
-MOTIF_LOG = "LàD_4h*.log"
 LIMITE_TAILLE_LOG = 1024 * 1024
-DATE_VEILLE = (datetime.now() - timedelta(days=1)).date()
+# Date au format année-jour-mois dans le nom : LàD_4h_2026-27-09.log pour le 27/09/2026
+DATE_VEILLE = (datetime.now() - timedelta(days=1)).strftime("%Y-%d-%m")
+MOTIF_LOG = f"LàD_4h_{DATE_VEILLE}*.log"
 
 date_du_jour = datetime.now().strftime("%d/%m/%Y")
 fichiers_non_modifies = []
@@ -256,13 +257,9 @@ except (FileNotFoundError, PermissionError, OSError) as erreur:
     raise SystemExit(1)
 
 
-# Contrôle du log LàD_4h de la veille (identifié par sa date de modification)
+# Contrôle du log LàD_4h de la veille (identifié par la date de son nom)
 try:
-    logs_veille = [
-        fichier
-        for fichier in DOSSIER_LOG.glob(MOTIF_LOG)
-        if datetime.fromtimestamp(fichier.stat().st_mtime).date() == DATE_VEILLE
-    ]
+    logs_veille = list(DOSSIER_LOG.glob(MOTIF_LOG))
 
     if not logs_veille:
         fichiers_log_alerte.append(
