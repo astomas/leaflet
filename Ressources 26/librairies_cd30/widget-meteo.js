@@ -89,13 +89,13 @@ function initWidgetMeteo(cfg) {
 		// [cd30] Priorité à l'échéance du jour : dès qu'une alerte est en cours
 		// aujourd'hui, le badge ne décrit qu'elle (niveau, phénomènes, pictos),
 		// même si demain est plus sévère. Ex. jaune J + orange J+1 donne
-		// "Vigilance météo jaune aujourd'hui ..." et non plus "Alerte météo orange ...".
+		// "Aujourd'hui vigilance météo jaune ..." et non plus "Alerte météo orange ...".
 		var alertes  = aAlerteJ ? alertesJ : alertesJ1;
 		var libs = libellesPhenomenes(alertes);
 		var niveau = NIVEAUX[niveauMax(alertes)] || '';
 		var texteNiveau = niveau ? ' ' + niveau : '';
 		var texte = (aAlerteJ
-				? 'Vigilance météo' + texteNiveau + ' aujourd\'hui'
+				? 'Aujourd\'hui vigilance météo' + texteNiveau
 				: 'Alerte météo J+1' + texteNiveau)
 			+ (libs.length ? ' ' + libs.join(' / ') : '');
 		// [cd30] classe de niveau : colore le fond du badge selon la vigilance
