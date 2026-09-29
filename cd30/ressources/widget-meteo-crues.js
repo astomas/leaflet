@@ -92,6 +92,20 @@ function initWidgetMeteo(cfg) {
 		return classes;
 	}
 
+	// Réutiliser les données Vigicrues impose d'en citer la source et la date de
+	// dernière mise à jour (mentions légales du site, licence Etalab) : ajoutées
+	// à l'infobulle du badge. &#10; = retour à la ligne dans l'infobulle.
+	function mentionCrues(alertes) {
+		var crue = (alertes || []).filter(function (a) {
+			return a.phenomenon_id === 4 && a.date;
+		})[0];
+		if (!crue) return '';
+		var d = new Date(crue.date);
+		return '&#10;Crues : © VIGICRUES, mise à jour du '
+			+ d.toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' }) + ' à '
+			+ d.toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit' });
+	}
+
 	function afficher(alertesJ, alertesJ1) {
 		var zone = widget.parentElement;
 		var aAlerteJ  = !!(alertesJ && alertesJ.length);
@@ -121,7 +135,8 @@ function initWidgetMeteo(cfg) {
 			return '<i class="fa-solid ' + cls + ' meteo-icone" aria-hidden="true"></i>';
 		}).join('');
 		widget.innerHTML = '<a class="meteo-alerte-simple' + classeNiveau + '" href="' + URL_VIGILANCE_GARD
-			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard">'
+			+ '" target="_blank" rel="noopener" title="Voir la vigilance Météo-France du Gard'
+			+ mentionCrues(alertes) + '">'
 			+ icones + '<span class="meteo-alerte-texte">' + texte + '</span></a>';
 		widget.style.display = 'flex';
 		if (zone) zone.style.display = 'flex';
@@ -140,7 +155,8 @@ function initWidgetMeteo(cfg) {
 			// donne NaN, et toute comparaison avec NaN est fausse
 			if (!(age < VALIDITE_CRUES_MS)) return null;
 			var n = parseInt(d.niveau);
-			return n >= 2 ? { phenomenon_id: 4, color_id: n } : null;
+			// date : reprise dans la mention de source affichée au survol du badge
+			return n >= 2 ? { phenomenon_id: 4, color_id: n, date: d.date } : null;
 		})
 		.catch(function() { return null; });
 	}
