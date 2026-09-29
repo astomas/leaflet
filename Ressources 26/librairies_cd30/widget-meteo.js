@@ -1,7 +1,9 @@
 /* //// widget vigilance Météo-France - Gard (dept 30) - opendatasoft, sans clé ////
    [cd30] Un seul badge "Alerte météo" précédé du ou des pictogrammes des
    phénomènes en cours, cliquable vers le site vigilance Gard.
-   Le badge n'apparaît que s'il existe au moins une alerte (J ou J+1). */
+   Le badge n'apparaît que s'il existe au moins une alerte (J ou J+1).
+   Il décrit en priorité l'échéance du jour (J), même si le lendemain est
+   plus sévère ; l'échéance J+1 n'est affichée que s'il n'y a rien aujourd'hui. */
 function initWidgetMeteo(cfg) {
 	var widget = document.getElementById('meteoWidget');
 	if (!widget) return;
@@ -54,7 +56,7 @@ function initWidgetMeteo(cfg) {
 		return max;
 	}
 
-	// Libellés des phénomènes en cours (J + J+1), dédoublonnés, en minuscules
+	// Libellés des phénomènes de l'échéance affichée, dédoublonnés, en minuscules
 	function libellesPhenomenes(alertes) {
 		var libs = [];
 		(alertes || []).forEach(function (a) {
@@ -77,24 +79,28 @@ function initWidgetMeteo(cfg) {
 
 	function afficher(alertesJ, alertesJ1) {
 		var zone = widget.parentElement;
-		var aAlerte = (alertesJ && alertesJ.length) || (alertesJ1 && alertesJ1.length);
-		if (!aAlerte) {
+		var aAlerteJ  = !!(alertesJ && alertesJ.length);
+		var aAlerteJ1 = !!(alertesJ1 && alertesJ1.length);
+		if (!aAlerteJ && !aAlerteJ1) {
 			widget.style.display = 'none';
 			if (zone) zone.style.display = 'none';
 			return;
 		}
-		var toutes = [].concat(alertesJ || [], alertesJ1 || []);
-		var libs = libellesPhenomenes(toutes);
-		var niveau = NIVEAUX[niveauMax(toutes)] || '';
-		// alerte uniquement sur l'échéance J+1 (rien aujourd'hui) : on le précise
-		var seulementDemain = !(alertesJ && alertesJ.length) && (alertesJ1 && alertesJ1.length);
-		var texte = 'Alerte météo' + (seulementDemain ? ' J+1' : '')
+		// [cd30] Priorité à l'échéance du jour : dès qu'une alerte est en cours
+		// aujourd'hui, le badge ne décrit qu'elle (niveau, phénomènes, pictos),
+		// même si demain est plus sévère. Ex. jaune J + orange J+1 donne
+		// "Alerte météo J jaune ..." et non plus "Alerte météo orange ...".
+		var echeance = aAlerteJ ? 'J' : 'J+1';
+		var alertes  = aAlerteJ ? alertesJ : alertesJ1;
+		var libs = libellesPhenomenes(alertes);
+		var niveau = NIVEAUX[niveauMax(alertes)] || '';
+		var texte = 'Alerte météo ' + echeance
 			+ (niveau ? ' ' + niveau : '') + (libs.length ? ' ' + libs.join(' / ') : '');
 		// [cd30] classe de niveau : colore le fond du badge selon la vigilance
 		var classeNiveau = niveau ? ' meteo-niveau-' + niveau : '';
 		// [cd30] pictogrammes des phénomènes, à gauche du libellé. aria-hidden :
 		// le texte du badge porte déjà l'information, l'icône ne fait que l'illustrer.
-		var icones = iconesPhenomenes(toutes).map(function (cls) {
+		var icones = iconesPhenomenes(alertes).map(function (cls) {
 			return '<i class="fa-solid ' + cls + ' meteo-icone" aria-hidden="true"></i>';
 		}).join('');
 		widget.innerHTML = '<a class="meteo-alerte-simple' + classeNiveau + '" href="' + URL_VIGILANCE_GARD
