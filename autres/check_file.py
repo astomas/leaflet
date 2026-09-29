@@ -49,11 +49,18 @@ CHEMINS_EXCLUS_ANCIENNETE = [
     # Path(CHEMIN_BASE, "Site/Thématiques/Entretien réseau routier/Fauchage/Cartes dynamiques/Stratégique - Suivi d'évolution annuelle de l'activité fauchage débroussaillement.html")
 ]
 
+# Log LàD_4h : alerte si le log de la veille fait moins de 1 Mo ou est absent
+DOSSIER_LOG = Path(CHEMIN_BASE, "rapport")
+MOTIF_LOG = "LàD_4h*.log"
+LIMITE_TAILLE_LOG = 1024 * 1024
+DATE_VEILLE = (datetime.now() - timedelta(days=1)).date()
+
 date_du_jour = datetime.now().strftime("%d/%m/%Y")
 fichiers_non_modifies = []
 fichiers_moins_1ko = []
 fichiers_geojson_vides = []
 fichiers_couches_vides = []
+fichiers_log_alerte = []
 
 MOTIF_GEOJSON_VIDE = '{"type": "FeatureCollection", "features": null}'
 COORD_PARTIELLEMENT_VIDE = '"geometry": null'
@@ -72,6 +79,15 @@ def creer_ligne(
             "%d/%m/%Y %H:%M:%S"
         ),
     }
+
+def chemin_relatif(fichier):
+    # Cartes affichées depuis RACINE, log (hors RACINE) depuis CHEMIN_BASE
+    chemin = Path(fichier)
+
+    try:
+        return chemin.relative_to(RACINE)
+    except ValueError:
+        return chemin.relative_to(CHEMIN_BASE)
 
 def est_exclu_du_controle_anciennete(fichier):
     chemin = str(fichier).rstrip("\\").casefold()
@@ -95,7 +111,7 @@ def envoyer_alerte_mail(fichiers, rapport):
     liste_fichiers = "\n".join(
         (
             f"- {ligne['type_exception']} : "
-            f"{Path(ligne['fichier']).relative_to(RACINE)}"
+            f"{chemin_relatif(ligne['fichier'])}"
         )
         for ligne in fichiers
     )
@@ -113,6 +129,7 @@ def envoyer_alerte_mail(fichiers, rapport):
             <li>Fichiers &lt; 1 Ko : {len(fichiers_moins_1ko)}</li>
             <li>Fichiers non modifiés : {len(fichiers_non_modifies)}</li>
             <li>Fichiers avec une couche vide ou au moins une coord. manquante : {len(fichiers_geojson_vides)}</li>
+            <li>Log LàD_4h de la veille &lt; 1 Mo ou absent : {len(fichiers_log_alerte)}</li>
         </ul>
 
         <p>
@@ -239,11 +256,49 @@ except (FileNotFoundError, PermissionError, OSError) as erreur:
     raise SystemExit(1)
 
 
+# Contrôle du log LàD_4h de la veille (identifié par sa date de modification)
+try:
+    logs_veille = [
+        fichier
+        for fichier in DOSSIER_LOG.glob(MOTIF_LOG)
+        if datetime.fromtimestamp(fichier.stat().st_mtime).date() == DATE_VEILLE
+    ]
+
+    if not logs_veille:
+        fichiers_log_alerte.append(
+            {
+                "type_exception": "Log LàD_4h de la veille absent",
+                "fichier": str(DOSSIER_LOG / MOTIF_LOG),
+                "taille_octets": "",
+                "date_modification": "",
+            }
+        )
+
+    for fichier in logs_veille:
+        informations = fichier.stat()
+
+        if informations.st_size < LIMITE_TAILLE_LOG:
+            fichiers_log_alerte.append(
+                creer_ligne(
+                    fichier,
+                    informations,
+                    datetime.fromtimestamp(informations.st_mtime),
+                    "Log LàD_4h de la veille < 1 Mo",
+                )
+            )
+
+except (PermissionError, OSError) as erreur:
+    print(
+        f"Impossible de contrôler le log LàD_4h : "
+        f"{DOSSIER_LOG} - {erreur}"
+    )
+
 
 resultats = (
     fichiers_moins_1ko
     + fichiers_non_modifies
     + fichiers_geojson_vides
+    + fichiers_log_alerte
 )
 
 # Regroupement par type d'exception, avec ce type toujours en dernier
@@ -321,7 +376,7 @@ try:
         for ligne in resultats:
             ligne_csv = ligne.copy()
             ligne_csv["fichier"] = "\\" + str(
-                Path(ligne["fichier"]).relative_to(RACINE)
+                chemin_relatif(ligne["fichier"])
             )
             resultats_csv.append(ligne_csv)
 
@@ -341,6 +396,10 @@ try:
         f"- Fichiers non modifiés : "
         f"{len(fichiers_non_modifies)}"
     )
+    print(
+        f"- Log LàD_4h de la veille < 1 Mo ou absent : "
+        f"{len(fichiers_log_alerte)}"
+    )
 
 except (PermissionError, OSError) as erreur:
     print(
@@ -350,10 +409,12 @@ except (PermissionError, OSError) as erreur:
 
 
 
-# Le mail part s'il existe au moins un fichier < 1 Ko, une carte quotidienne non mise à jour depuis 48 h 
+# Le mail part s'il existe au moins un fichier < 1 Ko, une carte quotidienne non mise à jour depuis 48 h,
+# ou un log LàD_4h de la veille < 1 Mo ou absent
 fichiers_alerte = (
     fichiers_moins_1ko
     + fichiers_non_modifies
+    + fichiers_log_alerte
     # + fichiers_couches_vides
 )
 
@@ -364,7 +425,7 @@ if fichiers_alerte:
     )
 else:
     print(
-        "Aucun fichier < 1 Ko, aucune carte quotidienne non mise à jour depuis 48 : aucun mail envoyé."
+        "Aucun fichier < 1 Ko, aucune carte quotidienne non mise à jour depuis 48, log LàD_4h correct : aucun mail envoyé."
     )
 
 print("Fin du contrôle.")
