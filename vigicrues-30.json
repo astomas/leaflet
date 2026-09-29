@@ -1,9 +1,9 @@
 {
   "departement": "30",
   "niveau": 3,
-  "ref": "29092026_16",
-  "date": "2026-09-29T13:55:07Z",
-  "source": "https://www.vigicrues.gouv.fr/services/InfoVigiCru.geojson",
+  "ref": "2026-09-29T12:33:47Z",
+  "date": "2026-09-29T12:33:47Z",
+  "source": "https://www.vigicrues.gouv.fr/territoire/rss?CdEntVigiCru=GA1,GA2,GA3,GA4,GA5,GA6,GA9,GA10,GA22,GA32,TL3",
   "troncons": [
     {
       "code": "GA1",
