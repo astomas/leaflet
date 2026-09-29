@@ -52,8 +52,8 @@ CHEMINS_EXCLUS_ANCIENNETE = [
 # Log LàD_4h : alerte si le log de la veille fait moins de 1 Mo ou est absent
 DOSSIER_LOG = Path(CHEMIN_BASE, "rapport")
 LIMITE_TAILLE_LOG = 1024 * 1024
-# Date au format année-jour-mois dans le nom : LàD_4h_2026-27-09.log pour le 27/09/2026
-DATE_VEILLE = (datetime.now() - timedelta(days=1)).strftime("%Y-%d-%m")
+# Date au format année-mois-jour dans le nom : LàD_4h_2026-09-27.log pour le 27/09/2026
+DATE_VEILLE = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 MOTIF_LOG = f"LàD_4h_{DATE_VEILLE}*.log"
 
 date_du_jour = datetime.now().strftime("%d/%m/%Y")
