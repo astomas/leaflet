@@ -31,7 +31,7 @@ jobs:
     timeout-minutes: 5
     steps:
       # seul le script est utile : inutile de récupérer les cartes de 10 Mo
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: cd30/ressources/vigicrues-30.ps1
           sparse-checkout-cone-mode: false
