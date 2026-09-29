@@ -56,12 +56,23 @@ LIMITE_TAILLE_LOG = 1024 * 1024
 DATE_VEILLE = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 MOTIF_LOG = f"LàD_4h_{DATE_VEILLE}*.log"
 
+# Log D_4h : contrôlé le lundi uniquement, sur le log du dimanche (la veille).
+# Alerte si absent ou < 100 Ko, seuil porté à 10 Mo le 1er lundi du mois (jour 1 à 7)
+MOTIF_LOG_DIMANCHE = f"D_4h_{DATE_VEILLE}*.log"
+EST_LUNDI = datetime.now().weekday() == 0
+EST_PREMIER_LUNDI_DU_MOIS = EST_LUNDI and datetime.now().day <= 7
+LIMITE_TAILLE_LOG_DIMANCHE = (
+    10 * 1024 * 1024 if EST_PREMIER_LUNDI_DU_MOIS else 100 * 1024
+)
+LIBELLE_LIMITE_LOG_DIMANCHE = "10 Mo" if EST_PREMIER_LUNDI_DU_MOIS else "100 Ko"
+
 date_du_jour = datetime.now().strftime("%d/%m/%Y")
 fichiers_non_modifies = []
 fichiers_moins_1ko = []
 fichiers_geojson_vides = []
 fichiers_couches_vides = []
 fichiers_log_alerte = []
+fichiers_log_dimanche_alerte = []
 
 MOTIF_GEOJSON_VIDE = '{"type": "FeatureCollection", "features": null}'
 COORD_PARTIELLEMENT_VIDE = '"geometry": null'
@@ -89,6 +100,44 @@ def chemin_relatif(fichier):
         return chemin.relative_to(RACINE)
     except ValueError:
         return chemin.relative_to(CHEMIN_BASE)
+
+def controler_log(motif, limite_taille, libelle_limite, nom_log):
+    # Lignes d'alerte pour un log de DOSSIER_LOG : absent ou plus petit que limite_taille
+    lignes = []
+
+    try:
+        logs = list(DOSSIER_LOG.glob(motif))
+
+        if not logs:
+            lignes.append(
+                {
+                    "type_exception": f"{nom_log} absent",
+                    "fichier": str(DOSSIER_LOG / motif),
+                    "taille_octets": "",
+                    "date_modification": "",
+                }
+            )
+
+        for fichier in logs:
+            informations = fichier.stat()
+
+            if informations.st_size < limite_taille:
+                lignes.append(
+                    creer_ligne(
+                        fichier,
+                        informations,
+                        datetime.fromtimestamp(informations.st_mtime),
+                        f"{nom_log} < {libelle_limite}",
+                    )
+                )
+
+    except (PermissionError, OSError) as erreur:
+        print(
+            f"Impossible de contrôler le log {motif} : "
+            f"{DOSSIER_LOG} - {erreur}"
+        )
+
+    return lignes
 
 def est_exclu_du_controle_anciennete(fichier):
     chemin = str(fichier).rstrip("\\").casefold()
@@ -131,6 +180,7 @@ def envoyer_alerte_mail(fichiers, rapport):
             <li>Fichiers non modifiés : {len(fichiers_non_modifies)}</li>
             <li>Fichiers avec une couche vide ou au moins une coord. manquante : {len(fichiers_geojson_vides)}</li>
             <li>Log LàD_4h de la veille &lt; 1 Mo ou absent : {len(fichiers_log_alerte)}</li>
+            <li>Log D_4h du dimanche (contrôle du lundi) &lt; {LIBELLE_LIMITE_LOG_DIMANCHE} ou absent : {len(fichiers_log_dimanche_alerte)}</li>
         </ul>
 
         <p>
@@ -258,36 +308,24 @@ except (FileNotFoundError, PermissionError, OSError) as erreur:
 
 
 # Contrôle du log LàD_4h de la veille (identifié par la date de son nom)
-try:
-    logs_veille = list(DOSSIER_LOG.glob(MOTIF_LOG))
+fichiers_log_alerte.extend(
+    controler_log(
+        MOTIF_LOG,
+        LIMITE_TAILLE_LOG,
+        "1 Mo",
+        "Log LàD_4h de la veille",
+    )
+)
 
-    if not logs_veille:
-        fichiers_log_alerte.append(
-            {
-                "type_exception": "Log LàD_4h de la veille absent",
-                "fichier": str(DOSSIER_LOG / MOTIF_LOG),
-                "taille_octets": "",
-                "date_modification": "",
-            }
+# Le lundi : contrôle du log D_4h du dimanche
+if EST_LUNDI:
+    fichiers_log_dimanche_alerte.extend(
+        controler_log(
+            MOTIF_LOG_DIMANCHE,
+            LIMITE_TAILLE_LOG_DIMANCHE,
+            LIBELLE_LIMITE_LOG_DIMANCHE,
+            "Log D_4h du dimanche",
         )
-
-    for fichier in logs_veille:
-        informations = fichier.stat()
-
-        if informations.st_size < LIMITE_TAILLE_LOG:
-            fichiers_log_alerte.append(
-                creer_ligne(
-                    fichier,
-                    informations,
-                    datetime.fromtimestamp(informations.st_mtime),
-                    "Log LàD_4h de la veille < 1 Mo",
-                )
-            )
-
-except (PermissionError, OSError) as erreur:
-    print(
-        f"Impossible de contrôler le log LàD_4h : "
-        f"{DOSSIER_LOG} - {erreur}"
     )
 
 
@@ -296,6 +334,7 @@ resultats = (
     + fichiers_non_modifies
     + fichiers_geojson_vides
     + fichiers_log_alerte
+    + fichiers_log_dimanche_alerte
 )
 
 # Regroupement par type d'exception, avec ce type toujours en dernier
@@ -397,6 +436,10 @@ try:
         f"- Log LàD_4h de la veille < 1 Mo ou absent : "
         f"{len(fichiers_log_alerte)}"
     )
+    print(
+        f"- Log D_4h du dimanche < {LIBELLE_LIMITE_LOG_DIMANCHE} ou absent : "
+        f"{len(fichiers_log_dimanche_alerte)}"
+    )
 
 except (PermissionError, OSError) as erreur:
     print(
@@ -407,11 +450,12 @@ except (PermissionError, OSError) as erreur:
 
 
 # Le mail part s'il existe au moins un fichier < 1 Ko, une carte quotidienne non mise à jour depuis 48 h,
-# ou un log LàD_4h de la veille < 1 Mo ou absent
+# un log LàD_4h de la veille < 1 Mo ou absent, ou (le lundi) un log D_4h du dimanche trop petit ou absent
 fichiers_alerte = (
     fichiers_moins_1ko
     + fichiers_non_modifies
     + fichiers_log_alerte
+    + fichiers_log_dimanche_alerte
     # + fichiers_couches_vides
 )
 
@@ -422,7 +466,7 @@ if fichiers_alerte:
     )
 else:
     print(
-        "Aucun fichier < 1 Ko, aucune carte quotidienne non mise à jour depuis 48, log LàD_4h correct : aucun mail envoyé."
+        "Aucun fichier < 1 Ko, aucune carte quotidienne non mise à jour depuis 48, logs LàD_4h / D_4h corrects : aucun mail envoyé."
     )
 
 print("Fin du contrôle.")
