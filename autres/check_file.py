@@ -7,7 +7,7 @@ from email.message import EmailMessage
 
 # Chemin de base
 RACINE = Path(
-    r"Q:\Dossiers\MSI\Partages\SI3P0-P0446\Site\Thématiques"
+    r"\\intra.cg30.fr\DGAML\Dossiers\MSI\Partages\SI3P0-P0446\Site\Thématiques"
 )
 
 # parametres mail
@@ -19,43 +19,44 @@ DESTINATAIRE = "thomas.fontaine@gard.fr"
 
 # Emplacement du rapport CSV
 DOSSIER_RAPPORT = Path(
-    r"Q:\Dossiers\MSI\Partages\SI3P0-P0446\Rapports"
+    r"\\intra.cg30.fr\DGAML\Dossiers\MSI\Partages\SI3P0-P0446\Rapports\csv"
 )
-RAPPORT = DOSSIER_RAPPORT / "rapport_cartes_dynamiques.csv"
+# conservation csv sur 6 mois glissants
+DATE_RAPPORT = datetime.now().strftime("%d-%m-%Y")
+RAPPORT = DOSSIER_RAPPORT / f"rapport_cartes_dynamiques_{DATE_RAPPORT}.csv"
+DUREE_CONSERVATION_RAPPORTS = 183
 
-# Seuils d'alerte, fichier vieux d'au moins 1 semaine et/ou < 1ko
-LIMITE_DATE = datetime.now() - timedelta(weeks=1, hours=1)
+# Seuils d'alerte : fichier vieux de 48h, fichier < 1ko , geojson vide
+LIMITE_DATE = datetime.now() - timedelta(days=2)
 LIMITE_TAILLE = 1024
 
+CHEMIN_BASE = Path(
+    r"\\intra.cg30.fr\DGAML\Dossiers\MSI\Partages\SI3P0-P0446"
+)
 CHEMINS_EXCLUS_ANCIENNETE = [
-    Path(
-        r"Q:\Dossiers\MSI\Partages\SI3P0-P0446"
-        r"\Site\Thématiques\Exploitation et trafic routier\PPBE"
-    ),
-    Path(
-        r"Q:\Dossiers\MSI\Partages\SI3P0-P0446"
-        r"\Site\Thématiques\Entretien réseau routier\Chute de blocs"
-    ),
-    Path(
-        r"Q:\Dossiers\MSI\Partages\SI3P0-P0446"
-        r"\Site\Thématiques\3V"
-    ),    
-    Path(
-        r"Q:\Dossiers\MSI\Partages\SI3P0-P0446"
-        r"\Site\Thématiques\Entretien Voies Vertes"
-    ),
-    Path(
-        r"Q:\Dossiers\MSI\Partages\SI3P0-P0446"
-        r"\Site\Thématiques\référentiel routier"
-    ),
-    Path(
-        r"Q:\Dossiers\MSI\Partages\SI3P0-P0446"
-        r"\Site\Thématiques\Education"
-    )
+    # maj manuelle
+        Path(CHEMIN_BASE, "Site/Thématiques/Exploitation et trafic routier/PPBE"),
+        Path(CHEMIN_BASE, "Site/Thématiques/Entretien voies vertes"),  
+        Path(CHEMIN_BASE, "Site/Thématiques/Exploitation et trafic 3V"),  
+        Path(CHEMIN_BASE, "Site/Thématiques/Référentiel 3V"),
+        Path(CHEMIN_BASE, "Site/Thématiques/référentiel routier"),
+        Path(CHEMIN_BASE, "Site/Thématiques/Entretien réseau routier/Chute de blocs"),
+    # mensuelle, hebdo
+        Path(CHEMIN_BASE, "Site/Thématiques/Education"),
+        Path(CHEMIN_BASE, "Site/Thématiques/Entretien réseau routier/Fauchage/Cartes dynamiques/OLD - Suivi du débroussaillement des RD sous OLD.html"), 
+    # exclusion temporaire de cartes journalieres particulieres : cartes debroussaillements suspendues jusqu'a l'automne
+    # Path(CHEMIN_BASE, "Site/Thématiques/Entretien réseau routier/Fauchage/Cartes dynamiques/Opérationnel - Suivi de la campagne de fauchage débroussaillement.html"),
+    # Path(CHEMIN_BASE, "Site/Thématiques/Entretien réseau routier/Fauchage/Cartes dynamiques/Stratégique - Suivi d'évolution annuelle de l'activité fauchage débroussaillement.html")
 ]
 
+date_du_jour = datetime.now().strftime("%d/%m/%Y")
 fichiers_non_modifies = []
 fichiers_moins_1ko = []
+fichiers_geojson_vides = []
+fichiers_couches_vides = []
+
+MOTIF_GEOJSON_VIDE = '{"type": "FeatureCollection", "features": null}'
+COORD_PARTIELLEMENT_VIDE = '"geometry": null'
 
 def creer_ligne(
     fichier,
@@ -89,45 +90,36 @@ def envoyer_alerte_mail(fichiers, rapport):
 
     message["From"] = EXPEDITEUR
     message["To"] = DESTINATAIRE
-    message["Subject"] = (
-        "ALERTE CARTOGRAPHIE - "
-        f"{len(fichiers)} fichier(s) inférieur(s) à 1 Ko"
-    )
+    message["Subject"] = ("Alerte carto Si3p0")
 
     liste_fichiers = "\n".join(
         (
-            f"- {ligne['fichier']} "
-            f"({ligne['taille_octets']} octets)"
+            f"- {ligne['type_exception']} : "
+            f"{Path(ligne['fichier']).relative_to(RACINE)}"
         )
         for ligne in fichiers
     )
 
-    texte = (
-    f"{len(fichiers)} fichier(s) HTML strictement inférieur(s) "
-    "à 1 Ko ont été détecté(s).\n\n"
-    f"{liste_fichiers}\n\n"
-    "Le rapport CSV complet est disponible en pièce jointe."
-    )
-
-    message.set_content(texte)
-
     message.add_alternative(
-        f"""
-        <html>
-            <body>
-                <p>
-                    {len(fichiers)} fichier(s) HTML strictement inférieur(s)
-                    à 1 Ko ont été détecté(s).
-                </p>
+        f"""<html>
+        <body>
+        <p>
+        {len(fichiers)} anomalie(s) déclenchant l'alerte au {date_du_jour} :
+        </p>
+        <p>{liste_fichiers.replace(chr(10), "<br>")}</p>
 
-                <p>{liste_fichiers.replace(chr(10), "<br>")}</p>
+        <p><strong>Récapitulatif du contrôle complet : {len(resultats)} exception(s) détectée(s)</strong></p>
+         <ul>            
+            <li>Fichiers &lt; 1 Ko : {len(fichiers_moins_1ko)}</li>
+            <li>Fichiers non modifiés : {len(fichiers_non_modifies)}</li>
+            <li>Fichiers avec une couche vide ou au moins une coord. manquante : {len(fichiers_geojson_vides)}</li>
+        </ul>
 
-                <p>
-                    Le rapport CSV complet est disponible en pièce jointe.
-                </p>
-            </body>
-        </html>
-        """,
+        <p>
+        Rapport CSV complet rattaché en PJ ou sur Q:\\Dossiers\\MSI\\Partages\\SI3P0-P0446\\Rapports\\csv.
+        </p>
+        </body>
+        </html>""",
         subtype="html",
     )
 
@@ -140,7 +132,7 @@ def envoyer_alerte_mail(fichiers, rapport):
             filename=rapport.name,
         )
 
-    # Envoi par le serveur SMTP de l'entreprise
+    # Envoi par le serveur SMTP 
     with smtplib.SMTP(
         SERVEUR_SMTP,
         PORT_SMTP,
@@ -173,14 +165,42 @@ try:
                         informations.st_mtime
                     )
 
-                    # Contrôle de la taille en priorité
+                    # Recherche d'au moins une couche GeoJSON vide
+                    contenu = fichier.read_text(
+                        encoding="utf-8",
+                        errors="replace"
+                    )
+
+                    if MOTIF_GEOJSON_VIDE in contenu:
+                        ligne_couche_vide = creer_ligne(
+                            fichier,
+                            informations,
+                            date_modification,
+                            "Une ou plusieurs couche vide",
+                        )
+                        fichiers_geojson_vides.append(ligne_couche_vide)
+                        fichiers_couches_vides.append(ligne_couche_vide)
+
+                    if COORD_PARTIELLEMENT_VIDE in contenu:
+                        fichiers_geojson_vides.append(
+                            creer_ligne(
+                                fichier,
+                                informations,
+                                date_modification,
+                                (
+                                    "Couche vide ou avec au moins une coord. manquante"
+                                ),
+                            )
+                        )
+
+                    # Contrôle de la taille 
                     if informations.st_size < LIMITE_TAILLE:
                         fichiers_moins_1ko.append(
                             creer_ligne(
                                 fichier,
                                 informations,
                                 date_modification,
-                                "Fichier inférieur à 1 Ko",
+                                "Fichier carte html < 1 Ko",
                             )
                         )
 
@@ -195,8 +215,7 @@ try:
                                 informations,
                                 date_modification,
                                 (
-                                    "Non modifié depuis plus de "
-                                    "1 semaine et 1 heure"
+                                    "Carte quotidienne non modifiée depuis 2 jours"
                                 ),
                             )
                         )
@@ -221,7 +240,24 @@ except (FileNotFoundError, PermissionError, OSError) as erreur:
 
 
 
-resultats = fichiers_moins_1ko + fichiers_non_modifies
+resultats = (
+    fichiers_moins_1ko
+    + fichiers_non_modifies
+    + fichiers_geojson_vides
+)
+
+# Regroupement par type d'exception, avec ce type toujours en dernier
+TYPE_EXCEPTION_EN_DERNIER = (
+    "Couche vide ou avec au moins une coord. manquante"
+)
+
+resultats.sort(
+    key=lambda ligne: (
+        ligne["type_exception"] == TYPE_EXCEPTION_EN_DERNIER,
+        ligne["type_exception"],
+        ligne["fichier"].casefold(),
+    )
+)
 
 
 if not resultats:
@@ -234,6 +270,32 @@ try:
         parents=True,
         exist_ok=True
     )
+
+    # Conservation glissante : suppression des rapports dates de plus de 30 jours.
+    date_limite_rapports = (
+        datetime.now().date()
+        - timedelta(days=DUREE_CONSERVATION_RAPPORTS)
+    )
+
+    for ancien_rapport in DOSSIER_RAPPORT.glob(
+        "rapport_cartes_dynamiques_??-??-????.csv"
+    ):
+        try:
+            date_rapport = datetime.strptime(
+                ancien_rapport.stem.removeprefix(
+                    "rapport_cartes_dynamiques_"
+                ),
+                "%d-%m-%Y",
+            ).date()
+
+            if date_rapport < date_limite_rapports:
+                ancien_rapport.unlink()
+
+        except (ValueError, PermissionError, OSError) as erreur:
+            print(
+                f"Impossible de traiter l'ancien rapport : "
+                f"{ancien_rapport} - {erreur}"
+            )
 
     with RAPPORT.open(
         "w",
@@ -254,12 +316,25 @@ try:
             delimiter=";",
         )
 
+        resultats_csv = []
+
+        for ligne in resultats:
+            ligne_csv = ligne.copy()
+            ligne_csv["fichier"] = "\\" + str(
+                Path(ligne["fichier"]).relative_to(RACINE)
+            )
+            resultats_csv.append(ligne_csv)
+
         writer.writeheader()
-        writer.writerows(resultats)
+        writer.writerows(resultats_csv)
 
     print(f"{len(resultats)} exception(s) détectée(s).")
     print(
-        f"- Fichiers inférieurs à 1 Ko : "
+        f"- Fichiers avec une couche vide ou au moins une coord. manquante : "
+        f"{len(fichiers_geojson_vides)}"
+    )
+    print(
+        f"- Fichiers < 1 Ko : "
         f"{len(fichiers_moins_1ko)}"
     )
     print(
@@ -275,28 +350,21 @@ except (PermissionError, OSError) as erreur:
 
 
 
-# Le mail part uniquement s'il existe au moins un fichier < 1 Ko.
+# Le mail part s'il existe au moins un fichier < 1 Ko, une carte quotidienne non mise à jour depuis 48 h 
+fichiers_alerte = (
+    fichiers_moins_1ko
+    + fichiers_non_modifies
+    # + fichiers_couches_vides
+)
 
-if fichiers_moins_1ko:
-    try:
-        envoyer_alerte_mail(
-            fichiers_moins_1ko,
-            RAPPORT
-        )
-
-        print(
-            f"Alerte envoyée à {DESTINATAIRE}."
-        )
-
-    except (smtplib.SMTPException, OSError) as erreur:
-        print(
-            f"Impossible d'envoyer l'alerte mail : {erreur}"
-        )
-
+if fichiers_alerte:
+    envoyer_alerte_mail(
+        fichiers_alerte,
+        RAPPORT
+    )
 else:
     print(
-        "Aucun fichier inférieur à 1 Ko : "
-        "aucun mail envoyé."
+        "Aucun fichier < 1 Ko, aucune carte quotidienne non mise à jour depuis 48 : aucun mail envoyé."
     )
 
 print("Fin du contrôle.")
