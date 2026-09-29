@@ -1,0 +1,65 @@
+{
+  "departement": "30",
+  "niveau": 3,
+  "ref": "29092026_16",
+  "date": "2026-09-29T13:55:07Z",
+  "source": "https://www.vigicrues.gouv.fr/services/InfoVigiCru.geojson",
+  "troncons": [
+    {
+      "code": "GA1",
+      "nom": "Cèze amont",
+      "niveau": 3
+    },
+    {
+      "code": "GA2",
+      "nom": "Cèze aval",
+      "niveau": 2
+    },
+    {
+      "code": "GA3",
+      "nom": "Gardon d'Alès",
+      "niveau": 3
+    },
+    {
+      "code": "GA4",
+      "nom": "Gardon d'Anduze",
+      "niveau": 3
+    },
+    {
+      "code": "GA5",
+      "nom": "Gardon aval",
+      "niveau": 2
+    },
+    {
+      "code": "GA6",
+      "nom": "Vidourle",
+      "niveau": 2
+    },
+    {
+      "code": "GA9",
+      "nom": "Rhône d'Avignon à la mer",
+      "niveau": 1
+    },
+    {
+      "code": "GA10",
+      "nom": "Rhône de Pont St Esprit à Avignon",
+      "niveau": 1
+    },
+    {
+      "code": "GA22",
+      "nom": "Ardèche aval",
+      "niveau": 2
+    },
+    {
+      "code": "GA32",
+      "nom": "Vistre",
+      "niveau": 1
+    },
+    {
+      "code": "TL3",
+      "nom": "Haut Tarn",
+      "niveau": 2
+    }
+  ],
+  "absents": []
+}
