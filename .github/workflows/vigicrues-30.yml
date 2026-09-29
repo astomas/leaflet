@@ -20,6 +20,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # arrêt programmé : le workflow se désactive lui-même
 
 # deux exécutions simultanées pousseraient sur la même branche
 concurrency:
@@ -30,17 +31,36 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # Relais GitHub en essai jusqu'au vendredi 2 octobre 2026 inclus : dès le
+      # samedi 3 (heure de Paris), le workflow se désactive lui-même. Pour le
+      # relancer : repousser la date ci-dessous, puis onglet Actions,
+      # « Vigilance crues Gard », bouton « Enable workflow ».
+      # Les dates AAAA-MM-JJ se comparent comme du texte : « > » suffit.
+      - name: Arrêt programmé le samedi 3 octobre 2026
+        id: arret
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ "$(TZ=Europe/Paris date +%F)" > "2026-10-02" ]]; then
+            gh workflow disable vigicrues-30.yml --repo "$GITHUB_REPOSITORY"
+            echo "Fin de l'essai sur GitHub : workflow désactivé"
+            echo "fini=oui" >> "$GITHUB_OUTPUT"
+          fi
+
       # seul le script est utile : inutile de récupérer les cartes de 10 Mo
       - uses: actions/checkout@v7
+        if: steps.arret.outputs.fini != 'oui'
         with:
           sparse-checkout: cd30/ressources/vigicrues-30.ps1
           sparse-checkout-cone-mode: false
 
       - name: Lecture de Vigicrues et calcul du niveau du Gard
+        if: steps.arret.outputs.fini != 'oui'
         shell: pwsh
         run: ./cd30/ressources/vigicrues-30.ps1 -Sortie "$env:RUNNER_TEMP/vigicrues-30.json"
 
       - name: Publication sur la branche donnees-vigicrues
+        if: steps.arret.outputs.fini != 'oui'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
