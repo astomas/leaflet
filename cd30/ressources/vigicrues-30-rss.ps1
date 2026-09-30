@@ -17,12 +17,13 @@
 	      powershell -NoProfile -File vigicrues-30-rss.ps1 -Sortie D:\site\...\vigicrues-30.json
 
 	Fichier produit (UTF-8 sans BOM) :
-	  { "departement": "30", "niveau": 2, "ref": "2026-09-29T12:33:47Z",
-	    "date": "2026-09-29T12:33:47Z", "source": "...",
+	  { "departement": "30", "niveau": 2, "ref": "2026-09-29T14:33:47+02:00",
+	    "date": "2026-09-29T14:33:47+02:00", "source": "...",
 	    "troncons": [ { "code": "GA6", "nom": "Vidourle", "niveau": 2 }, ... ],
 	    "absents": [] }
 	  niveau : 1 vert, 2 jaune, 3 orange, 4 rouge (couleur donnee par Vigicrues)
-	  date   : mise a jour Vigicrues la plus recente des troncons (UTC), validite 24 h
+	  date   : mise a jour Vigicrues la plus recente des troncons, a l'heure de Paris
+	           avec son decalage (+02:00 en ete, +01:00 en hiver), validite 24 h
 	  ref    : identique a date (le flux RSS n'a pas de reference de production)
 #>
 param(
@@ -95,15 +96,15 @@ foreach ($item in $items) {
 		nom    = $nom
 		niveau = $NIVEAUX[$Matches[1]]
 		# pubDate (format RSS, ex. "Tue, 29 Sep 2026 14:33:47 +0200") :
-		# heure de mise a jour de la page du territoire, ramenee en UTC
+		# heure de mise a jour de la page du territoire, gardee a l'heure de Paris
 		date   = [DateTimeOffset]::ParseExact([string]$item.pubDate, 'ddd, dd MMM yyyy HH:mm:ss zzz',
-			[Globalization.CultureInfo]::InvariantCulture).UtcDateTime
+			[Globalization.CultureInfo]::InvariantCulture)
 	}
 }
 
 $troncons = @()
 $absents = @()
-$dateProd = [datetime]::MinValue
+$dateProd = [DateTimeOffset]::MinValue
 foreach ($code in $TRONCONS_GARD) {
 	$p = $parCode[$code]
 	if ($null -eq $p) {
@@ -130,7 +131,7 @@ foreach ($t in $troncons) {
 	if ($t.niveau -gt $niveau) { $niveau = $t.niveau }
 }
 
-$dateIso = $dateProd.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", [Globalization.CultureInfo]::InvariantCulture)
+$dateIso = $dateProd.ToString("yyyy-MM-dd'T'HH:mm:sszzz", [Globalization.CultureInfo]::InvariantCulture)
 
 $resultat = [ordered]@{
 	departement = '30'
