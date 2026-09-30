@@ -17,8 +17,8 @@
 	      powershell -NoProfile -File vigicrues-30-rss.ps1 -Sortie D:\site\...\vigicrues-30.json
 
 	Fichier produit (UTF-8 sans BOM) :
-	  { "departement": "30", "niveau": 2, "ref": "2026-09-29T14:33:47+02:00",
-	    "date": "2026-09-29T14:33:47+02:00", "source": "...",
+	  { "departement": "30", "niveau": 2, "ref": "2026-09-29T14:33+02:00",
+	    "date": "2026-09-29T14:33+02:00", "source": "...",
 	    "troncons": [ { "code": "GA6", "nom": "Vidourle", "niveau": 2 }, ... ],
 	    "absents": [] }
 	  niveau : 1 vert, 2 jaune, 3 orange, 4 rouge (couleur donnee par Vigicrues)
@@ -131,7 +131,7 @@ foreach ($t in $troncons) {
 	if ($t.niveau -gt $niveau) { $niveau = $t.niveau }
 }
 
-$dateIso = $dateProd.ToString("yyyy-MM-dd'T'HH:mm:sszzz", [Globalization.CultureInfo]::InvariantCulture)
+$dateIso = $dateProd.ToString("yyyy-MM-dd'T'HH:mmzzz", [Globalization.CultureInfo]::InvariantCulture)
 
 $resultat = [ordered]@{
 	departement = '30'
