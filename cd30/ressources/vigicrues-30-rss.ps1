@@ -17,14 +17,16 @@
 	      powershell -NoProfile -File vigicrues-30-rss.ps1 -Sortie D:\site\...\vigicrues-30.json
 
 	Fichier produit (UTF-8 sans BOM) :
-	  { "departement": "30", "niveau": 2, "ref": "2026-09-29T14:33+02:00",
-	    "date": "2026-09-29T14:33+02:00", "source": "...",
+	  { "departement": "30", "niveau": 2, "ref": "29/09/2026 14:33",
+	    "date": "2026-09-29T14:33+02:00", "commentaire": "...", "source": "...",
 	    "troncons": [ { "code": "GA6", "nom": "Vidourle", "niveau": 2 }, ... ],
 	    "absents": [] }
 	  niveau : 1 vert, 2 jaune, 3 orange, 4 rouge (couleur donnee par Vigicrues)
 	  date   : mise a jour Vigicrues la plus recente des troncons, a l'heure de Paris
 	           avec son decalage (+02:00 en ete, +01:00 en hiver), validite 24 h
-	  ref    : identique a date (le flux RSS n'a pas de reference de production)
+	  ref    : meme date, lisible (jj/mm/aaaa hh:mm, heure de Paris) ; non lue par le widget
+	  commentaire : explication des dates, pour qui ouvre le fichier (JSON n'admet
+	           pas de commentaires : c'est un champ texte, ignore par le widget)
 #>
 param(
 	[Parameter(Mandatory = $true)]
@@ -136,8 +138,15 @@ $dateIso = $dateProd.ToString("yyyy-MM-dd'T'HH:mmzzz", [Globalization.CultureInf
 $resultat = [ordered]@{
 	departement = '30'
 	niveau      = $niveau
-	ref         = $dateIso
+	ref         = $dateProd.ToString('dd/MM/yyyy HH:mm', [Globalization.CultureInfo]::InvariantCulture)
 	date        = $dateIso
+	# Texte sans accents ni apostrophes : script en ASCII, et Windows PowerShell 5.1
+	# ecrirait les apostrophes sous la forme \u0027 dans le JSON.
+	commentaire = 'ref et date : meme instant. ref est lisible (heure de Paris). ' +
+	              'date est au format ISO 8601, seule lue par le widget ; +02:00 = decalage ' +
+	              'de Paris en ete (+01:00 en hiver). Cette heure est celle de la mise a jour ' +
+	              'du bulletin du SPC dans le flux RSS : environ 1 h 20 avant la publication ' +
+	              'nationale du geojson Vigicrues (ex. 08:35 pour la publication de 10 h).'
 	source      = $URL_VIGICRUES
 	troncons    = $troncons
 	absents     = $absents
