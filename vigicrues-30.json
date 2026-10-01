@@ -1,39 +1,39 @@
 {
   "departement": "30",
-  "niveau": 3,
-  "ref": "30092026_22",
-  "date": "2026-09-30T19:55:45Z",
+  "niveau": 1,
+  "ref": "01102026_06",
+  "date": "2026-10-01T03:55:29Z",
   "source": "https://www.vigicrues.gouv.fr/services/InfoVigiCru.geojson",
   "troncons": [
     {
       "code": "GA1",
       "nom": "Cèze amont",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "GA2",
       "nom": "Cèze aval",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "GA3",
       "nom": "Gardon d'Alès",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "GA4",
       "nom": "Gardon d'Anduze",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "GA5",
       "nom": "Gardon aval",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "GA6",
       "nom": "Vidourle",
-      "niveau": 3
+      "niveau": 1
     },
     {
       "code": "GA9",
@@ -53,7 +53,7 @@
     {
       "code": "GA32",
       "nom": "Vistre",
-      "niveau": 3
+      "niveau": 1
     },
     {
       "code": "TL3",
