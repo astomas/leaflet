@@ -70,7 +70,8 @@
 	<!-- spiderfy points superposés -->
 	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
 	<link rel="stylesheet" href="ressources/widget-meteo.css">
-	<script src="./ressources/widget-meteo-crues.js?v=22c5a82f"></script>
+	<!-- [cd30] ?v= = heure de chargement : le navigateur prend toujours la dernière version du widget -->
+	<script>document.write('<script src="./ressources/widget-meteo-crues.js?v=' + Date.now() + '"><\/script>');</script>
 	
 	</head>
 	
