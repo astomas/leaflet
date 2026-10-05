@@ -4,6 +4,9 @@ $dossierDonnees = "$PSScriptRoot\..\Données"
 $dossierRapports = "$PSScriptRoot\..\Rapports\LàD_0hà0h_F10min_moissonner_peupler"
 $dossierLogsHubeau = "$PSScriptRoot\..\Rapports\Temps_Hubeau"
 
+# journal cumulatif à la racine : une ligne par exécution (temps Hubeau, appels, durée totale)
+$fichierTempsHubeau = "$PSScriptRoot\..\temps_hubeau.csv"
+
 # fenêtre de l'appel global : Hub'Eau met environ 4 ms par relevé renvoyé.
 # 6 h donnent 6 relevés à chaque station active (moins d'1 h au pas de 5 min,
 # 3 h 40 pour la station au pas horaire lors des mesures du 05/10/2026)
@@ -19,7 +22,11 @@ New-Item -ItemType Directory -Path $dossierLogsHubeau -Force | Out-Null
 $dateNomLogAPI = Get-Date -Format "yyyy-MM-dd HH-mm-ss"
 $fichierLogAPI = "$dossierLogsHubeau\$dateNomLogAPI - temps Hubeau global - EN COURS.txt"
 $tempsTotalHubeau = 0.0
+$nombreAppelsHubeau = 0
+$nombreEssais = 0
+$nombreRecus = 0
 $nombreSecours = 0
+$chronoScript = [System.Diagnostics.Stopwatch]::StartNew()
 
 # recherche des tronçons et stations à moissonner
 SIg-Exporter-CSV -requete 'select CodeTronconHydro from TronconHydro' -csv "$dossierRapports\tronçons_hydro.csv"
@@ -117,6 +124,7 @@ for ($essai = 1; $essai -le 2 -and !$appelGlobalReussi -and $codesStations.Count
 
     Afficher-Message-Date -message "Début de l'appel global API Hubeau (essai $essai)."
 
+    $nombreEssais = $essai
     $nombreRecus = 0
     $chronoGlobal = [System.Diagnostics.Stopwatch]::StartNew()
 
@@ -125,6 +133,7 @@ for ($essai = 1; $essai -le 2 -and !$appelGlobalReussi -and $codesStations.Count
 
         # pages suivantes si le volume dépasse 20 000 résultats
         while ($uri) {
+            $nombreAppelsHubeau++
             $reponseHubeau = Invoke-RestMethod -Uri $uri -ErrorAction Stop
 
             # l'API trie par date décroissante : les premiers relevés rencontrés
@@ -204,6 +213,7 @@ foreach ($codeStation in $codesStations) {
         $chronoStation.Stop()
         $tempsTotalHubeau += $chronoStation.Elapsed.TotalSeconds
         $nombreSecours++
+        $nombreAppelsHubeau++
 
         $ligneLog = "{0} - Appel individuel Hubeau station {1} : {2:N2} seconde(s), {3} relevé(s)" -f `
             (Get-Date -Format "yyyy/MM/dd HH:mm:ss"), `
@@ -237,7 +247,7 @@ foreach ($codeStation in $codesStations) {
     ""
     "SYNTHESE"
     ("Temps total Hubeau, appel global et éventuels secours : {0:N2} seconde(s)" -f $tempsTotalHubeau)
-    ("Appels individuels de secours : {0}" -f $nombreSecours)
+    ("Appels Hubeau : {0}, dont {1} appel(s) individuel(s) de secours" -f $nombreAppelsHubeau, $nombreSecours)
     ("Temps de l'appel GeoJSON Vigicrues : {0:N2} seconde(s)" -f $chronoGeoJSON.Elapsed.TotalSeconds)
 ) | Tee-Object -FilePath $fichierLogAPI -Append | Write-Output
 
@@ -255,3 +265,24 @@ $ecriture = $null
 
 # exécution du fichier SQL construit
 SIg-Executer-Fichier -fichier $fichierSQL -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - exécution hydrométrie.sql.txt"
+
+# journal cumulatif : en-tête à la création, puis une ligne par exécution
+# (séparateur ; et décimales de la culture du serveur, lisible directement par Excel)
+$chronoScript.Stop()
+$encodageJournal = [Text.UTF8Encoding]::new($true)
+
+if (!(Test-Path $fichierTempsHubeau)) {
+    [System.IO.File]::AppendAllText($fichierTempsHubeau, "date;temps_hubeau_s;appels_hubeau;essais_appel_global;releves_recus;appels_secours;temps_vigicrues_s;temps_script_s`r`n", $encodageJournal)
+}
+
+$ligneTemps = "{0};{1:0.00};{2};{3};{4};{5};{6:0.00};{7:0.00}`r`n" -f `
+    (Get-Date -Format "yyyy/MM/dd HH:mm:ss"), `
+    $tempsTotalHubeau, `
+    $nombreAppelsHubeau, `
+    $nombreEssais, `
+    $nombreRecus, `
+    $nombreSecours, `
+    $chronoGeoJSON.Elapsed.TotalSeconds, `
+    $chronoScript.Elapsed.TotalSeconds
+
+[System.IO.File]::AppendAllText($fichierTempsHubeau, $ligneTemps, $encodageJournal)
