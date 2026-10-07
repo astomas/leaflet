@@ -1,8 +1,8 @@
 {
   "departement": "30",
   "niveau": 2,
-  "ref": "07102026_10",
-  "date": "2026-10-07T07:55:11Z",
+  "ref": "07102026_16",
+  "date": "2026-10-07T13:55:09Z",
   "source": "https://www.vigicrues.gouv.fr/services/InfoVigiCru.geojson",
   "troncons": [
     {
@@ -23,7 +23,7 @@
     {
       "code": "GA4",
       "nom": "Gardon d'Anduze",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "GA5",
@@ -33,7 +33,7 @@
     {
       "code": "GA6",
       "nom": "Vidourle",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "GA9",
