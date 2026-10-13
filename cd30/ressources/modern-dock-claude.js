@@ -336,29 +336,11 @@
     base.classList.add("modern-fonds-plan");
     section.appendChild(base);
 
-    // [cd30] Les pastilles sont remplacées par une liste déroulante.
-    // Les radios natifs restent dans le DOM (masqués) : ils pilotent la carte.
-    base.style.display = "none";
-    var select = document.createElement("select");
-    select.className = "modern-fonds-select";
     // Les radios sont RECONSTRUITS par Leaflet à chaque layeradd/layerremove
     // (_update) : toujours les requêter au moment de l'usage, jamais les cacher.
     function radiosActuels() {
       return Array.prototype.slice.call(base.querySelectorAll("input"));
     }
-    var radios = radiosActuels();
-    radios.forEach(function (r, i) {
-      var opt = document.createElement("option");
-      var lbl = r.nextElementSibling;
-      opt.value = String(i);
-      opt.textContent = (lbl ? lbl.textContent : "Fond " + (i + 1)).trim();
-      if (r.checked) opt.selected = true;
-      select.appendChild(opt);
-    });
-    var optBlanc = document.createElement("option");
-    optBlanc.value = "__blanc__";
-    optBlanc.textContent = "Fond blanc";
-    select.appendChild(optBlanc);
 
     // Fond blanc = retire les couches tuiles de la carte + fond de conteneur blanc
     function retirerFond() {
@@ -370,14 +352,97 @@
       });
       map.getContainer().classList.add("fond-blanc");
     }
-    select.addEventListener("change", function () {
-      if (select.value === "__blanc__") { retirerFond(); return; }
-      var map = window.maCarte;
-      if (map) map.getContainer().classList.remove("fond-blanc");
-      var r = radiosActuels()[Number(select.value)];
-      if (r) r.click();
-    });
-    section.appendChild(select);
+
+    // [cd30] Présentation des fonds : pastilles si la page le demande par
+    // data-fonds-affichage="pastilles" sur la section, liste déroulante sinon.
+    // Renvoie le nombre de fonds proposés (y compris fond blanc).
+    var nbFonds = (section.dataset.fondsAffichage === "pastilles")
+      ? afficherEnPastilles()
+      : afficherEnListe();
+
+    function afficherEnListe() {
+      // [cd30] Les pastilles sont remplacées par une liste déroulante.
+      // Les radios natifs restent dans le DOM (masqués) : ils pilotent la carte.
+      base.style.display = "none";
+      var select = document.createElement("select");
+      select.className = "modern-fonds-select";
+      var radios = radiosActuels();
+      radios.forEach(function (r, i) {
+        var opt = document.createElement("option");
+        var lbl = r.nextElementSibling;
+        opt.value = String(i);
+        opt.textContent = (lbl ? lbl.textContent : "Fond " + (i + 1)).trim();
+        if (r.checked) opt.selected = true;
+        select.appendChild(opt);
+      });
+      var optBlanc = document.createElement("option");
+      optBlanc.value = "__blanc__";
+      optBlanc.textContent = "Fond blanc";
+      select.appendChild(optBlanc);
+
+      select.addEventListener("change", function () {
+        if (select.value === "__blanc__") { retirerFond(); return; }
+        var map = window.maCarte;
+        if (map) map.getContainer().classList.remove("fond-blanc");
+        var r = radiosActuels()[Number(select.value)];
+        if (r) r.click();
+      });
+      section.appendChild(select);
+
+      // Si le fond change par ailleurs (code carte), resynchronise la liste
+      if (window.maCarte && window.maCarte.on) {
+        window.maCarte.on("baselayerchange", function () {
+          var rs = radiosActuels();
+          for (var i = 0; i < rs.length; i++) {
+            if (rs[i].checked) { select.value = String(i); break; }
+          }
+        });
+      }
+
+      return select.options.length;
+    }
+
+    function afficherEnPastilles() {
+      // Leaflet vide et reconstruit "base" à chaque _update : une pastille
+      // ajoutée dedans disparaîtrait. La pastille "Fond blanc" est donc posée
+      // à côté de "base", dans une grille commune ; "base" en display:contents
+      // n'a plus de boîte propre et ses labels deviennent cases de la grille.
+      var grille = document.createElement("div");
+      grille.className = "modern-fonds-plan";
+      base.classList.remove("modern-fonds-plan");
+      base.style.display = "contents";
+      section.insertBefore(grille, base);
+      grille.appendChild(base);
+
+      // Même structure que Leaflet (label > span > input + span) pour hériter
+      // du style des pastilles. Nom de groupe propre : n'interfère pas avec
+      // les radios Leaflet.
+      var label = document.createElement("label");
+      var pastille = document.createElement("span");
+      var radioBlanc = document.createElement("input");
+      radioBlanc.type = "radio";
+      radioBlanc.name = "modern-fond-blanc";
+      var texte = document.createElement("span");
+      texte.textContent = " Fond blanc";
+      pastille.appendChild(radioBlanc);
+      pastille.appendChild(texte);
+      label.appendChild(pastille);
+      grille.appendChild(label);
+
+      // Le retrait des tuiles fait reconstruire les radios Leaflet par
+      // _update, tous décochés : seule la pastille fond blanc reste active.
+      radioBlanc.addEventListener("click", retirerFond);
+
+      // Un fond tuile choisi (pastille ou code carte) désactive le fond blanc
+      if (window.maCarte && window.maCarte.on) {
+        window.maCarte.on("baselayerchange", function () {
+          window.maCarte.getContainer().classList.remove("fond-blanc");
+          radioBlanc.checked = false;
+        });
+      }
+
+      return radiosActuels().length + 1;
+    }
 
     // [cd30] Impression : recopie le fond blanc sur la carte d'impression
     // (le plugin browser.print crée un conteneur neuf, sans la classe).
@@ -409,19 +474,9 @@
       window.maCarte.on("browser-print-end", function () { marquerGroupesLegendeVides(false); });
     }
 
-    // Si le fond change par ailleurs (code carte), resynchronise la liste
-    if (window.maCarte && window.maCarte.on) {
-      window.maCarte.on("baselayerchange", function () {
-        var rs = radiosActuels();
-        for (var i = 0; i < rs.length; i++) {
-          if (rs[i].checked) { select.value = String(i); break; }
-        }
-      });
-    }
-
     // Met à jour le badge <em> avec le nombre de fonds (y compris fond blanc)
     var badge = section.querySelector(".modern-family-title em");
-    var nb = select.options.length;
+    var nb = nbFonds;
     if (badge && nb) badge.textContent = nb + (nb > 1 ? " fonds" : " fond");
 
     // Place la section "Fonds de plan" juste sous "Données métier"
