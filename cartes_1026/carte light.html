@@ -2150,7 +2150,8 @@ this.importFichier = function () {
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'button-container boutons-conteneur');
             boutonConteneur.appendChild(boutonServiceVisu.button);
-			boutonConteneur.appendChild(boutonInfo.button);	
+			// [cd30] bouton info déplacé dans la barre de titre (voir plus bas)
+			//boutonConteneur.appendChild(boutonInfo.button);
             return boutonConteneur;
         }
     });
@@ -2158,8 +2159,11 @@ this.importFichier = function () {
     conteneurStreetView = new conteneur();
     maCarte.addControl(conteneurStreetView);
 
+    // [cd30] bouton info dans la barre de titre, à côté du bouton d'aide :
+    // son conteneur easy-button est déplacé dans l'emplacement prévu
     var headerInfoDock = document.getElementById('modernHeaderInfoDock');
-    if (headerInfoDock) headerInfoDock.style.display = 'none';
+    //if (headerInfoDock) headerInfoDock.style.display = 'none';
+    if (headerInfoDock) headerInfoDock.appendChild(boutonInfo.button.parentNode);
 }
 	
 	this.titre = function(){
