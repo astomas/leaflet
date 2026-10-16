@@ -8,7 +8,28 @@
 	<script src="../Ressources 26/librairies_cd30/leaflet.js"></script>
 
 	<link rel="stylesheet" href="../cd30/ressources/nouvelle-ui-claude.css" />
-	<script src="../cd30/ressources/modern-dock-claude.js"></script>	
+	<script src="../cd30/ressources/modern-dock-claude.js"></script>
+
+	<!-- [cd30] Sidebar rétractable : chaque bloc (Données métier, Fonds de plan, Outils carte)
+	     se replie au clic sur son titre, comme dans « leaflet sidebar full ».
+	     Le modern-dock cd30 fige les sections : ce bloc réactive l'accordéon pour cette carte. -->
+	<style>
+		.modern-family-title { cursor: pointer; }
+		.modern-family-chevron { display: inline-flex; }
+		.modern-family[data-expanded="false"] > :not(.modern-family-title) { display: none; }
+		.modern-family-fonds-plan .modern-family-title:hover { background: #ddedf9; transition: background .18s ease; }
+		.modern-family-tools .modern-family-title:hover { background: #e8f6f2; transition: background .18s ease; }
+	</style>
+	<script>
+		// Ouvre / ferme le bloc dont on clique le titre : l'état est porté par
+		// data-expanded, que le CSS lit pour masquer le contenu du bloc
+		document.addEventListener("click", function (e) {
+			var titre = e.target.closest(".modern-family-title");
+			if (!titre) return;
+			var section = titre.closest(".modern-family");
+			if (section) section.dataset.expanded = (section.dataset.expanded === "false") ? "true" : "false";
+		});
+	</script>
 	
 	<title id="ti">Carte Leaflet</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
