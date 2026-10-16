@@ -20,6 +20,12 @@ lire le code d'un plugin, pas de cible pour les liens des pages.
 Seuls les chemins **relatifs** doivent suivre l'emplacement réel du fichier
 dans le dépôt.
 
+Exception : les pages publiées sur GitHub Pages (cartes de `cd30/`,
+`cartes_1026/carte light github.html`) visent les fichiers du dépôt :
+`Ressources 26/` (plugins déjà adaptés, chemins internes en `/leaflet/...`),
+`Ressources 26/maptiler/` (SDK, plugin et styles JSON MapTiler) et
+`cd30/ressources/`.
+
 ## Bibliothèques : vérifier l'API dans le fichier, pas de mémoire
 
 Les plugins vendorisés sont figés à une version donnée. Avant de corriger un
@@ -35,6 +41,9 @@ Pièges déjà rencontrés :
   en cours de route laisse les couches ajoutées entre-temps sans animation
   (décalage au zoom). Pour couper l'animation à chaud, passer
   `map.options.zoomAnimationThreshold` à 0 (relu à chaque zoom).
+- Le SDK MapTiler résout une adresse de style relative depuis
+  `location.origin`, pas depuis la page : sur GitHub Pages le préfixe
+  `/leaflet/` serait perdu. Passer `new URL(chemin, document.baseURI).href`.
 
 ## Fichiers volumineux
 
