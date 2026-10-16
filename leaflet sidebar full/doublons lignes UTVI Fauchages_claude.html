@@ -76,6 +76,11 @@
 	
 	<!-- spiderfy points superposés -->
 	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
+
+	<!-- MapTiler sdk fonds vecteurs -->
+	<script src="/leaflet/Ressources 26/maptiler/maptiler-sdk.min.js"></script>
+	<link href="/leaflet/Ressources 26/maptiler/maptiler-sdk.css" rel="stylesheet" />
+	<script src="/leaflet/Ressources 26/maptiler/maptilersdk-leaflet.js"></script>
 	
 	</head>	
 	
@@ -398,6 +403,47 @@ function gererEtiquettesRD(map) {
 }
 
 function CarteLeaflet(conteneurId) {   
+	// Conserve et réutilise les fonds MapTiler au lieu de détruire leur moteur WebGL.
+	// Évite les erreurs console lors des changements de fond, notamment vers CartoDB.
+	(function (p) {
+    const add = p.onAdd;
+
+    p.onAdd = function (map) {
+        if (!this._maptilerMap) return add.call(this, map);
+
+        const pane = map.getPane(this.getPaneName());
+        if (!this._container.parentNode) pane.appendChild(this._container);
+
+        this._offset = map.containerPointToLayerPoint([0, 0]);
+
+        if (map.options.zoomAnimation && map._proxy)
+            L.DomEvent.on(map._proxy, L.DomUtil.TRANSITION_END,
+                          this._transitionEnd, this);
+
+        this._maptilerMap.resize();
+        this._update();
+    };
+
+    p.onRemove = function (map) {
+        if (map._proxy)
+            L.DomEvent.off(map._proxy, L.DomUtil.TRANSITION_END,
+                           this._transitionEnd, this);
+
+        this._container.remove();
+    };
+
+    const transition = p._transitionEnd;
+
+    p._transitionEnd = function () {
+        if (!this._map || !this._maptilerMap) return;
+
+        L.Util.requestAnimFrame(function () {
+            if (this._map && this._maptilerMap)
+                transition.call(this);
+        }, this);
+    };
+	})(L.maptiler.MaptilerLayer.prototype);
+
     
  	/*var googleSat = L.gridLayer.googleMutant({
 		maxZoom: 22	, 
@@ -405,6 +451,8 @@ function CarteLeaflet(conteneurId) {
 		styles:[]			
 	});*/		// [cd30] fonds Google supprimés
 	 
+	// [cd30] anciens fonds de plan, remplacés par ceux de carte light
+	/*
 	var coucheWMTSIGN = "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2";
 	var fdcIGN = L.tileLayer("https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + coucheWMTSIGN + "&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png"
 		,{
@@ -437,7 +485,72 @@ function CarteLeaflet(conteneurId) {
 			//attribution: '&copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
 		}
 	);
-	
+	*/
+
+	// [cd30] fonds de plan repris de carte light
+	var orthoIGN = L.tileLayer(
+		"https://data.geopf.fr/tms/1.0.0/ORTHOIMAGERY.ORTHOPHOTOS/{z}/{x}/{y}.jpeg",
+		{
+			maxZoom: 21,
+			maxNativeZoom: 18,
+			attribution: '&copy; <a href="https://cartes.gouv.fr/" target="_blank">IGN</a>'
+		}
+	);
+	var orthoIGNAvecBDTopo = L.tileLayer(
+		"https://data.geopf.fr/tms/1.0.0/ORTHOIMAGERY.ORTHOPHOTOS/{z}/{x}/{y}.jpeg",
+		{
+			maxZoom: 21,
+			maxNativeZoom: 18,
+			attribution:
+				'&copy; <a href="https://cartes.gouv.fr/" target="_blank">IGN</a>'
+		}
+	);
+
+	const coucheBDTopo = "TRANSPORTNETWORKS.ROADS";
+	const BDTopo = L.tileLayer (
+		"https://data.geopf.fr/wmts?SERVICE=WMTS" +
+		"&REQUEST=GetTile&VERSION=1.0.0" +
+		"&LAYER=" + coucheBDTopo +
+		"&STYLE=normal&TILEMATRIXSET=PM" +
+		"&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}" +
+		"&FORMAT=image/png",
+		{
+			maxZoom: 20,
+			maxNativeZoom: 18
+		}
+	);
+
+	// fonds superposés
+	var groupeOrthoRoad = L.layerGroup([
+		orthoIGNAvecBDTopo,
+		BDTopo
+	]);
+		
+	var cartoDB = L.tileLayer(
+		"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2a4r_1_6950b1604182c04f83c08c85"
+		,{
+			subdomains: 'abcd',maxZoom: 22,maxNativeZoom: 20
+		}
+	);
+
+	// fonds IGN tuiles vecteurs
+	var mapTilerEpure = L.maptiler.maptilerLayer({
+	  style: "/leaflet/Ressources 26/maptiler/epure.json",
+	  apiKey: "DgI4UR0ibw23tlux6WWD",
+	  attribution:'&copy; <a href="https://cartes.gouv.fr" target="_blank">IGN</a>'
+	});	
+		
+	var MapTilerNoiretBlanc = L.maptiler.maptilerLayer({
+	  style: "/leaflet/Ressources 26/maptiler/gris.json",
+	  apiKey: "DgI4UR0ibw23tlux6WWD",
+	  attribution: '&copy; <a href="https://cartes.gouv.fr" target="_blank">IGN</a>'
+	});	
+
+	var MapTilerStandard = L.maptiler.maptilerLayer({
+	  style: "/leaflet/Ressources 26/maptiler/standard.json",
+	  apiKey: "DgI4UR0ibw23tlux6WWD",
+	  attribution: '&copy; <a href="https://cartes.gouv.fr" target="_blank">IGN</a>'
+	});
 
 	var tabGeomCouche = [];	
 	tabComposantLeg = [];
@@ -898,7 +1011,9 @@ function CarteLeaflet(conteneurId) {
 			this.zoomInitial = 10.8;
 		}  
 		
-		const fondParDefaut = window.location.href.includes('Graflex') ? orthoIGN : cartoDB;
+		// [cd30] ancien fond par défaut
+		// const fondParDefaut = window.location.href.includes('Graflex') ? orthoIGN : cartoDB;
+		const fondParDefaut = window.location.href.includes('Graflex') ? groupeOrthoRoad : cartoDB;
 		
 		maCarte = L.map(this.conteneurId, {
 			center: this.coordCarte,
@@ -1180,13 +1295,65 @@ function CarteLeaflet(conteneurId) {
 			tabEltsMPLeg[i].bringToBack();		
 		}
 		
+		// [cd30] anciens fonds de plan, remplacés par ceux de carte light
+		/*
 		var fondsCarte = {		
 			"CartoDB N&B": cartoDB, 		
 			"Stadia Map": StadiaMap,
 			"Plan IGN": fdcIGN,		
 			//"Google Satellite": googleSat,
 			"Ortho IGN": orthoIGN			
-		};	
+		};
+		*/
+
+		// gestion des fonds 		
+		const fondsVectoriels = [
+			mapTilerEpure,
+			MapTilerNoiretBlanc,
+			MapTilerStandard
+		];
+
+		// seuil Leaflet d'origine (4), restauré sur les fonds raster
+		const seuilAnimZoom = maCarte.options.zoomAnimationThreshold;
+
+		maCarte.on("baselayerchange", function (e) {
+
+			const estVectoriel = fondsVectoriels.includes(e.layer);
+
+			//sans anim (saccade)
+			maCarte.options.zoomAnimation = !estVectoriel;
+			// Ne pas modifier maCarte._zoomAnimated : chaque couche le recopie à son ajout,
+			// avant baselayerchange. Le fond raster choisi après un MapTiler restait sans
+			// animation et se décalait au zoom. Un seuil à 0 coupe l'animation sans y toucher.
+			maCarte.options.zoomAnimationThreshold = estVectoriel ? 0 : seuilAnimZoom;
+			// scroll ralentit
+			/*maCarte.options.wheelPxPerZoomLevel = estVectoriel ? 120 : 60;
+			maCarte.options.wheelDebounceTime = estVectoriel ? 100 : 40;*/
+
+			// Micro-zoom exécuté une seule fois au changement de fond vectoriel
+			if (estVectoriel) {
+				const zoomActuel = maCarte.getZoom();
+
+				maCarte.setZoom(zoomActuel + 0.2, {
+					animate: false
+				});
+
+				requestAnimationFrame(function () {
+					maCarte.setZoom(zoomActuel, {
+						animate: false
+					});
+				});
+			}
+		});
+
+		var fondsCarte = {	
+			"CartoDB N&B": cartoDB,				
+			"Plan IGN": MapTilerStandard,
+			"Ortho IGN": orthoIGN,
+			"Ortho IGN & BDTopo" : groupeOrthoRoad,
+			"Plan IGN N&B": MapTilerNoiretBlanc,
+			"Plan IGN épuré": mapTilerEpure,						
+		};
 	
 		var tabCtrlboxNom = [];
 		var libelleCouche = {};
@@ -1646,6 +1813,28 @@ this.importFichier = function () {
 		var btnIsochrone = new L.geoportalControl.Isocurve({});
 		
 		// bouton imprimer
+		L.Control.BrowserPrint.Utils.registerLayer(
+		  L.maptiler.MaptilerLayer,
+		  "L.maptiler.MaptilerLayer",
+		  function (layer) {
+			// Recrée le fond MapTiler actif avec son JSON d'origine avant page print
+			var clone = L.maptiler.maptilerLayer({
+			  style: layer.options.style,
+			  attribution: layer.options.attribution
+			});
+
+			// Permet à Browser Print d'attendre le chargement du fond vectoriel
+			clone._url = "maptiler-print";
+			clone._loading = true;
+
+			clone.once("ready", function () {
+			  clone._loading = false;
+			});
+
+			return clone;
+		  }
+		);
+		
 		var btnImprimer = new L.control.browserPrint({
 			title: "Imprimer",
 			closePopupsOnPrint: false,
