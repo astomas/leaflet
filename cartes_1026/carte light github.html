@@ -24,23 +24,23 @@
 		.modern-family-tools[data-expanded="false"] { background: #e8f6f2; }
 		.modern-family-tools[data-expanded="false"] .modern-family-title:hover { background: #d4efe6; }
 		/* Bouton info de la barre de titre, harmonisé avec le "?" de l'aide :
-		   rond bleu pâle de 44 px cerclé de bleu foncé, "i" blanc même police ; le bleu fonce au survol
-		   et quand la fenêtre est ouverte (un bleu plus clair effacerait le "i" blanc) */
+		   rond bleu de 44 px (bleu de l'icône de la fenêtre info) cerclé de blanc, "i" blanc même police,
+		   bleu plus clair au survol, plus foncé quand la fenêtre est ouverte */
 		#modernHeaderInfoDock .bouton-info {
 			width: 44px !important; height: 44px !important;
 			min-width: 44px !important; max-width: 44px !important;
 			line-height: 44px !important;
-			border: 2px solid #2563eb !important; box-sizing: border-box !important;
+			border: 2px solid #fff !important; box-sizing: border-box !important;
 			border-radius: 50% !important; box-shadow: none !important;
-			background: #7cb3f0 !important; color: #fff !important;
+			background: #2563eb !important; color: #fff !important;
 			font-family: inherit !important; font-size: 30px !important; font-weight: 900 !important;
 		}
 		#modernHeaderInfoDock .bouton-info .button-state { display: none !important; }
 		/* conteneur easy-button autour du bouton : sans ombre ni liseré (sinon carré gris derrière le rond) */
 		#modernHeaderInfoDock .easy-button-container { border: 0 !important; box-shadow: none !important; background: transparent !important; }
 		#modernHeaderInfoDock .bouton-info::before { content: "i"; }
-		#modernHeaderInfoDock .bouton-info:hover { background: #60a5fa !important; }
-		#modernHeaderInfoDock .bouton-info.bouton-info-actif { background: #3b82f6 !important; }
+		#modernHeaderInfoDock .bouton-info:hover { background: #3b82f6 !important; }
+		#modernHeaderInfoDock .bouton-info.bouton-info-actif { background: #1d4ed8 !important; }
 	</style>
 	<script>
 		// Ouvre / ferme le bloc dont on clique le titre : l'état est porté par
