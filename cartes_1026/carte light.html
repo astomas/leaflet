@@ -21,6 +21,20 @@
 		.modern-family-tools { background: #fff; transition: background .18s ease; }
 		.modern-family-tools[data-expanded="false"] { background: #e8f6f2; }
 		.modern-family-tools[data-expanded="false"] .modern-family-title:hover { background: #d4efe6; }
+		/* Bouton info de la barre de titre, harmonisé avec le "?" de l'aide :
+		   rond blanc de 44 px, "i" orange même police, plus clair au survol, gris quand la fenêtre est ouverte */
+		#modernHeaderInfoDock .bouton-info {
+			width: 44px !important; height: 44px !important;
+			min-width: 44px !important; max-width: 44px !important;
+			line-height: 44px !important;
+			border: none !important; border-radius: 50% !important; box-shadow: none !important;
+			background: #fff !important; color: #f9b062 !important;
+			font-family: inherit !important; font-size: 30px !important; font-weight: 900 !important;
+		}
+		#modernHeaderInfoDock .bouton-info .button-state { display: none !important; }
+		#modernHeaderInfoDock .bouton-info::before { content: "i"; }
+		#modernHeaderInfoDock .bouton-info:hover { color: #ffc98f !important; }
+		#modernHeaderInfoDock .bouton-info.bouton-info-actif { background: #e7e7e7 !important; }
 	</style>
 	<script>
 		// Ouvre / ferme le bloc dont on clique le titre : l'état est porté par
