@@ -1305,13 +1305,19 @@ function CarteLeaflet(conteneurId) {
 			MapTilerStandard
 		];
 
+		// seuil Leaflet d'origine (4), restauré sur les fonds raster
+		const seuilAnimZoom = maCarte.options.zoomAnimationThreshold;
+
 		maCarte.on("baselayerchange", function (e) {
 
 			const estVectoriel = fondsVectoriels.includes(e.layer);
 
 			//sans anim (saccade)
 			maCarte.options.zoomAnimation = !estVectoriel;
-			maCarte._zoomAnimated = !estVectoriel;
+			// Ne pas modifier maCarte._zoomAnimated : chaque couche le recopie à son ajout,
+			// avant baselayerchange. Le fond raster choisi après un MapTiler restait sans
+			// animation et se décalait au zoom. Un seuil à 0 coupe l'animation sans y toucher.
+			maCarte.options.zoomAnimationThreshold = estVectoriel ? 0 : seuilAnimZoom;
 			// scroll ralentit
 			/*maCarte.options.wheelPxPerZoomLevel = estVectoriel ? 120 : 60;
 			maCarte.options.wheelDebounceTime = estVectoriel ? 100 : 40;*/

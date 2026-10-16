@@ -31,6 +31,10 @@ Pièges déjà rencontrés :
   `L.BrowserPrint.Utils`.
 - Leaflet est en 1.9.x : `map.options.zoomAnimation` n'est lu qu'à la création
   de la carte ; seul `map._zoomAnimated` est relu à chaque zoom.
+  Mais chaque couche recopie `map._zoomAnimated` **à son ajout** : le modifier
+  en cours de route laisse les couches ajoutées entre-temps sans animation
+  (décalage au zoom). Pour couper l'animation à chaud, passer
+  `map.options.zoomAnimationThreshold` à 0 (relu à chaque zoom).
 
 ## Fichiers volumineux
 
