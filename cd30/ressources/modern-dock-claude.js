@@ -342,7 +342,9 @@
       return Array.prototype.slice.call(base.querySelectorAll("input"));
     }
 
-    // Fond blanc = retire les couches tuiles de la carte + fond de conteneur blanc
+    // [cd30] Fond blanc désactivé (mis en commentaire) : retirait les couches
+    // tuiles de la carte et passait le conteneur en fond blanc.
+    /*
     function retirerFond() {
       var map = window.maCarte;
       if (!map) return;
@@ -352,10 +354,11 @@
       });
       map.getContainer().classList.add("fond-blanc");
     }
+    */
 
     // [cd30] Présentation des fonds : pastilles si la page le demande par
     // data-fonds-affichage="pastilles" sur la section, liste déroulante sinon.
-    // Renvoie le nombre de fonds proposés (y compris fond blanc).
+    // Renvoie le nombre de fonds proposés.
     var nbFonds = (section.dataset.fondsAffichage === "pastilles")
       ? afficherEnPastilles()
       : afficherEnListe();
@@ -375,15 +378,19 @@
         if (r.checked) opt.selected = true;
         select.appendChild(opt);
       });
+      // [cd30] Fond blanc désactivé : option de liste mise en commentaire
+      /*
       var optBlanc = document.createElement("option");
       optBlanc.value = "__blanc__";
       optBlanc.textContent = "Fond blanc";
       select.appendChild(optBlanc);
+      */
 
       select.addEventListener("change", function () {
-        if (select.value === "__blanc__") { retirerFond(); return; }
-        var map = window.maCarte;
-        if (map) map.getContainer().classList.remove("fond-blanc");
+        // [cd30] Fond blanc désactivé
+        // if (select.value === "__blanc__") { retirerFond(); return; }
+        // var map = window.maCarte;
+        // if (map) map.getContainer().classList.remove("fond-blanc");
         var r = radiosActuels()[Number(select.value)];
         if (r) r.click();
       });
@@ -407,6 +414,8 @@
       // ajoutée dedans disparaîtrait. La pastille "Fond blanc" est donc posée
       // à côté de "base", dans une grille commune ; "base" en display:contents
       // n'a plus de boîte propre et ses labels deviennent cases de la grille.
+      // [cd30] La pastille "Fond blanc" est en commentaire ; la grille est
+      // conservée pour garder la même mise en page des pastilles.
       var grille = document.createElement("div");
       grille.className = "modern-fonds-plan";
       base.classList.remove("modern-fonds-plan");
@@ -414,6 +423,8 @@
       section.insertBefore(grille, base);
       grille.appendChild(base);
 
+      // [cd30] Fond blanc désactivé : pastille mise en commentaire
+      /*
       // Même structure que Leaflet (label > span > input + span) pour hériter
       // du style des pastilles. Nom de groupe propre : n'interfère pas avec
       // les radios Leaflet.
@@ -440,12 +451,17 @@
           radioBlanc.checked = false;
         });
       }
+      */
 
-      return radiosActuels().length + 1;
+      // [cd30] sans la pastille fond blanc : plus de "+ 1"
+      // return radiosActuels().length + 1;
+      return radiosActuels().length;
     }
 
-    // [cd30] Impression : recopie le fond blanc sur la carte d'impression
-    // (le plugin browser.print crée un conteneur neuf, sans la classe).
+    // [cd30] Fond blanc désactivé (mis en commentaire) : recopiait le fond
+    // blanc sur la carte d'impression (le plugin browser.print crée un
+    // conteneur neuf, sans la classe).
+    /*
     if (window.maCarte && window.maCarte.on) {
       window.maCarte.on("browser-print-start", function (e) {
         if (e.printMap && window.maCarte.getContainer().classList.contains("fond-blanc")) {
@@ -453,6 +469,7 @@
         }
       });
     }
+    */
 
     // [cd30] Impression : les entrées de légende grisées sont retirées en CSS
     // (@media print). Il reste à masquer l'en-tête et le bloc d'une couche dont
@@ -474,7 +491,7 @@
       window.maCarte.on("browser-print-end", function () { marquerGroupesLegendeVides(false); });
     }
 
-    // Met à jour le badge <em> avec le nombre de fonds (y compris fond blanc)
+    // Met à jour le badge <em> avec le nombre de fonds
     var badge = section.querySelector(".modern-family-title em");
     var nb = nbFonds;
     if (badge && nb) badge.textContent = nb + (nb > 1 ? " fonds" : " fond");
