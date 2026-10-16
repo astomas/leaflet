@@ -19,6 +19,10 @@
 		.modern-family[data-expanded="false"] > :not(.modern-family-title) { display: none; }
 		.modern-family-fonds-plan .modern-family-title:hover { background: #ddedf9; transition: background .18s ease; }
 		.modern-family-tools .modern-family-title:hover { background: #e8f6f2; transition: background .18s ease; }
+		/* Outils carte : fond blanc déplié, vert replié (survol un peu plus foncé pour rester visible) */
+		.modern-family-tools { background: #fff; transition: background .18s ease; }
+		.modern-family-tools[data-expanded="false"] { background: #e8f6f2; }
+		.modern-family-tools[data-expanded="false"] .modern-family-title:hover { background: #d4efe6; }
 	</style>
 	<script>
 		// Ouvre / ferme le bloc dont on clique le titre : l'état est porté par
