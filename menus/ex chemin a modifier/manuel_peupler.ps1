@@ -1,0 +1,78 @@
+﻿. ("$PSScriptRoot\..\..\API\PowerShell\api_complète.ps1")
+
+$dossierDonnees = "$PSScriptRoot\..\Données"
+$dossierRapports = "$PSScriptRoot\..\Rapports\manuel_peupler"
+$dossierSQL = "$PSScriptRoot\..\SQL"
+
+$dateBDTopo = '2025-12-01'
+$dateComplement3V = '2026-03-01'
+
+# nettoyage préalable
+Remove-Item "$dossierRapports\*"
+Remove-Item "$dossierTravailTemp\3v_peupler\*"
+
+SIg-Effacer-Table -table 'tmp.Source_ItineraireCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmp.Source_ItineraireCyclable.txt"
+SIg-Effacer-Table -table 'tmp.Source_PortionCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmp.Source_PortionCyclable.txt"
+SIg-Effacer-Table -table 'tmp.Source_SegmentCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmpSource_.SegmentCyclable.txt"
+SIg-Effacer-Table -table 'tmp.Source_Complement3v' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmp.Source_Complement3v.txt"
+
+# création des structures temporaires
+SIg-Creer-Table-Temp -table 'tmp.Source_ItineraireCyclable' -colonnes 'NumeroItineraireCyclable', 'NomOfficiel', 'NomUsage', 'Depart', 'Arrivee', 'EstInscrit', 'NiveauSchema', 'AnneeInscription', 'SiteWeb', 'AnneeOuverture' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - création tmp.Source_ItineraireCyclable.txt"
+SIg-Creer-Table-Temp -table 'tmp.Source_PortionCyclable' -colonnes 'Nom', 'Type', 'Description', 'NumeroItineraireCyclable', 'Ordre' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - création tmp.Source_PortionCyclable.txt"
+SIg-Creer-Table-Temp -table 'tmp.Source_SegmentCyclable' -colonnes 'EtatAvancement', 'Revetement', 'Statut', 'AnneeOuverture', 'SensUnique', 'SourceGeometrie', 'IdGeometrie', 'Fictif', 'PortionCyclable', 'Ordre', 'Proprietaires', 'Gestionnaires', 'Commentaires' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - création tmp.Source_SegmentCyclable.txt"
+
+# paramètrage des jobs de conversion des feuilles du fichier Excel descripteur en CSV
+$parametresJobs = [Collections.ArrayList]::new()
+
+[void]$parametresJobs.Add((Parametrer-Job-Exporter-CSV-Excel -excel "$dossierDonnees\Référentiel 3V.xlsx" -requete 'select * from [ItineraireCyclable$]' -csv "$dossierTravailTemp\3v_peupler\ItineraireCyclable.csv"))
+[void]$parametresJobs.Add((Parametrer-Job-Exporter-CSV-Excel -excel "$dossierDonnees\Référentiel 3V.xlsx" -requete 'select * from [PortionCyclable$]' -csv "$dossierTravailTemp\3v_peupler\PortionCyclable.csv"))
+[void]$parametresJobs.Add((Parametrer-Job-Exporter-CSV-Excel -excel "$dossierDonnees\Référentiel 3V.xlsx" -requete 'select * from [SegmentCyclable$]' -csv "$dossierTravailTemp\3v_peupler\SegmentCyclable.csv"))
+
+# exécution des jobs de conversion des feuilles du fichier Excel descripteur en CSV
+Executer-Jobs -parametresJobs $parametresJobs
+
+# paramètrage des jobs d'import des données dans les structures temporaires
+$parametresJobs = [Collections.ArrayList]::new()
+
+[void]$parametresJobs.Add((Parametrer-Job-SIg-Importer-CSV -csv "$dossierTravailTemp\3v_peupler\ItineraireCyclable.csv" -table 'tmp.Source_ItineraireCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - import ItineraireCyclable.csv.txt"))
+[void]$parametresJobs.Add((Parametrer-Job-SIg-Importer-CSV -csv "$dossierTravailTemp\3v_peupler\PortionCyclable.csv" -table 'tmp.Source_PortionCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - import PortionCyclable.csv.txt"))
+[void]$parametresJobs.Add((Parametrer-Job-SIg-Importer-CSV -csv "$dossierTravailTemp\3v_peupler\SegmentCyclable.csv" -table 'tmp.Source_SegmentCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - import SegmentCyclable.csv.txt"))
+[void]$parametresJobs.Add((Parametrer-Job-SIg-Importer-GeoJSON -geoJSON "$dossierDonnees\complement3v.geojson" -table 'tmp.Source_Complement3v' -multiGeom $false -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - import complement3v.geojson.txt"))
+
+# exécution des jobs d'import des données dans les structures temporaires
+Executer-Jobs -parametresJobs $parametresJobs
+
+# Partie 1 : sert pour le réalisation du référentiel (linéaire), export et carto
+# 1- peupler les tracés linéaires (segment, portion, itineraire)
+SIg-Executer-Fichier -fichier "$dossierSQL\1_peupler.sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 1_peupler.txt"
+
+# Partie 2 : uniqement utilisable pour la création de PR des VV (à activer lorsque modification ou création de parcour de la partie 1)
+
+# 2- inverser le sens des troncon à l'envers pour continuité du réseau
+SIg-Executer-Fichier -fichier "$dossierSQL\2_inverser_sens.sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 2_inverser_sens.txt"
+# 3- créer les vues matérialsées du réseau construit avec continuité
+#SIg-Executer-Fichier -fichier "$dossierSQL\3_vues et vues matérialisées de construction (create).sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 3_vues et vues matérialisées de construction (create).txt"
+SIg-Executer-Fichier -fichier "$dossierSQL\3_construction_itineraire.sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 3_construction_itineraire.txt"
+# 4- ajoute les PR0 et suivant en fonction de la distance abs (+1000m) sert pour loclaiser la première fois les PR à modifier dans le 5
+SIg-Executer-Fichier -fichier "$dossierSQL\4_calcul_pr.sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 4_calcul_pr.txt"
+# 5- déplacer des PR manuellement
+SIg-Executer-Fichier -fichier "$dossierSQL\5_corriger_source_pr.sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 5_corriger_source_pr.txt"
+# 6- Recalculer les Cumuldd débu et fin
+SIg-Executer-Fichier -fichier "$dossierSQL\6_maj_cumuld_segment.sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 6_maj_cumuld_segment.txt"
+
+# Parti 3 : mise à jour du référentiel
+#SIg-Executer-Fichier -fichier "$dossierSQL\6_corriger_source_pr.sql" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - 5_corriger_source_pr.txt"
+
+
+# update la date de la mise à jour de la source
+SIg-Executer-Commande -commande "update m.SegmentCyclable set DateSource = to_date('$dateBDTopo', 'YYYY-MM-DD') where SourceGeometrie = 'bdtopo.troncon_de_route'" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - MAJ date source bdtopo.troncon_de_route.txt"
+SIg-Executer-Commande -commande "update m.SegmentCyclable set DateSource = to_date('$dateBDTopo', 'YYYY-MM-DD') where SourceGeometrie = 'bdtopo.troncon_de_voie_ferree'" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - MAJ date source bdtopo.troncon_de_voie_ferree.txt"
+SIg-Executer-Commande -commande "update m.SegmentCyclable set DateSource = to_date('$dateComplement3V', 'YYYY-MM-DD') where SourceGeometrie = 'complement3v'" -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - MAJ date source complement3v.txt"
+
+# nettoyage final
+Remove-Item "$dossierTravailTemp\3v_peupler\*"
+
+SIg-Effacer-Table -table 'tmp.Source_ItineraireCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmp.Source_ItineraireCyclable.txt"
+SIg-Effacer-Table -table 'tmp.Source_PortionCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmp.Source_PortionCyclable.txt"
+SIg-Effacer-Table -table 'tmp.Source_SegmentCyclable' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmp.Source_SegmentCyclable.txt"
+SIg-Effacer-Table -table 'tmp.Source_Complement3v' -sortie "$dossierRapports\$(Get-Date -Format 'yyyy-MM-dd HH-mm-ss') - effacement tmp.Source_Complement3v.txt"
