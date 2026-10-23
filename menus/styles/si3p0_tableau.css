@@ -1,0 +1,207 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* ---------- Base page ---------- */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', Montserrat, Lato, Verdana, sans-serif;
+    font-size: 14px;
+    background-color: #00737b;
+    background-attachment: fixed;
+    background-image:
+        linear-gradient(135deg, rgba(0,58,63,0.7) 0%, rgba(0,115,123,0.4) 50%, rgba(0,82,88,0.6) 100%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='0.8' fill='rgba(255,255,255,0.06)'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, repeat;
+    background-size: cover, auto;
+}
+
+/* Texture légère */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.3;
+    z-index: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* ---------- Titre ---------- */
+
+#titre {
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+/* ---------- Boutons accueil / retour ---------- */
+
+body > a[href="http://si3p0"],
+body > a[href="../"] {
+    position: fixed;
+    top: 22px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.25s;
+}
+
+body > a[href="http://si3p0"] {
+    left: 24px;
+}
+
+body > a[href="../"] {
+    left: 78px;
+}
+
+body > a[href="http://si3p0"]:hover,
+body > a[href="../"]:hover {
+    background: rgba(255,255,255,0.28);
+    transform: scale(1.05);
+}
+
+body > a[href="http://si3p0"] > i,
+body > a[href="../"] > i {
+    font-size: 18px !important;
+    color: white !important;
+    margin: 0 !important;
+}
+
+/* ---------- Contenu ---------- */
+
+#contenu {
+    position: fixed;
+    top: 84px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 84px);
+    overflow: auto;
+    text-align: center;
+}
+
+/* ---------- Tableau ---------- */
+
+table.csv2html {
+    display: inline-block;
+    max-width: 98%;
+    max-height: calc(100% - 6px);
+    overflow: auto;
+    white-space: nowrap;
+    table-layout: auto;
+    background-color: #cdd9eb;
+	border-spacing: 1px;
+    border: 1px solid black;
+}
+
+tbody.csv2html tr:nth-child(even) {
+    background-color: rgba(200, 200, 200);
+}
+
+tbody.csv2html tr:nth-child(odd) {
+    background-color: rgba(193, 227, 230, 0.5);
+}
+
+th,
+td {
+    font-size: 12px;
+    padding: 5px;
+}
+
+th {
+    background-color: rgb(250, 181, 41);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+th:hover {
+    background-color: #ffcf4d;
+}
+
+td {
+    max-width: 1200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Première colonne */
+table.csv2html th:first-child,
+table.csv2html td:first-child {
+    width: 40px !important;
+    max-width: 40px !important;
+}
+
+/* ---------- Tri ---------- */
+
+.sort-arrow {
+    display: inline-block;
+    margin-left: 5px;
+    user-select: none;
+    font-size: 1.2em;
+}
+
+/* ---------- Recherche ---------- */
+
+.search-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+#tableSearch {
+    width: 190px;
+    padding: 8px 30px 8px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-clear {
+    position: absolute;
+    right: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+    font-size: 18px;
+    font-weight: bold;
+    display: none;
+}
+
+.search-clear:hover {
+    color: #666;
+}
+
+#tableSearch:valid ~ .search-clear {
+    display: block;
+}
+
+#tableSearch {
+    font-size: 14px;
+}
+
+#tableSearch::placeholder {
+    font-size: 12px;
+}
+
+/* ---------- Surlignage recherche ---------- */
+
+mark {
+    background-color: #eee600;
+    padding: 0;
+}
