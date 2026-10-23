@@ -1,0 +1,556 @@
+﻿/* ==========================================================================
+   SI3P0 — CSS menus thematiques modernisés "bento" 2026
+   Charte CD30 : teal #00737b, doré #fab529   
+   FOND : dégradé teal par défaut
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* ---------- Variables globales ---------- */
+:root {
+    --teal: #00737b;
+    --teal-d: #005258;
+    --teal-dd: #003a3f;
+    --gold: #fab529;
+    --gold-hover: #ffcc00;
+    --surface: rgba(255,255,255,0.88);
+    --surface-hover: rgba(255,255,255,0.95);
+    --border: rgba(0,115,123,0.12);
+    --border-hover: rgba(0,115,123,0.25);
+    --t1: #1a2a2b;
+    --t2: #4a5c5d;
+    --t3: #7a8a8b;
+    --radius: 20px;
+    --radius-sm: 12px;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ---------- Body : dégradé teal ---------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', Montserrat, Lato, Verdana, sans-serif;
+    min-height: 100vh;
+    background-attachment: fixed;
+	background:#00737b;
+	background-image:linear-gradient(135deg,rgba(0,58,63,0.7) 0%,rgba(0,115,123,0.4) 50%,rgba(0,82,88,0.6) 100%), url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='0.8' fill='rgba(255,255,255,0.06)'/%3E%3C/svg%3E");
+}
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.3;
+    z-index: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(500px circle at 85% -5%, rgba(0,115,123,0.25), transparent),
+        radial-gradient(400px circle at -5% 95%, rgba(250,181,41,0.08), transparent);
+}
+
+/* ---------- OPTION : fond photo satellite ---------- */
+body.fond-satellite {
+    background: var(--teal);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+body.fond-satellite::before {
+    background: linear-gradient(160deg,
+        rgba(0,58,63,0.72) 0%,
+        rgba(0,115,123,0.45) 50%,
+        rgba(0,82,88,0.65) 100%);
+    opacity: 1;
+}
+body.fond-satellite::after {
+    display: none;
+}
+
+/* ---------- Top bar ---------- */
+.top-bar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 28px 40px 0;
+    gap: 16px;
+}
+.top-bar > a {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.25s;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+.top-bar > a:hover {
+    background: rgba(255,255,255,0.28);
+    transform: scale(1.05);
+}
+.top-bar > a > .fa-house {
+    font-size: 1.2em !important;
+    color: white !important;
+    margin: 0 !important;
+}
+
+/* ---------- Titre ---------- */
+#titre {
+    position: relative;
+    z-index: 10;
+    font-family: 'Outfit', Montserrat, sans-serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    top: auto;
+    left: auto;
+    transform: none;
+    width: auto;
+    text-align: left;
+    margin: 0;
+}
+#titre b { font-weight: 600; color: white; }
+#titre em { font-style: normal; color: var(--gold); font-weight: 500; }
+
+/* ==========================================================================
+   GRILLE BENTO
+   minmax(0, 1fr) est la clé : contrairement à "1fr" seul, il autorise
+   les colonnes à rétrécir en dessous de la taille de leur contenu.
+   Sans ça, un texte long dans un <a> pousse la colonne au-delà de 50%.
+   ========================================================================== */
+#contenu {
+    position: relative;
+    z-index: 10;
+    max-width: 1280px;
+    /* margin: 36px auto 90px; */
+	margin: 36px auto 16px;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+    width: auto;
+	max-width: 80%;
+	/* align-items: start; */
+}
+
+/* ---------- Animation ---------- */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   SECTIONS PRINCIPALES (cartes bento blanches)
+   min-width:0 + overflow:hidden assurent que la carte ne déborde jamais
+   de sa colonne de grille, même avec du texte très long.
+   ========================================================================== */
+.accordeon-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    min-width: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.accordeon-section:nth-child(1) { animation-delay: 0.05s; }
+.accordeon-section:nth-child(2) { animation-delay: 0.10s; }
+.accordeon-section:nth-child(3) { animation-delay: 0.15s; }
+.accordeon-section:nth-child(4) { animation-delay: 0.20s; }
+.accordeon-section:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,60,65,0.15);
+}
+
+/* ---------- Header de carte ---------- */
+.card-head {
+    padding: 18px 20px 5px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+/* Header réduit pour les sections secondaires (UT, etc.) */
+.card-head-mini {
+    padding: 8px 20px 10px 20px;
+}
+.card-head-mini .card-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+.card-head-mini .card-name {
+    font-size: 18px;
+}
+.card-head-mini .card-sub {
+    font-size: 11px;
+    letter-spacing: 1.4px;
+}
+
+.card-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+.card-icon.icon-teal { background: rgba(0,115,123,0.1); color: var(--teal); }
+.card-icon.icon-gold { background: rgba(250,181,41,0.12); color: #c48a10; }
+.card-icon.icon-blue { background: rgba(8,57,81,0.1); color: #083951; }
+.card-icon.icon-coral { background: rgba(216,90,48,0.1); color: #f9b529; }
+.card-icon.icon-purple { background: rgba(83,74,183,0.1); color: #534ab7; }
+.card-icon.icon-green { background: rgba(30,158,117,0.1); color: #1d9e75; }
+.card-icon.icon-orange { background: rgba(250,181,41,0.15); color: #e8960e; }
+
+.card-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+}
+.card-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--t1);
+    letter-spacing: -0.2px;
+}
+.card-sub {
+    font-size: 12px;
+    color: var(--t3);
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    font-weight: 500;
+}
+
+/* ---------- Label accordéon (caché) ---------- */
+.accordeon-label { display: none; }
+
+/* ---------- Checkbox (déplier/replier) ---------- */
+input[type="checkbox"] { display: none; }
+input[type="checkbox"]:not(:checked) ~ .accordeon-contenu { display: none; }
+input[type="checkbox"]:checked ~ .accordeon-contenu { display: block; }
+
+/* ==========================================================================
+   CONTENU ACCORDEON (liste de liens)
+   display:block (et non flex) pour que les enfants respectent la largeur
+   du parent. Chaque <a> est ensuite en display:flex individuellement.
+   ========================================================================== */
+.accordeon-contenu {
+    padding: 12px 20px 18px;
+    font-family: 'Outfit', Montserrat, sans-serif;
+    text-align: left;
+}
+.accordeon-contenu br { display: none; }
+
+/* ==========================================================================
+   LIENS
+   overflow-wrap: anywhere  →  le navigateur peut couper un mot très long
+   si la ligne est trop étroite, mais en pratique le texte wrappera d'abord
+   sur les espaces normaux. C'est le filet de sécurité ultime.
+   ========================================================================== */
+.accordeon-contenu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+	padding: 9px 30px 9px 1px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--t2);
+    font-size: 16px;
+    transition: all 0.2s;
+    background: none;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+.accordeon-contenu a:first-of-type { padding-top: 11px; }
+.accordeon-contenu a:last-of-type  { padding-bottom: 11px; }
+.accordeon-contenu a:hover {
+    background: rgba(0,115,123,0.05);
+    color: var(--teal-d);
+    padding-left: 16px;
+}
+
+/* Bullet doré */
+.accordeon-contenu a .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.7;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.accordeon-contenu a:hover .dot {
+    opacity: 1;
+    transform: scale(1.6);
+    box-shadow: 0 0 8px rgba(250,181,41,0.35);
+}
+
+/* Flèche au hover */
+.link-arrow {
+    margin-left: auto;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.2s;
+    color: var(--t3);
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.accordeon-contenu a:hover .link-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ---------- Séparateur "Sous-thématiques" ---------- */
+.sep-row {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 8px 0;
+}
+.sep-row::before,
+.sep-row::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+	background: #fafafa80;
+}
+.sep-label {
+    font-size: 15px;
+	font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fafafa80;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* ---------- Mini-cards sous-thématiques (vertical, taille fixe) ---------- */
+.mini-cards-row {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: flex-start;
+}
+.section-hors-accordeon {
+    width: 200px;
+    min-height: 140px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--t1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: 0.2s;
+    margin: 0;
+    flex: 0 0 auto;
+}
+.section-hors-accordeon::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: var(--gold);
+    transition: width 0.3s;
+    border-radius: 2px;
+}
+.section-hors-accordeon:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,60,65,0.12);
+    background-color: var(--surface-hover);
+}
+.section-hors-accordeon:hover::after { width: 50%; }
+
+.mini-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+.mini-icon.icon-teal { background: rgba(0,115,123,0.1); color: var(--teal); }
+.mini-icon.icon-gold { background: rgba(250,181,41,0.12); color: #c48a10; }
+.mini-icon.icon-coral { background: rgba(216,90,48,0.1); color: #d85a30; }
+.mini-icon.icon-purple { background: rgba(83,74,183,0.1); color: #534ab7; }
+.mini-icon.icon-green { background: rgba(30,158,117,0.1); color: #1d9e75; }
+.mini-icon.icon-orange { background: rgba(250,181,41,0.15); color: #e8960e; }
+
+.section-hors-accordeon h4 {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--t1);
+    font-family: 'Outfit', Montserrat, sans-serif;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.25;
+    overflow-wrap: break-word;
+}
+
+.mini-desc {
+    font-size: 12px;
+    color: var(--t3);
+    line-height: 1.35;
+    text-align: center;
+}
+
+/* On masque l'ancien .accordeon-contenu dans les mini-cards */
+.section-hors-accordeon .accordeon-contenu {
+    display: none;
+}
+
+#copyright {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    padding: 12px 24px;
+    font-family: 'Outfit', Arial, sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    background: rgba(0,34,40,0.85);
+}
+#copyright a {
+    color: var(--gold);
+    text-decoration: none;
+}
+#copyright a:hover {
+    color: var(--gold-hover);
+    text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 800px) {
+    #contenu {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+    }
+    .top-bar { padding: 20px 16px 0; }
+    #titre { font-size: 22px; }
+    .mini-cards-row { justify-content: center; }
+}
+
+.btn-voir-tout {
+    padding: 8px 10px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--teal);
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    text-align: left;
+    padding-left: 27px;
+}
+.btn-voir-tout:hover {
+    background: rgba(0,115,123,0.05);
+    color: var(--teal-d);
+}
+/* bouton retour */
+.top-bar > a[href="../"] {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.25s;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+.top-bar > a[href="../"]:hover {
+    background: rgba(255,255,255,0.28);
+    transform: scale(1.05);
+}
+.top-bar > a[href="../"] > .fa-step-backward {
+    font-size: 1.1em !important;
+    color: white !important;
+    margin: 0 !important;
+}
+
+
+/* ---------- Sous-groupes dans une section (ex : Tableaux / Metabase) ---------- */
+.sous-groupe-titre {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal-d);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 10px 38px;
+    margin: 10px -20px 6px;
+    background: rgba(0,115,123,0.08);
+    border-left: 3px solid var(--gold);
+}
+.sous-groupe-titre:first-child {
+    margin-top: 0;
+}
+
+/* ---------- Liens externes (Metabase) : icône "ouvre dans nouvel onglet" ---------- */
+.accordeon-contenu a.lien-externe::after {
+    content: '\f08e';  /* fa-external-link-alt */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 11px;
+    margin-left: auto;
+    color: var(--t3);
+    opacity: 0.6;
+    transition: all 0.2s;
+}
+.accordeon-contenu a.lien-externe:hover::after {
+    color: var(--teal);
+    opacity: 1;
+    transform: translateX(2px);
+}
+/* Masquer la flèche classique sur les liens externes (évite le doublon) */
+.accordeon-contenu a.lien-externe .link-arrow {
+    display: none;
+}
