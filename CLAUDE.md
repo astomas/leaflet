@@ -20,11 +20,15 @@ lire le code d'un plugin, pas de cible pour les liens des pages.
 Seuls les chemins **relatifs** doivent suivre l'emplacement réel du fichier
 dans le dépôt.
 
-Exception : les pages publiées sur GitHub Pages (cartes de `cd30/`,
-`cartes_1026/carte light github.html`) visent les fichiers du dépôt :
+Exception : les pages publiées sur GitHub Pages (cartes à la racine de
+`cd30/` et de `leaflet sidebar full/`) visent les fichiers du dépôt :
 `Ressources 26/` (plugins déjà adaptés, chemins internes en `/leaflet/...`),
-`Ressources 26/maptiler/` (SDK, plugin et styles JSON MapTiler) et
-`cd30/ressources/`.
+`Ressources 26/maptiler/` (SDK, plugin et styles JSON MapTiler),
+`Ressources/API_JS/` (Font Awesome, icônes) et `cd30/ressources/`.
+
+GitHub Pages publie tout le dépôt : les autres pages (`menus/`, `cd30/autre/`)
+y sont lisibles, clés d'API comprises, mais visent le serveur interne et ne
+s'y affichent pas.
 
 ## Bibliothèques : vérifier l'API dans le fichier, pas de mémoire
 
