@@ -107,6 +107,19 @@ Pièges :
 - `-activerBoutonAccueil` est sans effet avec les modèles accordéon et tableau
   (bouton accueil toujours présent).
 
+`menus/nouvelle arborescence/` : copies modifiées, mêmes noms, de
+`fonctions_si3p0.ps1`, `nvx_menus.js` et `index-page-accueil.html` pour la
+refonte de `specs.png` (originaux inchangés). Différences :
+
+- sous-thématiques « réseau » (`Route`, `Véloroutes et Voies Vertes`,
+  `Lieux de covoiturage`, `Bâtiments`) : 4 premiers noms de
+  `$nomsSousThematiques` côté PS1, `listeSousThematiqueHaut` côté JS, affichées
+  en haut de page dans cet ordre ;
+- index générés du plus profond au moins profond, thématique en dernier : plus
+  besoin de relancer pour une nouvelle sous-thématique ;
+- titre « Thématique - Sous-thématique » pour une sous-thématique directe
+  (`Route` existe dans plusieurs thématiques).
+
 ## Fichiers volumineux
 
 Plusieurs cartes pèsent 8 à 10 Mo (GeoJSON embarqué). **Ne jamais les déplacer
