@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
         'route':                'Routes départementales',
         'véloroutes et voies vertes': 'Itinéraires cyclables EV, V et V30',
         'lieux de covoiturage': '',
-        'bâtiments':            'Patrimoine foncier et bâti',
+        'bâtiments':            'Bâtiments départementaux',
         'ppbe':                 'Plan de Prévention du Bruit et de l\'Environnement',
         'waze':                 'Cartes de chaleur des accidents et nids-de-poule RD',
         'conventions et ddp':   'Conventions routes/Dégats sur le Domaine Public',
