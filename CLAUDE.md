@@ -109,7 +109,22 @@ Pièges :
 
 `menus/nouvelle arborescence/` : copies modifiées, mêmes noms, de
 `fonctions_si3p0.ps1`, `nvx_menus.js` et `index-page-accueil.html` pour la
-refonte de `specs.png` (originaux inchangés). Différences :
+refonte de `specs.png` (originaux inchangés). Arborescence cible :
+
+```
+Thématiques/
+  Référentiels/         Route/ · Véloroutes et Voies Vertes/ · Lieux de covoiturage/ · Bâtiments/
+  Exploitation/         Route/ (PPBE, Waze) · Véloroutes et Voies Vertes/
+  Entretiens et Suivi/  Route/ (Chute de blocs, Curage, Fauchage) · Bâtiments/
+  Actes admin. et juridiques/ · Territoires - PER/ · Education/ · Très Haut Débit/
+```
+
+`Référentiels/Bâtiments` reprend « Patrimoine foncier et bâti »,
+`Entretiens et Suivi/Bâtiments` reprend « Exploitation et Suivi Bâtiments ».
+Une sous-thématique présente dans plusieurs thématiques (`Route`, `Bâtiments`)
+partage la même icône et la même description : les garder génériques.
+
+Différences avec les originaux :
 
 - sous-thématiques « réseau » (`Route`, `Véloroutes et Voies Vertes`,
   `Lieux de covoiturage`, `Bâtiments`) : 4 premiers noms de
