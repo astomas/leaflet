@@ -109,7 +109,9 @@ Pièges :
 
 `menus/nouvelle arborescence/` : copies modifiées, mêmes noms, de
 `fonctions_si3p0.ps1`, `nvx_menus.js` et `index-page-accueil.html` pour la
-refonte de `specs.png` (originaux inchangés). Arborescence cible :
+refonte de `specs.png` (originaux inchangés), et dans son sous-dossier
+`ex chemin a modifier/` les scripts 3V avec leurs chemins de sortie adaptés.
+Arborescence cible :
 
 ```
 Thématiques/
