@@ -1,6 +1,4 @@
 {
-  "total_count": 1,
-  "results": [
-    { "domain_id": "30", "echeance": "J", "phenomenon_id": "2", "color_id": 3 }
-  ]
+  "total_count": 0,
+  "results": []
 }
