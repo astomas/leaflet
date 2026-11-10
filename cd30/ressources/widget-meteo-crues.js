@@ -166,7 +166,10 @@ function initWidgetMeteo(cfg) {
 			afficher(TEST_J || [], TEST_J1 || []);
 			return;
 		}
-		var url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
+		// cfg.URL_ODS : fichier au format de la réponse Opendatasoft, pour tester
+		// le badge par le même chemin (requête réseau) que les données réelles
+		var url = cfg.URL_ODS
+			|| 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
 			+ 'weatherref-france-vigilance-meteo-departement/records'
 			+ '?where=domain_id%3D%2230%22%20AND%20color_id%20%3E%201&limit=30';
 		// une panne d'Opendatasoft ne doit pas masquer la vigilance crues, et inversement.
