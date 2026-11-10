@@ -169,8 +169,11 @@ function initWidgetMeteo(cfg) {
 		var url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
 			+ 'weatherref-france-vigilance-meteo-departement/records'
 			+ '?where=domain_id%3D%2230%22%20AND%20color_id%20%3E%201&limit=30';
-		// une panne d'Opendatasoft ne doit pas masquer la vigilance crues, et inversement
-		var requeteOds = fetch(url)
+		// une panne d'Opendatasoft ne doit pas masquer la vigilance crues, et inversement.
+		// no-store : sans lui, le navigateur pouvait resservir la réponse de la
+		// veille depuis son cache (alerte terminée encore affichée jusqu'à un
+		// Ctrl+F5). Ici la requête part toujours vers le serveur, comme Ctrl+F5.
+		var requeteOds = fetch(url, { cache: 'no-store' })
 			.then(function(r) { return r.json(); })
 			.catch(function() { return null; });
 		Promise.all([requeteOds, chargerCrues()])
