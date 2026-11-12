@@ -1,8 +1,8 @@
 {
   "departement": "30",
   "niveau": 2,
-  "ref": "04112026_10",
-  "date": "2026-11-04T08:55:10Z",
+  "ref": "11112026_16",
+  "date": "2026-11-11T14:55:47Z",
   "source": "https://www.vigicrues.gouv.fr/services/InfoVigiCru.geojson",
   "troncons": [
     {
@@ -48,12 +48,12 @@
     {
       "code": "GA22",
       "nom": "Ardèche aval",
-      "niveau": 1
+      "niveau": 2
     },
     {
       "code": "GA32",
       "nom": "Vistre",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "TL3",
