@@ -117,9 +117,13 @@ function initWidgetMeteo(cfg) {
 			afficher(TEST_J || [], TEST_J1 || []);
 			return;
 		}
+		// Domaines 30 (Gard) et 3010 (littoral du Gard) : Météo-France publie
+		// la vigilance vagues-submersion des départements côtiers sous un
+		// domaine à part, numéro du département suivi de « 10 ». Sans 3010,
+		// une alerte vagues-submersion n'apparaît jamais dans le badge.
 		var url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/'
 			+ 'weatherref-france-vigilance-meteo-departement/records'
-			+ '?where=domain_id%3D%2230%22%20AND%20color_id%20%3E%201&limit=30';
+			+ '?where=%28domain_id%3D%2230%22%20OR%20domain_id%3D%223010%22%29%20AND%20color_id%20%3E%201&limit=30';
 		fetch(url)
 		.then(function(r) { return r.json(); })
 		.then(function(data) {
