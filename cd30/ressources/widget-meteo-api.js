@@ -1,14 +1,10 @@
 /* //// widget vigilance Météo-France - Gard (dept 30) - API officielle ////
-   [cd30] Variante de widget-meteo-crues.js : même badge, mêmes pictogrammes,
-   mais les données viennent de l'API « Données Publiques Vigilance » de
+cela servira quand meteo france diffusera alertes infra departementales via leur API
+   [cd30] Variante de widget-meteo-crues.js : les données viennent de l'API « Données Publiques Vigilance » de
    Météo-France (portail-api.meteofrance.fr) au lieu d'Opendatasoft + Vigicrues.
-   - Couleur crues : celle que Météo-France affiche pour le département, sans
-     recalcul par tronçon ni workflow GitHub (vigicrues-30.yml inutile ici).
-   - Clé d'API obligatoire : CLE_PAR_DEFAUT ci-dessous (ou cfg.CLE_API).
-     Elle est lisible par tout visiteur de la page.
+   Clé d'API obligatoire : CLE_PAR_DEFAUT ci-dessous (ou cfg.CLE_API). lisible par tout visiteur de la page.
    Domaines lus : 30 (Gard) et 3010 (littoral du Gard : vagues-submersion).
-   Le badge décrit en priorité l'échéance du jour (J) ; J+1 n'est affiché que
-   s'il n'y a rien aujourd'hui. */
+   Le badge décrit en priorité l'échéance du jour (J) ; J+1 n'est affiché que s'il n'y a rien aujourd'hui. */
 function initWidgetMeteo(cfg) {
 	var widget = document.getElementById('meteoWidget');
 	if (!widget) return;
