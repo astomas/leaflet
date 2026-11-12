@@ -4,7 +4,8 @@
    Météo-France (portail-api.meteofrance.fr) au lieu d'Opendatasoft + Vigicrues.
    - Couleur crues : celle que Météo-France affiche pour le département, sans
      recalcul par tronçon ni workflow GitHub (vigicrues-30.yml inutile ici).
-   - Clé d'API obligatoire (cfg.CLE_API). Elle est lisible dans la page.
+   - Clé d'API obligatoire : CLE_PAR_DEFAUT ci-dessous (ou cfg.CLE_API).
+     Elle est lisible par tout visiteur de la page.
    Domaines lus : 30 (Gard) et 3010 (littoral du Gard : vagues-submersion).
    Le badge décrit en priorité l'échéance du jour (J) ; J+1 n'est affiché que
    s'il n'y a rien aujourd'hui. */
@@ -21,7 +22,11 @@ function initWidgetMeteo(cfg) {
 	   badge par le même chemin (requête réseau) que les données réelles */
 	var URL_API = cfg.URL_API
 		|| 'https://public-api.meteofrance.fr/public/DPVigilance/v1/cartevigilance/encours';
-	var CLE_API = cfg.CLE_API || '';
+	/* Clé « API Key » du portail portail-api.meteofrance.fr (API Données
+	   Publiques Vigilance) : remplacer VOTRE_CLE par la clé, entre les
+	   apostrophes. Une page peut en imposer une autre via cfg.CLE_API. */
+	var CLE_PAR_DEFAUT = 'VOTRE_CLE';
+	var CLE_API = cfg.CLE_API || CLE_PAR_DEFAUT;
 
 	/* 30 = département, 3010 = son littoral : Météo-France y publie la
 	   vigilance vagues-submersion (numéro du département suivi de « 10 ») */
@@ -181,8 +186,9 @@ function initWidgetMeteo(cfg) {
 			afficher(TEST_J || [], TEST_J1 || [], null);
 			return;
 		}
-		if (!CLE_API && !cfg.URL_API) {
-			console.warn('Widget météo : clé d\'API Météo-France absente (CLE_API)');
+		// clé non renseignée : inutile d'appeler l'API, elle répondrait 401
+		if ((!CLE_API || CLE_API === 'VOTRE_CLE') && !cfg.URL_API) {
+			console.warn('Widget météo : clé d\'API Météo-France non renseignée (CLE_PAR_DEFAUT dans widget-meteo-api.js)');
 			afficher([], [], null);
 			return;
 		}
