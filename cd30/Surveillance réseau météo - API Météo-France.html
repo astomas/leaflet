@@ -71,7 +71,8 @@
 	<script src="/leaflet/Ressources 26/overlap-marker.js"></script>
 	<link rel="stylesheet" href="ressources/widget-meteo.css">
 	<!-- [cd30] ?v= : augmenter ce numéro à chaque modification du widget pour que les navigateurs prennent tout de suite la nouvelle version -->
-	<script src="./ressources/widget-meteo-crues.js?v=4"></script>
+	<!-- [cd30] widget lisant l'API officielle Météo-France (clé : CLE_API dans initWidgetMeteo, plus bas) -->
+	<script src="./ressources/widget-meteo-api.js?v=1"></script>
 	
 	</head>
 	
@@ -80,7 +81,7 @@
     <header class="modern-header">
       <div id="modernLogosDock" class="modern-logos-dock modern-header-logos" aria-label="Liens rapides"></div>
       <div class="modern-header-titles">
-        <h1>Surveillance du réseau - source CD30 - Waze - vigilance infradépartementale</h1>
+        <h1>Surveillance du réseau - source CD30 - Waze - API Météo-France</h1>
       </div>
       <div class="meteo-zone">
         <div id="meteoWidget" class="modern-meteo-widget"></div>
@@ -2423,6 +2424,8 @@ this.rechercherJson = function(){
 
 	this.widgetMeteo = function() {
 		initWidgetMeteo({
+			// clé « API Key » du portail portail-api.meteofrance.fr (API Données Publiques Vigilance)
+			CLE_API: 'VOTRE_CLE',
 			// null = données réelles - exemple : var TEST_J: [{color_id:2, phenomenon_id:6}]
 			TEST_J:  null,
 			TEST_J1: null
