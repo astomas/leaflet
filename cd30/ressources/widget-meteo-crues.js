@@ -9,6 +9,12 @@
    à partir de Vigicrues par cd30/ressources/vigicrues-30.ps1 (Vigicrues ne
    renvoie pas d'en-tête CORS, la page ne peut pas le lire directement).
    Comme sur vigilance.meteofrance.fr, « crues » apparaît dès le jaune. */
+
+/* 				ATTENTION au 11/2026 : 
+renouveller abonnement meteo france au bout de 2 ans 
+regénérer clé APi au bout de  3 ans 
+*/
+
 function initWidgetMeteo(cfg) {
 	var widget = document.getElementById('meteoWidget');
 	if (!widget) return;
