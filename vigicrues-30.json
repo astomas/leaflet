@@ -1,8 +1,8 @@
 {
   "departement": "30",
-  "niveau": 2,
-  "ref": "25112026_10",
-  "date": "2026-11-25T08:55:15Z",
+  "niveau": 1,
+  "ref": "25112026_22",
+  "date": "2026-11-25T20:56:36Z",
   "source": "https://www.vigicrues.gouv.fr/services/InfoVigiCru.geojson",
   "troncons": [
     {
@@ -53,7 +53,7 @@
     {
       "code": "GA32",
       "nom": "Vistre",
-      "niveau": 2
+      "niveau": 1
     },
     {
       "code": "TL3",
