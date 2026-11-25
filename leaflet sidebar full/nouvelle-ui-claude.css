@@ -1616,7 +1616,8 @@ div[id^="GPgeocodeResultsList"] {
   border-radius: 50% !important;
   background: #fff !important;
   border: none !important;
-  color: #f9b062 !important;
+  /*color: #f9b062 !important;*/
+  color: blue !important;
   box-shadow: none !important;
 }
 .modern-header-help.modern-header-info button.modern-header-info-control:hover {
