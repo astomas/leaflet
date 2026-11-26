@@ -235,6 +235,15 @@ body.is-resizing * {
   position: relative !important;
 }
 
+/* Pas de contour de focus autour de la carte. Leaflet donne le focus à la
+   carte au clic (et après les boutons Info / Aide) ; le navigateur dessine
+   alors son contour 1px à l'extérieur (outline-offset de leaflet.css), sur le
+   bord de l'en-tête : la carte semblait remonter de 3px. */
+#carteId:focus,
+#carteId:focus-visible {
+  outline: none;
+}
+
 .modern-family {
   margin-bottom: 12px;
   overflow: hidden;
