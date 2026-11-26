@@ -504,9 +504,13 @@ body.is-resizing * {
   transition: box-shadow .18s, transform .18s, border-color .18s;
 }
 
+/* Libellé de l'élément de légende : taille et fonte réglées ICI, sur le span
+   (et non sur .leaflet-legend-item) car le rem ignore la taille du parent.
+   Verdana : fonte d'écran très lisible en petite taille (Tahoma en repli). */
 .detail-couches-sidebar .leaflet-legend-item span {
   display: inline !important;
-  font-size: .70rem !important;
+  font-family: Verdana, Tahoma, Geneva, sans-serif !important;
+  font-size: .78rem !important;
   color: #374151 !important;
   white-space: normal !important;
   vertical-align: middle;
