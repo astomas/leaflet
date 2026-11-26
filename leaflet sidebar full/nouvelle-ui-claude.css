@@ -679,6 +679,12 @@ body.is-resizing * {
 .leaflet-control .easy-button-button.bouton-service-visu-actif {
   background: #ffff00 !important;
 }
+/* Bouton Info sur la carte : rétablit la couleur d'icône de leaflet-si3p0
+   (#4f5697), écrasée par la règle globale ci-dessus (plus précise), y compris
+   au survol. Placée APRÈS la règle :hover, à précision égale elle l'emporte. */
+.leaflet-control .easy-button-button.bouton-info {
+  color: #4f5697 !important;
+}
 
 .leaflet-control-scale-line {
   border-radius: 6px;
