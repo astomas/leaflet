@@ -1377,6 +1377,14 @@ body.leaflet--printing .titre {
   color: rgba(250, 181, 41, 0.7) !important;
 }
 
+/* Icône de déplacement (grabber, haut gauche) des fenêtres Info et Aide
+   masquée. C'est la seule poignée de déplacement de Leaflet.Dialog : ces
+   fenêtres ne se déplacent donc plus (redimensionnement toujours possible). */
+.dialog-info .leaflet-control-dialog-grabber,
+.dialog-aide .leaflet-control-dialog-grabber {
+  display: none;
+}
+
 /* Zone de contenu */
 .dialog-aide .leaflet-control-dialog-contents {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
