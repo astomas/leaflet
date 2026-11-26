@@ -1683,6 +1683,19 @@ div[id^="GPgeocodeResultsList"] {
   height: 100%;
   right: 0;                     /* annule le decalage 1px herite d'easy-button.css */
 }
+/* Bouton Info posé sur la carte, à côté du Pegman (Surveillance réseau météo),
+   comme sur les cartes cd30 : icône qui remplit le bouton. */
+.boutons-conteneur .easy-button-button.bouton-info .fa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2em !important;
+  line-height: 1 !important;
+}
+/* Écart Pegman / Info de 3px comme cd30 (au lieu des 8px de leaflet-si3p0) */
+.boutons-conteneur .bouton-service-visu:has(+ .bouton-info) {
+  margin-right: 3px;
+}
 .modern-header-help.modern-header-info button.bouton-info .fa {
   display: flex;                /* le glyphe devient un item flex... */
   align-items: center;          /* ...centre verticalement... */

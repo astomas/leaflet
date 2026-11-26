@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="/leaflet/Ressources 26/librairies_cd30/leaflet-si3p0-claude.css" />
 	<script src="/leaflet/Ressources 26/librairies_cd30/leaflet.js"></script>
 
-	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=7" />
+	<link rel="stylesheet" href="nouvelle-ui-claude.css?v=8" />
 	<script src="./modern-dock-claude.js?v=3"></script>
 
 	<title id="ti">Carte Leaflet</title>
@@ -2106,7 +2106,7 @@ this.importFichier = function () {
         onAdd: function() {
             var boutonConteneur = L.DomUtil.create('div', 'boutons-conteneur');
             boutonConteneur.appendChild(boutonServiceVisu.button);
-            // boutonInfo vit dans l'en-tête (modernHeaderInfoDock) : ne pas le rapatrier ici
+            boutonConteneur.appendChild(boutonInfo.button);
             return boutonConteneur;
         }
     });
@@ -2114,21 +2114,10 @@ this.importFichier = function () {
     conteneurVisuInfo = new conteneur();
     maCarte.addControl(conteneurVisuInfo);
 
+    // Bouton Info revenu sur la carte (bas droite, à côté du Pegman) comme sur
+    // les cartes cd30 : le dock d'en-tête, devenu vide, est masqué.
     var headerInfoDock = document.getElementById('modernHeaderInfoDock');
-    if (headerInfoDock) {
-        headerInfoDock.innerHTML = '';
-        boutonInfo.button.dataset.modernDocked = 'true';
-        boutonInfo.button.classList.add('modern-header-info-control');
-        headerInfoDock.appendChild(boutonInfo.button);
-        var headerInfoLabel = document.createElement('span');
-        headerInfoLabel.className = 'modern-header-help-label';
-        headerInfoLabel.textContent = 'Info';
-        headerInfoDock.appendChild(headerInfoLabel);
-        headerInfoDock.addEventListener('click', function(e) {
-            if (e.target.closest('.easy-button-button')) return;
-            boutonInfo.button.click();
-        });
-    }
+    if (headerInfoDock) headerInfoDock.style.display = 'none';
 }
 	
 	this.titre = function(){
