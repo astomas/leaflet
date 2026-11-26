@@ -635,7 +635,7 @@ body.is-resizing * {
   max-height: 28px !important;
 }
 
-.leaflet-bar:not(.detail-couches-sidebar),
+.leaflet-bar:not(.detail-couches-sidebar):not(.barre-services-visu),
 .legend-container,
 .leaflet-legend:not(.detail-couches-sidebar),
 .infotitre {
@@ -653,17 +653,20 @@ body.is-resizing * {
   box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
 }
 
+/* background-color et non background : le raccourci background remet
+   background-image à none (!important) et effaçait les icônes posées en style
+   inline par les plugins (services Street View, Maps, Panoramax, Waze). */
 .leaflet-bar a,
 .leaflet-control .easy-button-button {
   color: var(--modern-primary) !important;
-  background: #fff !important;
+  background-color: #fff !important;
   transition: background .18s, color .18s;
 }
 
 .leaflet-bar a:hover,
 .leaflet-control .easy-button-button:hover {
   color: var(--modern-accent) !important;
-  background: #eef4fb !important;
+  background-color: #eef4fb !important;
 }
 
 /* //// modif nouvelle UI - bouton pegman (Service Visualisation) : la règle
