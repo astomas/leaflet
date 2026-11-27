@@ -156,7 +156,6 @@
   // Docke le bouton "Exporter" (créé par export-couches.js via L.easyButton)
   // dans "Outils carte", en 2e position après "Importer".
   // Le bouton peut ne pas être encore rendu : on réessaie tant qu'il est absent
-  // (dockElement est idempotent, les essais superflus sont sans effet).
   window.modernDockExporter = function (essaisRestants) {
     var ok = window.modernDockExistingControl("Exporter", {
       terms: ["export", "arrow-up-from-bracket", "fa-arrow-up-from-bracket"],
@@ -275,13 +274,14 @@
   // d'attribut sans JS supplémentaire.
   function setupAccordion() {
     document.querySelectorAll(".modern-family").forEach(function (section) {
-      var title = section.querySelector(".modern-family-title");
+      /*var title = section.querySelector(".modern-family-title");
       if (!title) return;
       // État initial : ouvert si l'attribut est absent
       if (!section.hasAttribute("data-expanded")) section.dataset.expanded = "true";
       title.addEventListener("click", function () {
         section.dataset.expanded = section.dataset.expanded === "false" ? "true" : "false";
-      });
+      });*/
+	   section.dataset.expanded = "true";
     });
   }
 
@@ -407,21 +407,16 @@
     // Injection des items légende sous chaque label de couche
     injecterLegende(overlays);
 
-    // Repli auto des autres blocs selon la longueur de « Données métier ».
+	// Repli auto des autres blocs selon la longueur de « Données métier ».
     // Appelé ici, une seule fois (la fonction sort plus haut si déjà déplacée).
     replierBlocsOuverture(overlays);
 
     return true;
   };
-
-  // Repli automatique des blocs de la sidebar, À L'OUVERTURE UNIQUEMENT, selon
-  // le nombre de lignes du bloc « Données métier » : nombre de couches + nombre
-  // d'éléments de légende sous les couches actives à l'ouverture (œil vert).
-  //   > 9  : replie « Outils carte »
-  //   > 14 : replie « Outils carte » et « Fonds de plan »
-  // Aucun écouteur : pas de repli pendant la consultation de la carte.
-  var SEUIL_REPLI_OUTILS = 9;
-  var SEUIL_REPLI_FONDS  = 14;
+  
+  // Repli automatique des blocs de la sidebar, À L'OUVERTURE UNIQUEMENT
+  var SEUIL_REPLI_OUTILS = 10;
+  var SEUIL_REPLI_FONDS  = 15;
 
   function replierBlocsOuverture(overlays) {
     var couches  = overlays.querySelectorAll("label");
@@ -439,14 +434,11 @@
     var outils = document.querySelector(".modern-family-tools");
     var fonds  = document.querySelector(".modern-family-fonds-plan");
     // data-expanded="false" : même état que le clic sur le titre (accordéon)
-    if (nbLignes > SEUIL_REPLI_OUTILS && outils) outils.dataset.expanded = "false";
-    if (nbLignes > SEUIL_REPLI_FONDS  && fonds)  fonds.dataset.expanded  = "false";
+    if (nbLignes >= SEUIL_REPLI_OUTILS && outils) outils.dataset.expanded = "false";
+    if (nbLignes >= SEUIL_REPLI_FONDS  && fonds)  fonds.dataset.expanded  = "false";
   }
 
-  // Injecte les éléments de légende sous chaque label de couche dans la sidebar.
-  // Réutilise L.control.Legend (rendu canvas + toggle map.addLayer/removeLayer)
-  // plutôt qu'un rendu statique. Chaque couche obtient son propre contrôle légende
-  // dont le container DOM est injecté directement dans la sidebar.
+  // Injecte les éléments de légende sous chaque label de couche dans la sidebar
   function injecterLegende(overlays) {
     var data = window.modernLegendeParCouche;
     var map  = window.maCarte;
@@ -483,9 +475,7 @@
 
       label.insertAdjacentElement("afterend", container);
 
-      // Chevron de repli/dépli du détail légende, ajouté à gauche du libellé.
-      // Le clic est neutralisé (preventDefault/stopPropagation) pour ne pas
-      // basculer la visibilité de la couche (action de la case/œil).
+      // Chevron de repli/dépli du détail légende, ajouté à gauche du libellé
       var chevron = document.createElement("span");
       chevron.className = "detail-couches-toggle";
       chevron.setAttribute("role", "button");
@@ -503,9 +493,7 @@
         chevron.classList.toggle("collapsed", replie);
       });
 
-      // === Œil = maître de visibilité de la couche, piloté sur System B ===
-      // System B = layerGroups de légende (tabCouchesLGLeg) — ce qui est
-      // réellement affiché. map.hasLayer() est la seule source de vérité.
+      // oeil visibilité de la couche
       var caseOeil = label.querySelector('input[type="checkbox"]');
       var itemsAvecLayers = items.filter(function (it) { return it.layers; });
 
@@ -514,18 +502,13 @@
         return itemsAvecLayers.some(function (it) { return map.hasLayer(it.layers); });
       };
 
-      // Coche/décoche l'icône œil via une classe sur le label — PAS via la case
-      // native : une case cochée serait resynchronisée par le contrôle Leaflet
-      // (_onInputClick) au moindre clic dans le contrôle, qui rajouterait alors
-      // la copie System A (doublon geoJson) sur la carte. La case reste donc
-      // toujours décochée pour neutraliser définitivement System A.
+      // Coche/décoche l'icône œil via une classe sur le label 
       var majOeil = function () {
         if (caseOeil) caseOeil.checked = false;
         label.classList.toggle("modern-couche-active", unItemActif());
       };
 
-      // Synchronise les classes DOM d'inactivité avec l'état réel de la carte.
-      // Appariement par ordre : item[k] avec layers ↔ k-ième div cliquable du plugin.
+      // Synchronise les classes DOM d'inactivité avec l'état réel de la carte
       var syncClasses = function () {
         var divsClic = container.querySelectorAll(".leaflet-legend-item-clickable");
         var idx = 0;
@@ -550,10 +533,7 @@
         majOeil();
       };
 
-      // Clic œil : tout allumer si rien d'actif, tout éteindre sinon.
-      // Si la couche était repliée à l'init (data-collapsed-init), on la déplie
-      // à la première activation — une seule fois, le flag est ensuite retiré.
-      // preventDefault neutralise la case native (pas de doublon System A).
+      // Clic œil : tout allumer si rien d'actif, tout éteindre sinon
       label.addEventListener("click", function (event) {
         if (event.target.closest(".detail-couches-toggle")) return;
         event.preventDefault();
@@ -566,10 +546,7 @@
         }
       });
 
-      // Clic item individuel : le plugin bascule layers + classe ; on recolore
-      // ensuite l'œil. On écoute le clic sur le container (une fois par clic
-      // utilisateur) plutôt que layeradd/layerremove qui se déclenche pour
-      // chaque enfant du layerGroup (758 fois pour le réseau routier → lag).
+      // Clic item individuel : le plugin bascule layers + classe 
       container.addEventListener("click", function (event) {
         if (!event.target.closest(".leaflet-legend-item-clickable")) return;
         setTimeout(majOeil, 0);
@@ -618,45 +595,51 @@
     else sidebar.appendChild(scroll);
   }
 
+
+
   // =========================================================================
   // Aide partagée entre cartes
   // =========================================================================
 
-  // //// modif nouvelle UI - fonction aide externalisée depuis les HTML cartes (contenu identique sur toutes les cartes).
+  // modif nouvelle UI - fonction aide externalisée depuis les HTML cartes (contenu identique sur toutes les cartes).
   // Crée le dialog d'aide, le bouton easyButton et le dock en-tête.
   // Appelé une seule fois à l'init de chaque carte via : this.aide = function(){ window.aideCarto(maCarte); }
   // Textes mis à jour : "cases à cocher" → icône œil dans la barre latérale ; export → "barre latérale". ////
   window.aideCarto = function (maCarte) {
-    // [cd30] Aide modernisée : grille de cartes (icône + titre + description).
+    // Aide modernisée : grille de cartes (icône + titre + description).
     function carteAide(img, titre, texte) {
-      var src = (img.charAt(0) === "/") ? img : "/leaflet/Ressources/API_JS/images/Aide/" + img;
+      var src = (img.charAt(0) === "/") ? img : "/Ressources/API_JS/images/Aide/" + img;
       return "<div class='aide-carte'><img src='" + src + "'>"
         + "<div class='aide-carte-txt'><b>" + titre + "</b><span>" + texte + "</span></div></div>";
     }
     var contenuAideComplet =
       "<div class='encadré-aide'>Afficher la carte depuis le Système d'Information du CD 30.<br>Une connexion internet est nécessaire pour les fonds de carte.</div>"
       + "<div class='aide-grille'>"
-      + carteAide("recentrer.png", "Recentrer carte", "Recentre automatiquement la carte sur le département du Gard (ou sur l'UT selon carte).")
-      + carteAide("rechGoogle.gif", "Rechercher localisation", "Commune, adresse, bâtiment, route, lieu")
-      + carteAide("/leaflet/cd30/ressources/aide-surlignage.svg", "Surligner lignes", "Surlignage en rouge des lignes au survol de la souris (actif ou non à l'ouverture selon la carte). Les lignes surlignées peuvent être disjointes ('multilignes').")
-      + carteAide("recherche.gif", "Rechercher élément de couche", "Saisir des caractères pour afficher les correspondances et zoomer dessus. Touche 'Espace' pour la liste entière. Bouton d'export GeoJSON de l'élément dans la fenêtre.")
-      + carteAide("legende.gif", "Légende dynamique", "Afficher/masquer chaque élément de la légende en cliquant dessus. L'œil de la barre latérale bascule la couche entière ; la légende filtre les éléments d'une même couche. Bloc légende repliable.")
-      + carteAide("streetview.gif", "Street View, Panoramax, Maps, Waze", "Après clic, positionner Pegman (personnage orange) sur la carte puis choisir un service. Désactiver : touche clavier ou re-clic sur le bouton.")
-      + carteAide("info.png", "Informations", "Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône 'i' (ou via la croix).")
-      + carteAide("coordGPS.gif", "Coordonnées GPS", "Clic droit sur la carte (zoom ville et +) pour afficher/copier les coordonnées 'lat, long'.")
-      + "<div class='aide-phrase'>Selon le nombre de couches et d'éléments de couche présents dans la sidebar à gauche à ouverture, les blocs outils cartes et fond de plan pourront être automatiquement repliés.</div>"
-      + "<div class='aide-sous-titre'>Outils de carte</div>"
-      + carteAide("dossier.gif", "Import couches", "Affiche des fichiers de couches WGS84 (Shape, GeoJSON, csv, GPX, Kml). Glisser/déposer possible, zip (1 couche par fichier), clic droit sur 1 élément importé pour effacer.")
-      + carteAide("/leaflet/cd30/ressources/aide-export.svg", "Export couches", "Exporte la ou les couches WGS84 sélectionnées dans la barre latérale aux formats GeoJSON, Shape ou GPX.")
-      + carteAide("imprimer.gif", "Imprimer carte", "'Vue courante' : la portion affichée, en paysage. 'Auto Gard' : tout le département (échelle auto). 'Sélec. zone' : un rectangle tracé à la souris.")
-      + carteAide("distance.gif", "Mesure de distance(s)", "Tracer une ligne pour mesurer en km (3 décimales), angles possibles. 'Echap' ou double-clic pour finir un segment ; plusieurs tronçons possibles. Bouton 'Règle' ou 'Echap' pour tout effacer.")
-      + carteAide("isochrone.gif", "Isochrone et isodistance", "Placer un point puis lancer le calcul (voiture ou piéton) : isochrone ou isodistance autour ou depuis le point. Le réseau routier est pris en compte.")
-      + carteAide("/leaflet/Ressources/Images/Punaises/GPS-Location.png", "Recherche par coordonnées GPS", "Copier ou saisir des coordonnées WGS84 (ex : '43.83494, 4.35965') pour afficher icône et fenêtre. Re-clic sur le bouton pour effacer.")
-      + "</div>"
-      + "<p class='text-warning'>Les rendus des fonctions importer, mesurer et isochrone seront perdus à la réouverture de la carte.<br>Pour en conserver une trace : impression papier/pdf via l'outil 'Imprimer' ou capture écran.</p>";
-
+	+ carteAide("recentrer.png", "Recentrer la carte", "Recentrage auto sur le Gard (ou l'UT selon carte).")
+		+ carteAide("rechLieu.png", "Rechercher une localisation", "Commune, adresse, lieu.")
+		+ carteAide("surlignage.png", "Surlignage des lignes", "Surlignage en rouge des lignes au survol de la souris. Interrupteur actif ou non à l'ouverture selon la carte.")
+		+ carteAide("recherche.gif", "Rechercher un élément de couche", "Route, PR, station, activité, site, UT, etc. selon la carte. Touche 'Espace': afficher la liste entière. Rech. par filtre (ex. PR par RD).")
+		+ carteAide("legende_sidebar.png", "Légende dynamique", "Cliquer pour afficher/masquer 1 couche entière (ligne icone oeil) ou,  si disponibles, des éléments de couche en dessous.")/*<span style='color: #007e8d;' 'font-weigth:bold;'> (*)</span>")*/
+		+ carteAide("streetview.png", "Accès Street View, G. Maps, Panoramax, Waze, IGN", "Après clic, positionner Pegman (personnage orange) sur la carte et choisir un service. Désactiver: touche clavier ou reclic.")
+		+ carteAide("info.png", "Informations", "Affiche les infos relatives aux données représentées. Fermer en réappuyant sur l'icône <b>'i'</b> (ou via la croix).")
+		+ carteAide("coordGPS.png", "Afficher coordonnées GPS", "Clic droit sur la carte au niveau de zoom ville et plus pour afficher/copier les coord. du curseur.")
+		// + "<div class='aide-phrase'>(*) Selon le nombre de couches et d'éléments de couche présents à gauche à l'ouverture, les blocs 'outils carte' et 'fonds de plan' seront  repliés.</div>"
+		+ "<div class='aide-sous-titre'>Outils carte</div>"
+		+ carteAide("dossier.gif", "Import de couches", "Affiche des fichiers de couches Shape, GeoJSON, Csv, GPX, Kml. Possibilité de glisser/déposer et zipper. Clic droit sur 1 des éléments pour effacer la couche importée après validation.")
+		+ carteAide("export.png", "Export de couches", "Après validation, exporter la ou les couches WGS84 activées (icone oeil vert) dans la barre latérale aux formats GeoJSON, Shape ou GPX.")
+		+ carteAide("imprimer.gif", "Imprimer la carte", "<u>'Vue courante'</u>: portion affichée à l'écran au format paysage.<br> <u>'Auto Gard'</u>: le département du Gard avec mise à l'échelle auto.<br> <u>'Sélec. zone'</u>: imprime un rectangle tracé à la souris sur la carte.")
+		+ carteAide("distance.gif", "Mesure de distance(s)", "Tracer une ligne pour mesurer en km (3 décimales, angles possibles). 'Echap' ou double-clic pour finir un segment. Reclic du bouton 'Règle' ou à nouveau 'Echap' pour tout effacer.")
+		+ carteAide("isochrone.gif", "Calcul isochrone", "Entrer une adresse ou placer un point sur la carte puis lancer le calcul (voiture ou piéton) isochrone ou isodistance sens départ ou arrivée. Le réseau routier est pris en compte.")
+		+ carteAide("rech-GPS.png", "Recherche par coordonnées GPS", "Copier ou saisir des coordonnées WGS84 (ex : '43.8349, 4.3596') pour localiser l'adresse la plus proche. Recliquer le bouton pour effacer la ou les adresses trouvées.")
+		+ "</div>"
+		+ "<p class='text-warning'>Les rendus issus des outils importer, mesure distance ou calcul d'isochrones seront perdus à la réouverture de la carte.<br>Pour en conserver une trace, faire une impression papier ou pdf via l'outil 'Imprimer' ou faire une capture d'écran.<br><br>Selon le nombre d'éléments du bloc 'Données métier', les blocs 'Outils carte' et 'Fonds de plan' peuvent être repliés à ouverture.<br>A l'ouverture, les couches dont l'ensemble des éléments sont grisés (icone oeil barré) sont repliés, clic chevron vert pour déplier.</p>"
+		+ "<div style='margin-top:10px; font-size:1.25em; font-weight:bold; text-align:center'>"
+		+ "<a href='http://si3p0/Ressources/tuto/Tutorial_Si3p0_new.ppsx' targeterPoint</a>"
+		+ " Lien tutoriel powerpoint sur la recherche d'éléments, les objets superposés et l'export/import de couches"
+	  + "</div>";
+			  
     if (!L.Browser.mobile) {
-      var fenêtreAide = new L.control.dialog({size: [790,740], anchor: [0,500], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,700]});
+      var fenêtreAide = new L.control.dialog({size: [845,685], anchor: [0,250], position:"topleft", initOpen: true, minSize: [350,250], maxSize: [900,750]});
     } else {
       var fenêtreAide = new L.control.dialog({size: [290,300], anchor: [0,50], position:"topleft", initOpen: true, minSize: [260,250], maxSize: [600,400]});
     }

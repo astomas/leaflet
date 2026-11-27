@@ -51,7 +51,7 @@ body {
   content: "";
   position: absolute;
   top: -60%;
-  right: -8%;
+  right: -15%;
   width: 360px;
   height: 220px;
   border-radius: 50%;
@@ -157,6 +157,30 @@ body {
   border-right: 1px solid var(--modern-border);
 }
 
+.bouton-service-visu {
+    width: 66px;
+    height: 46px;
+    border-radius: 5px;
+    border-width: 1px;
+    /* margin-right: 8px; */
+    background-color: #fff1cd;
+}
+
+.bouton-service-visu-actif {
+    background-color: yellow;
+}
+
+.bouton-service-visu img {
+    width: 34px;
+    height: 42px;
+}
+
+/* conteneurs de boutons */
+.boutons-conteneur {
+    display: flex;
+    margin-bottom: -6px !important;
+}
+
 /* Conteneur scrollable de la sidebar : absorbe le débordement vertical des
    sections de données (Fonds de plan, Données métier). La section « Outils
    carte » reste HORS de ce conteneur (cf. setupSidebarScroll dans le JS) car
@@ -234,16 +258,13 @@ body.is-resizing * {
   height: 100% !important;
   position: relative !important;
 }
-
 /* Pas de contour de focus autour de la carte. Leaflet donne le focus à la
    carte au clic (et après les boutons Info / Aide) ; le navigateur dessine
    alors son contour 1px à l'extérieur (outline-offset de leaflet.css), sur le
    bord de l'en-tête : la carte semblait remonter de 3px. */
-#carteId:focus,
-#carteId:focus-visible {
+#carteId:focus, #carteId:focus-visible {
   outline: none;
 }
-
 .modern-family {
   margin-bottom: 12px;
   overflow: hidden;
@@ -432,6 +453,21 @@ body.is-resizing * {
   transition: color .15s;
 }
 
+/* masquer tooltip polygone a niv de zoom (js) */
+.masquer-tooltips-polygones .tooltip-polygone {
+    display: none !important;
+}
+/* tronquer tooltips trop longs */
+.tooltip-import {
+    min-width: 220px;
+    max-width: 480px;
+    max-height: 260px;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.35;
+}
+
 /* Couche active (case cochée, œil ouvert) → libellé dégrisé.
    Bascule automatiquement à l'ouverture et en cours de session.
    .modern-couche-active : couches à items de légende, dont l'œil est piloté
@@ -498,6 +534,7 @@ body.is-resizing * {
 
 .detail-couches-sidebar .leaflet-legend-group-content {
   padding: 0 !important;
+  font-weight:600;
 }
 
 /* Étiquette blanche : display block remplace display table, l'icône et le
@@ -511,17 +548,15 @@ body.is-resizing * {
   border-radius: 8px;
   transition: box-shadow .18s, transform .18s, border-color .18s;
 }
-
-/* Libellé de l'élément de légende : taille et fonte réglées ICI, sur le span
-   (et non sur .leaflet-legend-item) car le rem ignore la taille du parent.
-   Verdana : fonte d'écran très lisible en petite taille (Tahoma en repli). */
+/* apparence élément couche ds sidebar */
 .detail-couches-sidebar .leaflet-legend-item span {
   display: inline !important;
-  font-family: Verdana, Tahoma, Geneva, sans-serif !important;
-  font-size: .78rem !important;
   color: #374151 !important;
   white-space: normal !important;
   vertical-align: middle;
+  /* font-family: Verdana, Tahoma, Geneva, sans-serif !important; */
+  font-size: .71rem !important;
+  font-weight: 500;
 }
 /* Décalage libellé lignes/polygones (symbole canvas) uniquement */
 .detail-couches-sidebar .leaflet-legend-item i:has(canvas) + span {
@@ -643,7 +678,7 @@ body.is-resizing * {
   max-height: 28px !important;
 }
 
-.leaflet-bar:not(.detail-couches-sidebar):not(.barre-services-visu),
+.leaflet-bar:not(.detail-couches-sidebar),
 .legend-container,
 .leaflet-legend:not(.detail-couches-sidebar),
 .infotitre {
@@ -661,9 +696,6 @@ body.is-resizing * {
   box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
 }
 
-/* background-color et non background : le raccourci background remet
-   background-image à none (!important) et effaçait les icônes posées en style
-   inline par les plugins (services Street View, Maps, Panoramax, Waze). */
 .leaflet-bar a,
 .leaflet-control .easy-button-button {
   color: var(--modern-primary) !important;
@@ -687,6 +719,7 @@ body.is-resizing * {
 .leaflet-control .easy-button-button.bouton-service-visu-actif {
   background: #ffff00 !important;
 }
+
 /* Bouton Info sur la carte : rétablit la couleur d'icône de leaflet-si3p0
    (#4f5697), écrasée par la règle globale ci-dessus (plus précise), y compris
    au survol. Placée APRÈS la règle :hover, à précision égale elle l'emporte. */
@@ -822,6 +855,79 @@ body.is-resizing * {
 .legend-container summary {
   color: var(--modern-primary);
   font-weight: 800;
+}
+
+/* interrupteur surlignage */
+.switch-control-container-discret {
+    background: #fcd689;
+    border: 1px solid rgba(250, 181, 41, 0.4);
+    border-radius: 12px;
+    padding: 6px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 6px;
+}
+
+.switch-label-discret {
+    display: block;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 8.5px;
+    font-weight: 900;
+    color: black;
+    margin-top: 3px;
+	margin-bottom: -3px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.leaflet-control-switch-discret {
+    background: #bbb;
+    border-radius: 15px;
+    width: 48px;
+    height: 23px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+}
+
+
+.switch-text-discret {
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-weight: 900;
+    font-size: 9px;
+    color: #000;
+    margin-left: 21px;
+    transition: all 0.3s;
+    user-select: none;
+    letter-spacing: -0.2px;
+}
+
+.switch-handle-discret {
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    left: 3px;
+    transition: all 0.3s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.switch-active-discret {
+    background: #e60000;
+}
+
+.switch-active-discret .switch-handle-discret {
+    left: 29px;
+}
+
+.switch-active-discret .switch-text-discret {
+    color: #fff;
+    margin-left: 7px;
 }
 
 .bouton-aide,
@@ -1166,127 +1272,90 @@ body.leaflet--printing .titre {
   background: transparent !important;
 }
 
-/* Boîte « Choisissez le format d'export » harmonisée avec la nouvelle UI :
-   carte blanche à liseré gauche couleur « Outils carte », formats en
-   pastilles (comme les fonds de plan), boutons arrondis comme les outils.
-   Les couleurs système de leaflet-si3p0-claude.css (Canvas, AccentColor…)
-   sont remplacées par des couleurs fixes : même rendu quel que soit le thème
-   de l'ordinateur. Centrée dans la fenêtre : ne recouvre plus l'en-tête. */
 .export-dialog {
   z-index: 300001 !important;
-  color-scheme: light;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 280px;
-  padding: 16px 18px 14px;
-  background: #fff;
-  color: var(--modern-text);
-  border: 1px solid #dbe3ec;
-  border-left: 4px solid var(--modern-tools);
-  border-radius: 12px;
-  box-shadow: 0 10px 28px rgba(31, 35, 40, .24);
-  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
-/* Titre : style des en-têtes de popup, souligné couleur outils */
-.export-dialog h4 {
-  margin: 0 0 14px;
-  padding-bottom: 7px;
-  border-bottom: 2px solid var(--modern-tools);
-  font-size: 14px;
-  font-weight: 800;
-  color: #1f2d3d;
+/* Styles pour la boite de dialogue d'export */
+.export-dialog {
+    color-scheme: light dark;
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: Canvas;
+    color: CanvasText;
+    border: 2px solid ButtonBorder;
+    border-radius: 8px;
+    padding-top: 0px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    z-index: 10000;
+    min-width: 240px;
+    font-family: system-ui, sans-serif;
 }
 
-/* Formats : 3 pastilles côte à côte ; la pastille cochée est remplie */
+.export-dialog h3 {
+    margin-top: 0;
+    color: CanvasText;
+}
+
 .export-dialog-options {
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+    margin: 15px 0;
 }
 
 .export-dialog-label {
-  position: relative;
-  margin: 0;
-  padding: 7px 10px;
-  text-align: center;
-  border-radius: 999px;
-  border: 1px solid #b7e2d6;
-  background: #eefaf6;
-  color: #0f6e5a;
-  font-size: .8rem;
-  font-weight: 600;
-  transition: background .15s, color .15s, border-color .15s;
+    display: block;
+    margin: 10px 0;
+    cursor: pointer;
+    color: CanvasText;
+    font-size: 0.9em;
 }
 
-.export-dialog-label:hover {
-  background: #d3f0e6;
-  border-color: var(--modern-tools);
-}
-
-.export-dialog-label:has(input:checked) {
-  background: var(--modern-tools);
-  border-color: var(--modern-tools);
-  color: #fff;
-}
-
-/* Radio masqué : le focus clavier (Tab, flèches) s'affiche sur la pastille */
-.export-dialog-label:has(input:focus-visible) {
-  outline: 2px solid var(--modern-tools);
-  outline-offset: 2px;
-}
-
-/* Radio natif masqué (conservé dans le DOM : le clic sur la pastille le coche) */
 .export-dialog-label input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-  pointer-events: none;
+    margin-right: 8px;
+    cursor: pointer;
 }
 
 .export-dialog-buttons {
-  margin-top: 16px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+    margin-top: 20px;
+    text-align: right;
 }
 
 .export-dialog-btn {
-  padding: 7px 16px;
-  border-radius: 10px;
-  font: 700 .8rem "Segoe UI", Arial, Helvetica, sans-serif;
-  cursor: pointer;
-  transition: background .15s, border-color .15s;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
 }
 
 .export-dialog-btn-cancel {
-  margin-right: 0;
-  background: #fff;
-  color: var(--modern-primary);
-  border: 1px solid #dbe3ec;
+    background: ButtonFace;
+    color: ButtonText;
+    /* border: 1px solid ButtonBorder; */
+    margin-right: 8px;
 }
-
-.export-dialog-btn-cancel:hover {
-  background: #f1f5f9;
+.export-dialog-btn-cancel:focus {
+    outline: none;
 }
 
 .export-dialog-btn-export {
-  background: var(--modern-tools);
-  color: #fff;
-  border: 1px solid var(--modern-tools);
+    background: AccentColor;
+    color: AccentColorText;
+    border: 1px solid ButtonBorder;
+    font-weight: bold;
 }
 
-.export-dialog-btn-export:hover {
-  background: #12876f;
-  border-color: #12876f;
-}
-
-.export-dialog-btn:focus-visible {
-  outline: 2px solid var(--modern-tools);
-  outline-offset: 2px;
+.export-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
 }
 
 .modern-tools-dock label[id^="GPshowIsochronPicto"] {
@@ -1450,12 +1519,12 @@ body.leaflet--printing .titre {
   border-bottom: 1px solid rgba(250, 181, 41, 0.4);
   color: #5b3a00;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 38px;
-  padding: 1px 36px 0 50px;
+  padding: 0px 0px 0px 55px;
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -1504,11 +1573,13 @@ body.leaflet--printing .titre {
   padding: 14px 7px 16px !important;
 }
 
-/* Encadré d'introduction */
+/* Encadré d'introduction — fond bleu doux (remplace l'orange de si3p0) */
 .dialog-aide .encadré-aide {
   text-align: center;
   font-weight: 700;
   border: none;
+  background-color: #d6e9f8;
+  color: #1a4f72;
   border-radius: 8px;
   padding: 5px 3px;
   display: block;
@@ -1540,6 +1611,23 @@ body.leaflet--printing .titre {
   font-weight: 700;
 }
 
+/* Phrase libre de l'aide : occupe toute la largeur de la grille */
+.dialog-aide .aide-phrase {
+  grid-column: 1 / -1;
+  /* padding: 2px 2px; */
+  /* text-align: center; */
+  font-weight: 500;
+  color: #007e8d;
+}
+
+
+/* bandeau titre du dialog d'aide au teal du header */
+.dialog-aide .leaflet-control-dialog-inner::before {
+  background: #007e8d !important;
+  color: #fff !important;
+  border-bottom-color: rgba(255, 255, 255, .25) !important;
+}
+
 /* Toggle "voir plus / moins" — façon pilule, sans carte */
 .dialog-aide .leaflet-control-dialog-contents p:has(#lienExtensible) {
   background: none;
@@ -1569,6 +1657,23 @@ body.leaflet--printing .titre {
   border: none;
   padding: 0;
   margin-top: 8px;
+}
+
+/* info */
+.bouton-info {
+    width: 66px !important;
+    height: 46px !important;
+    color: #4f5697 !important;
+    background-color: white !important;
+    border-width: 1px !important;
+}
+
+.bouton-info:hover {
+    background-color: #e7e7e7;
+}
+
+.bouton-info-actif {
+    background-color: #e7e7e7;
 }
 
 /* Avertissement — carte ambre */
@@ -1634,7 +1739,7 @@ body.leaflet--printing .titre {
   align-items: flex-start;
   gap: 10px;
   padding: 9px 11px;
-  background: #fff;
+  background: #f3f3f3;
   border: 1px solid rgba(15, 23, 42, .1);
   border-radius: 8px;
 }
@@ -1648,7 +1753,7 @@ body.leaflet--printing .titre {
 .dialog-aide .aide-carte-txt {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  /* gap: 2px; */
 }
 .dialog-aide .aide-carte-txt b {
   font-size: 13px;
@@ -1656,7 +1761,7 @@ body.leaflet--printing .titre {
 }
 .dialog-aide .aide-carte-txt span {
   font-size: 12px;
-  line-height: 1.35;
+  line-height: 1.3;
   color: #55606e;
 }
 
@@ -1671,16 +1776,6 @@ body.leaflet--printing .titre {
   font-weight: 800;
   letter-spacing: .4px;
   border-bottom: 2px solid rgba(0, 126, 141, .25);
-}
-
-/* Phrase libre de l'aide : toute la largeur de la grille, centrée, en gras,
-   couleur du sous-titre « Outils de carte » */
-.dialog-aide .aide-phrase {
-  grid-column: 1 / -1;
-  padding: 6px 10px;
-  text-align: center;
-  font-weight: 700;
-  color: #007e8d;
 }
 
 /* [cd30] Recherche IGN (SearchEngine) : espace la loupe, le champ et la liste
@@ -1722,9 +1817,22 @@ div[id^="GPgeocodeResultsList"] {
   top: 33px !important;             /* juste sous le champ aligné (hauteur 33px) */
 }
 
-/* [cd30] Bouton Aide : pastille ronde blanche, "?" orange centre.
-   Le controle Leaflet d'origine est masque, le label porte tout le visuel. */
-.modern-header-aide .modern-header-help-label {
+.modern-header-aide:hover .modern-header-help-label
+ {
+    color: #ffc98f;
+}
+.modern-header-aide .modern-header-help-label
+ {
+    font-size: 42px;
+    font-weight: 900;
+    color: #f9b062;
+    margin-right: 16px;
+}
+
+.modern-header-help-label {
+    line-height: 1;
+}
+/*.modern-header-aide .modern-header-help-label {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1736,7 +1844,7 @@ div[id^="GPgeocodeResultsList"] {
   font-weight: 900;
   color: #f9b062;            /* "?" reste orange */
   box-sizing: border-box;
-}
+}*/
 .modern-header-aide:hover .modern-header-help-label {
   color: #ffc98f;
 }
@@ -1832,9 +1940,10 @@ div[id^="GPgeocodeResultsList"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2em !important;
+  font-size: 2.8em !important;
   line-height: 1 !important;
 }
+
 /* Écart Pegman / Info de 3px comme cd30 (au lieu des 8px de leaflet-si3p0) */
 .boutons-conteneur .bouton-service-visu:has(+ .bouton-info) {
   margin-right: 3px;
