@@ -1673,6 +1673,12 @@ body.leaflet--printing .titre {
   border-bottom: 2px solid rgba(0, 126, 141, .25);
 }
 
+/* Phrase libre de l'aide : occupe toute la largeur de la grille */
+.dialog-aide .aide-phrase {
+  grid-column: 1 / -1;
+  padding: 2px;
+}
+
 /* [cd30] Recherche IGN (SearchEngine) : espace la loupe, le champ et la liste
    d'autocomplétion pour supprimer les chevauchements (le plugin colle le champ
    sur la loupe avec left:-3px et décale la liste de 27px). */
