@@ -1673,10 +1673,14 @@ body.leaflet--printing .titre {
   border-bottom: 2px solid rgba(0, 126, 141, .25);
 }
 
-/* Phrase libre de l'aide : occupe toute la largeur de la grille */
+/* Phrase libre de l'aide : toute la largeur de la grille, centrée, en gras,
+   couleur du sous-titre « Outils de carte » */
 .dialog-aide .aide-phrase {
   grid-column: 1 / -1;
-  padding: 2px;
+  padding: 6px 10px;
+  text-align: center;
+  font-weight: 700;
+  color: #007e8d;
 }
 
 /* [cd30] Recherche IGN (SearchEngine) : espace la loupe, le champ et la liste
