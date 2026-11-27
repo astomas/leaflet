@@ -1909,6 +1909,12 @@ this.importFichier = function () {
 			imperial: false
 			}).addTo(e.printMap); 
 
+			// Auto Gard : carte imprimée décalée de 10px vers la gauche. Différé car le
+			// plugin recadre la carte sur le Gard juste après cet événement (mode auto).
+			if (maCarte.getContainer().classList.contains("leaflet-browser-print--auto")) {
+				setTimeout(function() { e.printMap.panBy([10, 0], { animate: false }); }, 150);
+			}
+
 			if (presenceLegende) {
 			blocLegende.addTo(e.printMap);
 			
