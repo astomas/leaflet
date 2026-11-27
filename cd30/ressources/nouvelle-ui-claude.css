@@ -1931,6 +1931,12 @@ div[id^="GPgeocodeResultsList"] {
   border-bottom: 2px solid rgba(0, 126, 141, .25);
 }
 
+/* Phrase libre de l'aide : occupe toute la largeur de la grille */
+.dialog-aide .aide-phrase {
+  grid-column: 1 / -1;
+  padding: 2px;
+}
+
 /* [cd30] Bandeau en haut du bloc légende : porte le chevron de repli global.
    Un clic dessus (ou sur un élément de légende) maintient le bloc ouvert. */
 .legende-bandeau {
