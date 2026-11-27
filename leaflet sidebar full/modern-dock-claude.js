@@ -407,8 +407,41 @@
     // Injection des items légende sous chaque label de couche
     injecterLegende(overlays);
 
+    // Repli auto des autres blocs selon la longueur de « Données métier ».
+    // Appelé ici, une seule fois (la fonction sort plus haut si déjà déplacée).
+    replierBlocsOuverture(overlays);
+
     return true;
   };
+
+  // Repli automatique des blocs de la sidebar, À L'OUVERTURE UNIQUEMENT, selon
+  // le nombre de lignes du bloc « Données métier » : nombre de couches + nombre
+  // d'éléments de légende sous les couches actives à l'ouverture (œil vert).
+  //   > 9  : replie « Outils carte »
+  //   > 14 : replie « Outils carte » et « Fonds de plan »
+  // Aucun écouteur : pas de repli pendant la consultation de la carte.
+  var SEUIL_REPLI_OUTILS = 9;
+  var SEUIL_REPLI_FONDS  = 14;
+
+  function replierBlocsOuverture(overlays) {
+    var couches  = overlays.querySelectorAll("label");
+    var nbLignes = couches.length;
+    couches.forEach(function (label) {
+      // Œil vert = classe posée par injecterLegende (majOeil)
+      if (!label.classList.contains("modern-couche-active")) return;
+      // La légende de la couche est insérée juste après son label
+      var detail = label.nextElementSibling;
+      if (detail && detail.classList.contains("detail-couches-sidebar")) {
+        nbLignes += detail.querySelectorAll(".leaflet-legend-item").length;
+      }
+    });
+
+    var outils = document.querySelector(".modern-family-tools");
+    var fonds  = document.querySelector(".modern-family-fonds-plan");
+    // data-expanded="false" : même état que le clic sur le titre (accordéon)
+    if (nbLignes > SEUIL_REPLI_OUTILS && outils) outils.dataset.expanded = "false";
+    if (nbLignes > SEUIL_REPLI_FONDS  && fonds)  fonds.dataset.expanded  = "false";
+  }
 
   // Injecte les éléments de légende sous chaque label de couche dans la sidebar.
   // Réutilise L.control.Legend (rendu canvas + toggle map.addLayer/removeLayer)
