@@ -247,7 +247,7 @@ img.leaflet-marker-icon[src*="geosearch"] {
     color: CanvasText;
     border: 2px solid ButtonBorder;
     border-radius: 8px;
-    padding-top: 0px;
+    padding-top: 15px;
     padding-right: 15px;
     padding-bottom: 10px;
     padding-left: 15px;
@@ -257,8 +257,10 @@ img.leaflet-marker-icon[src*="geosearch"] {
     font-family: system-ui, sans-serif;
 }
 
-.export-dialog h3 {
-    margin-top: 0;
+/* Le titre est un <h4> (export-couches.js) : l'ancien sélecteur h3 ne
+   s'appliquait pas. L'espace du haut vient du padding-top de la boîte. */
+.export-dialog h4 {
+    margin: 0;
     color: CanvasText;
 }
 
