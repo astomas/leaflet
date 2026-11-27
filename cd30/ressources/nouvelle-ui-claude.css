@@ -1187,8 +1187,127 @@ body.leaflet--printing .titre {
   background: transparent !important;
 }
 
+/* Boîte « Choisissez le format d'export » harmonisée avec la nouvelle UI :
+   carte blanche à liseré gauche couleur « Outils carte », formats en
+   pastilles (comme les fonds de plan), boutons arrondis comme les outils.
+   Les couleurs système de leaflet-si3p0-claude.css (Canvas, AccentColor…)
+   sont remplacées par des couleurs fixes : même rendu quel que soit le thème
+   de l'ordinateur. Centrée dans la fenêtre : ne recouvre plus l'en-tête. */
 .export-dialog {
   z-index: 300001 !important;
+  color-scheme: light;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 280px;
+  padding: 16px 18px 14px;
+  background: #fff;
+  color: var(--modern-text);
+  border: 1px solid #dbe3ec;
+  border-left: 4px solid var(--modern-tools);
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(31, 35, 40, .24);
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+/* Titre : style des en-têtes de popup, souligné couleur outils */
+.export-dialog h4 {
+  margin: 0 0 14px;
+  padding-bottom: 7px;
+  border-bottom: 2px solid var(--modern-tools);
+  font-size: 14px;
+  font-weight: 800;
+  color: #1f2d3d;
+}
+
+/* Formats : 3 pastilles côte à côte ; la pastille cochée est remplie */
+.export-dialog-options {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.export-dialog-label {
+  position: relative;
+  margin: 0;
+  padding: 7px 10px;
+  text-align: center;
+  border-radius: 999px;
+  border: 1px solid #b7e2d6;
+  background: #eefaf6;
+  color: #0f6e5a;
+  font-size: .8rem;
+  font-weight: 600;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.export-dialog-label:hover {
+  background: #d3f0e6;
+  border-color: var(--modern-tools);
+}
+
+.export-dialog-label:has(input:checked) {
+  background: var(--modern-tools);
+  border-color: var(--modern-tools);
+  color: #fff;
+}
+
+/* Radio masqué : le focus clavier (Tab, flèches) s'affiche sur la pastille */
+.export-dialog-label:has(input:focus-visible) {
+  outline: 2px solid var(--modern-tools);
+  outline-offset: 2px;
+}
+
+/* Radio natif masqué (conservé dans le DOM : le clic sur la pastille le coche) */
+.export-dialog-label input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.export-dialog-buttons {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.export-dialog-btn {
+  padding: 7px 16px;
+  border-radius: 10px;
+  font: 700 .8rem "Segoe UI", Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.export-dialog-btn-cancel {
+  margin-right: 0;
+  background: #fff;
+  color: var(--modern-primary);
+  border: 1px solid #dbe3ec;
+}
+
+.export-dialog-btn-cancel:hover {
+  background: #f1f5f9;
+}
+
+.export-dialog-btn-export {
+  background: var(--modern-tools);
+  color: #fff;
+  border: 1px solid var(--modern-tools);
+}
+
+.export-dialog-btn-export:hover {
+  background: #12876f;
+  border-color: #12876f;
+}
+
+.export-dialog-btn:focus-visible {
+  outline: 2px solid var(--modern-tools);
+  outline-offset: 2px;
 }
 
 .modern-tools-dock label[id^="GPshowIsochronPicto"] {
