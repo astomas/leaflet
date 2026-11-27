@@ -1,11 +1,25 @@
 ﻿	// --- Fonction commune d'export ---
-	// [cd30] Détermine si une couche métier (tabCoucheMG) est active : l'œil vert
-	// de la sidebar équivaut à la couche présente sur la carte (map.hasLayer).
-	// Le repli sur le registre modernLegendeParCouche (version sidebar-légende
-	// des cartes racine) marquait à tort TOUTES les couches comme affichées ici,
-	// car les groupes de légende sont sur la carte dès l'ouverture en cd30.
+	// Détermine si une couche métier (tabCoucheMG) est actuellement affichée.
+	// Nouvelle UI « sans légende » : la visibilité est portée par les layerGroups
+	// de légende exposés via window.modernLegendeParCouche (keyés par nomcouche),
+	// la couche tabCoucheMG d'origine restant volontairement hors carte. On lit
+	// donc le nomcouche des features et on vérifie l'état réel sur la carte.
+	// Ancienne UI (registre absent) : test historique map.hasLayer conservé.
 	function coucheMetierAffichee(map, couche) {
-		return map.hasLayer(couche);
+		if (map.hasLayer(couche)) return true;
+		var registre = (typeof window !== 'undefined') ? window.modernLegendeParCouche : null;
+		if (!registre) return false;
+		var affichee = false;
+		couche.eachLayer(function(layer) {
+			if (affichee) return;
+			var props = layer.feature && layer.feature.properties;
+			var nom = props ? props.nomcouche : null;
+			var items = nom ? registre[nom] : null;
+			if (items && items.some(function(it) { return it.layers && map.hasLayer(it.layers); })) {
+				affichee = true;
+			}
+		});
+		return affichee;
 	}
 
 	function exportCouches(map, format, coucheSpecifique, nomCoucheSpecifique) {
@@ -463,7 +477,7 @@ CarteLeaflet.prototype.exportCouches = function() {
 			// Créer la boîte de dialogue
 			const dialog = document.createElement('div');
 			dialog.className = 'export-dialog';
-			
+
 			dialog.innerHTML = `
 			  <h4>Choisissez le format d'export</h4>
 			  <div class="export-dialog-options">
@@ -485,49 +499,53 @@ CarteLeaflet.prototype.exportCouches = function() {
 				<button id="btnExporter" class="export-dialog-btn export-dialog-btn-export">Continuer</button>
 			  </div>
 			`;
-			
-			// Overlay (fond sombre)
+
+			// Overlay (fond)
 			const overlay = document.createElement('div');
 			overlay.className = 'export-overlay';
-			
+
 			document.body.appendChild(overlay);
 			document.body.appendChild(dialog);
-			
-			// FORCER LE FOCUS sur le bouton Exporter après ajout au DOM
-			setTimeout(() => {
-			  document.getElementById('btnExporter').focus();
-			}, 0);
-			
-			// Gestion des boutons
-			document.getElementById('btnExporter').onclick = function() {
-			  const selectedFormat = dialog.querySelector('input[name="format"]:checked').value;
+
+			// Boutons cherchés dans la boîte elle-même, pas dans tout le document
+			const btnExporter = dialog.querySelector('#btnExporter');
+			const btnAnnuler  = dialog.querySelector('#btnAnnuler');
+
+			// Fermeture unique : retire la boîte, l'overlay ET l'écouteur clavier.
+			// Avant, seul Échap retirait l'écouteur : après Annuler / Continuer / clic
+			// à côté, la touche Entrée cliquait un bouton disparu (erreur JS) et
+			// chaque ouverture ajoutait un écouteur de plus.
+			function fermer() {
 			  overlay.remove();
 			  dialog.remove();
-			  exportCouches(map, selectedFormat);
-			};
-			
-			document.getElementById('btnAnnuler').onclick = function() {
-			  overlay.remove();
-			  dialog.remove();
-			};
-			
-			// Fermer en cliquant sur l'overlay
-			overlay.onclick = function() {
-			  overlay.remove();
-			  dialog.remove();
-			};
-			// Gestion touches clavier
-			function handleKeydown(e) {
-				if (e.key === 'Enter') {
-					document.getElementById('btnExporter').click();
-				}
-				if (e.key === 'Escape') {
-					overlay.remove();
-					dialog.remove();
-					document.removeEventListener('keydown', handleKeydown);
-				}
+			  document.removeEventListener('keydown', gererTouches);
 			}
-			document.addEventListener('keydown', handleKeydown);
+
+			function valider() {
+			  const selectedFormat = dialog.querySelector('input[name="format"]:checked').value;
+			  fermer();
+			  exportCouches(map, selectedFormat);
+			}
+
+			// Échap = fermer ; Entrée = Continuer, sauf sur « Annuler » qui garde
+			// son action native. preventDefault évite que le bouton qui a le focus
+			// redéclenche l'action une seconde fois.
+			function gererTouches(e) {
+			  if (e.key === 'Escape') {
+				fermer();
+			  } else if (e.key === 'Enter' && e.target !== btnAnnuler) {
+				e.preventDefault();
+				valider();
+			  }
+			}
+
+			btnExporter.onclick = valider;
+			btnAnnuler.onclick  = fermer;
+			overlay.onclick     = fermer;	// clic hors de la boîte
+			document.addEventListener('keydown', gererTouches);
+
+			// FORCER LE FOCUS sur le bouton Continuer après ajout au DOM
+			setTimeout(() => { btnExporter.focus(); }, 0);
 		  }, 
 		  'Export des couches cochées'
 		).addTo(maCarte);
