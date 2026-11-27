@@ -2553,7 +2553,41 @@ this.rechercherJson = function(){
 			TEST_J1: null  // null = données réelles  | ex: [{ niveau: 3, phenomene_lib: 'Orages' }]
 		});
 	};
-	
+
+}
+
+// Repli automatique des blocs de la sidebar, À L'OUVERTURE UNIQUEMENT, selon le
+// nombre de lignes du bloc « Données métier » : nombre de couches + nombre
+// d'éléments de légende sous les couches actives à l'ouverture (œil vert).
+//   > 9  : replie « Outils carte »
+//   > 14 : replie « Outils carte » et « Fonds de plan »
+// Exécuté une seule fois au chargement : aucun repli pendant la consultation.
+function replierBlocsSidebarOuverture(essaisRestants) {
+	var overlays = document.querySelector(".modern-donnees-metier");
+	// Bloc « Données métier » pas encore déplacé dans la sidebar : on retente
+	if (!overlays) {
+		var n = (typeof essaisRestants === "number") ? essaisRestants : 10;
+		if (n > 0) setTimeout(function () { replierBlocsSidebarOuverture(n - 1); }, 200);
+		return;
+	}
+
+	var couches = overlays.querySelectorAll("label");
+	var nbLignes = couches.length;
+	couches.forEach(function (label) {
+		// Œil vert = classe posée par injecterLegende (modern-dock-claude.js)
+		if (!label.classList.contains("modern-couche-active")) return;
+		// La légende de la couche est insérée juste après son label
+		var detail = label.nextElementSibling;
+		if (detail && detail.classList.contains("detail-couches-sidebar")) {
+			nbLignes += detail.querySelectorAll(".leaflet-legend-item").length;
+		}
+	});
+
+	var outils = document.querySelector(".modern-family-tools");
+	var fonds  = document.querySelector(".modern-family-fonds-plan");
+	// data-expanded="false" : même état que le clic sur le titre (accordéon)
+	if (nbLignes > 9 && outils) outils.dataset.expanded = "false";
+	if (nbLignes > 14 && fonds) fonds.dataset.expanded = "false";
 }
 
 function main() {
@@ -2570,6 +2604,7 @@ function main() {
 	window.modernDockExporter();
 	window.modernDockFondsDePlan();
 	window.modernDockDonneesMetier();
+	replierBlocsSidebarOuverture();
 	carteLeaflet.afficherOutils();
 	carteLeaflet.titre();
 	carteLeaflet.ajouterLogo();
