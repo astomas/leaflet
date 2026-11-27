@@ -418,10 +418,10 @@
   // le nombre de lignes du bloc « Données métier » : nombre de couches + nombre
   // d'éléments de légende sous les couches actives à l'ouverture (œil vert).
   //   > 9  : replie « Outils carte »
-  //   > 14 : replie « Outils carte » et « Fonds de plan »
+  //   > 13 : replie « Outils carte » et « Fonds de plan »
   // Aucun écouteur : pas de repli pendant la consultation de la carte.
   var SEUIL_REPLI_OUTILS = 9;
-  var SEUIL_REPLI_FONDS  = 14;
+  var SEUIL_REPLI_FONDS  = 13;
 
   function replierBlocsOuverture(overlays) {
     var couches  = overlays.querySelectorAll("label");
